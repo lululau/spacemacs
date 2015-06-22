@@ -560,13 +560,6 @@
       ;; https://bitbucket.org/lyro/evil/issue/502/cursor-is-not-refreshed-in-some-cases
       (add-hook 'post-command-hook 'evil-refresh-cursor)
 
-      ;; hack for speeding up the use of ace-jump-line as a motion
-      ;; https://bitbucket.org/lyro/evil/issue/472/evil-half-cursor-makes-evil-ace-jump-mode
-      (defun evil-half-cursor ()
-        "Change cursor to a half-height box. (This is really just a thick horizontal bar.)"
-        (let ((height (/ (window-pixel-height) (* (window-height) 2))))
-          (setq cursor-type (cons 'hbar height))))
-
       (defun spacemacs/state-color-face (state)
         "Return the symbol of the face for the given STATE."
         (intern (format "spacemacs-%s-face" (symbol-name state))))
@@ -752,7 +745,9 @@ Example: (evil-map visual \"<\" \"<gv\")"
        "paste-micro-state"
        (evil-paste-before evil-paste-after evil-visual-paste) after
        "Initate the paste micro-state."
-       (unless (evil-ex-p) (spacemacs/paste-micro-state)))
+       (unless (or (evil-ex-p)
+                   (eq 'evil-paste-from-register this-command))
+         (spacemacs/paste-micro-state)))
       (defun spacemacs//paste-ms-doc ()
         "The documentation for the paste micro-state."
         (format (concat "[%s/%s] Type [p] or [P] to paste the previous or "
@@ -1340,7 +1335,7 @@ Example: (evil-map visual \"<\" \"<gv\")"
 
 (defun spacemacs/init-helm ()
   (use-package helm
-    :defer t
+    :defer 1
     :commands spacemacs/helm-find-files
     :config
     (progn
@@ -2009,10 +2004,10 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
       (evil-leader/set-key
         "pb"  'helm-projectile-switch-to-buffer
         "pd"  'helm-projectile-find-dir
-        "pe"  'helm-projectile-recentf
         "pf"  'helm-projectile-find-file
         "ph"  'helm-projectile
         "pp"  'helm-projectile-switch-project
+        "pr"  'helm-projectile-recentf
         "pv"  'projectile-vc
         "sgp" 'helm-projectile-grep))))
 
@@ -2896,27 +2891,26 @@ It is a string holding:
                                           "projectile.cache"))
       (setq projectile-known-projects-file (concat spacemacs-cache-directory
                                                    "projectile-bookmarks.eld"))
-      (unless (boundp 'spacemacs-use-helm-projectile)
+      (unless (configuration-layer/package-usedp 'helm-projectile)
         (evil-leader/set-key
           "pb" 'projectile-switch-to-buffer
           "pd" 'projectile-find-dir
-          "pe" 'projectile-recentf
           "pf" 'projectile-find-file
-          "pg" 'projectile-grep
           "ph" 'helm-projectile
+          "pr" 'projectile-recentf
           "ps" 'projectile-switch-project))
       (evil-leader/set-key
         "p!" 'projectile-run-shell-command-in-root
         "p&" 'projectile-run-async-shell-command-in-root
         "pc" 'projectile-compile-project
         "pD" 'projectile-dired
+        "pG" 'projectile-regenerate-tags
         "pI" 'projectile-invalidate-cache
         "pk" 'projectile-kill-buffers
         "po" 'projectile-multi-occur
-        "pr" 'projectile-replace
-        "pR" 'projectile-regenerate-tags
-        "py" 'projectile-find-tag
-        "pT" 'projectile-find-test-file))
+        "pR" 'projectile-replace
+        "pT" 'projectile-find-test-file
+        "py" 'projectile-find-tag))
     :config
     (progn
       (projectile-global-mode)
