@@ -47,57 +47,40 @@
         "gl" 'magit-log
         "gs" 'magit-status
         "gd" 'spacemacs/magit-diff-head
-        "gC" 'magit-commit)
-      (evilify magit-commit-mode magit-commit-mode-map
-               (kbd "C-j") 'magit-goto-next-section
-               (kbd "C-k") 'magit-goto-previous-section
-               (kbd "C-n") 'magit-goto-next-section
-               (kbd "C-p") 'magit-goto-previous-section
-               (kbd "C-v") 'magit-revert-item)
-      (evilify magit-log-mode magit-log-mode-map
-               (kbd "C-j") 'magit-goto-next-section
-               (kbd "C-k") 'magit-goto-previous-section
-               (kbd "C-n") 'magit-goto-next-section
-               (kbd "C-p") 'magit-goto-previous-section
-               (kbd "C-v") 'magit-revert-item)
-      (evilify magit-process-mode magit-process-mode-map
-               (kbd "C-j") 'magit-goto-next-section
-               (kbd "C-k") 'magit-goto-previous-section
-               (kbd "C-n") 'magit-goto-next-section
-               (kbd "C-p") 'magit-goto-previous-section
-               (kbd "C-v") 'magit-revert-item)
-      (evilify magit-branch-manager-mode magit-branch-manager-mode-map
-               "K" 'magit-discard-item
-               "L" 'magit-key-mode-popup-logging
-               (kbd "C-j") 'magit-goto-next-section
-               (kbd "C-k") 'magit-goto-previous-section
-               (kbd "C-n") 'magit-goto-next-section
-               (kbd "C-p") 'magit-goto-previous-section
-               (kbd "C-v") 'magit-revert-item)
-      (evilify magit-status-mode magit-status-mode-map
-               "K" 'magit-discard-item
-               "L" 'magit-key-mode-popup-logging
-               "H" 'magit-key-mode-popup-diff-options
-               (kbd "C-j") 'magit-goto-next-section
-               (kbd "C-k") 'magit-goto-previous-section
-               (kbd "C-n") 'magit-goto-next-section
-               (kbd "C-p") 'magit-goto-previous-section
-               (kbd "C-v") 'magit-revert-item)
-      (evilify magit-diff-mode magit-diff-mode-map
-               "K" 'magit-discard-item
-               "L" 'magit-key-mode-popup-logging
-               "H" 'magit-key-mode-popup-diff-options
-               (kbd "C-j") 'magit-goto-next-section
-               (kbd "C-k") 'magit-goto-previous-section
-               (kbd "C-n") 'magit-goto-next-section
-               (kbd "C-p") 'magit-goto-previous-section
-               (kbd "C-v") 'magit-revert-item))
+        "gC" 'magit-commit))
     :config
     (progn
       ;; (spacemacs|hide-lighter magit-auto-revert-mode)
-      (define-key magit-staged-section-map "k" 'evil-previous-visual-line)
-      (define-key magit-hunk-section-map "k" 'evil-previous-visual-line)
-      (define-key magit-file-section-map "k" 'evil-previous-visual-line)
+
+      ;; mode maps
+      (spacemacs/evilify-map 'magit-mode-map)
+      ;; (spacemacs/evilify-map 'magit-popup-mode-map  'magit-popup-mode)
+      (spacemacs/evilify-map 'magit-status-mode-map 'magit-status-mode)
+      (spacemacs/evilify-map 'magit-refs-mode-map 'magit-refs-mode)
+      (spacemacs/evilify-map 'magit-blame-mode-map 'magit-blame-mode)
+      (spacemacs/evilify-map 'magit-diff-mode-map 'magit-diff-mode)
+      (spacemacs/evilify-map 'magit-log-read-revs-map 'magit-log-read-revs)
+      (spacemacs/evilify-map 'magit-log-mode-map 'magit-log-mode)
+      (spacemacs/evilify-map 'magit-log-select-mode-map 'magit-log-select-mode)
+      (spacemacs/evilify-map 'magit-cherry-mode-map 'magit-cherry-mode)
+      (spacemacs/evilify-map 'magit-reflog-mode-map 'magit-reflog-mode)
+      (spacemacs/evilify-map 'magit-process-mode-map 'magit-process-mode)
+      ;; section maps
+      (spacemacs/evilify-map 'magit-tag-section-map)
+      (spacemacs/evilify-map 'magit-untracked-section-map)
+      (spacemacs/evilify-map 'magit-branch-section-map)
+      (spacemacs/evilify-map 'magit-remote-section-map)
+      (spacemacs/evilify-map 'magit-file-section-map)
+      (spacemacs/evilify-map 'magit-hunk-section-map)
+      (spacemacs/evilify-map 'magit-unstaged-section-map)
+      (spacemacs/evilify-map 'magit-staged-section-map)
+      (spacemacs/evilify-map 'magit-commit-section-map)
+      (spacemacs/evilify-map 'magit-module-commit-section-map)
+      (spacemacs/evilify-map 'magit-unpulled-section-map)
+      (spacemacs/evilify-map 'magit-unpushed-section-map)
+      (spacemacs/evilify-map 'magit-stashes-section-map)
+      (spacemacs/evilify-map 'magit-stash-section-map)
+
       ;; full screen magit-status
       (when git-magit-status-fullscreen
         (defadvice magit-status (around magit-fullscreen activate)
@@ -126,5 +109,5 @@
       (defun magit-dont-ignore-whitespace ()
         (interactive)
         (setq magit-diff-options (remove "-w" magit-diff-options))
-        (magit-refresh))
-      (define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace))))
+        (magit-refresh)))
+    (define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)))
