@@ -582,7 +582,7 @@ Additional information may as well be displayed in the minibuffer.
 [[#auto-highlight-and-edition-of-symbols][Auto-highlight-symbol micro-state]]:
 [[file:img/spacemacs-ahs-micro-state.png]]
 
-[[#change-font-size][Text scale micro-state]]:
+[[#text][Text scale micro-state]]:
 [[file:img/spacemacs-scale-micro-state.png]]
 
 * Differences between Vim, Evil and Spacemacs
@@ -1156,7 +1156,7 @@ Navigation is performed using the Vi key bindings ~hjkl~.
 | ~L~         | move quickly down (10 lines at a time)                                            |
 | ~SPC j h~   | go to the beginning of line (and set a mark at the previous location in the line) |
 | ~SPC j l~   | go to the end of line (and set a mark at the previous location in the line)       |
-| ~SPC z z~   | lock the cursor at the center of the screen                                       |
+| ~SPC t -~   | lock the cursor at the center of the screen                                       |
 
 **** Smooth scrolling
 [[https://github.com/aspiers/smooth-scrolling][smooth-scrolling]] prevent the point to jump when it reaches the top or
@@ -1496,7 +1496,7 @@ The mode-line has the following format =[x/y] d (D:a, F:b)= where:
 
 *** Bookmarks
 Bookmarks can be set anywhere in a file. Bookmarks are persistent. They are very
-useful to jump to/open a known project. =Spacemacs= used =helm-bookmarks= to
+useful to jump to/open a known project. =Spacemacs= uses =helm-bookmarks= to
 manage them.
 
 Open an =helm= window with the current bookmarks by pressing: ~SPC h b~
@@ -1625,7 +1625,7 @@ called =pt=.
 | ~SPC s L~       | focus the last converted search buffer                                   |
 | Prefix argument | will ask for file extensions                                             |
 
-**** Searching in current file 
+**** Searching in current file
 | Key Binding | Description                                         |
 |-------------+-----------------------------------------------------|
 | ~SPC s s~   | search with the first found tool                    |

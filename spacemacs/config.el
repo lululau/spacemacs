@@ -165,8 +165,14 @@ Can be installed with `brew install trash'."
 ;; Save clipboard contents into kill-ring before replace them
 (setq save-interprogram-paste-before-kill t)
 
-;; Single space between sentencs is more widespread than double
+;; Single space between sentences is more widespread than double
 (setq-default sentence-end-double-space nil)
+
+;; The C-d rebinding that most shell-like buffers inherit from
+;; comint-mode assumes non-evil configuration with its
+;; `comint-delchar-or-maybe-eof' function, so we disable it
+(eval-after-load 'comint
+  '(define-key comint-mode-map (kbd "C-d") nil))
 
 ;; ---------------------------------------------------------------------------
 ;; UI
