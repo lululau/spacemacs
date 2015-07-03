@@ -1,4 +1,4 @@
-;;; config.el --- Git Layer configuration File for Spacemacs
+;;; extensions.el --- which-key Layer Extensions File for Spacemacs
 ;;
 ;; Copyright (c) 2012-2014 Sylvain Benner
 ;; Copyright (c) 2014-2015 Sylvain Benner & Contributors
@@ -10,10 +10,7 @@
 ;;
 ;;; License: GPLv3
 
-;; Variables
+(setq which-key-post-extensions '(which-key))
 
-(defvar git-enable-magit-svn-plugin nil
-  "If non nil `magit-svn' plugin is enabled.")
-
-(defvar git-magit-status-fullscreen nil
-  "If non nil magit-status buffer is displayed in fullscreen.")
+(defun which-key/init-which-key ()
+  (use-package which-key)) 
