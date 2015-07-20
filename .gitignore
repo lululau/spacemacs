@@ -44,3 +44,6 @@ private/*
 !private/README.md
 !private/snippets/README.md
 /games/
+/GPATH
+/GRTAGS
+/GTAGS
