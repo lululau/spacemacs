@@ -18,7 +18,13 @@
 
 (defun gtags/init-ggtags ()
   (use-package ggtags
-    :defer t))
+    :defer t
+    :init
+    (progn
+      (add-hook 'projectile-mode-hook 'ggtags-mode))
+    :config
+    (progn
+      (spacemacs|hide-lighter ggtags-mode))))
 
 (defun gtags/init-helm-gtags ()
   (use-package helm-gtags
