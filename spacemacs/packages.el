@@ -23,6 +23,7 @@
         bookmark
         buffer-move
         clean-aindent-mode
+        define-word
         desktop
         diminish
         doc-view
@@ -56,7 +57,7 @@
         gh-md
         golden-ratio
         google-translate
-        guide-key-tip
+        ;; guide-key-tip
         helm
         helm-ag
         helm-descbinds
@@ -99,6 +100,7 @@
         vi-tilde-fringe
         volatile-highlights
         whitespace
+        which-key
         window-numbering
         winner
         ))
@@ -431,6 +433,13 @@
     (progn
       (setq desktop-dirname spacemacs-cache-directory)
       (push spacemacs-cache-directory desktop-path))))
+
+(defun spacemacs/init-define-word ()
+  (use-package define-word
+    :defer t
+    :init
+    (evil-leader/set-key
+      "xwd" 'define-word-at-point)))
 
 (defun spacemacs/init-diminish ()
   (require 'diminish)
@@ -1253,6 +1262,7 @@ Example: (evil-map visual \"<\" \"<gv\")"
                    'spacemacs/no-golden-ratio-guide-key)
       (add-to-list 'golden-ratio-exclude-buffer-names " *NeoTree*")
       (add-to-list 'golden-ratio-exclude-buffer-names "*LV*")
+      (add-to-list 'golden-ratio-exclude-buffer-names " *which-key*")
 
       (spacemacs|diminish golden-ratio-mode " ⓖ" " g"))))
 
@@ -1276,63 +1286,63 @@ Example: (evil-map visual \"<\" \"<gv\")"
       (setq google-translate-default-source-language "En")
       (setq google-translate-default-target-language "Fr"))))
 
-(defun spacemacs/init-guide-key-tip ()
-  (use-package guide-key-tip
-    :init
-    (progn
-      (defun spacemacs/toggle-guide-key ()
-        "Toggle golden-ratio mode on and off."
-        (interactive)
-        (if (symbol-value guide-key-mode)
-            (guide-key-mode -1)
-          (guide-key-mode)))
+;; (defun spacemacs/init-guide-key-tip ()
+;;   (use-package guide-key-tip
+;;     :init
+;;     (progn
+;;       (defun spacemacs/toggle-guide-key ()
+;;         "Toggle golden-ratio mode on and off."
+;;         (interactive)
+;;         (if (symbol-value guide-key-mode)
+;;             (guide-key-mode -1)
+;;           (guide-key-mode)))
 
-      (defadvice guide-key/popup-guide-buffer-p
-          (around spacemacs/inhibit-guide-buffer activate)
-        "Prevent the popup of the guide-key buffer in some case."
-        ;; a micro-state is running
-        ;; or
-        ;; bzg-big-fringe-mode is on
-        (unless (or overriding-terminal-local-map
-                    bzg-big-fringe-mode)
-          ad-do-it))
+;;       (defadvice guide-key/popup-guide-buffer-p
+;;           (around spacemacs/inhibit-guide-buffer activate)
+;;         "Prevent the popup of the guide-key buffer in some case."
+;;         ;; a micro-state is running
+;;         ;; or
+;;         ;; bzg-big-fringe-mode is on
+;;         (unless (or overriding-terminal-local-map
+;;                     bzg-big-fringe-mode)
+;;           ad-do-it))
 
-      (spacemacs|add-toggle guide-key
-                      :status guide-key-mode
-                      :on (guide-key-mode)
-                      :off (guide-key-mode -1)
-                      :documentation
-                      "Display a buffer with available key bindings."
-                      :evil-leader "tG")
+;;       (spacemacs|add-toggle guide-key
+;;                       :status guide-key-mode
+;;                       :on (guide-key-mode)
+;;                       :off (guide-key-mode -1)
+;;                       :documentation
+;;                       "Display a buffer with available key bindings."
+;;                       :evil-leader "tG")
 
-      (setq guide-key/guide-key-sequence `("C-x"
-                                           "C-c"
-                                           "C-w"
-                                           ,dotspacemacs-leader-key
-                                           ,dotspacemacs-emacs-leader-key
-                                           ,dotspacemacs-major-mode-leader-key
-                                           ,dotspacemacs-major-mode-emacs-leader-key
-                                           ;; M-m in terminal
-                                           "<ESC>m"
-                                           ;; C-M-m in terminal
-                                           "<ESC><RET>"
-                                           "g"
-                                           "\["
-                                           "\]"
-                                           "z"
-                                           "C-h")
-            guide-key/recursive-key-sequence-flag t
-            guide-key/popup-window-position 'bottom
-            guide-key/idle-delay dotspacemacs-guide-key-delay
-            guide-key/text-scale-amount 0
-            ;; use this in your ~/.spacemacs file to enable tool tip in a
-            ;; graphical envrionment
-            ;; guide-key-tip/enabled (if window-system t)
-            guide-key-tip/enabled nil)
-      (setq guide-key/highlight-command-regexp
-                   (cons spacemacs/prefix-command-string font-lock-warning-face))
-      (guide-key-mode 1)
-      (spacemacs|diminish guide-key-mode " Ⓖ" " G"))))
+;;       (setq guide-key/guide-key-sequence `("C-x"
+;;                                            "C-c"
+;;                                            "C-w"
+;;                                            ,dotspacemacs-leader-key
+;;                                            ,dotspacemacs-emacs-leader-key
+;;                                            ,dotspacemacs-major-mode-leader-key
+;;                                            ,dotspacemacs-major-mode-emacs-leader-key
+;;                                            ;; M-m in terminal
+;;                                            "<ESC>m"
+;;                                            ;; C-M-m in terminal
+;;                                            "<ESC><RET>"
+;;                                            "g"
+;;                                            "\["
+;;                                            "\]"
+;;                                            "z"
+;;                                            "C-h")
+;;             guide-key/recursive-key-sequence-flag t
+;;             guide-key/popup-window-position 'bottom
+;;             guide-key/idle-delay dotspacemacs-guide-key-delay
+;;             guide-key/text-scale-amount 0
+;;             ;; use this in your ~/.spacemacs file to enable tool tip in a
+;;             ;; graphical envrionment
+;;             ;; guide-key-tip/enabled (if window-system t)
+;;             guide-key-tip/enabled nil)
+;;       (setq guide-key/highlight-command-regexp
+;;                    (cons spacemacs/prefix-command-string font-lock-warning-face))
+;;       (guide-key-mode 1)
+;;       (spacemacs|diminish guide-key-mode " Ⓖ" " G"))))
 
 (defun spacemacs/init-helm ()
   (use-package helm
@@ -2098,7 +2108,7 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
     :defer t
     :init
     (progn
-      (when (eq dotspacemacs-highlight-delimiters 'current)
+      (when (member dotspacemacs-highlight-delimiters '(all current))
         (add-hook 'prog-mode-hook #'highlight-parentheses-mode))
       (evil-leader/set-key "tCp" 'highlight-parentheses-mode)
       (setq hl-paren-colors '("Springgreen3"
@@ -2106,6 +2116,7 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
                               "IndianRed3"
                               "IndianRed4")))
     :config
+    (spacemacs|hide-lighter highlight-parentheses-mode)
     (set-face-attribute 'hl-paren-face nil :weight 'ultra-bold)))
 
 (defun spacemacs/init-hl-anything ()
@@ -2947,7 +2958,7 @@ It is a string holding:
     :init
     (progn
       (evil-leader/set-key "tCd" 'rainbow-delimiters-mode)
-      (when (eq dotspacemacs-highlight-delimiters 'all)
+      (when (member dotspacemacs-highlight-delimiters '(any all))
         (add-to-hooks 'rainbow-delimiters-mode '(prog-mode-hook))))))
 
 (defun spacemacs/init-recentf ()
@@ -3194,6 +3205,46 @@ It is a string holding:
                           :background nil)
       (spacemacs|diminish whitespace-mode " ⓦ" " w")
       (spacemacs|diminish global-whitespace-mode " Ⓦ" " W"))))
+
+(defun spacemacs/init-which-key ()
+  (use-package which-key
+    :init
+    (progn
+      (setq which-key-max-description-length 32)
+      (which-key-mode)
+      (spacemacs|add-toggle which-key
+                            :status which-key-mode
+                            :on (which-key-mode)
+                            :off (which-key-mode -1)
+                            :documentation
+                            "Display a buffer with available key bindings."
+                            :evil-leader "tK")
+      (defadvice which-key--update
+          (around spacemacs/inhibit-which-key-buffer activate)
+        "Prevent the popup of the which-key buffer in some case."
+        ;; a micro-state is running
+        ;; or
+        ;; bzg-big-fringe-mode is on
+        (if (or overriding-terminal-local-map
+                bzg-big-fringe-mode)
+            (let ((which-key-inhibit t)) ad-do-it)
+          ad-do-it))
+      (add-to-list 'which-key-description-replacement-alist '("select-window-\\([0-9]\\)" . "Window \\1"))
+      (which-key-add-key-based-replacements
+       "SPC TAB"  "last buffer"
+       "SPC SPC"  "ace word"
+       "SPC !"    "shell cmd"
+       "SPC '"    "open shell"
+       "SPC /"    "smart search"
+       "SPC ?"    "show keybindings"
+       "SPC J"    "split sexp"
+       "SPC l"    "ace line"
+       "SPC u"    "universal arg"
+       "SPC v"    "expand region"
+       "SPC <f1>" "apropos"
+       "SPC m"    "maj mode cmds"
+       (concat "SPC " dotspacemacs-command-key) "M-x")
+      (spacemacs|diminish which-key-mode " Ⓚ" " K"))))
 
 (defun spacemacs/init-window-numbering ()
   (use-package window-numbering

@@ -1,8 +1,9 @@
-;;; extensions.el --- which-key Layer Extensions File for Spacemacs
+;;; packages.el --- ranger Layer packages File for Spacemacs
 ;;
 ;; Copyright (c) 2012-2014 Sylvain Benner
 ;; Copyright (c) 2014-2015 Sylvain Benner & Contributors
 ;;
+;; Author: Rich Alesi
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
 ;;
@@ -10,7 +11,13 @@
 ;;
 ;;; License: GPLv3
 
-(setq which-key-post-extensions '(which-key))
+(setq ranger-packages
+  '(ranger))
 
-(defun which-key/init-which-key ()
-  (use-package which-key)) 
+(setq ranger-excluded-packages '())
+
+(defun ranger/init-ranger ()
+  (use-package ranger
+    :defer t
+    :init
+    (evil-leader/set-key "ar" 'ranger)))
