@@ -1489,7 +1489,7 @@ Removes the automatic guessing of the initial value based on thing at point. "
         "ff"   'spacemacs/helm-find-files
         "fF"   'helm-find-files
         "fr"   'helm-recentf
-        "hb"   'helm-pp-bookmarks
+        "hb"   'helm-bookmarks
         "hi"   'helm-info-at-point
         "hl"   'helm-resume
         "hm"   'helm-man-woman
