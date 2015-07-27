@@ -15,6 +15,7 @@
         gitattributes-mode
         gitconfig-mode
         gitignore-mode
+        git-commit
         git-messenger
         git-timemachine
         helm-gitignore
@@ -30,6 +31,10 @@
   (use-package helm-gitignore
     :defer t
     :init (evil-leader/set-key "gI" 'helm-gitignore)))
+
+(defun git/init-git-commit ()
+  (use-package git-commit
+    :defer t))
 
 (defun git/init-git-messenger ()
   (use-package git-messenger
@@ -90,9 +95,6 @@
                magit-commit)
     :init
     (progn
-      (add-to-list 'load-path (format "%smagit-next/lisp/"
-                                      (configuration-layer/get-layer-property
-                                       'git :ext-dir)))
       (setq magit-completing-read-function 'magit-builtin-completing-read)
       (add-hook 'git-commit-mode-hook 'fci-mode)
       ;; On Windows, we must use Git GUI to enter username and password
