@@ -7,6 +7,7 @@
      - [[#features][Features:]]
  - [[#install][Install]]
      - [[#layer][Layer]]
+         - [[#recommended-settings][Recommended Settings]]
      - [[#magit-status-fullscreen][Magit status fullscreen]]
      - [[#magit-auto-complete][Magit auto-complete]]
      - [[#magit-svn-plugin][Magit SVN plugin]]
@@ -30,7 +31,7 @@ This layers adds extensive support for [[http://git-scm.com/][git]].
 - colorize buffer line by age of commit with [[https://github.com/syohex/emacs-smeargle][smeargle]]
 - gitignore generator with [[https://github.com/jupl/helm-gitignore][helm-gitignore]]
 
-New to Magit? Checkout the [[https://magit.github.io/master/magit.html#Introduction][official intro]].
+New to Magit? Checkout the [[http://magit.vc/about.html][official intro]].
 
 * Install
 
@@ -41,6 +42,16 @@ To use this contribution add it to your =~/.spacemacs=
 #+BEGIN_SRC emacs-lisp
 (setq-default dotspacemacs-configuration-layers '(git))
 #+END_SRC
+
+*** Recommended Settings
+Read the documentation for the =magit-push-always-verify= variable, then you may wish to set it to =nil= in your =dotspacemacs/config= function.
+
+#+BEGIN_SRC emacs-lisp
+(defun dotspacemacs/config ()
+  (setq magit-push-always-verify nil))
+#+END_SRC
+
+The =nag= default is to prevent surprising behavior for newcomers, but causes the ~PP~, ~Po~, ~Pe~ (and more) push commands to nag you in the same way. Once you understand what they do, it is better simply to give the command you intend.
 
 ** Magit status fullscreen
 
