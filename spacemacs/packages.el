@@ -1372,7 +1372,8 @@ Removes the automatic guessing of the initial value based on thing at point. "
             helm-display-header-line nil
             helm-split-window-in-side-p t
             helm-always-two-windows t
-            helm-echo-input-in-header-line t)
+            helm-echo-input-in-header-line t
+            helm-imenu-execute-action-at-once-if-one nil)
 
       ;; hide minibuffer in Helm session, since we use the header line already
       (defun helm-hide-minibuffer-maybe ()
@@ -3451,7 +3452,7 @@ one of `l' or `r'."
                 which-key-description-replacement-alist)))
       (dolist (leader-key `(,dotspacemacs-leader-key ,dotspacemacs-emacs-leader-key))
         (which-key-add-key-based-replacements
-         (concat leader-key " m")    "maj mode cmds"
+         (concat leader-key " m")    "major mode commands"
          (concat leader-key " " dotspacemacs-command-key) "M-x"))
       ;; disable special key handling for spacemacs, since it can be
       ;; disorienting if you don't understand it
