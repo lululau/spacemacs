@@ -107,6 +107,8 @@
         (define-key map (kbd "C-d") 'company-show-doc-buffer)
         (define-key map (kbd "C-j") 'company-select-next)
         (define-key map (kbd "C-k") 'company-select-previous)
+        (define-key map (kbd "C-n") 'company-select-next)
+        (define-key map (kbd "C-p") 'company-select-previous)
         (define-key map (kbd "C-l") 'company-complete-selection))
       ;; Nicer looking faces
       (custom-set-faces
