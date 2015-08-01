@@ -154,10 +154,14 @@
       (defun spacemacs/ace-buffer-links ()
         "Ace jump to links in `spacemacs' buffer."
         (interactive)
-        (ali-generic
-         (spacemacs//collect-spacemacs-buffer-links)
-         (forward-char 1)
-         (widget-button-press (point)))))))
+        (let ((res (avy--with-avy-keys spacemacs/ace-buffer-links
+                    (avy--process
+                        (spacemacs//collect-spacemacs-buffer-links)
+                        #'avy--overlay-pre))))
+            (when res
+            (goto-char (1+ res))
+            (widget-button-press (point))))))))
+
 
 (defun spacemacs/init-ace-window ()
   (use-package ace-window
@@ -549,7 +553,9 @@
       (spacemacs|hide-lighter eldoc-mode))))
 
 (defun spacemacs/init-eval-sexp-fu ()
-  (require 'eval-sexp-fu))
+  ;; ignore obsolete function warning generated on startup
+  (let ((byte-compile-not-obsolete-funcs (append byte-compile-not-obsolete-funcs '(preceding-sexp))))
+    (require 'eval-sexp-fu)))
 
 (defun spacemacs/init-evil ()
   (use-package evil
@@ -569,6 +575,11 @@
       ;; put back refresh of the cursor on post-command-hook see status of:
       ;; https://bitbucket.org/lyro/evil/issue/502/cursor-is-not-refreshed-in-some-cases
       (add-hook 'post-command-hook 'evil-refresh-cursor)
+
+      ;; allow the point to go past the end of line so we can
+      ;; consisently evaluate expression with eval-last-sexp in
+      ;; all modes
+      (setq evil-move-beyond-eol t)
 
       (defun spacemacs/state-color-face (state)
         "Return the symbol of the face for the given STATE."
@@ -818,6 +829,9 @@ Example: (evil-map visual \"<\" \"<gv\")"
       (if (ht-contains? configuration-layer-all-packages 'smartparens)
           (defadvice evil-delete-backward-char-and-join
               (around spacemacs/evil-delete-backward-char-and-join activate)
+            (defvar smartparens-strict-mode)
+            ;; defadvice compiles this sexp generating a compiler warning for a
+            ;; free variable reference. The line above fixes this
             (if smartparens-strict-mode
                 (call-interactively 'sp-backward-delete-char)
               ad-do-it))))))
@@ -1490,7 +1504,7 @@ Removes the automatic guessing of the initial value based on thing at point. "
         "ff"   'spacemacs/helm-find-files
         "fF"   'helm-find-files
         "fr"   'helm-recentf
-        "hb"   'helm-bookmarks
+        "hb"   'helm-filtered-bookmarks
         "hi"   'helm-info-at-point
         "hl"   'helm-resume
         "hm"   'helm-man-woman
@@ -2288,7 +2302,9 @@ Put (global-hungry-delete-mode) in dotspacemacs/config to enable by default."
 
 (defun spacemacs/init-iedit ()
   (use-package iedit
-    :defer t))
+    :defer t
+    :init
+    (setq iedit-toggle-key-default nil)))
 
 (defun spacemacs/init-indent-guide ()
   (use-package indent-guide
@@ -3214,8 +3230,9 @@ one of `l' or `r'."
         :documentation "Enable smartparens globally."
         :evil-leader "t C-p")
 
-      (setq sp-show-pair-delay 0
-            sp-show-pair-from-inside t ; fix paren highlighting in normal mode
+      (setq sp-show-pair-delay 0.2
+            ;; fix paren highlighting in normal mode
+            sp-show-pair-from-inside t
             sp-cancel-autoskip-on-backward-movement nil))
     :config
     (progn

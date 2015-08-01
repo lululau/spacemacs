@@ -232,4 +232,23 @@ FILE-TO-LOAD is an explicit file to load after the installation."
        (force-mode-line-update))
      (spacemacs/check-for-new-version spacemacs-version-check-interval))))
 
+(defun spacemacs/describe-system-info ()
+  "Gathers info about your Spacemacs setup and copies to clipboard."
+  (interactive)
+  (let ((sysinfo (format
+                  (concat "#### System Info\n"
+                          "- OS: %s\n"
+                          "- Emacs: %s\n"
+                          "- Spacemacs: %s\n"
+                          "- Spacemacs branch: %s\n"
+                          "- Layers:\n```elisp\n%s```\n")
+                  system-type
+                  emacs-version
+                  spacemacs-version
+                  (spacemacs/git-get-current-branch)
+                  (pp dotspacemacs-configuration-layers))))
+    (kill-new sysinfo)
+    (message (concat "%s\nInformation has been copied to clipboard.\n"
+                     "You can past it in gitter chat.") sysinfo)))
+
 (provide 'core-spacemacs)
