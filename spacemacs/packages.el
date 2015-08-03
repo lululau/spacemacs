@@ -68,6 +68,7 @@
         helm-projectile
         helm-swoop
         helm-themes
+        helm-unicode
         highlight-indentation
         highlight-numbers
         highlight-parentheses
@@ -1099,20 +1100,14 @@ Example: (evil-map visual \"<\" \"<gv\")"
     :defer t
     :init
     (progn
-
       (spacemacs|add-toggle mode-line-battery
-                            :status fancy-battery-mode
-                            :on
-                            (fancy-battery-mode)
-                            (spacemacs/mode-line-battery-remove-from-global)
-                            :off (fancy-battery-mode -1)
-                            :documentation "Display battery info in mode-line."
-                            :evil-leader "tmb")
+        :status fancy-battery-mode
+        :on (fancy-battery-mode)
+        :off (fancy-battery-mode -1)
+        :documentation "Display battery info in mode-line."
+        :evil-leader "tmb")
 
-      (defun spacemacs/mode-line-battery-remove-from-global ()
-        "Remove the battery info from the `global-mode-string'."
-        (setq global-mode-string (delq 'fancy-battery-mode-line
-                                       global-mode-string)))
+      (push 'fancy-battery-mode-line spacemacs--global-mode-line-excludes)
 
       (defun spacemacs/mode-line-battery-percentage ()
         "Return the load percentage or an empty string."
@@ -1136,9 +1131,7 @@ Example: (evil-map visual \"<\" \"<gv\")"
       ;; basically remove all faces and properties.
       (defun fancy-battery-default-mode-line ()
         "Assemble a mode line string for Fancy Battery Mode."
-        (spacemacs/mode-line-battery-remove-from-global)
         (when fancy-battery-last-status
-
           (let* ((type (cdr (assq ?L fancy-battery-last-status)))
                  (percentage (spacemacs/mode-line-battery-percentage))
                  (time (spacemacs/mode-line-battery-time)))
@@ -2092,6 +2085,11 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
     (evil-leader/set-key
       "Th" 'helm-themes)))
 
+(defun spacemacs/init-helm-unicode ()
+  (use-package helm-unicode
+    :defer t
+    :init (evil-leader/set-key "iu" 'helm-unicode)))
+
 (defun spacemacs/init-highlight-indentation ()
   (use-package highlight-indentation
     :defer t
@@ -2108,7 +2106,11 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
         :on (highlight-indentation-current-column-mode)
         :off (highlight-indentation-current-column-mode -1)
         :documentation "Highlight indentation level at point."
-        :evil-leader "thc"))))
+        :evil-leader "thc"))
+    :config
+    (progn
+      (spacemacs|diminish highlight-indentation-mode " ⓗi" " hi")
+      (spacemacs|diminish highlight-indentation-current-column-mode " ⓗc" " hc"))))
 
 (defun spacemacs/init-highlight-numbers ()
   (use-package highlight-numbers
@@ -2125,6 +2127,7 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
     (progn
       (when (member dotspacemacs-highlight-delimiters '(all current))
         (add-hook 'prog-mode-hook #'highlight-parentheses-mode))
+      (setq hl-paren-delay 0.2)
       (evil-leader/set-key "tCp" 'highlight-parentheses-mode)
       (setq hl-paren-colors '("Springgreen3"
                               "IndianRed1"
@@ -2871,7 +2874,8 @@ It is a string holding:
         :when (bound-and-true-p nyan-mode))
 
       (spacemacs|define-mode-line-segment global-mode
-        (powerline-raw global-mode-string)
+        (powerline-raw (-difference global-mode-string
+                                    spacemacs--global-mode-line-excludes))
         :when (spacemacs//mode-line-nonempty global-mode-string))
 
       (spacemacs|define-mode-line-segment battery
@@ -2899,15 +2903,17 @@ It is a string holding:
                          (spacemacs|custom-flycheck-lighter ,type))))))
 
       (spacemacs|define-mode-line-segment org-clock
-        (funcall spacemacs-mode-line-org-clock-format-function)
+        (substring-no-properties (funcall spacemacs-mode-line-org-clock-format-function))
         :when (and spacemacs-mode-line-org-clock-current-taskp
                    (fboundp 'org-clocking-p)
                    (org-clocking-p)))
+      (push 'org-mode-line-string spacemacs--global-mode-line-excludes)
 
       (spacemacs|define-mode-line-segment org-pomodoro
-        (concat "[" (nth 1 org-pomodoro-mode-line) "]")
+        (nth 1 org-pomodoro-mode-line)
         :when (and (fboundp 'org-pomodoro-active-p)
                    (org-pomodoro-active-p)))
+      (push 'org-pomodoro-mode-line spacemacs--global-mode-line-excludes)
 
       ;; END define modeline segments
 
