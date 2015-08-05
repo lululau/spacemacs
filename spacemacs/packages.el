@@ -89,12 +89,15 @@
         popwin
         powerline
         projectile
+        quelpa
+        quelpa-use-package
         rainbow-delimiters
         recentf
         rfringe
         smartparens
         smooth-scrolling
         spacemacs-theme
+        spray
         subword
         undo-tree
         use-package
@@ -106,7 +109,11 @@
         winner
         ))
 
-(setq spacemacs-excluded-packages '())
+(setq spacemacs-excluded-packages
+      '(;; waiting for an overlay bug to be fixed
+        ;; see https://github.com/syl20bnr/spacemacs/issues/2529
+        hl-anything
+        ))
 
 ;; Paradox from MELPA is not compatible with 24.3 anymore
 (unless  (version< emacs-version "24.4")
@@ -1518,7 +1525,7 @@ Removes the automatic guessing of the initial value based on thing at point. "
 
       ;; define the key binding at the very end in order to allow the user
       ;; to overwrite any key binding
-      (add-hook 'after-init-hook
+      (add-hook 'emacs-startup-hook
                 (lambda ()
                   (unless (configuration-layer/package-usedp 'smex)
                     (evil-leader/set-key dotspacemacs-command-key 'helm-M-x))))
@@ -3111,7 +3118,7 @@ one of `l' or `r'."
           (dolist (buffer '("*Messages*" "*spacemacs*" "*Compile-Log*"))
             (when (get-buffer buffer)
               (spacemacs//restore-powerline buffer)))))
-      (add-hook 'after-init-hook
+      (add-hook 'emacs-startup-hook
                 'spacemacs//set-powerline-for-startup-buffers))))
 
 (defun spacemacs/init-projectile ()
@@ -3169,6 +3176,10 @@ one of `l' or `r'."
     (progn
       (projectile-global-mode)
       (spacemacs|hide-lighter projectile-mode))))
+
+(defun spacemacs/init-quelpa ())
+
+(defun spacemacs/init-quelpa-use-package ())
 
 (defun spacemacs/init-rainbow-delimiters ()
   (use-package rainbow-delimiters
@@ -3278,6 +3289,29 @@ one of `l' or `r'."
     (ad-activate 'next-line)
     (ad-disable-advice 'isearch-repeat 'after 'isearch-smooth-scroll)
     (ad-activate 'isearch-repeat)))
+
+(defun spacemacs/init-spray ()
+  (use-package spray
+    :commands spray-mode
+    :init
+    (progn
+      (defun spacemacs/start-spray ()
+        "Start spray speed reading on current buffer at current point."
+        (interactive)
+        (evil-insert-state)
+        (spray-mode t)
+        (evil-insert-state-cursor-hide))
+      (evil-leader/set-key "asr" 'spacemacs/start-spray)
+
+      (defadvice spray-quit (after spacemacs//quit-spray activate)
+        "Correctly quit spray."
+        (set-default-evil-insert-state-cursor)
+        (evil-normal-state)))
+    :config
+    (progn
+      (define-key spray-mode-map (kbd "h") 'spray-backward-word)
+      (define-key spray-mode-map (kbd "l") 'spray-forward-word)
+      (define-key spray-mode-map (kbd "q") 'spray-quit))))
 
 (defun spacemacs/init-subword ()
   (unless (version< emacs-version "24.4")
