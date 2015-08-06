@@ -27,7 +27,6 @@
   (use-package diff-hl
     :init
     (progn
-      (setq diff-hl-side 'right)
       (global-diff-hl-mode)
       (unless (display-graphic-p)
         (setq diff-hl-side 'left)
