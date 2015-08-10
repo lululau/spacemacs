@@ -25,7 +25,7 @@
   (setq package-archives '(("melpa" . "http://melpa.org/packages/")
                            ("org" . "http://orgmode.org/elpa/")
                            ("ELPA" . "http://tromey.com/elpa/")
-                           ("gnu" . "https://elpa.gnu.org/packages/")))
+                           ("gnu" . "http://elpa.gnu.org/packages/")))
   ;; optimization, no need to activate all the packages so early
   (setq package-enable-at-startup nil)
   (package-initialize 'noactivate)
@@ -196,9 +196,11 @@ layer directory."
          (name-str (symbol-name name-sym))
          (location (when (listp pkg) (plist-get (cdr pkg) :location)))
          (step (when (listp pkg) (plist-get (cdr pkg) :step)))
+         (excluded (when (listp pkg) (plist-get (cdr pkg) :excluded)))
          (obj (cfgl-package name-str :name name-sym)))
     (when location (oset obj :location location))
     (when step (oset obj :step step))
+    (oset obj :excluded excluded)
     obj))
 
 (defun configuration-layer/get-packages (layers &optional dotfile)
@@ -634,6 +636,10 @@ LAYERS is a list of layer symbols."
        ((null (oref pkg :owner))
         (spacemacs-buffer/message
          (format "%S ignored since it has no owner layer." pkg-name)))
+       ((eq 'dotfile (oref pkg :owner))
+        (configuration-layer//activate-package pkg-name)
+        (spacemacs-buffer/message
+         (format "%S is configured in the dotfile." pkg-name)))
        ((eq 'local (oref pkg :location))
         (let* ((owner (object-assoc (oref pkg :owner)
                                     :name configuration-layer-layers))
