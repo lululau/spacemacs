@@ -446,14 +446,16 @@ manually from the template file =~/.emacs.d/core/templates/.spacemacs.template=
 To apply the modifications made in =~/.spacemacs= press ~SPC f e R~. It will
 re-execute the =Spacemacs= initialization process.
 
-*Note:* A synchronization re-execute the functions =dotspacemacs/init= and
+*Note:* A synchronization re-executes the functions =dotspacemacs/init= and
 =dotspacemacs/config=. Depending on the content of this functions you may
 encounter some unwanted side effects. For instance if you use a toggle in
 =dotspacemac/config= to enable some behavior, this behavior will be turned off
-whenever the dotfile is re-synchronize. To avoid these side-effects it is
-recommended to use =setq= expressions instead of toggle functions. It is also
-possible to /skip/ the execution of =dotspacemacs/config= with the universal
-argument (~SPC u SPC f e R~).
+whenever the dotfile is re-synchronized. To avoid these side-effects it is
+recommended to either use =setq= expressions instead of toggle functions, or to
+use the =on= or =off= versions instead (i.e. instead of
+=spacemacs/toggle-<thing>=, use =spacemacs/toggle-<thing>-on= or
+=spacemacs/toggle-<thing>-off=). It is possible to /skip/ the execution of
+=dotspacemacs/config= with the universal argument (~SPC u SPC f e R~).
 
 ** Content
 *** Using configuration layers
@@ -1325,28 +1327,28 @@ dotfile.
 **** Buffers manipulation key bindings
 Buffer manipulation commands (start with ~b~):
 
-| Key Binding | Description                                                             |
-|-------------+-------------------------------------------------------------------------|
-| ~SPC TAB~   | switch to alternate buffer (switch back and forth)                      |
-| ~SPC b b~   | switch to a buffer using =helm=                                         |
-| ~SPC b d~   | kill the current buffer (does not delete the visited file)              |
-| ~SPC b e~   | erase the content of the buffer (ask for confirmation)                  |
-| ~SPC b h~   | open =*spacemacs*= home buffer                                          |
-| ~SPC b k~   | kill a buffer                                                           |
-| ~SPC b K~   | kill all buffers except the current one                                 |
-| ~SPC b C-K~ | kill all buffers matching the regexp                                    |
-| ~SPC b m h~ | move a buffer to the left                                               |
-| ~SPC b m j~ | move a buffer to the bottom                                             |
-| ~SPC b m k~ | move a buffer to the top                                                |
-| ~SPC b m l~ | move a buffer to the right                                              |
-| ~SPC b M~   | swap windows using [[https://github.com/abo-abo/ace-window][ace-swap-window]]                                      |
-| ~SPC b n~   | switch to next buffer avoiding special buffers                          |
-| ~SPC b p~   | switch to previous buffer avoiding special buffers                      |
-| ~SPC b P~   | copy clipboard and replace buffer (useful when pasting from a browser)  |
-| ~SPC b R~   | revert the current buffer (reload from disk)                            |
-| ~SPC b w~   | toggle read-only (writable state)                                       |
-| ~SPC b Y~   | copy whole buffer to clipboard (useful when copying to a browser)       |
-| ~z f~       | Make current function or comments visible in buffer as much as possible |
+| Key Binding | Description                                                              |
+|-------------+--------------------------------------------------------------------------|
+| ~SPC TAB~   | switch to alternate buffer in the current window (switch back and forth) |
+| ~SPC b b~   | switch to a buffer using =helm=                                          |
+| ~SPC b d~   | kill the current buffer (does not delete the visited file)               |
+| ~SPC b e~   | erase the content of the buffer (ask for confirmation)                   |
+| ~SPC b h~   | open =*spacemacs*= home buffer                                           |
+| ~SPC b k~   | kill a buffer                                                            |
+| ~SPC b K~   | kill all buffers except the current one                                  |
+| ~SPC b C-K~ | kill all buffers matching the regexp                                     |
+| ~SPC b m h~ | move a buffer to the left                                                |
+| ~SPC b m j~ | move a buffer to the bottom                                              |
+| ~SPC b m k~ | move a buffer to the top                                                 |
+| ~SPC b m l~ | move a buffer to the right                                               |
+| ~SPC b M~   | swap windows using [[https://github.com/abo-abo/ace-window][ace-swap-window]]                                       |
+| ~SPC b n~   | switch to next buffer avoiding special buffers                           |
+| ~SPC b p~   | switch to previous buffer avoiding special buffers                       |
+| ~SPC b P~   | copy clipboard and replace buffer (useful when pasting from a browser)   |
+| ~SPC b R~   | revert the current buffer (reload from disk)                             |
+| ~SPC b w~   | toggle read-only (writable state)                                        |
+| ~SPC b Y~   | copy whole buffer to clipboard (useful when copying to a browser)        |
+| ~z f~       | Make current function or comments visible in buffer as much as possible  |
 
 **** Buffers manipulation manipulation micro-state
 A convenient buffer manipulation micro-state allows to quickly cycles through
@@ -2224,6 +2226,7 @@ To search in a project see [[#searching-in-a-project][project searching]].
     |-------------+-------------------------------------------------------|
     | ~SPC p !~   | run shell command in root                             |
     | ~SPC p &~   | run async shell command in root                       |
+    | ~SPC p a~   | toggle between implementation and test                |
     | ~SPC p b~   | switch to project buffer                              |
     | ~SPC p c~   | compile project using =projectile=                    |
     | ~SPC p d~   | find directory                                        |
@@ -2237,7 +2240,7 @@ To search in a project see [[#searching-in-a-project][project searching]].
     | ~SPC p p~   | switch project                                        |
     | ~SPC p r~   | open a recent file                                    |
     | ~SPC p R~   | replace a string                                      |
-    | ~SPC p s~   | see [[#searching-in-a-project][search in project]]                                 |
+    | ~SPC p s~   | see [[#searching-in-a-project][search in project]]    |
     | ~SPC p t~   | open =NeoTree= in =projectile= root                   |
     | ~SPC p T~   | find test files                                       |
     | ~SPC p v~   | open project root in =vc-dir= or =magit=              |
@@ -2392,26 +2395,28 @@ file to =~/.spacemacs=
 | [[https://github.com/syl20bnr/spacemacs/pull/1995][1000th pull request]] | [[https://github.com/justbur][justbur]]    |
 
 ** Stars, forks and watchers
-| Achievements  | Account         |
-|---------------+-----------------|
-| 100th watcher | [[https://github.com/adouzzy][adouzzy]]         |
-| 100th fork    | [[https://github.com/balajisivaraman][balajisivaraman]] |
-| 200th fork    | [[https://github.com/alcol80][alcol80]]         |
-| 300th fork    | [[https://github.com/mlopes][mlopes]]          |
-| 100th star    | [[https://github.com/Jackneill][Jackneill]]       |
-| 200th star    | [[https://github.com/jb55][jb55]]            |
-| 400th star    | [[https://github.com/dbohdan][dbohdan]]         |
-| 600th star    | [[https://github.com/laat][laat]]            |
-| 700th star    | [[https://github.com/kendall][kendall]]         |
-| 800th star    | [[https://github.com/urso][urso]]            |
-| 900th star    | [[https://github.com/luisgerhorst][luisgerhorst]]    |
-| 1000th star!  | [[https://github.com/rashly][rashly]]          |
-| 2000th star!! | [[https://github.com/stshine][stshine]]         |
+| Achievements   | Account         |
+|----------------+-----------------|
+| 100th watcher  | [[https://github.com/adouzzy][adouzzy]]         |
+| 100th fork     | [[https://github.com/balajisivaraman][balajisivaraman]] |
+| 200th fork     | [[https://github.com/alcol80][alcol80]]         |
+| 300th fork     | [[https://github.com/mlopes][mlopes]]          |
+| 100th star     | [[https://github.com/Jackneill][Jackneill]]       |
+| 200th star     | [[https://github.com/jb55][jb55]]            |
+| 400th star     | [[https://github.com/dbohdan][dbohdan]]         |
+| 600th star     | [[https://github.com/laat][laat]]            |
+| 700th star     | [[https://github.com/kendall][kendall]]         |
+| 800th star     | [[https://github.com/urso][urso]]            |
+| 900th star     | [[https://github.com/luisgerhorst][luisgerhorst]]    |
+| 1000th star!   | [[https://github.com/rashly][rashly]]          |
+| 2000th star!!  | [[https://github.com/stshine][stshine]]         |
+| 3000th star!!! | [[https://github.com/TheBB][TheBB]]           |
 
 ** Gitter chat
-| Achievements  | Account     |
-|---------------+-------------|
-| 1000th joiner | [[https://github.com/gabrielpoca][gabrielpoca]] |
+| Achievements                    | Account     |
+|---------------------------------+-------------|
+| First joiner on the Gitter Chat | [[https://github.com/trishume][trishume]]    |
+| 1000th joiner                   | [[https://github.com/gabrielpoca][gabrielpoca]] |
 
 ** First times
 | Achievements                           | Account      |
@@ -2420,16 +2425,17 @@ file to =~/.spacemacs=
 | [[https://github.com/syl20bnr/spacemacs/commit/e802027d75d0c0aed55539b0da2dfa0df94dfd39][First contribution layer]]               | [[https://github.com/trishume][trishume]]     |
 | [[http://oli.me.uk/2014/11/06/spacemacs-emacs-vim/][First blog article on Spacemacs]]        | [[https://github.com/Wolfy87][Wolfy87]]      |
 | [[https://github.com/syl20bnr/spacemacs/commit/7b44a56263049482ed540ed6815a295633ffe9d1][First contributed banner]]               | [[https://github.com/chrisbarrett][chrisbarrett]] |
-| First joiner on the Gitter Chat        | [[https://github.com/trishume][trishume]]     |
 
 ** Specials
-| Achievements                           | Account      |
-|----------------------------------------+--------------|
-| The Gunner (made 18 PRs in a row)      | [[https://github.com/ralesi][ralesi]]       |
-| The Saint (unlocked the holy-mode)     | [[https://github.com/trishume][trishume]]     |
-| The Artist (made the spacemacs logo)   | [[https://github.com/nashamri][nashamri]]     |
-| The Meme Master (made the doge banner) | [[https://github.com/chrisbarrett][chrisbarrett]] |
-| The Helm captain (see [[http://tuhdo.github.io/helm-intro.html][here]])            | [[https://github.com/tuhdo][tuhdo]]        |
+| Achievements                            | Account      |
+|-----------------------------------------+--------------|
+| The Gunner (made 18 PRs in a row)       | [[https://github.com/ralesi][ralesi]]       |
+| The Saint (unlocked the holy-mode)      | [[https://github.com/trishume][trishume]]     |
+| The Artist (made the spacemacs logo)    | [[https://github.com/nashamri][nashamri]]     |
+| The Meme Master (made the doge banner)  | [[https://github.com/chrisbarrett][chrisbarrett]] |
+| The Helm captain (see [[http://tuhdo.github.io/helm-intro.html][here]])             | [[https://github.com/tuhdo][tuhdo]]        |
+| The Master of the Keys (made [[https://github.com/justbur/emacs-which-key][which-key]]) | [[https://github.com/justbur][justbur]]      |
+| The PR Patrol Officer                   | [[https://github.com/robbyoconnor][robbyoconnor]] |
 
 * Thank you
 [[#using-configuration-layers][Jokes aside]], thank you Richard for this great piece of software.

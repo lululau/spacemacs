@@ -16,13 +16,13 @@
         (evil-evilified-state :location local :step pre)
         (holy-mode :location local :step pre)
         ;; default
-        ace-jump-mode
         ace-link
         ace-window
         adaptive-wrap
         aggressive-indent
         auto-dictionary
         auto-highlight-symbol
+        avy
         bind-key
         bookmark
         buffer-move
@@ -130,19 +130,6 @@
         ))
 
 ;; Initialization of packages
-
-(defun spacemacs/init-ace-jump-mode ()
-  (use-package ace-jump-mode
-    :defer t
-    :init
-    (progn
-      (add-hook 'ace-jump-mode-end-hook 'golden-ratio)
-      (evil-leader/set-key "SPC" 'evil-ace-jump-word-mode)
-      (evil-leader/set-key "l" 'evil-ace-jump-line-mode))
-    :config
-    (progn
-      (setq ace-jump-mode-scope 'global)
-      (evil-leader/set-key "`" 'ace-jump-mode-pop-mark))))
 
 (defun spacemacs/init-ace-link ()
   (use-package ace-link
@@ -263,14 +250,13 @@
                                                 markdown-mode-hook))
     :config
     (progn
-      (custom-set-variables
-       '(ahs-case-fold-search nil)
-       '(ahs-default-range (quote ahs-range-whole-buffer))
-       ;; disable auto-highlight of symbol
-       ;; current symbol should be highlight on demand with <SPC> s h
-       '(ahs-idle-timer 0)
-       '(ahs-idle-interval 0.25)
-       '(ahs-inhibit-face-list nil))
+      (setq ahs-case-fold-search nil
+            ahs-default-range 'ahs-range-whole-buffer
+            ;; disable auto-highlight of symbol
+            ;; current symbol should be highlight on demand with <SPC> s h
+            ahs-idle-timer 0
+            ahs-idle-interval 0.25
+            ahs-inhibit-face-list nil)
 
       (defvar spacemacs-last-ahs-highlight-p nil
         "Info on the last searched highlighted symbol.")
@@ -318,8 +304,7 @@
         "Safe wrapper for ahs-highlight-now"
         (eval '(progn
                  (spacemacs/ensure-ahs-enabled-locally)
-                 (ahs-highlight-now)
-                 ) nil))
+                 (ahs-highlight-now)) nil))
 
       (defun spacemacs/quick-ahs-forward ()
         "Go to the next occurrence of symbol under point with
@@ -329,6 +314,7 @@
                       (spacemacs/ahs-highlight-now-wrapper)
                       (when (configuration-layer/package-usedp 'evil-jumper)
                         (evil-set-jump))
+                      (spacemacs/highlight-symbol-micro-state)
                       (ahs-forward)) nil))
 
       (defun spacemacs/quick-ahs-backward ()
@@ -339,6 +325,7 @@
                       (spacemacs/ahs-highlight-now-wrapper)
                       (when (configuration-layer/package-usedp 'evil-jumper)
                         (evil-set-jump))
+                      (spacemacs/highlight-symbol-micro-state)
                       (ahs-backward)) nil))
 
       (eval-after-load 'evil
@@ -352,9 +339,8 @@
         (eval '(progn
                  (spacemacs/ahs-highlight-now-wrapper)
                  (setq spacemacs-last-ahs-highlight-p (ahs-highlight-p))
-                 (spacemacs/auto-highlight-symbol-overlay-map)
-                 (spacemacs/integrate-evil-search nil)
-                 ) nil))
+                 (spacemacs/highlight-symbol-micro-state)
+                 (spacemacs/integrate-evil-search nil)) nil))
 
       (defun spacemacs/symbol-highlight-reset-range ()
         "Reset the range for `auto-highlight-symbol'."
@@ -362,11 +348,12 @@
         (eval '(ahs-change-range ahs-default-range) nil))
 
       (evil-leader/set-key
-        "sh"  'spacemacs/symbol-highlight
-        "sH"  'spacemacs/goto-last-searched-ahs-symbol
-        "sR"  'spacemacs/symbol-highlight-reset-range)
+        "sh" 'spacemacs/symbol-highlight
+        "sH" 'spacemacs/goto-last-searched-ahs-symbol
+        "sR" 'spacemacs/symbol-highlight-reset-range)
 
       (spacemacs|hide-lighter auto-highlight-symbol-mode)
+
       ;; micro-state to easily jump from a highlighted symbol to the others
       (dolist (sym '(ahs-forward
                      ahs-forward-definition
@@ -375,52 +362,65 @@
                      ahs-back-to-start
                      ahs-change-range))
         (let* ((advice (intern (format "spacemacs/%s" (symbol-name sym)))))
-          (eval `(defadvice ,sym (after ,advice activate)
+          (eval `(defadvice ,sym (around ,advice activate)
                    (spacemacs/ahs-highlight-now-wrapper)
-                   (setq spacemacs-last-ahs-highlight-p (ahs-highlight-p))
-                   (spacemacs/auto-highlight-symbol-overlay-map)))))
-      (defun spacemacs/auto-highlight-symbol-overlay-map ()
-        "Set a temporary overlay map to easily jump from highlighted symbols to
- the nexts."
-        (interactive)
-        (set-temporary-overlay-map
-         (let ((map (make-sparse-keymap)))
-           (define-key map (kbd "d") 'ahs-forward-definition)
-           (define-key map (kbd "D") 'ahs-backward-definition)
-           (if (ht-contains? configuration-layer-all-packages 'evil-iedit-state)
-               (define-key map (kbd "e") 'evil-iedit-state/iedit-mode)
-             (define-key map (kbd "e") 'ahs-edit-mode))
-           (define-key map (kbd "n") 'ahs-forward)
-           (define-key map (kbd "N") 'ahs-backward)
-           (define-key map (kbd "R") 'ahs-back-to-start)
-           (define-key map (kbd "r") (lambda () (interactive)
-                                       (eval '(ahs-change-range) nil)))
-           (define-key map (kbd "/") 'spacemacs/helm-project-smart-do-search-region-or-symbol)
-           (define-key map (kbd "b") 'spacemacs/helm-buffers-smart-do-search-region-or-symbol)
-           (define-key map (kbd "f") 'spacemacs/helm-files-smart-do-search-region-or-symbol)
-           map) nil)
-        (let* ((i 0)
-               (overlay-count (length ahs-overlay-list))
-               (overlay (format "%s" (nth i ahs-overlay-list)))
-               (current-overlay (format "%s" ahs-current-overlay))
-               (st (ahs-stat))
-               (plighter (ahs-current-plugin-prop 'lighter))
-               (plugin (format " <%s> " (cond ((string= plighter "HS") "D")
-                                              ((string= plighter "HSA") "B")
-                                              ((string= plighter "HSD") "F"))))
-               (propplugin (propertize plugin 'face
-                                       `(:foreground "#ffffff"
-                                         :background ,(face-attribute
-                                                       'ahs-plugin-defalt-face :foreground)))))
-          (while (not (string= overlay current-overlay))
-            (setq i (1+ i))
-            (setq overlay (format "%s" (nth i ahs-overlay-list))))
-          (let* ((x/y (format "[%s/%s]" (- overlay-count i) overlay-count))
-                 (propx/y (propertize x/y 'face ahs-plugin-whole-buffer-face))
-                 (hidden (if (< 0 (- overlay-count (nth 4 st))) "*" ""))
-                 (prophidden (propertize hidden 'face '(:weight bold))))
-            (echo "%s %s%s (n/N) move, (e) edit, (r) range, (R) reset, (d/D) definition, (/) find in project, (f) find in files, (b) find in opened buffers"
-                  propplugin propx/y prophidden)))))))
+                   ad-do-it
+                   (spacemacs/ahs-highlight-now-wrapper)
+                   (setq spacemacs-last-ahs-highlight-p (ahs-highlight-p))))))
+
+      (spacemacs|define-micro-state highlight-symbol
+        :doc (let* ((i 0)
+                    (overlay-count (length ahs-overlay-list))
+                    (overlay (format "%s" (nth i ahs-overlay-list)))
+                    (current-overlay (format "%s" ahs-current-overlay))
+                    (st (ahs-stat))
+                    (plighter (ahs-current-plugin-prop 'lighter))
+                    (plugin (format " <%s> " (cond ((string= plighter "HS") "D")
+                                                   ((string= plighter "HSA") "B")
+                                                   ((string= plighter "HSD") "F"))))
+                    (propplugin (propertize plugin 'face
+                                            `(:foreground "#ffffff"
+                                                          :background ,(face-attribute
+                                                                        'ahs-plugin-defalt-face :foreground)))))
+               (while (not (string= overlay current-overlay))
+                 (setq i (1+ i))
+                 (setq overlay (format "%s" (nth i ahs-overlay-list))))
+               (let* ((x/y (format "(%s/%s)" (- overlay-count i) overlay-count))
+                      (propx/y (propertize x/y 'face ahs-plugin-whole-buffer-face))
+                      (hidden (if (< 0 (- overlay-count (nth 4 st))) "*" ""))
+                      (prophidden (propertize hidden 'face '(:weight bold))))
+                 (format "%s %s%s [n/N] move [e] edit [r] range [R] reset [d/D] definition [/] find in project [f] find in files [b] find in opened buffers [q] exit"
+                         propplugin propx/y prophidden)))
+        :bindings
+        ("d" ahs-forward-definition)
+        ("D" ahs-backward-definition)
+        ("e" nil
+         :post (if (configuration-layer/package-usedp 'evil-iedit-state)
+                   (evil-iedit-state/iedit-mode)
+                 (ahs-edit-mode))
+         :exit t)
+        ("n" spacemacs/quick-ahs-forward)
+        ("N" spacemacs/quick-ahs-backward)
+        ("R" ahs-back-to-start)
+        ("r" ahs-change-range)
+        ("/" spacemacs/helm-project-smart-do-search-region-or-symbol :exit t)
+        ("b" spacemacs/helm-buffers-smart-do-search-region-or-symbol :exit t)
+        ("f" spacemacs/helm-files-smart-do-search-region-or-symbol :exit t)
+        ("q" nil :exit t)))))
+
+(defun spacemacs/init-avy ()
+  (use-package avy
+    :defer t
+    :init
+    (progn
+      (setq avy-keys (number-sequence ?a ?z))
+      (setq avy-all-windows 'all-frames)
+      (setq avy-background t)
+      (evil-leader/set-key
+        "SPC" 'avy-goto-word-or-subword-1
+        "l" 'avy-goto-line))
+    :config
+    (evil-leader/set-key "`" 'avy-pop-mark)))
 
 (defun spacemacs/init-bind-key ())
 
@@ -428,7 +428,7 @@
   (use-package bookmark
     :defer t
     :init
-    (setq bookmark-default-file (concat user-emacs-directory "bookmarks")
+    (setq bookmark-default-file (concat spacemacs-cache-directory "bookmarks")
           ;; autosave each change
           bookmark-save-flag 1)))
 
@@ -464,13 +464,12 @@
         :evil-leader "t C--"))
     :config
     (progn
-      (custom-set-variables
-       '(ccm-recenter-at-end-of-file t)
-       '(ccm-ignored-commands (quote (mouse-drag-region
-                                      mouse-set-point
-                                      widget-button-click
-                                      scroll-bar-toolkit-scroll
-                                      evil-mouse-drag-region))))
+      (setq ccm-recenter-at-end-of-file t
+            ccm-ignored-commands '(mouse-drag-region
+                                   mouse-set-point
+                                   widget-button-click
+                                   scroll-bar-toolkit-scroll
+                                   evil-mouse-drag-region))
       (spacemacs|diminish centered-cursor-mode " ⊝" " -"))))
 
 (defun spacemacs/init-clean-aindent-mode ()
@@ -1151,9 +1150,8 @@ Example: (evil-map visual \"<\" \"<gv\")"
                       'spacemacs/helm-buffers-smart-do-search-region-or-symbol)))
              new-bindings)
             (setq ad-return-value (cons new-msg new-bindings)))))
-      (custom-set-variables
-       '(expand-region-contract-fast-key "V")
-       '(expand-region-reset-fast-key "r")))))
+      (setq expand-region-contract-fast-key "V"
+            expand-region-reset-fast-key "r"))))
 
 (defun spacemacs/init-fancy-battery ()
   (use-package fancy-battery
@@ -1308,7 +1306,6 @@ Example: (evil-map visual \"<\" \"<gv\")"
                       select-window-7
                       select-window-8
                       select-window-9
-                      ace-jump-mode-pop-mark
                       buf-move-left
                       buf-move-right
                       buf-move-up
@@ -3235,6 +3232,7 @@ one of `l' or `r'."
       (evil-leader/set-key
         "p!" 'projectile-run-shell-command-in-root
         "p&" 'projectile-run-async-shell-command-in-root
+        "pa" 'projectile-toggle-between-implementation-and-test
         "pc" 'projectile-compile-project
         "pD" 'projectile-dired
         "pG" 'projectile-regenerate-tags
@@ -3566,13 +3564,13 @@ one of `l' or `r'."
                ("spacemacs/toggle-\\(.+\\)" . "\\1")
                ("select-window-\\([0-9]\\)" . "window \\1")
                ("spacemacs/alternate-buffer" . "last buffer")
-               ("evil-ace-jump-word-mode" . "ace word")
+               ("avy-goto-word-or-subword-1" . "avy word")
                ("shell-command" . "shell cmd")
                ("spacemacs/default-pop-shell" . "open shell")
                ("spacemacs/helm-project-smart-do-search-region-or-symbol" . "smart search")
                ("helm-descbinds" . "show keybindings")
                ("sp-split-sexp" . "split sexp")
-               ("evil-ace-jump-line-mode" . "ace line")
+               ("avy-goto-line" . "avy line")
                ("universal-argument" . "universal arg")
                ("er/expand-region" . "expand region")
                ("helm-apropos" . "apropos"))))
