@@ -29,7 +29,6 @@
   ;; optimization, no need to activate all the packages so early
   (setq package-enable-at-startup nil)
   (package-initialize 'noactivate)
-  ;; (package-initialize)
   ;; Emacs 24.3 and above ships with python.el but in some Emacs 24.3.1 packages
   ;; for Ubuntu, python.el seems to be missing.
   ;; This hack adds marmalade repository for this case only.
@@ -190,14 +189,17 @@ layer directory."
       (spacemacs-buffer/warning "Cannot find layer %S !" name-sym)
       nil)))
 
-(defun configuration-layer/make-package (pkg)
-  "Return a `cfgl-package' object based on PKG."
+(defun configuration-layer/make-package (pkg &optional obj)
+  "Return a `cfgl-package' object based on PKG.
+If OBJ is non nil then copy PKG properties into OBJ, otherwise create
+a new object.
+Properties that can be copied are `:location', `:step' and `:excluded'."
   (let* ((name-sym (if (listp pkg) (car pkg) pkg))
          (name-str (symbol-name name-sym))
          (location (when (listp pkg) (plist-get (cdr pkg) :location)))
          (step (when (listp pkg) (plist-get (cdr pkg) :step)))
          (excluded (when (listp pkg) (plist-get (cdr pkg) :excluded)))
-         (obj (cfgl-package name-str :name name-sym)))
+         (obj (if obj obj (cfgl-package name-str :name name-sym))))
     (when location (oset obj :location location))
     (when step (oset obj :step step))
     (oset obj :excluded excluded)
@@ -219,15 +221,16 @@ layer directory."
           (unless (configuration-layer/layer-usedp name)
             (load packages-file))
           (dolist (pkg (symbol-value (intern (format "%S-packages" name))))
-            (let* ((pkgname (if (listp pkg) (car pkg) pkg))
+            (let* ((pkg-name (if (listp pkg) (car pkg) pkg))
                    (init-func (intern (format "%S/init-%S"
-                                              name pkgname)))
+                                              name pkg-name)))
                    (pre-init-func (intern (format "%S/pre-init-%S"
-                                                  name pkgname)))
+                                                  name pkg-name)))
                    (post-init-func (intern (format "%S/post-init-%S"
-                                                   name pkgname)))
-                   (obj (object-assoc pkg :name result)))
-              (unless obj
+                                                   name pkg-name)))
+                   (obj (object-assoc pkg-name :name result)))
+              (if obj
+                  (setq obj (configuration-layer/make-package pkg obj))
                 (setq obj (configuration-layer/make-package pkg))
                 (push obj result))
               (when (fboundp init-func)
@@ -244,6 +247,7 @@ layer directory."
                 (push name (oref obj :pre-layers)))
               (when (fboundp post-init-func)
                 (push name (oref obj :post-layers)))))
+          ;; TODO remove support for <layer>-excluded-packages in 0.105.0
           (let ((xvar (intern (format "%S-excluded-packages" name))))
             (when (boundp xvar)
               (dolist (xpkg (symbol-value xvar))
@@ -264,16 +268,16 @@ layer directory."
             (let ((var (intern (format "%S-%S-extensions" name step))))
               (when (boundp var)
                 (dolist (pkg (symbol-value var))
-                  (let ((pkgname (if (listp pkg) (car pkg) pkg)))
+                  (let ((pkg-name (if (listp pkg) (car pkg) pkg)))
                     (when (fboundp (intern (format "%S/init-%S"
-                                                   name pkgname)))
+                                                   name pkg-name)))
                       (let ((obj (configuration-layer/make-package pkg))
                             (init-func (intern (format "%S/init-%S"
-                                                       name pkgname)))
+                                                       name pkg-name)))
                             (pre-init-func (intern (format "%S/pre-init-%S"
-                                                           name pkgname)))
+                                                           name pkg-name)))
                             (post-init-func (intern (format "%S/post-init-%S"
-                                                            name pkgname)))
+                                                            name pkg-name)))
                             (obj (object-assoc pkg :name result)))
                         (unless obj
                           (setq obj (configuration-layer/make-package pkg))
@@ -531,53 +535,76 @@ LAYERS is a list of layer symbols."
 (defun configuration-layer//install-packages (packages)
   "Install PACKAGES."
   (interactive)
-  (let* ((candidates (configuration-layer/filter-packages
-                      packages
-                      (lambda (x) (and (not (null (oref x :owner)))
-                                       (not (eq 'local (oref x :location)))
-                                       (not (oref x :excluded))))))
-         (not-installed (configuration-layer//get-uninstalled-packages
-                         (mapcar 'car (object-assoc-list :name candidates))))
+  (let* ((not-installed
+          (configuration-layer/filter-packages
+           packages
+           (lambda (x) (and (not (null (oref x :owner)))
+                            (not (eq 'local (oref x :location)))
+                            (not (oref x :excluded))
+                            (not (package-installed-p (oref x :name)))))))
          (not-installed-count (length not-installed)))
     ;; installation
-    (if not-installed
-        (progn
-          (spacemacs-buffer/append
-           (format "Found %s new package(s) to install...\n"
-                   not-installed-count))
-          (spacemacs-buffer/append
-           "--> fetching new package repository indexes...\n")
-          (spacemacs//redisplay)
-          (package-refresh-contents)
-          (setq installed-count 0)
-          (dolist (pkg-name not-installed)
-            (setq installed-count (1+ installed-count))
-            (let* ((pkg (object-assoc pkg-name :name
-                                      configuration-layer-packages))
-                   (layer (when pkg (oref pkg :owner))))
-              (spacemacs-buffer/replace-last-line
-               (format "--> installing %s%s... [%s/%s]"
-                       (if layer (format "%S:" layer) "")
-                       pkg-name installed-count not-installed-count) t))
-            (unless (package-installed-p pkg-name)
-              (condition-case err
-                  (if (not (assq pkg-name package-archive-contents))
-                      (spacemacs-buffer/append
-                       (format (concat "\nPackage %s is unavailable. "
-                                       "Is the package name misspelled?\n")
-                               pkg-name))
-                    (dolist
-                        (dep (configuration-layer//get-package-deps-from-archive
-                              pkg-name))
-                      (configuration-layer//activate-package (car dep)))
-                    (package-install pkg-name))
-                ('error
-                 (configuration-layer//set-error)
-                 (spacemacs-buffer/append
-                  (format (concat "An error occurred while installing %s "
-                                  "(error: %s)\n") pkg-name err)))))
-            (spacemacs//redisplay))
-          (spacemacs-buffer/append "\n")))))
+    (when not-installed
+      (spacemacs-buffer/append
+       (format "Found %s new package(s) to install...\n"
+               not-installed-count))
+      (spacemacs-buffer/append
+       "--> fetching new package repository indexes...\n")
+      (spacemacs//redisplay)
+      (package-refresh-contents)
+      (setq installed-count 0)
+      (dolist (pkg not-installed)
+        (setq installed-count (1+ installed-count))
+        (let* ((pkg-name (oref pkg :name))
+               (layer (oref pkg :owner))
+               (location (oref pkg :location)))
+          (spacemacs-buffer/replace-last-line
+           (format "--> installing %s%s... [%s/%s]"
+                   (if layer (format "%S:" layer) "")
+                   pkg-name installed-count not-installed-count) t)
+          (unless (package-installed-p pkg-name)
+            (condition-case err
+                (cond
+                 ((eq 'elpa location)
+                  (configuration-layer//install-from-elpa pkg))
+                 ((eq 'recipe location)
+                  (configuration-layer//install-from-recipe pkg))
+                 (t (spacemacs-buffer/warning
+                     "Unknown location %S for package %S." location pkg-name)))
+              ('error
+               (configuration-layer//set-error)
+               (spacemacs-buffer/append
+                (format (concat "An error occurred while installing %s "
+                                "(error: %s)\n") pkg-name err))))))
+        (spacemacs//redisplay))
+      (spacemacs-buffer/append "\n"))))
+
+(defun configuration-layer//install-from-elpa (pkg)
+  "Install PKG from ELPA."
+  (if (not (assq pkg-name package-archive-contents))
+      (spacemacs-buffer/append
+       (format (concat "\nPackage %s is unavailable. "
+                       "Is the package name misspelled?\n")
+               pkg-name))
+    (dolist
+        (dep (configuration-layer//get-package-deps-from-archive
+              pkg-name))
+      (configuration-layer//activate-package (car dep)))
+    (package-install pkg-name)))
+
+(defun configuration-layer//install-from-recipe (pkg)
+  "Install PKG from a recipe."
+  (let* ((pgk-name (oref pkg :name))
+         (layer (oref pkg :owner))
+         (recipes-var (intern (format "%S-package-recipes" layer)))
+         (recipe (when (boundp recipes-var)
+                   (assq pkg-name (symbol-value recipes-var)))))
+    (if recipe
+        (quelpa recipe)
+      (spacemacs-buffer/warning
+       (concat "Cannot find any recipe for package %S! Be sure "
+               "to add a recipe for it in alist %S.")
+       pkg-name recipes-var))))
 
 (defun configuration-layer//filter-packages-with-deps (pkg-names filter)
   "Return a filtered PACKAGES list where each elements satisfies FILTER."
@@ -846,6 +873,11 @@ to select one."
 (defun configuration-layer/get-layer-property (layer slot)
   "Return the value of SLOT for the given LAYER."
   (slot-value (object-assoc layer :name configuration-layer-layers) slot))
+
+(defun configuration-layer/get-layer-local-dir (layer)
+  "Return the value of SLOT for the given LAYER."
+  (concat (slot-value (object-assoc layer :name configuration-layer-layers)
+                      :dir) "local/"))
 
 (defun configuration-layer/get-layer-path (layer)
   "Return the path for LAYER symbol."
