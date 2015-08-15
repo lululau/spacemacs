@@ -97,7 +97,9 @@
                :documentation "Layers with a post-init function.")
    (location :initarg :location
              :initform elpa
-             :type (satisfies (lambda (x) (member x '(local elpa recipe))))
+             :type (satisfies (lambda (x)
+                                (or (member x '(local elpa))
+                                    (and (listp x) (eq 'recipe (car x))))))
              :documentation "Location of the package.")
    (step :initarg :step
          :initform nil
@@ -535,42 +537,43 @@ LAYERS is a list of layer symbols."
 (defun configuration-layer//install-packages (packages)
   "Install PACKAGES."
   (interactive)
-  (let* ((not-installed
+  (let* ((candidates
           (configuration-layer/filter-packages
            packages
            (lambda (x) (and (not (null (oref x :owner)))
                             (not (eq 'local (oref x :location)))
-                            (not (oref x :excluded))
-                            (not (package-installed-p (oref x :name)))))))
-         (not-installed-count (length not-installed)))
+                            (not (oref x :excluded))))))
+         (noinst-pkg-names (configuration-layer//get-uninstalled-packages
+                            (mapcar 'car (object-assoc-list :name candidates))))
+         (noinst-count (length noinst-pkg-names)))
     ;; installation
-    (when not-installed
+    (when noinst-pkg-names
       (spacemacs-buffer/append
        (format "Found %s new package(s) to install...\n"
-               not-installed-count))
+               noinst-count))
       (spacemacs-buffer/append
        "--> fetching new package repository indexes...\n")
       (spacemacs//redisplay)
       (package-refresh-contents)
       (setq installed-count 0)
-      (dolist (pkg not-installed)
+      (dolist (pkg-name noinst-pkg-names)
         (setq installed-count (1+ installed-count))
-        (let* ((pkg-name (oref pkg :name))
-               (layer (oref pkg :owner))
-               (location (oref pkg :location)))
+        (let* ((pkg (object-assoc pkg-name :name configuration-layer-packages))
+               (layer (when pkg (oref pkg :owner)))
+               (location (when pkg (oref pkg :location))))
           (spacemacs-buffer/replace-last-line
            (format "--> installing %s%s... [%s/%s]"
-                   (if layer (format "%S:" layer) "")
-                   pkg-name installed-count not-installed-count) t)
+                   (if layer (format "%S:" layer) "dependency ")
+                   pkg-name installed-count noinst-count) t)
           (unless (package-installed-p pkg-name)
             (condition-case err
                 (cond
-                 ((eq 'elpa location)
-                  (configuration-layer//install-from-elpa pkg))
-                 ((eq 'recipe location)
+                 ((or (null pkg) (eq 'elpa location))
+                  (configuration-layer//install-from-elpa pkg-name))
+                 ((and (listp location) (eq 'recipe (car location)))
                   (configuration-layer//install-from-recipe pkg))
-                 (t (spacemacs-buffer/warning
-                     "Unknown location %S for package %S." location pkg-name)))
+                 (t (spacemacs-buffer/warning "Cannot install package %S."
+                                              pkg-name)))
               ('error
                (configuration-layer//set-error)
                (spacemacs-buffer/append
@@ -579,7 +582,7 @@ LAYERS is a list of layer symbols."
         (spacemacs//redisplay))
       (spacemacs-buffer/append "\n"))))
 
-(defun configuration-layer//install-from-elpa (pkg)
+(defun configuration-layer//install-from-elpa (pkg-name)
   "Install PKG from ELPA."
   (if (not (assq pkg-name package-archive-contents))
       (spacemacs-buffer/append
@@ -596,9 +599,7 @@ LAYERS is a list of layer symbols."
   "Install PKG from a recipe."
   (let* ((pgk-name (oref pkg :name))
          (layer (oref pkg :owner))
-         (recipes-var (intern (format "%S-package-recipes" layer)))
-         (recipe (when (boundp recipes-var)
-                   (assq pkg-name (symbol-value recipes-var)))))
+         (recipe (cons pkg-name (cdr (oref pkg :location)))))
     (if recipe
         (quelpa recipe)
       (spacemacs-buffer/warning
@@ -629,18 +630,40 @@ LAYERS is a list of layer symbols."
   (configuration-layer//filter-packages-with-deps
    pkg-names (lambda (x) (not (package-installed-p x)))))
 
+(defun configuration-layer//package-has-recipe-p (pkg-name)
+  "Return non nil if PKG-NAME is the name of a package declared with a recipe."
+  (when (object-assoc pkg-name :name configuration-layer-packages)
+    (let* ((pkg (object-assoc pkg-name :name configuration-layer-packages))
+           (location (oref pkg :location)))
+      (and (listp location) (eq 'recipe (car location))))))
+
+(defun configuration-layer//get-package-recipe (pkg-name)
+  "Return the recipe for PGK-NAME if it has one."
+  (let ((pkg (object-assoc pkg-name :name configuration-layer-packages)))
+    (when pkg
+      (let ((location (oref pkg :location)))
+        (when (and (listp location) (eq 'recipe (car location)))
+          location)))))
+
+(defun configuration-layer//new-version-available-p (pkg-name)
+  "Return non nil if there is a new version available for PKG-NAME."
+  (let ((recipe (configuration-layer//get-package-recipe pkg-name))
+        (cur-version (configuration-layer//get-package-version-string pkg-name))
+        new-version)
+    (when cur-version
+      (setq new-version
+            (if recipe
+                (quelpa-checkout recipe (expand-file-name (symbol-name pkg-name)
+                                                          quelpa-build-dir))
+              (configuration-layer//get-latest-package-version-string
+               pkg-name)))
+      ;; (message "%s: %s > %s ?" pkg-name cur-version new-version)
+      (version< cur-version new-version))))
+
 (defun configuration-layer//get-packages-to-update (pkg-names)
   "Return a filtered list of PKG-NAMES to update."
   (configuration-layer//filter-packages-with-deps
-   pkg-names
-   (lambda (x)
-     ;; the package is a built-in package
-     ;; or a newest version is available
-     (let ((installed-ver (configuration-layer//get-package-version-string x)))
-       (and (not (null installed-ver))
-            (version< installed-ver
-                      (configuration-layer//get-latest-package-version-string
-                       x)))))))
+   pkg-names 'configuration-layer//new-version-available-p))
 
 (defun configuration-layer//configure-packages (packages)
   "Configure all passed PACKAGES honoring the steps order."
@@ -998,6 +1021,10 @@ to select one."
    ((version< emacs-version "24.3.50")
     (let ((v (configuration-layer//get-package-version-string pkg-name)))
       (when v (package-delete (symbol-name pkg-name) v))))
+   ((version<= "25.0.50" emacs-version)
+    (let ((p (cadr (assq pkg-name package-alist))))
+      ;; add force flag to ignore dependency checks in Emacs25
+      (when p (package-delete p t))))
    (t (let ((p (cadr (assq pkg-name package-alist))))
         (when p (package-delete p))))))
 

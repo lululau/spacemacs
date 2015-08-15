@@ -42,7 +42,7 @@
         evil-escape
         evil-exchange
         evil-iedit-state
-        evil-indent-textobject
+        (evil-indent-textobject :location (recipe :fetcher github :repo "TheBB/evil-indent-textobject"))
         evil-jumper
         evil-leader
         evil-lisp-state
@@ -2246,6 +2246,21 @@ Put (global-hungry-delete-mode) in dotspacemacs/config to enable by default."
     :commands hybrid-mode
     :init
     (progn
+      (add-to-list 'spacemacs-evil-cursor-colors
+                   `(hybrid . ,(spacemacs/state-color 'emacs)))
+      (spacemacs/set-state-faces)
+      (setq hybrid-mode-insert-state-cursor
+            (if (and (display-graphic-p)
+                     dotspacemacs-colorize-cursor-according-to-state)
+                `(,(spacemacs/state-color 'hybrid) (bar . 2))
+              'bar))
+      (copy-face 'spacemacs-insert-face 'spacemacs-insert-face-backup)
+      (add-hook 'hybrid-mode-hook
+                (lambda ()
+                  (copy-face (if hybrid-mode
+                                 'spacemacs-emacs-face
+                               'spacemacs-insert-face-backup)
+                             'spacemacs-insert-face)))
       (when (eq 'hybrid dotspacemacs-editing-style)
         (hybrid-mode))
       (spacemacs|add-toggle hybrid-mode
@@ -2690,8 +2705,10 @@ Put (global-hungry-delete-mode) in dotspacemacs/config to enable by default."
                                    map)))
                    (split-string (format-mode-line minor-mode-alist))
                    (concat (propertize
-                            (if dotspacemacs-mode-line-unicode-symbols " " "") 'face face)
-                           (unless dotspacemacs-mode-line-unicode-symbols "|"))))
+                            (if (dotspacemacs|symbol-value
+                                 dotspacemacs-mode-line-unicode-symbols) " " "") 'face face)
+                           (unless (dotspacemacs|symbol-value
+                                    dotspacemacs-mode-line-unicode-symbols) "|"))))
 
       (defpowerline spacemacs-powerline-new-version
         (propertize
@@ -3169,10 +3186,24 @@ one of `l' or `r'."
         (spacemacs//mode-line-prepare-any spacemacs-mode-line-right 'r))
 
       (defun spacemacs//mode-line-prepare ()
+        ;; diminish the lighters
+        (when spacemacs-mode-line-minor-modesp
+          (let ((unicodep (dotspacemacs|symbol-value
+                           dotspacemacs-mode-line-unicode-symbols)))
+            (dolist (mm spacemacs--diminished-minor-modes)
+              (let ((mode (car mm)))
+                (when (and (boundp mode) (symbol-value mode))
+                  (let* ((unicode (cadr mm))
+                         (ascii (caddr mm))
+                         (dim (if unicodep
+                                  unicode
+                                (if ascii ascii unicode))))
+                    (diminish mode dim)))))))
         (let* ((active (powerline-selected-window-active))
                (lhs (spacemacs//mode-line-prepare-left))
                (rhs (spacemacs//mode-line-prepare-right))
                (line-face (if active 'powerline-active2 'powerline-inactive2)))
+          ;; create the line
           (concat (powerline-render lhs)
                   (powerline-fill line-face (powerline-width rhs))
                   (powerline-render rhs))))
@@ -3192,7 +3223,8 @@ one of `l' or `r'."
         "Set the powerline for buffers created when Emacs starts."
         (unless configuration-layer-error-count
           (dolist (buffer '("*Messages*" "*spacemacs*" "*Compile-Log*"))
-            (when (get-buffer buffer)
+            (when (and (get-buffer buffer)
+                       (configuration-layer/package-usedp 'powerline))
               (spacemacs//restore-powerline buffer)))))
       (add-hook 'emacs-startup-hook
                 'spacemacs//set-powerline-for-startup-buffers))))
@@ -3629,7 +3661,8 @@ one of `l' or `r'."
       (let* ((num (window-numbering-get-number))
              (str (if num (int-to-string num))))
         (cond
-         ((not dotspacemacs-mode-line-unicode-symbols) str)
+         ((not (dotspacemacs|symbol-value
+                dotspacemacs-mode-line-unicode-symbols)) str)
          ((equal str "1")  "➊")
          ((equal str "2")  "➋")
          ((equal str "3")  "➌")
