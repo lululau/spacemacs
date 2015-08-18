@@ -21,7 +21,7 @@
     :defer t
     :init
     (progn
-      (evilify ibuffer-mode ibuffer-mode-map)
+      ;; (evilify ibuffer-mode ibuffer-mode-map)
       (evil-leader/set-key "bB" 'ibuffer)
       (global-set-key (kbd "C-x C-b") 'ibuffer)
 
