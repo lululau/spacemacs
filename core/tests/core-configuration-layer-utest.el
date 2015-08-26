@@ -13,28 +13,28 @@
 (require 'core-configuration-layer)
 
 ;; ---------------------------------------------------------------------------
-;; configuration-layer//declare-layers
+;; configuration-layer//make-layers
 ;; ---------------------------------------------------------------------------
 
-(ert-deftest test-declare-layers--result-order-is-not-reversed ()
+(ert-deftest test-make-layers--result-order-is-not-reversed ()
   (mocker-let ((configuration-layer/make-layer
                 (x)
-                ((:input '(layer3) :output 'layer3)
+                ((:input '(layer1) :output 'layer1)
                  (:input '(layer2) :output 'layer2)
-                 (:input '(layer1) :output 'layer1))))
+                 (:input '(layer3) :output 'layer3))))
     (let* ((input '(layer1 layer2 layer3))
-           (result (configuration-layer//declare-layers input)))
+           (result (configuration-layer//make-layers input)))
       (should (equal result input)))))
 
-(ert-deftest test-declare-layers--ignore-not-found-layer ()
+(ert-deftest test-make-layers--ignore-not-found-layer ()
   (mocker-let ((configuration-layer/make-layer
                 (x)
-                ((:input '(layer3) :output 'layer3)
+                ((:input '(layer1) :output 'layer1)
                  (:input '(layer2-not-found) :output nil)
-                 (:input '(layer1) :output 'layer1))))
+                 (:input '(layer3) :output 'layer3))))
               (let* ((input '(layer1 layer2-not-found layer3))
                      (expected '(layer1 layer3))
-                     (result (configuration-layer//declare-layers input)))
+                     (result (configuration-layer//make-layers input)))
                 (should (equal result expected)))))
 
 ;; ---------------------------------------------------------------------------
@@ -514,13 +514,13 @@
 ;; ---------------------------------------------------------------------------
 
 (ert-deftest test-package-has-a-recipe-p--true ()
-  (let ((configuration-layer-packages
+  (let ((configuration-layer--packages
          `(,(configuration-layer/make-package '(pkg1 :location (recipe blah)))
            ,(configuration-layer/make-package '(pkg2 :location elpa)))))
     (should (configuration-layer//package-has-recipe-p 'pkg1))))
 
 (ert-deftest test-package-has-a-recipe-p--false ()
-  (let ((configuration-layer-packages
+  (let ((configuration-layer--packages
          `(,(configuration-layer/make-package '(pkg1 :location (recipe blah)))
            ,(configuration-layer/make-package '(pkg2 :location elpa)))))
     (should (not (configuration-layer//package-has-recipe-p 'pkg2)))))
@@ -530,14 +530,14 @@
 ;; ---------------------------------------------------------------------------
 
 (ert-deftest test-get-package-recipe--return-recipe-if-package-has-one ()
-  (let ((configuration-layer-packages
+  (let ((configuration-layer--packages
          `(,(configuration-layer/make-package '(pkg1 :location (recipe blah)))
            ,(configuration-layer/make-package '(pkg2 :location elpa)))))
     (should (eq 'recipe
                 (car (configuration-layer//get-package-recipe 'pkg1))))))
 
 (ert-deftest test-get-package-recipe--return-nil-if-package-has-no-recipe ()
-  (let ((configuration-layer-packages
+  (let ((configuration-layer--packages
          `(,(configuration-layer/make-package '(pkg1 :location (recipe blah)))
            ,(configuration-layer/make-package '(pkg2 :location elpa)))))
     (should (not (configuration-layer//get-package-recipe 'pkg2)))))
@@ -652,7 +652,7 @@
          (layers (list layer1))
          (layer1-packages '(pkg1 pkg2 pkg3))
          (mocker-mock-default-record-cls 'mocker-stub-record)
-         (configuration-layer-packages
+         (configuration-layer--packages
           (list (cfgl-package "pkg3" :name 'pkg3 :owner 'layer1)
                 (cfgl-package "pkg2" :name 'pkg2 :owner 'layer1)
                 (cfgl-package "pkg1" :name 'pkg1 :owner 'layer1))))
@@ -664,7 +664,7 @@
          (layers (list layer1))
          (layer1-packages '(pkg1 pkg2 pkg3))
          (mocker-mock-default-record-cls 'mocker-stub-record)
-         (configuration-layer-packages
+         (configuration-layer--packages
           (list (cfgl-package "pkg3" :name 'pkg3)
                 (cfgl-package "pkg2" :name 'pkg2)
                 (cfgl-package "pkg1" :name 'pkg1))))
