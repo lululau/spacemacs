@@ -18,6 +18,7 @@
         js-doc
         js2-mode
         js2-refactor
+        tern
         web-beautify
         web-mode
         ))
@@ -56,6 +57,9 @@
 (defun react/post-init-js2-refactor ()
   (add-hook 'react-mode-hook 'spacemacs/js2-refactor-require)
   (spacemacs/js2-refactor-set-key-bindings 'react-mode))
+
+(defun react/post-init-tern ()
+  (add-hook 'react-mode-hook 'tern-mode))
 
 (defun react/post-init-web-beautify ()
   (evil-leader/set-key-for-mode 'react-mode  "m=" 'web-beautify-js))

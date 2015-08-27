@@ -12,10 +12,16 @@
 
 (setq markdown-packages
   '(
+    emoji-cheat-sheet-plus
     markdown-mode
     markdown-toc
     mmm-mode
+    company
+    company-emoji
     ))
+
+(defun markdown/post-init-emoji-cheat-sheet-plus ()
+  (add-hook 'markdown-mode-hook 'emoji-cheat-sheet-plus-display-mode))
 
 (defun markdown/init-markdown-mode ()
   (use-package markdown-mode
@@ -91,7 +97,7 @@ Will work on both org-mode and any mode that accepts plain html."
         "mxP"  'markdown-pre-region
         ;; Following and Jumping
         "mN"   'markdown-next-link
-        "mo"   'markdown-follow-thing-at-point
+        "mf"   'markdown-follow-thing-at-point
         "mP"   'markdown-previous-link
         "m <RET>" 'markdown-jump)
 
@@ -165,3 +171,10 @@ Will work on both org-mode and any mode that accepts plain html."
       (mmm-add-mode-ext-class 'markdown-mode nil 'markdown-c++)
       (mmm-add-mode-ext-class 'markdown-mode nil 'markdown-elisp)
       (mmm-add-mode-ext-class 'markdown-mode nil 'markdown-html))))
+
+(when (configuration-layer/layer-usedp 'auto-completion)
+  (defun markdown/post-init-company ()
+    (spacemacs|add-company-hook markdown-mode)
+    (push 'company-capf company-backends-markdown-mode))
+  (defun markdown/post-init-company-emoji ()
+    (push 'company-emoji company-backends-markdown-mode)))

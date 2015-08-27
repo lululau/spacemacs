@@ -75,7 +75,6 @@
         (helm-spacemacs :location local)
         helm-swoop
         helm-themes
-        helm-unicode
         highlight-indentation
         highlight-numbers
         highlight-parentheses
@@ -103,6 +102,8 @@
         rainbow-delimiters
         recentf
         rfringe
+        savehist
+        saveplace
         smartparens
         smooth-scrolling
         (solarized-theme :location local)
@@ -174,19 +175,7 @@
         "wC"  'ace-delete-window
         "w <SPC>"  'ace-window)
       ;; set ace-window keys to home-row
-      (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
-    :config
-    (progn
-      ;; add support for golden-ratio
-      (eval-after-load 'golden-ratio
-        '(setq golden-ratio-extra-commands
-               (append golden-ratio-extra-commands
-                       '(ace-window
-                         ace-delete-window
-                         ace-select-window
-                         ace-swap-window
-                         ace-maximize-window
-                         )))))))
+      (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))))
 
 (defun spacemacs/init-adaptive-wrap ()
   (use-package adaptive-wrap
@@ -199,14 +188,6 @@
     :defer t
     :init
     (progn
-      (defun spacemacs/toggle-aggressive-indent ()
-        "Toggle the aggressive indent mode for the current buffer."
-        (interactive)
-        (require 'aggressive-indent)
-        (if (symbol-value aggressive-indent-mode)
-            (global-aggressive-indent-mode -1)
-          (global-aggressive-indent-mode)))
-
       (spacemacs|add-toggle aggressive-indent
         :status aggressive-indent-mode
         :on (aggressive-indent-mode)
@@ -221,11 +202,7 @@
         :evil-leader "t C-I"))
     :config
     (progn
-      (defun spacemacs/disable-aggressive-indent ()
-        (aggressive-indent-mode -1))
-
-      (add-hook 'diff-auto-refine-mode-hook 'spacemacs/disable-aggressive-indent)
-
+      (add-hook 'diff-auto-refine-mode-hook 'spacemacs/toggle-aggressive-indent-off)
       (spacemacs|diminish aggressive-indent-mode " Ⓘ" " I"))))
 
 (defun spacemacs/init-auto-dictionary ()
@@ -242,8 +219,8 @@
   (use-package auto-highlight-symbol
     :defer t
     :init
-    (add-to-hooks 'auto-highlight-symbol-mode '(prog-mode-hook
-                                                markdown-mode-hook))
+    (spacemacs/add-to-hooks 'auto-highlight-symbol-mode '(prog-mode-hook
+                                                          markdown-mode-hook))
     :config
     (progn
       (setq ahs-case-fold-search nil
@@ -306,23 +283,23 @@
         "Go to the next occurrence of symbol under point with
 `auto-highlight-symbol'"
         (interactive)
-        (eval '(progn (spacemacs/integrate-evil-search t)
-                      (spacemacs/ahs-highlight-now-wrapper)
-                      (when (configuration-layer/package-usedp 'evil-jumper)
-                        (evil-set-jump))
-                      (spacemacs/highlight-symbol-micro-state)
-                      (ahs-forward)) nil))
+        (spacemacs/integrate-evil-search t)
+        (spacemacs/ahs-highlight-now-wrapper)
+        (when (configuration-layer/package-usedp 'evil-jumper)
+          (evil-set-jump))
+        (spacemacs/highlight-symbol-micro-state)
+        (ahs-forward))
 
       (defun spacemacs/quick-ahs-backward ()
         "Go to the previous occurrence of symbol under point with
 `auto-highlight-symbol'"
         (interactive)
-        (eval '(progn (spacemacs/integrate-evil-search nil)
-                      (spacemacs/ahs-highlight-now-wrapper)
-                      (when (configuration-layer/package-usedp 'evil-jumper)
-                        (evil-set-jump))
-                      (spacemacs/highlight-symbol-micro-state)
-                      (ahs-backward)) nil))
+        (spacemacs/integrate-evil-search nil)
+        (spacemacs/ahs-highlight-now-wrapper)
+        (when (configuration-layer/package-usedp 'evil-jumper)
+          (evil-set-jump))
+        (spacemacs/highlight-symbol-micro-state)
+        (ahs-backward))
 
       (eval-after-load 'evil
         '(progn
@@ -332,16 +309,15 @@
       (defun spacemacs/symbol-highlight ()
         "Highlight the symbol under point with `auto-highlight-symbol'."
         (interactive)
-        (eval '(progn
-                 (spacemacs/ahs-highlight-now-wrapper)
-                 (setq spacemacs-last-ahs-highlight-p (ahs-highlight-p))
-                 (spacemacs/highlight-symbol-micro-state)
-                 (spacemacs/integrate-evil-search nil)) nil))
+        (spacemacs/ahs-highlight-now-wrapper)
+        (setq spacemacs-last-ahs-highlight-p (ahs-highlight-p))
+        (spacemacs/highlight-symbol-micro-state)
+        (spacemacs/integrate-evil-search nil))
 
       (defun spacemacs/symbol-highlight-reset-range ()
         "Reset the range for `auto-highlight-symbol'."
         (interactive)
-        (eval '(ahs-change-range ahs-default-range) nil))
+        (ahs-change-range ahs-default-range))
 
       (evil-leader/set-key
         "sh" 'spacemacs/symbol-highlight
@@ -490,23 +466,25 @@
       "xwd" 'define-word-at-point)))
 
 (defun spacemacs/init-diminish ()
-  (require 'diminish)
-  ;; Minor modes abbrev --------------------------------------------------------
-  (when (display-graphic-p)
-    (eval-after-load "eproject"
-      '(diminish 'eproject-mode " eⓅ"))
-    (eval-after-load "flymake"
-      '(diminish 'flymake-mode " Ⓕ2")))
-  ;; Minor Mode (hidden) ------------------------------------------------------
-  (eval-after-load 'elisp-slime-nav
-    '(diminish 'elisp-slime-nav-mode))
-  (eval-after-load "hi-lock"
-    '(diminish 'hi-lock-mode))
-  (eval-after-load "abbrev"
-    '(diminish 'abbrev-mode))
-  (eval-after-load "subword"
-    '(when (eval-when-compile (version< "24.3.1" emacs-version))
-       (diminish 'subword-mode))))
+  (use-package diminish
+    :init
+    (progn
+      ;; Minor modes abbrev --------------------------------------------------------
+      (when (display-graphic-p)
+        (eval-after-load "eproject"
+          '(diminish 'eproject-mode " eⓅ"))
+        (eval-after-load "flymake"
+          '(diminish 'flymake-mode " Ⓕ2")))
+      ;; Minor Mode (hidden) ------------------------------------------------------
+      (eval-after-load 'elisp-slime-nav
+        '(diminish 'elisp-slime-nav-mode))
+      (eval-after-load "hi-lock"
+        '(diminish 'hi-lock-mode))
+      (eval-after-load "abbrev"
+        '(diminish 'abbrev-mode))
+      (eval-after-load "subword"
+        '(when (eval-when-compile (version< "24.3.1" emacs-version))
+           (diminish 'subword-mode))))))
 
 (defun spacemacs/init-dired+ ()
   (use-package dired+
@@ -732,8 +710,8 @@
       ;; Make the current definition and/or comment visible.
       (define-key evil-normal-state-map "zf" 'reposition-window)
       ;; toggle maximize buffer
-      (define-key evil-window-map (kbd "o") 'toggle-maximize-buffer)
-      (define-key evil-window-map (kbd "C-o") 'toggle-maximize-buffer)
+      (define-key evil-window-map (kbd "o") 'spacemacs/toggle-maximize-buffer)
+      (define-key evil-window-map (kbd "C-o") 'spacemacs/toggle-maximize-buffer)
 
       (evil-leader/set-key "re" 'evil-show-registers)
 
@@ -876,7 +854,7 @@ Example: (evil-map visual \"<\" \"<gv\")"
         ;; between percent signs:
         (spacemacs|define-text-object "%" "percent" "%" "%"))
 
-      (add-to-hook 'prog-mode-hook '(spacemacs//standard-text-objects))
+      (spacemacs/add-to-hook 'prog-mode-hook '(spacemacs//standard-text-objects))
 
       ;; support smart 1parens-strict-mode
       (when (configuration-layer/package-usedp 'smartparens)
@@ -932,16 +910,17 @@ Example: (evil-map visual \"<\" \"<gv\")"
     :init (evil-exchange-install)))
 
 (defun spacemacs/init-evil-iedit-state ()
-
-  (defun spacemacs/evil-state-lazy-loading ()
-    (require 'evil-iedit-state)
-    ;; activate leader in iedit and iedit-insert states
-    (define-key evil-iedit-state-map
-      (kbd evil-leader/leader) evil-leader--default-map))
-
-  (evil-leader/set-key "se" 'evil-iedit-state)
-  (evil-leader/set-key "sE" 'evil-iedit-state/iedit-mode)
-  (add-to-hooks 'spacemacs/evil-state-lazy-loading '(find-file-hook)))
+  (use-package evil-iedit-state
+    :commands (evil-iedit-state evil-iedit-state/iedit-mode)
+    :init
+    (progn
+      (evil-leader/set-key "se" 'evil-iedit-state)
+      (evil-leader/set-key "sE" 'evil-iedit-state/iedit-mode))
+    :config
+    (progn
+      ;; activate leader in iedit and iedit-insert states
+      (define-key evil-iedit-state-map
+        (kbd evil-leader/leader) evil-leader--default-map))))
 
 (defun spacemacs/init-evil-indent-textobject ()
   (use-package evil-indent-textobject))
@@ -1025,7 +1004,7 @@ Example: (evil-map visual \"<\" \"<gv\")"
     (progn
       (defun spacemacs/evil-numbers-micro-state-doc ()
         "Display a short documentation in the mini buffer."
-        (echo "+/= to increase the value or - to decrease it"))
+        (spacemacs/echo "+/= to increase the value or - to decrease it"))
 
       (defun spacemacs/evil-numbers-micro-state-overlay-map ()
         "Set a temporary overlay map to easily increase or decrease a number"
@@ -1079,12 +1058,11 @@ Example: (evil-map visual \"<\" \"<gv\")"
       (evil-define-key 'visual evil-surround-mode-map "S" 'evil-substitute))))
 
 (defun spacemacs/init-evil-terminal-cursor-changer ()
-  (unless (display-graphic-p)
-    (require 'evil-terminal-cursor-changer)
-     (setq evil-visual-state-cursor 'box) ; █
-     (setq evil-insert-state-cursor 'bar) ; ⎸
-     (setq evil-emacs-state-cursor 'hbar) ; _
-    ))
+  (use-package evil-terminal-cursor-changer
+    :if (not (display-graphic-p))
+    :init (setq evil-visual-state-cursor 'box
+                evil-insert-state-cursor 'bar
+                evil-emacs-state-cursor 'hbar)))
 
 (defun spacemacs/init-evil-tutor ()
   (use-package evil-tutor
@@ -1266,7 +1244,15 @@ Example: (evil-map visual \"<\" \"<gv\")"
 
       (setq golden-ratio-extra-commands
             (append golden-ratio-extra-commands
-                    '(windmove-left
+                    '(ace-window
+                      ace-delete-window
+                      ace-select-window
+                      ace-swap-window
+                      ace-maximize-window
+                      avy-pop-mark
+                      evil-avy-goto-word-or-subword-1
+                      evil-avy-goto-line
+                      windmove-left
                       windmove-right
                       windmove-up
                       windmove-down
@@ -1490,6 +1476,18 @@ Removes the automatic guessing of the initial value based on thing at point. "
                                             preselection))))))
           (helm-do-grep-1 targets nil nil nil nil use-region-or-symbol-p)))
 
+      (defun helm-find-contrib-file ()
+        "Runs helm find files on spacemacs contrib folder"
+        (interactive)
+        (helm-find-files-1
+         (expand-file-name (concat user-emacs-directory "contrib/"))))
+
+      (defun helm-find-spacemacs-file ()
+        "Runs helm find files on spacemacs directory"
+        (interactive)
+        (helm-find-files-1
+         (expand-file-name (concat user-emacs-directory "spacemacs/"))))
+
       (defun spacemacs/helm-file-do-grep ()
         "Search in current file with `grep' using a default input."
         (interactive)
@@ -1537,6 +1535,13 @@ Removes the automatic guessing of the initial value based on thing at point. "
                 (switch-to-buffer-other-window "*hgrep*")
                 (message "No previous search buffer found"))))
 
+      ;; use helm by default for contrib and spacemacs layers
+      (unless dotspacemacs-use-ido
+        (define-key global-map [remap find-spacemacs-file]
+          'helm-find-spacemacs-file)
+        (define-key global-map [remap find-contrib-file]
+          'helm-find-contrib-file))
+
       ;; use helm by default for M-x
       (unless (configuration-layer/package-usedp 'smex)
         (global-set-key (kbd "M-x") 'helm-M-x))
@@ -1552,11 +1557,12 @@ Removes the automatic guessing of the initial value based on thing at point. "
         "hi"   'helm-info-at-point
         "hl"   'helm-resume
         "hm"   'helm-man-woman
+        "iu"   'helm-ucs
         "ry"   'helm-show-kill-ring
         "rr"   'helm-register
         "rm"   'helm-all-mark-rings
         "sL"   'spacemacs/last-search-buffer
-        "sl"  'spacemacs/jump-in-buffer)
+        "sl"   'spacemacs/jump-in-buffer)
 
       ;; search with grep
       (evil-leader/set-key
@@ -2141,11 +2147,6 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
     (evil-leader/set-key
       "Th" 'helm-themes)))
 
-(defun spacemacs/init-helm-unicode ()
-  (use-package helm-unicode
-    :defer t
-    :init (evil-leader/set-key "iu" 'helm-unicode)))
-
 (defun spacemacs/init-highlight-indentation ()
   (use-package highlight-indentation
     :defer t
@@ -2311,10 +2312,10 @@ Put (global-hungry-delete-mode) in dotspacemacs/config to enable by default."
         (define-key ido-completion-map (kbd "C-S-n") 'next-history-element)
         (define-key ido-completion-map (kbd "C-S-p") 'previous-history-element)
         ;; ido-other window maps
-        (define-key ido-completion-map (kbd "C-o") 'ido-invoke-in-other-window)
-        (define-key ido-completion-map (kbd "C-s") 'ido-invoke-in-vertical-split)
-        (define-key ido-completion-map (kbd "C-t") 'ido-invoke-in-new-frame)
-        (define-key ido-completion-map (kbd "C-v") 'ido-invoke-in-horizontal-split)
+        (define-key ido-completion-map (kbd "C-o") 'spacemacs/ido-invoke-in-other-window)
+        (define-key ido-completion-map (kbd "C-s") 'spacemacs/ido-invoke-in-vertical-split)
+        (define-key ido-completion-map (kbd "C-t") 'spacemacs/ido-invoke-in-new-frame)
+        (define-key ido-completion-map (kbd "C-v") 'spacemacs/ido-invoke-in-horizontal-split)
         ;; more natural navigation keys: up, down to change current item
         ;; left to go up dir
         ;; right to open the selected item
@@ -2391,12 +2392,12 @@ Put (global-hungry-delete-mode) in dotspacemacs/config to enable by default."
         ("K" ido-prev-match-dir)
         ("l" ido-exit-minibuffer :exit t)
         ("n" ido-next-match-dir)
-        ("o" ido-invoke-in-other-window :exit t)
+        ("o" spacemacs/ido-invoke-in-other-window :exit t)
         ("p" ido-prev-match-dir)
         ("q" nil :exit t)
-        ("s" ido-invoke-in-vertical-split :exit t)
-        ("t" ido-invoke-in-new-frame :exit t)
-        ("v" ido-invoke-in-horizontal-split :exit t)))))
+        ("s" spacemacs/ido-invoke-in-vertical-split :exit t)
+        ("t" spacemacs/ido-invoke-in-new-frame :exit t)
+        ("v" spacemacs/ido-invoke-in-horizontal-split :exit t)))))
 
 (defun spacemacs/init-iedit ()
   (use-package iedit
@@ -2489,9 +2490,10 @@ It will toggle the overlay under point or create an overlay of one character."
   (use-package info+
     :defer t
     :init
-    (add-hook 'Info-mode-hook (lambda () (require 'info+)))
-    :config
-    (setq Info-fontify-angle-bracketed-flag nil)))
+    (progn
+      (eval-after-load 'info
+        '(require 'info+))
+      (setq Info-fontify-angle-bracketed-flag nil))))
 
 (defun spacemacs/init-leuven-theme ()
   (use-package leuven-theme
@@ -2620,8 +2622,8 @@ It will toggle the overlay under point or create an overlay of one character."
         "pt" 'neotree-find-project-root))
 
     :config
-    (add-to-hook 'neotree-mode-hook '(spacemacs//init-neotree
-                                      spacemacs//neotree-key-bindings))))
+    (spacemacs/add-to-hook 'neotree-mode-hook '(spacemacs//init-neotree
+                                                spacemacs//neotree-key-bindings))))
 
 (defun spacemacs/init-page-break-lines ()
   (use-package page-break-lines
@@ -3302,7 +3304,7 @@ one of `l' or `r'."
       ;; note for Windows: GNU find or Cygwin find must be in path
       ;; default parameters are not supported on Windows, we default
       ;; to simplest call to find.
-      (when (system-is-mswindows)
+      (when (spacemacs/system-is-mswindows)
         (setq projectile-generic-command "find . -type f"))
       (setq projectile-enable-caching t
             projectile-indexing-method 'alien
@@ -3346,7 +3348,7 @@ one of `l' or `r'."
     (progn
       (evil-leader/set-key "tCd" 'rainbow-delimiters-mode)
       (when (member dotspacemacs-highlight-delimiters '(any all))
-        (add-to-hooks 'rainbow-delimiters-mode '(prog-mode-hook))))))
+        (spacemacs/add-to-hooks 'rainbow-delimiters-mode '(prog-mode-hook))))))
 
 (defun spacemacs/init-recentf ()
   (use-package recentf
@@ -3369,15 +3371,39 @@ one of `l' or `r'."
   (use-package rfringe
     :defer t))
 
+(defun spacemacs/init-savehist ()
+  (use-package savehist
+    :init
+    (progn
+      ;; Minibuffer history
+      (setq savehist-file (concat spacemacs-cache-directory "savehist")
+            enable-recursive-minibuffers t ; Allow commands in minibuffers
+            history-length 1000
+            savehist-additional-variables '(mark-ring
+                                            global-mark-ring
+                                            search-ring
+                                            regexp-search-ring
+                                            extended-command-history)
+            savehist-autosave-interval 60)
+      (savehist-mode t))))
+
+(defun spacemacs/init-saveplace ()
+  (use-package saveplace
+    :init
+    (progn
+      ;; Save point position between sessions
+      (setq save-place t
+            save-place-file (concat spacemacs-cache-directory "places")))))
+
 (defun spacemacs/init-smartparens ()
   (use-package smartparens
     :defer t
     :init
     (progn
-      (add-to-hooks (if dotspacemacs-smartparens-strict-mode
-                        'smartparens-strict-mode
-                      'smartparens-mode)
-                    '(prog-mode-hook))
+      (spacemacs/add-to-hooks (if dotspacemacs-smartparens-strict-mode
+                                  'smartparens-strict-mode
+                                'smartparens-mode)
+                              '(prog-mode-hook))
 
       ;; enable smartparens-mode in `eval-expression'
       (defun conditionally-enable-smartparens-mode ()
@@ -3628,8 +3654,6 @@ one of `l' or `r'."
   (use-package which-key
     :init
     (progn
-      (setq which-key-max-description-length 32)
-      (which-key-mode)
       (spacemacs|add-toggle which-key
         :status which-key-mode
         :on (which-key-mode)
@@ -3674,14 +3698,25 @@ one of `l' or `r'."
          (concat leader-key " " dotspacemacs-command-key) "M-x"))
       ;; disable special key handling for spacemacs, since it can be
       ;; disorienting if you don't understand it
-      (setq which-key-special-keys nil)
-      (setq which-key-use-C-h-for-paging t)
+      (setq which-key-prefix-title-alist
+            `((,(listify-key-sequence
+                 (kbd (concat dotspacemacs-leader-key " m"))) . "Major mode commands")
+              (,(listify-key-sequence
+                 (kbd (concat dotspacemacs-emacs-leader-key " m"))) . "Major mode commands")
+              (,(listify-key-sequence
+                 (kbd dotspacemacs-leader-key)) . "Spacemacs root")
+              (,(listify-key-sequence
+                 (kbd dotspacemacs-emacs-leader-key)) . "Spacemacs root")))
+      (nconc which-key-prefix-title-alist spacemacs/prefix-titles)
+      (setq which-key-special-keys nil
+            which-key-use-C-h-for-paging t
+            which-key-echo-keystrokes 0.02
+            which-key-max-description-length 32)
+      (which-key-mode)
       (spacemacs|diminish which-key-mode " Ⓚ" " K"))))
 
 (defun spacemacs/init-window-numbering ()
   (use-package window-numbering
-    ;; not deferred on puprose
-    :init (require 'window-numbering)
     :config
     (progn
       (when (configuration-layer/package-usedp 'powerline)

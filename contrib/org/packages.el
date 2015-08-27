@@ -12,6 +12,9 @@
 
 (setq org-packages
   '(
+    company
+    company-emoji
+    emoji-cheat-sheet-plus
     evil-org
     htmlize
     org
@@ -21,6 +24,16 @@
     org-repo-todo
     toc-org
     ))
+
+(when (configuration-layer/layer-usedp 'auto-completion)
+  (defun org/post-init-company ()
+    (spacemacs|add-company-hook org-mode)
+    (push 'company-capf company-backends-org-mode))
+  (defun org/post-init-company-emoji ()
+    (push 'company-emoji company-backends-org-mode)))
+
+(defun org/post-init-emoji-cheat-sheet-plus ()
+  (add-hook 'org-mode-hook 'spacemacs/delay-emoji-cheat-sheet-hook))
 
 (defun org/init-evil-org ()
   (use-package evil-org
@@ -34,7 +47,7 @@
            "b" nil "mb" 'org-tree-to-indirect-buffer
            "c" nil "mA" 'org-archive-subtree
            "o" nil "mC" 'evil-org-recompute-clocks
-           "l" nil "mo" 'evil-org-open-links
+           "l" nil "ml" 'evil-org-open-links
            "t" nil "mT" 'org-show-todo-tree)
       (evil-define-key 'normal evil-org-mode-map
         "O" 'evil-open-above)
@@ -153,7 +166,7 @@ Will work on both org-mode and any mode that accepts plain html."
     :defer t
     :init
     (progn
-      (when (system-is-mac)
+      (when (spacemacs/system-is-mac)
         (setq org-pomodoro-audio-player "/usr/bin/afplay"))
       (evil-leader/set-key-for-mode 'org-mode
         "mp" 'org-pomodoro))))

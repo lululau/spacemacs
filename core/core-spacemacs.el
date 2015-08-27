@@ -73,6 +73,9 @@ initialization."
   (prefer-coding-system 'utf-8)
   ;; dotfile init
   (dotspacemacs/load-file)
+  ;; TODO remove evil-want-C-u-scroll and document it, we should not
+  ;; shadow the universal argument
+  (setq-default evil-want-C-u-scroll t)
   (dotspacemacs|call-func dotspacemacs/init "Calling dotfile init...")
   ;; spacemacs init
   (switch-to-buffer (get-buffer-create spacemacs-buffer-name))
@@ -102,8 +105,8 @@ initialization."
   ;; for convenience and user support
   (unless (fboundp 'tool-bar-mode)
     (spacemacs-buffer/message (concat "No graphical support detected, you won't be"
-                               "able to launch a graphical instance of Emacs"
-                               "with this build.")))
+                                      "able to launch a graphical instance of Emacs"
+                                      "with this build.")))
   ;; font
   (if (find-font (font-spec :name (car dotspacemacs-default-font)))
       (spacemacs/set-default-font dotspacemacs-default-font)
@@ -111,9 +114,6 @@ initialization."
                               (car dotspacemacs-default-font)))
   ;; banner
   (spacemacs-buffer/insert-banner-and-buttons)
-  (setq-default evil-want-C-u-scroll t)
-  ;; Initializing configuration from ~/.spacemacs
-  (dotspacemacs|call-func dotspacemacs/init "Executing user init...")
   ;; mandatory dependencies
   ;; dash is required to prevent a package.el bug with f on 24.3.1
   (spacemacs/load-or-install-package 'dash t)
@@ -249,12 +249,13 @@ FILE-TO-LOAD is an explicit file to load after the installation."
                           "- OS: %s\n"
                           "- Emacs: %s\n"
                           "- Spacemacs: %s\n"
-                          "- Spacemacs branch: %s\n"
+                          "- Spacemacs branch: %s (rev. %s)\n"
                           "- Layers:\n```elisp\n%s```\n")
                   system-type
                   emacs-version
                   spacemacs-version
                   (spacemacs/git-get-current-branch)
+                  (spacemacs/git-get-current-branch-rev)
                   (pp dotspacemacs-configuration-layers))))
     (kill-new sysinfo)
     (message sysinfo)

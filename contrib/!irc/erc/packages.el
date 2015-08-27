@@ -12,6 +12,9 @@
 
 (setq erc-packages
       '(
+        company
+        company-emoji
+        emoji-cheat-sheet-plus
         erc
         erc-hl-nicks
         erc-image
@@ -20,8 +23,19 @@
         erc-yt
         ))
 
-(when (system-is-mac)
+(when (spacemacs/system-is-mac)
   (push 'erc-terminal-notifier erc-packages))
+
+(when (configuration-layer/layer-usedp 'auto-completion)
+  (defun erc/post-init-company ()
+    (spacemacs|add-company-hook erc-mode)
+    (push 'company-capf company-backends-erc-mode))
+
+  (defun erc/post-init-company-emoji ()
+    (push 'company-emoji company-backends-erc-mode)))
+
+(defun erc/post-init-emoji-cheat-sheet-plus ()
+  (add-hook 'erc-mode-hook 'emoji-cheat-sheet-plus-display-mode))
 
 (defun erc/init-erc ()
   "Initialize ERC"
@@ -39,9 +53,9 @@
     (defun no-linum (&rest ignore)
       (when (or 'linum-mode global-linum-mode)
         (linum-mode 0)))
-    (add-to-hooks 'no-linum '(erc-hook
-                              erc-mode-hook
-                              erc-insert-pre-hook))
+    (spacemacs/add-to-hooks 'no-linum '(erc-hook
+                                        erc-mode-hook
+                                        erc-insert-pre-hook))
     :config
     (progn
       (use-package erc-autoaway
@@ -73,7 +87,10 @@
          :app-icon "/home/io/.emacs.d/assets/spacemacs.svg"
          :urgency 'low))
 
-      (add-hook 'erc-text-matched-hook 'erc-global-notify)
+      ;; osx doesn't have dbus support
+      (when (boundp 'dbus-compiled-version)
+        (add-hook 'erc-text-matched-hook 'erc-global-notify))
+
       ;; keybindings
       (evil-leader/set-key-for-mode 'erc-mode
         "md" 'erc-input-action

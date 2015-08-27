@@ -1,4 +1,4 @@
-;;; config.el --- Org configuration File for Spacemacs
+;;; config.el --- Vinegar Layer Configuration File for Spacemacs
 ;;
 ;; Copyright (c) 2012-2014 Sylvain Benner
 ;; Copyright (c) 2014-2015 Sylvain Benner & Contributors
@@ -12,7 +12,5 @@
 
 ;; Variables
 
-(defvar org-enable-github-support nil
-  "If non-nil Github related packages are configured.")
-
-(spacemacs|defvar-company-backends org-mode)
+(defvar vinegar-reuse-dired-buffer nil
+  "If non-nil, reuses one dired buffer for navigation.")
