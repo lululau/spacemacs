@@ -238,7 +238,7 @@
         :status yas-minor-mode
         :on (yas-minor-mode)
         :off (yas-minor-mode -1)
-        :documentation "Enable yasnippet."
+        :documentation "Enable snippets."
         :evil-leader "ty")
 
       (defun spacemacs/force-yasnippet-off ()
