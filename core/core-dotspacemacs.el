@@ -210,27 +210,41 @@ Possible values are: `recents' `bookmarks' `projects'.")
 If ARG is non nil then `dotspacemacs/config' is skipped."
   (interactive "P")
   (when (file-exists-p dotspacemacs-filepath)
-    (let ((tests-ok (dotspacemacs/test-dotfile t)))
-      (if tests-ok
-          (with-current-buffer (find-file-noselect dotspacemacs-filepath)
-            (let ((dotspacemacs-loading-progress-bar nil))
-              (setq spacemacs-loading-string "")
-              (save-buffer)
-              (load-file buffer-file-name)
-              (dotspacemacs|call-func dotspacemacs/init
-                                      "Calling dotfile init...")
-              (configuration-layer/sync)
-              (if arg
-                  (message (concat "Done (`dotspacemacs/config'function has "
-                                   "been skipped)."))
-                (dotspacemacs|call-func dotspacemacs/config
-                                        "Calling dotfile config...")
-                (message "Done."))
-              (when (configuration-layer/package-usedp 'powerline)
-                (spacemacs//restore-powerline (current-buffer)))))
-        (switch-to-buffer-other-window dotspacemacs-test-results-buffer)
-        (spacemacs-buffer/warning "Some tests failed, check `%s' buffer"
-                                  dotspacemacs-test-results-buffer)))))
+    (with-current-buffer (find-file-noselect dotspacemacs-filepath)
+      (let ((dotspacemacs-loading-progress-bar nil))
+        (setq spacemacs-loading-string "")
+        (save-buffer)
+        (let ((tests-ok (dotspacemacs/test-dotfile t)))
+          (if tests-ok
+              (progn
+                (load-file buffer-file-name)
+                (dotspacemacs|call-func dotspacemacs/init
+                                        "Calling dotfile init...")
+                (configuration-layer/sync)
+                (if arg
+                    (message (concat "Done (`dotspacemacs/config'function has "
+                                     "been skipped)."))
+                  (dotspacemacs|call-func dotspacemacs/config
+                                          "Calling dotfile config...")
+                  (message "Done."))
+                (when (configuration-layer/package-usedp 'powerline)
+                  (spacemacs//restore-powerline (current-buffer))))
+            (switch-to-buffer-other-window dotspacemacs-test-results-buffer)
+            (spacemacs-buffer/warning "Some tests failed, check `%s' buffer"
+                                      dotspacemacs-test-results-buffer)))))))
+
+(defun dotspacemacs/get-variable-string-list ()
+  "Return a list of all the dotspacemacs variables as strings."
+  (all-completions "" obarray
+                   (lambda (x)
+                     (and (boundp x)
+                          (not (keywordp x))
+                          (string-prefix-p "dotspacemacs"
+                                           (symbol-name x))))))
+
+(defun dotspacemacs/get-variable-list ()
+  "Return a list of all dotspacemacs variable symbols."
+  (mapcar 'intern (dotspacemacs/get-variable-string-list)))
 
 (defmacro dotspacemacs|symbol-value (symbol)
   "Return the value of SYMBOL corresponding to a dotspacemacs variable.
@@ -349,56 +363,48 @@ If MSG is not nil then display a message in `*Messages'."
              dotspacemacs-filepath passed-tests total-tests))
     (equal passed-tests total-tests)))
 
+(defmacro dotspacemacs||let-init-test (&rest body)
+  "Macro to protect dotspacemacs variables"
+  `(let ((fpath dotspacemacs-filepath)
+         ,@(dotspacemacs/get-variable-list)
+         (passed-tests 0) (total-tests 0))
+     (setq dotspacemacs-filepath fpath)
+     (load dotspacemacs-filepath)
+     ,@body))
+
 (defun dotspacemacs//test-dotspacemacs/init ()
   "Tests for `dotspacemacs/init'"
   (insert
    (format (concat "\n* Testing settings in dotspacemacs/init "
                    "[[file:%s::dotspacemacs/init][Show in File]]\n")
            dotspacemacs-filepath))
-  ;; protect global values of these variables
-  (let (dotspacemacs-editing-style dotspacemacs-verbose-loading
-        dotspacemacs-startup-banner dotspacemacs-startup-lists
-        dotspacemacs-themes dotspacemacs-colorize-cursor-according-to-state
-        dotspacemacs-default-font dotspacemacs-leader-key
-        dotspacemacs-emacs-leader-key dotspacemacs-major-mode-leader-key
-        dotspacemacs-major-mode-emacs-leader-key dotspacemacs-command-key
-        dotspacemacs-auto-save-file-location dotspacemacs-use-ido
-        dotspacemacs-enable-paste-micro-state dotspacemacs-guide-key-delay
-        dotspacemacs-loading-progress-bar dotspacemacs-fullscreen-at-startup
-        dotspacemacs-fullscreen-use-non-native dotspacemacs-maximized-at-startup
-        dotspacemacs-active-transparency dotspacemacs-inactive-transparency
-        dotspacemacs-mode-line-unicode-symbols dotspacemacs-smooth-scrolling
-        dotspacemacs-smartparens-strict-mode dotspacemacs-highlight-delimiters
-        dotspacemacs-persistent-server dotspacemacs-search-tools
-        dotspacemacs-default-package-repository
-        (passed-tests 0) (total-tests 0))
-    (load dotspacemacs-filepath)
-    (dotspacemacs/init)
-    (spacemacs//test-var
-     (lambda (x) (member x '(vim emacs)))
-     'dotspacemacs-editing-style "is \'vim or \'emacs")
-    (spacemacs//test-var
-     (lambda (x) (member x '(original cache nil)))
-     'dotspacemacs-auto-save-file-location (concat "is one of \'original, "
-                                                   "\'cache or nil"))
-    (spacemacs//test-var
-     (lambda (x) (member x '(all current nil)))
-     'dotspacemacs-highlight-delimiters "is one of \'all, \'current or nil")
-    (spacemacs//test-list
-     (lambda (x) (member x '(recents bookmarks projects)))
-     'dotspacemacs-startup-lists (concat "includes only \'recents, "
-                                         "\'bookmarks or \'projects"))
-    (spacemacs//test-var 'stringp 'dotspacemacs-leader-key "is a string")
-    (spacemacs//test-var 'stringp 'dotspacemacs-emacs-leader-key "is a string")
-    (spacemacs//test-var
-     'stringp 'dotspacemacs-major-mode-leader-key "is a string")
-    (spacemacs//test-var 'stringp 'dotspacemacs-command-key "is a string")
-    (insert (format
-             (concat "** RESULTS: "
-                     "[[file:%s::dotspacemacs/init][dotspacemacs/init]] "
-                     "passed %s out of %s tests\n")
-             dotspacemacs-filepath passed-tests total-tests))
-    (equal passed-tests total-tests)))
+  (dotspacemacs||let-init-test
+   (dotspacemacs/init)
+   (spacemacs//test-var
+    (lambda (x) (member x '(vim emacs hybrid)))
+    'dotspacemacs-editing-style "is \'vim, \'emacs or \'hybrid")
+   (spacemacs//test-var
+    (lambda (x) (member x '(original cache nil)))
+    'dotspacemacs-auto-save-file-location (concat "is one of \'original, "
+                                                  "\'cache or nil"))
+   (spacemacs//test-var
+    (lambda (x) (member x '(all current nil)))
+    'dotspacemacs-highlight-delimiters "is one of \'all, \'current or nil")
+   (spacemacs//test-list
+    (lambda (x) (member x '(recents bookmarks projects)))
+    'dotspacemacs-startup-lists (concat "includes only \'recents, "
+                                        "\'bookmarks or \'projects"))
+   (spacemacs//test-var 'stringp 'dotspacemacs-leader-key "is a string")
+   (spacemacs//test-var 'stringp 'dotspacemacs-emacs-leader-key "is a string")
+   (spacemacs//test-var
+    'stringp 'dotspacemacs-major-mode-leader-key "is a string")
+   (spacemacs//test-var 'stringp 'dotspacemacs-command-key "is a string")
+   (insert (format
+            (concat "** RESULTS: "
+                    "[[file:%s::dotspacemacs/init][dotspacemacs/init]] "
+                    "passed %s out of %s tests\n")
+            dotspacemacs-filepath passed-tests total-tests))
+   (equal passed-tests total-tests)))
 
 (defun dotspacemacs/test-dotfile (&optional hide-buffer)
   "Test settings in dotfile for correctness.
@@ -425,8 +431,12 @@ If MSG is not nil then display a message in `*Messages'."
           ;; dotspacemacs-version not implemented yet
           ;; (insert (format "* Running tests on %s (v%s)\n" dotspacemacs-filepath dotspacemacs-version))
           (prog1
-              (and (dotspacemacs//test-dotspacemacs/layers)
-                   (dotspacemacs//test-dotspacemacs/init))
+              ;; execute all tests no matter what
+              (reduce (lambda (x y)
+                        (and (funcall y) x))
+                      '(dotspacemacs//test-dotspacemacs/layers
+                        dotspacemacs//test-dotspacemacs/init)
+                      :initial-value t)
             (goto-char (point-min))))))))
 
 (provide 'core-dotspacemacs)
