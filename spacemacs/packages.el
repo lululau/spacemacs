@@ -279,32 +279,58 @@
                  (spacemacs/ensure-ahs-enabled-locally)
                  (ahs-highlight-now)) nil))
 
+      (defun spacemacs/enter-ahs-forward ()
+        "Go to the next occurrence of symbol under point with
+`auto-highlight-symbol'"
+        (interactive)
+        (setq-local spacemacs--ahs-searching-forward t)
+        (spacemacs/quick-ahs-forward))
+
+      (defun spacemacs/enter-ahs-backward ()
+        "Go to the previous occurrence of symbol under point with
+`auto-highlight-symbol'"
+        (interactive)
+        (setq-local spacemacs--ahs-searching-forward nil)
+        (spacemacs/quick-ahs-forward))
+
       (defun spacemacs/quick-ahs-forward ()
         "Go to the next occurrence of symbol under point with
 `auto-highlight-symbol'"
         (interactive)
-        (spacemacs/integrate-evil-search t)
-        (spacemacs/ahs-highlight-now-wrapper)
-        (when (configuration-layer/package-usedp 'evil-jumper)
-          (evil-set-jump))
-        (spacemacs/highlight-symbol-micro-state)
-        (ahs-forward))
+        (spacemacs//quick-ahs-move t))
 
       (defun spacemacs/quick-ahs-backward ()
         "Go to the previous occurrence of symbol under point with
 `auto-highlight-symbol'"
         (interactive)
-        (spacemacs/integrate-evil-search nil)
-        (spacemacs/ahs-highlight-now-wrapper)
-        (when (configuration-layer/package-usedp 'evil-jumper)
-          (evil-set-jump))
-        (spacemacs/highlight-symbol-micro-state)
-        (ahs-backward))
+        (spacemacs//quick-ahs-move nil))
+
+      (defun spacemacs//quick-ahs-move (forward)
+        "Go to the next occurrence of symbol under point with
+`auto-highlight-symbol'"
+
+        (if (eq forward spacemacs--ahs-searching-forward)
+            (progn
+              (spacemacs/integrate-evil-search t)
+              (spacemacs/ahs-highlight-now-wrapper)
+              (when (configuration-layer/package-usedp 'evil-jumper)
+                (evil-set-jump))
+              (spacemacs/highlight-symbol-micro-state)
+              (ahs-forward)
+              )
+          (progn
+            (spacemacs/integrate-evil-search nil)
+            (spacemacs/ahs-highlight-now-wrapper)
+            (when (configuration-layer/package-usedp 'evil-jumper)
+              (evil-set-jump))
+            (spacemacs/highlight-symbol-micro-state)
+            (ahs-backward)
+            )))
 
       (eval-after-load 'evil
         '(progn
-           (define-key evil-motion-state-map (kbd "*") 'spacemacs/quick-ahs-forward)
-           (define-key evil-motion-state-map (kbd "#") 'spacemacs/quick-ahs-backward)))
+           (define-key evil-motion-state-map (kbd "*") 'spacemacs/enter-ahs-forward)
+           (define-key evil-motion-state-map (kbd "#") 'spacemacs/enter-ahs-backward)))
 
       (defun spacemacs/symbol-highlight ()
         "Highlight the symbol under point with `auto-highlight-symbol'."
@@ -313,6 +339,11 @@
         (setq spacemacs-last-ahs-highlight-p (ahs-highlight-p))
         (spacemacs/highlight-symbol-micro-state)
         (spacemacs/integrate-evil-search nil))
+
+      (defun spacemacs//ahs-ms-on-exit ()
+        ;; Restore user search direction state as ahs has exitted in a state
+        ;; good for <C-s>, but not for 'n' and 'N'"
+        (setq isearch-forward spacemacs--ahs-searching-forward))
 
       (defun spacemacs/symbol-highlight-reset-range ()
         "Reset the range for `auto-highlight-symbol'."
@@ -363,6 +394,7 @@
                       (prophidden (propertize hidden 'face '(:weight bold))))
                  (format "%s %s%s [n/N] move [e] edit [r] range [R] reset [d/D] definition [/] find in project [f] find in files [b] find in opened buffers [q] exit"
                          propplugin propx/y prophidden)))
+        :on-exit  (spacemacs//ahs-ms-on-exit)
         :bindings
         ("d" ahs-forward-definition)
         ("D" ahs-backward-definition)
@@ -712,6 +744,18 @@
       ;; toggle maximize buffer
       (define-key evil-window-map (kbd "o") 'spacemacs/toggle-maximize-buffer)
       (define-key evil-window-map (kbd "C-o") 'spacemacs/toggle-maximize-buffer)
+      ;; make cursor keys work
+      (define-key evil-window-map (kbd "<left>") 'evil-window-left)
+      (define-key evil-window-map (kbd "<right>") 'evil-window-right)
+      (define-key evil-window-map (kbd "<up>") 'evil-window-up)
+      (define-key evil-window-map (kbd "<down>") 'evil-window-down)
+      ;; Make Y equivalent to y$
+      (defun spacemacs/evil-yank-to-end-of-line ()
+        "Yank from point to end of line."
+        (interactive)
+        (evil-yank (point) (point-at-eol)))
+      (define-key evil-normal-state-map (kbd "Y") 'spacemacs/evil-yank-to-end-of-line)
+      (define-key evil-motion-state-map (kbd "Y") 'spacemacs/evil-yank-to-end-of-line)
 
       (evil-leader/set-key "re" 'evil-show-registers)
 
@@ -856,16 +900,21 @@ Example: (evil-map visual \"<\" \"<gv\")"
 
       (spacemacs/add-to-hook 'prog-mode-hook '(spacemacs//standard-text-objects))
 
+      ;; define text-object for entire buffer
+      (evil-define-text-object evil-inner-buffer (count &optional beg end type)
+        (evil-select-paren "\\`" "\\'" beg end type count nil))
+      (define-key evil-inner-text-objects-map "g" 'evil-inner-buffer)
+
       ;; support smart 1parens-strict-mode
       (when (configuration-layer/package-usedp 'smartparens)
-          (defadvice evil-delete-backward-char-and-join
-              (around spacemacs/evil-delete-backward-char-and-join activate)
-            (defvar smartparens-strict-mode)
-            ;; defadvice compiles this sexp generating a compiler warning for a
-            ;; free variable reference. The line above fixes this
-            (if smartparens-strict-mode
-                (call-interactively 'sp-backward-delete-char)
-              ad-do-it))))))
+        (defadvice evil-delete-backward-char-and-join
+            (around spacemacs/evil-delete-backward-char-and-join activate)
+          (defvar smartparens-strict-mode)
+          ;; defadvice compiles this sexp generating a compiler warning for a
+          ;; free variable reference. The line above fixes this
+          (if smartparens-strict-mode
+              (call-interactively 'sp-backward-delete-char)
+            ad-do-it))))))
 
 (defun spacemacs/init-evil-anzu ()
   (use-package evil-anzu
@@ -976,23 +1025,68 @@ Example: (evil-map visual \"<\" \"<gv\")"
       (setq evil-lisp-state-global t)
       (setq evil-lisp-state-leader-prefix "k"))))
 
+;; other commenting functions in funcs.el with keybinds in keybindings.el
 (defun spacemacs/init-evil-nerd-commenter ()
   (use-package evil-nerd-commenter
-    :commands (evilnc-comment-operator
-               evilnc-comment-or-uncomment-lines
-               evilnc-toggle-invert-comment-line-by-line
-               evilnc-comment-or-uncomment-paragraphs
-               evilnc-quick-comment-or-uncomment-to-the-line
-               evilnc-copy-and-comment-lines)
+    :commands evilnc-comment-operator
     :init
     (progn
+      ;; double all the commenting functions so that the inverse operations
+      ;; can be called without setting a flag
+      (defun spacemacs/comment-or-uncomment-lines-inverse (&optional arg)
+        (interactive "p")
+        (let ((evilnc-invert-comment-line-by-line t))
+          (evilnc-comment-or-uncomment-lines arg)))
+
+      (defun spacemacs/comment-or-uncomment-lines (&optional arg)
+        (interactive "p")
+        (let ((evilnc-invert-comment-line-by-line nil))
+          (evilnc-comment-or-uncomment-lines arg)))
+
+      (defun spacemacs/copy-and-comment-lines-inverse (&optional arg)
+        (interactive "p")
+        (let ((evilnc-invert-comment-line-by-line t))
+          (evilnc-copy-and-comment-lines arg)))
+
+      (defun spacemacs/copy-and-comment-lines (&optional arg)
+        (interactive "p")
+        (let ((evilnc-invert-comment-line-by-line nil))
+          (evilnc-copy-and-comment-lines arg)))
+
+      (defun spacemacs/quick-comment-or-uncomment-to-the-line-inverse
+          (&optional arg)
+        (interactive "p")
+        (let ((evilnc-invert-comment-line-by-line t))
+          (evilnc-comment-or-uncomment-to-the-line arg)))
+
+      (defun spacemacs/quick-comment-or-uncomment-to-the-line (&optional arg)
+        (interactive "p")
+        (let ((evilnc-invert-comment-line-by-line nil))
+          (evilnc-comment-or-uncomment-to-the-line arg)))
+
+      (defun spacemacs/comment-or-uncomment-paragraphs-inverse (&optional arg)
+        (interactive "p")
+        (let ((evilnc-invert-comment-line-by-line t))
+          (evilnc-comment-or-uncomment-paragraphs arg)))
+
+      (defun spacemacs/comment-or-uncomment-paragraphs (&optional arg)
+        (interactive "p")
+        (let ((evilnc-invert-comment-line-by-line nil))
+          (evilnc-comment-or-uncomment-paragraphs arg)))
+
+      (define-key evil-normal-state-map "gc" 'evilnc-comment-operator)
+      (define-key evil-normal-state-map "gy" 'spacemacs/copy-and-comment-lines)
+
       (evil-leader/set-key
         ";"  'evilnc-comment-operator
-        "cl" 'evilnc-comment-or-uncomment-lines
-        "ci" 'evilnc-toggle-invert-comment-line-by-line
-        "cp" 'evilnc-comment-or-uncomment-paragraphs
-        "ct" 'evilnc-quick-comment-or-uncomment-to-the-line
-        "cy" 'evilnc-copy-and-comment-lines))))
+        "cl" 'spacemacs/comment-or-uncomment-lines
+        "cL" 'spacemacs/comment-or-uncomment-lines-inverse
+        "cp" 'spacemacs/comment-or-uncomment-paragraphs
+        "cP" 'spacemacs/comment-or-uncomment-paragraphs-inverse
+        "ct" 'spacemacs/quick-comment-or-uncomment-to-the-line
+        "cT" 'spacemacs/quick-comment-or-uncomment-to-the-line-inverse
+        "cy" 'spacemacs/copy-and-comment-lines
+        "cY" 'spacemacs/copy-and-comment-lines-inverse))))
 
 (defun spacemacs/init-evil-matchit ()
   (use-package evil-matchit
@@ -1399,6 +1493,31 @@ Example: (evil-map visual \"<\" \"<gv\")"
       (when dotspacemacs-helm-resize
         (setq helm-autoresize-min-height 1)
         (helm-autoresize-mode 1))
+
+      ;; from https://www.reddit.com/r/emacs/comments/2z7nbv/lean_helm_window/
+      (defvar helm-source-header-default-background (face-attribute 'helm-source-header :background))
+      (defvar helm-source-header-default-foreground (face-attribute 'helm-source-header :foreground))
+      (defvar helm-source-header-default-box (face-attribute 'helm-source-header :box))
+      (defvar helm-source-header-default-height (face-attribute 'helm-source-header :height) )
+
+      (defun helm-toggle-header-line ()
+        "Hide the `helm' header is there is only one source."
+        (when dotspacemacs-helm-no-header
+          (if (> (length helm-sources) 1)
+              (set-face-attribute 'helm-source-header
+                                  nil
+                                  :foreground helm-source-header-default-foreground
+                                  :background helm-source-header-default-background
+                                  :box helm-source-header-default-box
+                                  :height helm-source-header-default-height)
+            (set-face-attribute 'helm-source-header
+                                nil
+                                :foreground (face-attribute 'helm-selection :background)
+                                :background (face-attribute 'helm-selection :background)
+                                :box nil
+                                :height 0.1))))
+      (add-hook 'helm-before-initialize-hook 'helm-toggle-header-line)
+
       (defun spacemacs/helm-find-files (arg)
         "Custom spacemacs implementation for calling helm-find-files-1.
 
@@ -1593,6 +1712,7 @@ Removes the automatic guessing of the initial value based on thing at point. "
       (defvar spacemacs-helm-display-buffer-regexp `("*.*helm.**"
                                                      (display-buffer-in-side-window)
                                                      (inhibit-same-window . t)
+                                                     (side . ,dotspacemacs-helm-position)
                                                      (window-height . 0.4)))
       (defvar spacemacs-display-buffer-alist nil)
       (defun spacemacs//helm-prepare-display ()
@@ -1608,7 +1728,7 @@ Removes the automatic guessing of the initial value based on thing at point. "
           (setq display-buffer-alist nil)
           (popwin-mode -1)))
 
-      (defun spacemacs//display-helm-at-bottom (buffer)
+      (defun spacemacs//display-helm-window (buffer)
         (let ((display-buffer-alist (list spacemacs-helm-display-help-buffer-regexp
                                           ;; this or any specialized case of Helm buffer must be added AFTER
                                           ;; `spacemacs-helm-display-buffer-regexp'. Otherwise,
@@ -1619,7 +1739,7 @@ Removes the automatic guessing of the initial value based on thing at point. "
                                           spacemacs-helm-display-buffer-regexp)))
           (helm-default-display-buffer buffer)))
 
-      (setq helm-display-function 'spacemacs//display-helm-at-bottom)
+      (setq helm-display-function 'spacemacs//display-helm-window)
 
       (defun spacemacs//restore-previous-display-config ()
         (popwin-mode 1)
@@ -2550,11 +2670,9 @@ It will toggle the overlay under point or create an overlay of one character."
             neo-dont-be-alone t
             neo-persist-show nil
             neo-show-hidden-files t
-            neo-auto-indent-point t)
-
-      (defun spacemacs//init-neotree ()
-        "Initialize the neotree mode."
-        )
+            neo-auto-indent-point t
+            neo-modern-sidebar t
+            neo-vc-integration '(face))
 
       (defun spacemacs/neotree-expand-or-open ()
         "Collapse a neotree node."
@@ -2624,8 +2742,7 @@ It will toggle the overlay under point or create an overlay of one character."
         "pt" 'neotree-find-project-root))
 
     :config
-    (spacemacs/add-to-hook 'neotree-mode-hook '(spacemacs//init-neotree
-                                                spacemacs//neotree-key-bindings))))
+    (spacemacs/add-to-hook 'neotree-mode-hook '(spacemacs//neotree-key-bindings))))
 
 (defun spacemacs/init-page-break-lines ()
   (use-package page-break-lines
@@ -3690,7 +3807,8 @@ one of `l' or `r'."
                ("avy-goto-line" . "avy line")
                ("universal-argument" . "universal arg")
                ("er/expand-region" . "expand region")
-               ("helm-apropos" . "apropos"))))
+               ("helm-apropos" . "apropos")
+               ("evil-lisp-state-\\(.+\\)" . "\\1"))))
         (dolist (nd new-descriptions)
           ;; ensure the target matches the whole string
           (push (cons (concat "\\`" (car nd) "\\'") (cdr nd))
@@ -3699,22 +3817,37 @@ one of `l' or `r'."
         (which-key-add-key-based-replacements
          (concat leader-key " m")    "major mode commands"
          (concat leader-key " " dotspacemacs-command-key) "M-x"))
+      (if (fboundp 'which-key-declare-prefixes)
+          (which-key-declare-prefixes
+            dotspacemacs-leader-key '("root" . "Spacemacs root")
+            dotspacemacs-emacs-leader-key '("root" . "Spacemacs root")
+            (concat dotspacemacs-leader-key " m")
+            '("major-mode-cmd" . "Major mode commands")
+            (concat dotspacemacs-emacs-leader-key " m")
+            '("major-mode-cmd" . "Major mode commands"))
+        ;; no need to use this after everyone updates which-key
+        (setq which-key-prefix-title-alist
+              `((,(listify-key-sequence
+                   (kbd (concat dotspacemacs-leader-key " m"))) . "Major mode commands")
+                (,(listify-key-sequence
+                   (kbd (concat dotspacemacs-emacs-leader-key " m"))) . "Major mode commands")
+                (,(listify-key-sequence
+                   (kbd dotspacemacs-leader-key)) . "Spacemacs root")
+                (,(listify-key-sequence
+                   (kbd dotspacemacs-emacs-leader-key)) . "Spacemacs root")))
+        (nconc which-key-prefix-title-alist spacemacs/prefix-titles))
       ;; disable special key handling for spacemacs, since it can be
       ;; disorienting if you don't understand it
-      (setq which-key-prefix-title-alist
-            `((,(listify-key-sequence
-                 (kbd (concat dotspacemacs-leader-key " m"))) . "Major mode commands")
-              (,(listify-key-sequence
-                 (kbd (concat dotspacemacs-emacs-leader-key " m"))) . "Major mode commands")
-              (,(listify-key-sequence
-                 (kbd dotspacemacs-leader-key)) . "Spacemacs root")
-              (,(listify-key-sequence
-                 (kbd dotspacemacs-emacs-leader-key)) . "Spacemacs root")))
-      (nconc which-key-prefix-title-alist spacemacs/prefix-titles)
+      (pcase dotspacemacs-which-key-position
+        (`right (which-key-setup-side-window-right))
+        (`bottom (which-key-setup-side-window-bottom))
+        (`right-then-bottom (which-key-setup-side-window-right-bottom)))
       (setq which-key-special-keys nil
             which-key-use-C-h-for-paging t
+            which-key-prevent-C-h-from-cycling t
             which-key-echo-keystrokes 0.02
-            which-key-max-description-length 32)
+            which-key-max-description-length 32
+            which-key-idle-delay dotspacemacs-which-key-delay)
       (which-key-mode)
       (spacemacs|diminish which-key-mode " Ⓚ" " K"))))
 
@@ -3764,7 +3897,8 @@ one of `l' or `r'."
                          (eq w neo-global--window))
                 (window-numbering-assign w 0)))
             windows))
-    (add-hook 'window-numbering-before-hook 'spacemacs//window-numbering-assign)))
+    (add-hook 'window-numbering-before-hook 'spacemacs//window-numbering-assign)
+    (add-hook 'neo-after-create-hook '(lambda (w) (window-numbering-update)))))
 
 (defun spacemacs/init-winner ()
   (use-package winner

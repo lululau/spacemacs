@@ -4,19 +4,19 @@
 
 * Table of Contents                                                   :TOC@4:
  - [[#description][Description]]
-     - [[#features][Features:]]
+   - [[#features][Features:]]
  - [[#install][Install]]
-     - [[#layer][Layer]]
-     - [[#github-support][Github support]]
-     - [[#different-bullets][Different bullets]]
+   - [[#layer][Layer]]
+   - [[#github-support][Github support]]
+   - [[#different-bullets][Different bullets]]
  - [[#key-bindings][Key bindings]]
-     - [[#org-with-evil-org-mode][Org with evil-org-mode]]
-         - [[#element-insertion][Element insertion]]
-         - [[#org-emphasize][Org emphasize]]
-         - [[#tagging][Tagging]]
-     - [[#pomodoro][Pomodoro]]
-     - [[#presentation][Presentation]]
-     - [[#org-repo-todo][Org-repo-todo]]
+   - [[#org-with-evil-org-mode][Org with evil-org-mode]]
+     - [[#element-insertion][Element insertion]]
+     - [[#org-emphasize][Org emphasize]]
+     - [[#tagging][Tagging]]
+   - [[#pomodoro][Pomodoro]]
+   - [[#presentation][Presentation]]
+   - [[#org-repo-todo][Org-repo-todo]]
 
 * Description
 

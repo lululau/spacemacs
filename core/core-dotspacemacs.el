@@ -122,6 +122,12 @@ with `:' and Emacs commands are executed with `<leader> :'.")
 (defvar dotspacemacs-helm-resize nil
   "If non nil, `helm' will try to miminimize the space it uses.")
 
+(defvar dotspacemacs-helm-no-header nil
+  "if non nil, the helm header is hidden when there is only one source.")
+
+(defvar dotspacemacs-helm-position 'bottom
+  "Position in which to show the `helm' mini-buffer.")
+
 (defvar dotspacemacs-auto-save-file-location 'cache
   "Location where to auto-save files. Possible values are `original' to
 auto-save the file in-place, `cache' to auto-save the file to another
@@ -132,8 +138,16 @@ Default value is `cache'.")
   "If non nil the paste micro-state is enabled. While enabled pressing `p`
 several times cycle between the kill ring content.'")
 
-(defvar dotspacemacs-guide-key-delay 0.4
-  "Guide-key delay in seconds.")
+(defvar dotspacemacs-which-key-delay 0.4
+  "Delay in seconds starting from the last keystroke after which
+the which-key buffer will be shown if you have not completed a
+key sequence. Setting this variable is equivalent to setting
+`which-key-idle-delay'.")
+
+(defvar dotspacemacs-which-key-position 'bottom
+  "Location of the which-key popup buffer. Possible choices are bottom,
+right, and right-then-bottom. The last one will display on the
+right if possible and fallback to bottom if not.")
 
 (defvar dotspacemacs-loading-progress-bar t
   "If non nil a progress bar is displayed when spacemacs is loading. This
