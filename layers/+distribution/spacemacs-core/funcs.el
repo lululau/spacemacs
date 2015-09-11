@@ -128,7 +128,11 @@ used as the prefix command."
                      ,(intern (format "evil-%S-state-local-map" s))
                      ,(kbd dotspacemacs-major-mode-emacs-leader-key)
                      major-mode-map)))
-          '(emacs insert normal motion visual))))
+          '(emacs insert normal motion visual))
+    (when hybrid-mode
+      (define-key evil-hybrid-state-map
+        (kbd dotspacemacs-major-mode-emacs-leader-key)
+        major-mode-map))))
 
 (defun spacemacs/split-and-new-line ()
   "Split a quoted string or s-expression and insert a new line with
@@ -423,6 +427,27 @@ argument takes the kindows rotate backwards."
   (interactive)
   (ediff-files (dotspacemacs/location)
                (concat dotspacemacs-template-directory ".spacemacs.template")))
+
+(defun spacemacs/new-empty-buffer ()
+  "Create a new buffer called untitled(<n>)"
+  (interactive)
+  (let ((newbuf (generate-new-buffer-name "untitled")))
+    (switch-to-buffer newbuf)))
+
+(defun spacemacs/layout-triple-columns ()
+  " Set the layout to triple columns. "
+  (interactive)
+  (golden-ratio-mode 0)
+  (delete-other-windows)
+  (dotimes (i 2) (split-window-right))
+  (balance-windows))
+
+(defun spacemacs/layout-double-columns ()
+  " Set the layout to double columns. "
+  (interactive)
+  (golden-ratio-mode 1)
+  (delete-other-windows)
+  (split-window-right))
 
 (defun spacemacs/home ()
   "Go to home Spacemacs buffer"
