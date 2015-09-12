@@ -51,6 +51,9 @@
     map)
   "Keymap for spacemacs mode.")
 
+(defvar spacemacs--default-mode-line mode-line-format
+  "Backup of default mode line format.")
+
 (define-derived-mode spacemacs-mode special-mode "Spacemacs"
   "Spacemacs major mode for startup screen.
 
@@ -198,9 +201,7 @@ FILE-TO-LOAD is an explicit file to load after the installation."
     (spacemacs-buffer/set-mode-line "Dotfile wizard installer")
     (spacemacs//redisplay)
     (when (dotspacemacs/install 'with-wizard)
-      (dotspacemacs/sync-configuration-layers)
-      (spacemacs-buffer/append
-       "The dotfile has been installed.\n"))))
+      (dotspacemacs/sync-configuration-layers '(16)))))
 
 (defun spacemacs/display-and-copy-version ()
   "Echo the current spacemacs version and copy it."
@@ -239,15 +240,13 @@ FILE-TO-LOAD is an explicit file to load after the installation."
      ;; Display useful lists of items
      (when dotspacemacs-startup-lists
        (spacemacs-buffer/insert-startupify-lists))
-     (when configuration-layer-error-count
-       ;; ("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification "   " mode-line-position evil-mode-line-tag
-        ;; (vc-mode vc-mode)
-       ;; "  " mode-line-modes mode-line-misc-info mode-line-end-spaces
-       (spacemacs-buffer/set-mode-line
-        (format (concat "%s error(s) at startup! "
-                        "Spacemacs may not be able to operate properly.")
-                configuration-layer-error-count))
-       (force-mode-line-update))
+     (if configuration-layer-error-count
+         (spacemacs-buffer/set-mode-line
+          (format (concat "%s error(s) at startup! "
+                          "Spacemacs may not be able to operate properly.")
+                  configuration-layer-error-count))
+       (spacemacs-buffer/set-mode-line spacemacs--default-mode-line))
+     (force-mode-line-update)
      (spacemacs/check-for-new-version spacemacs-version-check-interval))))
 
 (defun spacemacs/describe-system-info ()

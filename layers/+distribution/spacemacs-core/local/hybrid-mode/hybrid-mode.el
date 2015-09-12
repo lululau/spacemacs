@@ -55,24 +55,20 @@
         (evil-move-cursor-back))))))
 
 (define-key evil-hybrid-state-map [escape] 'evil-normal-state)
-
-(defadvice evil-insert-state (around hybrid-state-advice disable)
-  "In Hybrid style this advice is run to switch to hybrid
-state instead of insert state."
-  (evil-hybrid-state))
+(setf (symbol-function 'hybrid-mode--evil-insert-state-backup)
+      (symbol-function 'evil-insert-state))
 
 ;;;###autoload
 (define-minor-mode hybrid-mode
   "Global minor mode to replaces the `evil-insert-state' keymap
 with `evil-hybrid-state-map'."
   :global t
-  :lighter " Hy"
+  :lighter " hybrid"
   :group 'spacemacs
   (if hybrid-mode
-      (progn
-        (ad-enable-advice 'evil-insert-state 'around 'hybrid-state-advice)
-        (ad-activate 'evil-insert-state))
-    (ad-disable-advice 'evil-insert-state 'around 'hybrid-state-advice)
-    (ad-activate 'evil-insert-state)))
+      (setf (symbol-function 'evil-insert-state)
+            (symbol-function 'evil-hybrid-state))
+    (setf (symbol-function 'evil-insert-state)
+          (symbol-function 'hybrid-mode--evil-insert-state-backup))))
 
 (provide 'hybrid-mode)
