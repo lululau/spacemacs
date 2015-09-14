@@ -13,6 +13,7 @@
 ;; Without this comment emacs25 adds (package-initialize) here
 ;; (package-initialize)
 
+(setq gc-cons-threshold 100000000)
 (defconst spacemacs-version          "0.104.0" "Spacemacs version.")
 (defconst spacemacs-emacs-min-version   "24.3" "Minimal version of Emacs.")
 
@@ -24,8 +25,8 @@
   (require 'core-spacemacs)
   (require 'core-configuration-layer)
   (spacemacs/init)
-  (configuration-layer/sync)
   (spacemacs/maybe-install-dotfile)
+  (configuration-layer/sync)
   (spacemacs/setup-startup-hook)
   (require 'server)
   (unless (server-running-p) (server-start)))
