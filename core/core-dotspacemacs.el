@@ -54,7 +54,7 @@ exists. Otherwise, fallback to ~/.spacemacs")
 
 (defvar dotspacemacs-distribution 'spacemacs
   "Base distribution to use. This is a layer contained in the directory
-`+distribution'. For now available distributions are `spacemacs-core'
+`+distribution'. For now available distributions are `spacemacs-base'
 or `spacemacs'.")
 
 (defvar dotspacemacs-configuration-layer-path '()
@@ -322,15 +322,15 @@ If ARG is non nil then Ask questions to the user before installing the dotfile."
                     vim)
                    ("On the planet Emacs in the Holy control tower (emacs)"
                     emacs)))))
-             ("dotspacemacs-distribution 'spacemacs-core"
+             ("dotspacemacs-distribution 'spacemacs-base"
               ,(format
                 "dotspacemacs-distribution '%S"
                 (dotspacemacs//ido-completing-read
                  "What distribution of spacemacs would you like to start with? "
                  '(("The standard distribution with many goodies built-in (spacemacs)"
                     spacemacs)
-                   ("A distribution with the spacemacs essentials that you can build on (spacemacs-core)"
-                    spacemacs-core)))))))))
+                   ("A distribution with the spacemacs essentials that you can build on (spacemacs-base)"
+                    spacemacs-base)))))))))
     (with-current-buffer (find-file-noselect
                        (concat dotspacemacs-template-directory
                                ".spacemacs.template"))
@@ -358,7 +358,44 @@ value."
 (defun dotspacemacs/load-file ()
   "Load ~/.spacemacs if it exists."
   (let ((dotspacemacs (dotspacemacs/location)))
-    (if (file-exists-p dotspacemacs) (load dotspacemacs))))
+    (if (file-exists-p dotspacemacs)
+        (unless (ignore-errors (load dotspacemacs))
+          (dotspacemacs/safe-load)))))
+
+(defun dotspacemacs/safe-load ()
+  "Error recovery from malformed .spacemacs.
+Loads default .spacemacs template and suspends pruning of orphan packages.
+Informs users of error and prompts for default editing style for use during
+error recovery."
+  (load (concat dotspacemacs-template-directory
+                ".spacemacs.template"))
+  (defadvice dotspacemacs/layers
+      (after error-recover-preserve-packages activate)
+    (progn
+      (setq-default dotspacemacs-delete-orphan-packages nil)
+      (ad-disable-advice 'dotspacemacs/layers 'after
+                         'error-recover-preserve-packages)
+      (ad-activate 'dotspacemacs/layers)))
+  (defadvice dotspacemacs/init
+      (after error-recover-prompt-for-style activate)
+    (progn
+      (setq-default dotspacemacs-editing-style
+                    (intern
+                     (ido-completing-read
+                      (format
+                       (concat
+                        "Spacemacs encountered an error while "
+                        "loading your `%s' file.\n"
+                        "Pick your editing style for recovery "
+                        "(use left and right arrows): ")
+                       dotspacemacs-filepath)
+                      '(("vim" vim)
+                        ("emacs" emacs)
+                        ("hybrid" hybrid))
+                      nil t nil nil 'vim)))
+      (ad-disable-advice 'dotspacemacs/init 'after
+                         'error-recover-prompt-for-style)
+      (ad-activate 'dotspacemacs/init))))
 
 (defmacro dotspacemacs|call-func (func &optional msg)
   "Call the function from the dotfile only if it is bound.
