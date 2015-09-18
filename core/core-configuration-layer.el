@@ -331,12 +331,14 @@ Properties that can be copied are `:location', `:step' and `:excluded'."
                         (oset obj :step step)))))))))))
     ;; additional and excluded packages from dotfile
     (when dotfile
-      (dolist (apkg dotspacemacs-additional-packages)
-        (let ((obj (object-assoc apkg :name result)))
-          (unless obj
-            (setq obj (configuration-layer/make-package apkg))
-            (push obj result))
-          (oset obj :owner 'dotfile)))
+      (dolist (pkg dotspacemacs-additional-packages)
+        (let* ((pkg-name (if (listp pkg) (car pkg) pkg))
+               (obj (object-assoc pkg-name :name result)))
+          (if obj
+              (setq obj (configuration-layer/make-package pkg obj))
+            (setq obj (configuration-layer/make-package pkg))
+            (push obj result)
+            (oset obj :owner 'dotfile))))
       (dolist (xpkg dotspacemacs-excluded-packages)
         (let ((obj (object-assoc xpkg :name result)))
           (unless obj
@@ -656,15 +658,18 @@ path."
                "to add a recipe for it in alist %S.")
        pkg-name recipes-var))))
 
-(defun configuration-layer//filter-packages-with-deps (pkg-names filter)
+(defun configuration-layer//filter-packages-with-deps
+    (pkg-names filter &optional use-archive)
   "Return a filtered PACKAGES list where each elements satisfies FILTER."
   (when pkg-names
     (let (result)
       (dolist (pkg-name pkg-names)
         ;; recursively check dependencies
         (let* ((deps
-                (configuration-layer//get-package-deps-from-archive
-                 pkg-name))
+                (if use-archive
+                    (configuration-layer//get-package-deps-from-archive
+                     pkg-name)
+                  (configuration-layer//get-package-deps-from-alist pkg-name)))
                (install-deps
                 (when deps (configuration-layer//filter-packages-with-deps
                             (mapcar 'car deps) filter))))
@@ -715,7 +720,7 @@ path."
 (defun configuration-layer//get-packages-to-update (pkg-names)
   "Return a filtered list of PKG-NAMES to update."
   (configuration-layer//filter-packages-with-deps
-   pkg-names 'configuration-layer//new-version-available-p))
+   pkg-names 'configuration-layer//new-version-available-p 'use-archive))
 
 (defun configuration-layer//configure-packages (packages)
   "Configure all passed PACKAGES honoring the steps order."
@@ -977,12 +982,12 @@ to select one."
   "Return the path for LAYER symbol."
   (ht-get configuration-layer-paths layer))
 
-(defun configuration-layer//get-all-packages-dependencies ()
+(defun configuration-layer//get-packages-dependencies ()
   "Returns dependencies hash map for all packages in `package-alist'."
   (let ((result (make-hash-table :size 512)))
     (dolist (pkg package-alist)
       (let* ((pkg-sym (car pkg))
-             (deps (configuration-layer//get-package-dependencies pkg-sym)))
+             (deps (configuration-layer//get-package-deps-from-alist pkg-sym)))
         (dolist (dep deps)
           (let* ((dep-sym (car dep))
                  (value (ht-get result dep-sym)))
@@ -1036,12 +1041,13 @@ to select one."
         (expand-file-name (concat elpa-dir pkg-dir-name))))
      (t (package-desc-dir (cadr pkg-desc))))))
 
-(defun configuration-layer//get-package-dependencies (pkg-name)
+(defun configuration-layer//get-package-deps-from-alist (pkg-name)
   "Return the dependencies alist for package with name PKG-NAME."
   (let ((pkg-desc (assq pkg-name package-alist)))
-    (cond
-     ((version< emacs-version "24.3.50") (aref (cdr pkg-desc) 1))
-     (t (package-desc-reqs (cadr pkg-desc))))))
+    (when pkg-desc
+      (cond
+       ((version< emacs-version "24.3.50") (aref (cdr pkg-desc) 1))
+       (t (package-desc-reqs (cadr pkg-desc)))))))
 
 (defun configuration-layer//get-package-deps-from-archive (pkg-name)
   "Return the dependencies alist for a PKG-NAME from the archive data."
@@ -1111,7 +1117,7 @@ Returns the filtered list."
 (defun configuration-layer/delete-orphan-packages (packages)
   "Delete PACKAGES if they are orphan."
   (interactive)
-  (let* ((dependencies (configuration-layer//get-all-packages-dependencies))
+  (let* ((dependencies (configuration-layer//get-packages-dependencies))
          (implicit-packages (configuration-layer//get-implicit-packages
                              configuration-layer--used-distant-packages))
          (orphans (configuration-layer//filter-used-themes
