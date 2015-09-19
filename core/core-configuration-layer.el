@@ -102,7 +102,7 @@
    (location :initarg :location
              :initform elpa
              :type (satisfies (lambda (x)
-                                (or (member x '(local elpa))
+                                (or (member x '(local elpa private))
                                     (and (listp x) (eq 'recipe (car x))))))
              :documentation "Location of the package.")
    (step :initarg :step
@@ -192,8 +192,8 @@ layer directory."
                        "this layer already exists.") name))
      (t
       (make-directory layer-dir t)
-      (configuration-layer//copy-template "extensions" layer-dir)
-      (configuration-layer//copy-template "packages" layer-dir)
+      (configuration-layer//copy-template name "extensions" layer-dir)
+      (configuration-layer//copy-template name "packages" layer-dir)
       (message "Configuration layer \"%s\" successfully created." name)))))
 
 (defun configuration-layer/make-layer (layer)
@@ -363,17 +363,17 @@ Properties that can be copied are `:location', `:step' and `:excluded'."
   "Return the distant packages (ie to be intalled) that are effectively used."
   (configuration-layer/filter-objects
    packages (lambda (x) (and (not (null (oref x :owner)))
-                             (not (eq 'local (oref x :location)))
+                             (not (memq (oref x :location) '(local private)))
                              (not (oref x :excluded))))))
 
 (defun configuration-layer//get-private-layer-dir (name)
-  "Return an absolute path the the private configuration layer with name
-NAME."
-  (concat configuration-layer-private-layer-directory name "/"))
+  "Return an absolute path to the private configuration layer string NAME."
+  (file-name-as-directory
+   (concat configuration-layer-private-layer-directory name)))
 
-(defun configuration-layer//copy-template (template &optional layer-dir)
-  "Copy and replace special values of TEMPLATE to LAYER_DIR. If
-LAYER_DIR is nil, the private directory is used."
+(defun configuration-layer//copy-template (name template &optional layer-dir)
+  "Copy and replace special values of TEMPLATE to layer string NAME.
+If LAYER_DIR is nil, the private directory is used."
   (let ((src (concat configuration-layer-template-directory
                      (format "%s.template" template)))
         (dest (if layer-dir
@@ -739,6 +739,21 @@ path."
   (dolist (pkg packages)
     (spacemacs-buffer/loading-animation)
     (let ((pkg-name (oref pkg :name)))
+      ;; load-path
+      (pcase (oref pkg :location)
+        (`local
+         (let* ((owner (object-assoc (oref pkg :owner)
+                                     :name configuration-layer--layers))
+                (dir (oref owner :dir)))
+           (unless (eq owner 'dotfile)
+             (push (format "%slocal/%S/" dir pkg-name) load-path)
+             ;; TODO remove extensions in 0.105.0
+             (push (format "%sextensions/%S/" dir pkg-name) load-path))))
+        (`private
+         (push (configuration-layer//get-private-layer-dir
+                (symbol-name (oref pkg :name)))
+               load-path)))
+      ;; configuration
       (cond
        ((oref pkg :excluded)
         (spacemacs-buffer/message
@@ -750,14 +765,6 @@ path."
         (configuration-layer//activate-package pkg-name)
         (spacemacs-buffer/message
          (format "%S is configured in the dotfile." pkg-name)))
-       ((eq 'local (oref pkg :location))
-        (let* ((owner (object-assoc (oref pkg :owner)
-                                    :name configuration-layer--layers))
-               (dir (oref owner :dir)))
-          (push (format "%slocal/%S/" dir pkg-name) load-path)
-          ;; TODO remove extensions in 0.105.0
-          (push (format "%sextensions/%S/" dir pkg-name) load-path))
-        (configuration-layer//configure-package pkg))
        (t
         (configuration-layer//activate-package pkg-name)
         (configuration-layer//configure-package pkg))))))
