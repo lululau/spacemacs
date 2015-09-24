@@ -18,8 +18,12 @@
     evil-org
     gnuplot
     htmlize
-    org
+    ;; org is installed by `org-plus-contrib'
+    (org :location built-in)
+    org-plus-contrib
     org-bullets
+    ;; org-mime is installed by `org-plus-contrib'
+    (org-mime :location built-in)
     org-pomodoro
     org-present
     org-repo-todo
@@ -63,6 +67,9 @@
     :defer t
     :init (evil-leader/set-key-for-mode 'org-mode
             "mtp" 'org-plot/gnuplot)))
+
+;; dummy init function to force installation of `org-plus-contrib'
+(defun org/init-org-plus-contrib ())
 
 (defun org/init-org ()
   (use-package org
@@ -112,9 +119,29 @@ Will work on both org-mode and any mode that accepts plain html."
         "ml" 'org-open-at-point
         "mT" 'org-show-todo-tree
 
+        "m." 'org-time-stamp
+
         ;; headings
         "mhi" 'org-insert-heading-after-current
         "mhI" 'org-insert-heading
+
+        ;; More cycling options (timestamps, headlines, items, properties)
+        "mL" 'org-shiftright
+        "mH" 'org-shiftleft
+        "mJ" 'org-shiftdown
+        "mK" 'org-shiftup
+
+        ;; Change between TODO sets
+        "m C-S-l" 'org-shiftcontrolright
+        "m C-S-h" 'org-shiftcontrolleft
+        "m C-S-j" 'org-shiftcontroldown
+        "m C-S-k" 'org-shiftcontrolup
+
+        ;; Subtree editing
+        "mSl" 'org-demote-subtree
+        "mSh" 'org-promote-subtree
+        "mSj" 'org-move-subtree-down
+        "mSk" 'org-move-subtree-up
 
         ;; tables
         "mta" 'org-table-align
@@ -208,6 +235,17 @@ Will work on both org-mode and any mode that accepts plain html."
   (use-package org-bullets
     :defer t
     :init (add-hook 'org-mode-hook 'org-bullets-mode)))
+
+(defun org/init-org-mime ()
+  (use-package org-mime
+    :defer t
+    :commands (org-mime-htmlize org-mime-org-buffer-htmlize)
+    :init
+    (progn
+      (evil-leader/set-key-for-mode 'message-mode
+        "mM" 'org-mime-htmlize)
+      (evil-leader/set-key-for-mode 'org-mode
+        "mm" 'org-mime-org-buffer-htmlize))))
 
 (defun org/init-org-pomodoro ()
   (use-package org-pomodoro

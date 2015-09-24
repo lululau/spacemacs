@@ -17,8 +17,8 @@
     company-anaconda
     cython-mode
     eldoc
-    ;; evil-matchit
     evil-jumper
+    evil-matchit
     flycheck
     helm-cscope
     helm-pydoc
@@ -39,24 +39,9 @@
     :defer t
     :init
     (progn
-      (defun spacemacs//set-anaconda-mode-directory ()
-        ;; hack to redefine the variable `anaconda-mode-server-directory'
-        ;; we need to do this to retrieve the server version and
-        ;; then redefine the variable
-        (unless (string-match-p spacemacs-cache-directory
-                                anaconda-mode-server-directory)
-          (makunbound 'anaconda-mode-ensure-directory-command)
-          (makunbound 'anaconda-mode-check-installation-command)
-          (makunbound 'anaconda-mode-install-server-command)
-          (setq features (delq 'anaconda-mode features))
-          (setq anaconda-mode-server-directory
-                (concat spacemacs-cache-directory
-                        "anaconda-mode/"
-                        anaconda-mode-server-version))
-          (require 'anaconda-mode)))
-      (spacemacs/add-to-hook 'python-mode-hook
-                             '(spacemacs//set-anaconda-mode-directory
-                               anaconda-mode)))
+      (setq anaconda-mode-installation-directory
+            (concat spacemacs-cache-directory "anaconda-mode"))
+      (add-hook 'python-mode-hook 'anaconda-mode))
     :config
     (progn
       (evil-leader/set-key-for-mode 'python-mode
@@ -273,15 +258,8 @@
         (setq imenu-create-index-function
               #'spacemacs/python-imenu-create-index-python-or-semantic)))))
 
-;; Has bugs at the moment
-;; (defun python/post-init-evil-matchit ()
-;;   (use-package evil-matchit-python
-;;     :defer t
-;;     :init
-;;     (add-hook `python-mode-hook `turn-on-evil-matchit-mode)
-;;     :config
-;;     (plist-put evilmi-plugins 'python-mode '((evilmi-simple-get-tag evilmi-simple-jump)
-;;                                              (evilmi-python-get-tag evilmi-python-jump)))))
+(defun python/post-init-evil-matchit ()
+    (add-hook `python-mode-hook `turn-on-evil-matchit-mode))
 
 (defun python/post-init-flycheck ()
   (add-hook 'python-mode-hook 'flycheck-mode))

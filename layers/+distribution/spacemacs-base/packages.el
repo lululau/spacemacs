@@ -15,12 +15,7 @@
         bind-key
         bookmark
         diminish
-        ;; hack to be able to wrap built-in emacs modes in an init function
-        (builtin-process-menu :location local)
-        (builtin-ido :location local)
-        (builtin-hs-minor-mode :location local)
-        (builtin-electric-indent-mode :location local)
-        (builtin-uniquify :location local)
+        (electric-indent-mode :location built-in)
         ediff
         eldoc
         evil
@@ -34,12 +29,15 @@
         helm-descbinds
         helm-projectile
         (helm-spacemacs :location local)
+        (hs-minor-mode :location built-in)
         (holy-mode :location local :step pre)
         (hybrid-mode :location local :step pre)
+        (ido :location built-in)
         ido-vertical-mode
         page-break-lines
         popup
         popwin
+        (process-menu :location built-in)
         projectile
         quelpa
         recentf
@@ -48,6 +46,7 @@
         spacemacs-theme
         subword
         undo-tree
+        (uniquify :location built-in)
         use-package
         which-key
         whitespace
@@ -98,35 +97,8 @@
       ;; don't display eldoc on modeline
       (spacemacs|hide-lighter eldoc-mode))))
 
-(defun spacemacs-base/init-builtin-process-menu ()
-  (evilify process-menu-mode process-menu-mode-map))
-
-(defun spacemacs-base/init-builtin-ido ()
-  (ido-mode t)
-  (setq ido-save-directory-list-file (concat spacemacs-cache-directory
-                                             "ido.last")
-        ;; enable fuzzy matching
-        ido-enable-flex-matching t))
-
-(defun spacemacs-base/init-builtin-hs-minor-mode ()
-  ;; required for evil folding
-  (defun spacemacs//enable-hs-minor-mode ()
-    "Enable hs-minor-mode for code folding."
-    (ignore-errors
-      (hs-minor-mode)
-      (spacemacs|hide-lighter hs-minor-mode)))
-  (add-hook 'prog-mode-hook 'spacemacs//enable-hs-minor-mode))
-
-(defun spacemacs-base/init-builtin-electric-indent-mode ()
+(defun spacemacs-base/init-electric-indent-mode ()
   (electric-indent-mode))
-
-(defun spacemacs-base/init-builtin-uniquify ()
-  (require 'uniquify)
-  ;; When having windows with repeated filenames, uniquify them
-  ;; by the folder they are in rather those annoying <2>,<3>,.. etc
-  (setq uniquify-buffer-name-style 'post-forward-angle-brackets
-        ;; don't screw special buffers
-        uniquify-ignore-buffers-re "^\\*"))
 
 ;; notes from mijoharas
 ;; We currently just set a few variables to make it look nicer.
@@ -925,6 +897,15 @@ ARG non nil means that the editing style is `vim'."
     :init
     (evil-leader/set-key "feh" 'helm-spacemacs)))
 
+(defun spacemacs-base/init-hs-minor-mode ()
+  ;; required for evil folding
+  (defun spacemacs//enable-hs-minor-mode ()
+    "Enable hs-minor-mode for code folding."
+    (ignore-errors
+      (hs-minor-mode)
+      (spacemacs|hide-lighter hs-minor-mode)))
+  (add-hook 'prog-mode-hook 'spacemacs//enable-hs-minor-mode))
+
 (defun spacemacs-base/init-holy-mode ()
   (use-package holy-mode
     :commands holy-mode
@@ -934,10 +915,13 @@ ARG non nil means that the editing style is `vim'."
         (holy-mode))
       (spacemacs|add-toggle holy-mode
         :status holy-mode
-        :on (holy-mode)
+        :on (progn (when (bound-and-true-p hybrid-mode)
+                     (hybrid-mode -1))
+                   (holy-mode))
         :off (holy-mode -1)
         :documentation "Globally toggle holy mode."
-        :evil-leader "E H"))))
+        :evil-leader "tEh")
+      (spacemacs|diminish holy-mode " Ⓔh" " Eh"))))
 
 (defun spacemacs-base/init-hybrid-mode ()
   (use-package hybrid-mode
@@ -946,10 +930,20 @@ ARG non nil means that the editing style is `vim'."
       (when (eq 'hybrid dotspacemacs-editing-style) (hybrid-mode))
       (spacemacs|add-toggle hybrid-mode
         :status hybrid-mode
-        :on (hybrid-mode)
+        :on (progn (when (bound-and-true-p holy-mode)
+                     (holy-mode -1))
+                   (hybrid-mode))
         :off (hybrid-mode -1)
         :documentation "Globally toggle hybrid mode."
-        :evil-leader "E Y"))))
+        :evil-leader "tEy")
+      (spacemacs|diminish hybrid-mode " Ⓔy" " Ey"))))
+
+(defun spacemacs-base/init-ido ()
+  (ido-mode t)
+  (setq ido-save-directory-list-file (concat spacemacs-cache-directory
+                                             "ido.last")
+        ;; enable fuzzy matching
+        ido-enable-flex-matching t))
 
 (defun spacemacs-base/init-ido-vertical-mode ()
   (use-package ido-vertical-mode
@@ -1163,6 +1157,9 @@ ARG non nil means that the editing style is `vim'."
                                        (string-match str (car x))))
                        popwin:special-display-config))))))
 
+(defun spacemacs-base/init-process-menu ()
+  (evilify process-menu-mode process-menu-mode-map))
+
 (defun spacemacs-base/init-projectile ()
   (use-package projectile
     :commands (projectile-ack
@@ -1319,6 +1316,14 @@ ARG non nil means that the editing style is `vim'."
     (setq undo-tree-visualizer-diff t)
     :config
     (spacemacs|hide-lighter undo-tree-mode)))
+
+(defun spacemacs-base/init-uniquify ()
+  (require 'uniquify)
+  ;; When having windows with repeated filenames, uniquify them
+  ;; by the folder they are in rather those annoying <2>,<3>,.. etc
+  (setq uniquify-buffer-name-style 'post-forward-angle-brackets
+        ;; don't screw special buffers
+        uniquify-ignore-buffers-re "^\\*"))
 
 (defun spacemacs-base/init-use-package ())
 
