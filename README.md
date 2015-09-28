@@ -13,7 +13,7 @@
 |
 <b><a href="doc/DOCUMENTATION.org">documentation</a></b>
 |
-<b><a href="doc/CONTRIBUTE.org">contribute</a></b>
+<b><a href="doc/CONTRIBUTE.org">cont                                                       (spacemacs-0.104.0)ribute</a></b>
 |
 <b><a href="doc/DOCUMENTATION.org#achievements">achievements</a></b>
 |
@@ -42,6 +42,7 @@
 - [Update](#update)
     - [Automatic update](#automatic-update)
     - [On develop branch](#on-develop-branch)
+    - [Revert to a specific version](#revert-to-a-specific-version)
 - [Contributions](#contributions)
 - [License](#license)
 - [Supporting Spacemacs](#supporting-spacemacs)
@@ -62,6 +63,8 @@ to mix the two styles. You can switch between any style at any moment which
 make it a very good tool for pair-programming.
 
 Spacemacs is currently in beta, and contributions are very welcome.
+
+![spacemacs_python](doc/img/spacemacs-python.png)
 
 # Features
 
@@ -109,6 +112,10 @@ favorite package manager.
 ### Linux distros
 
 Install Emacs from the package manager of your Linux distribution.
+
+You should install the "emacs" package, not the "xemacs" package.
+XEmacs is an old fork of Emacs. The X in its name is unrelated to X11.
+Both Emacs and XEmacs have graphical support.
 
 ### OS X
 
@@ -220,6 +227,15 @@ the starting page.
    ```
 
 3. Restart Emacs to complete the upgrade.
+
+## Revert to a specific version
+
+To revert to a specific version you just have to checkout the corresponding
+branch, for instance to revert to the last `0.103`:
+
+   ```sh
+   git checkout origin/release-0.103
+   ```
 
 # Contributions
 
