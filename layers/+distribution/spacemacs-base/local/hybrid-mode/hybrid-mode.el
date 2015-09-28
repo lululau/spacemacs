@@ -58,6 +58,14 @@
 (setf (symbol-function 'hybrid-mode--evil-insert-state-backup)
       (symbol-function 'evil-insert-state))
 
+;; Override stock evil function `evil-insert-state-p'
+(defun evil-insert-state-p (&optional state)
+  "Whether the current state is insert.
+\(That is, whether `evil-state' is either `evil-insert-state' or
+ `evil-hybrid-state'.)"
+  (and evil-local-mode
+       (memq (or state evil-state) '(insert hybrid))))
+
 ;;;###autoload
 (define-minor-mode hybrid-mode
   "Global minor mode to replaces the `evil-insert-state' keymap
