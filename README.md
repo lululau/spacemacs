@@ -17,7 +17,7 @@
 |
 <b><a href="doc/DOCUMENTATION.org#achievements">achievements</a></b>
 |
-<b><a href="#faq">FAQ</a></b>
+<b><a href="doc/FAQ.org">FAQ</a></b>
 </p>
 ***
 
@@ -186,7 +186,7 @@ For efficient searches we recommend to install `pt` ([the platinum searcher][]).
 4. Restart Emacs to complete the installation.
 
 If the mode-line turns red then be sure to visit the
-[troubleshooting][troubleshoot] guide and consult the [FAQ](#faq).
+[troubleshooting][troubleshoot] guide and consult the [FAQ][FAQ.org].
 
 ## Spacemacs logo
 
@@ -211,7 +211,7 @@ Its color depends on the number of versions available since your last update.
 Green means that your current version is recent, orange and red that your
 current version is older.
 
-[[file:doc/img/powerline-update.png]]
+![powerline_update](doc/img/powerline-update.png)
 
 Click on the arrow to update Spacemacs to the last version.
 

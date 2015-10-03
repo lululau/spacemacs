@@ -218,6 +218,8 @@ If called with a prefix argument, uses the other-window instead."
           "mer" 'cider-eval-region
           "mew" 'cider-eval-last-sexp-and-replace
 
+          "mfb" 'cider-format-buffer
+
           "mgb" 'cider-jump-back
           "mge" 'cider-jump-to-compilation-error
           "mgg" 'cider-find-var
@@ -231,6 +233,7 @@ If called with a prefix argument, uses the other-window instead."
           "msf" 'spacemacs/cider-send-function-to-repl
           "msF" 'spacemacs/cider-send-function-to-repl-focus
           "msi" 'cider-jack-in
+          "msI" 'cider-jack-in-clojurescript
           "msn" 'spacemacs/cider-send-ns-form-to-repl
           "msN" 'spacemacs/cider-send-ns-form-to-repl-focus
           "msq" 'cider-quit
@@ -316,11 +319,12 @@ If called with a prefix argument, uses the other-window instead."
           "mrcn" 'cljr-clean-ns
           "mrcp" 'cljr-cycle-privacy
           "mrdk" 'cljr-destructure-keys
-          "mref" 'cljr-extract-function
           "mrec" 'cljr-extract-constant
+          "mred" 'cljr-extract-def
+          "mref" 'cljr-extract-function
           "mrel" 'cljr-expand-let
-          "mrfu" 'cljr-find-usages
           "mrfe" 'cljr-create-fn-from-example
+          "mrfu" 'cljr-find-usages
           "mrhd" 'cljr-hotload-dependency
           "mril" 'cljr-introduce-let
           "mris" 'cljr-inline-symbol
@@ -334,10 +338,10 @@ If called with a prefix argument, uses the other-window instead."
           "mrrr" 'cljr-remove-unused-requires
           "mrrs" 'cljr-rename-symbol
           "mrru" 'cljr-replace-use
+          "mrsc" 'cljr-show-changelog
           "mrsn" 'cljr-sort-ns
           "mrsp" 'cljr-sort-project-dependencies
           "mrsr" 'cljr-stop-referring
-          "mrsc" 'cljr-show-changelog
           "mrtf" 'cljr-thread-first-all
           "mrth" 'cljr-thread
           "mrtl" 'cljr-thread-last-all
