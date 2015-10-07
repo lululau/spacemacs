@@ -32,6 +32,7 @@
    - [[#installation][Installation]]
      - [[#alternative-setup][Alternative setup]]
    - [[#synchronization-of-dotfile-changes][Synchronization of dotfile changes]]
+   - [[#testing][Testing]]
    - [[#content][Content]]
      - [[#using-configuration-layers][Using configuration layers]]
      - [[#setting-configuration-layers-variables][Setting configuration layers variables]]
@@ -44,6 +45,7 @@
      - [[#vim][Vim]]
      - [[#emacs][Emacs]]
      - [[#hybrid][Hybrid]]
+   - [[#evilified-modes][Evilified modes]]
    - [[#states][States]]
    - [[#evil-leader][Evil leader]]
    - [[#universal-argument][Universal argument]]
@@ -74,6 +76,7 @@
    - [[#reserved-prefix-command-for-user][Reserved prefix command for user]]
    - [[#helm][Helm]]
      - [[#c-z-and-tab-switch][C-z and Tab switch]]
+     - [[#helm-focus][Helm focus]]
      - [[#helm-micro-state][Helm micro-state]]
    - [[#discovering][Discovering]]
      - [[#key-bindings][Key bindings]]
@@ -497,6 +500,12 @@ use the =on= or =off= versions instead (i.e. instead of
 =spacemacs/toggle-<thing>-off=). It is possible to /skip/ the execution of
 =dotspacemacs/user-config= with the universal argument (~SPC u SPC f e R~).
 
+** Testing
+You can use the command =SPC : dotspacemacs/test-dotfile= to check if your
+=~/.spacemacs= looks correct. This will check, among other things, whether the
+declared layers can be found and that the variables have sensible values. These
+tests are also run automatically when you synchronize with ~SPC f e R~.
+
 ** Content
 *** Using configuration layers
 To use a configuration layer, add it to the =dotspacemacs-configuration-layers=
@@ -508,11 +517,11 @@ For instance to add the configuration layer of [[#thank-you][RMS]]:
     (setq-default dotspacemacs-configuration-layers '(rms))
 #+end_src
 
-If this layer does not exist you can still try another one in [[file:../contrib][the =contrib=
+If this layer does not exist you can still try another one in [[file:../layers][the =layers=
 directory]].
-
+ 
 Configuration layers are expected to be stored in =~/.emacs.d/private= or
-=~/.emacs.d/contrib=. But you are free to keep them somewhere else by declaring
+=~/.emacs.d/layers=. But you are free to keep them somewhere else by declaring
 additional paths where =Spacemacs= can look for configuration layers. This is
 done by setting the list =dotspacemacs-configuration-layer-path= in your
 =~/.spacemacs=:
@@ -641,6 +650,27 @@ in =evil-hybrid-state-map= keymap instead of =evil-insert-state-map=.
 
 Hybrid mode can be enabled by setting =dotspacemacs-editing-style= to =hybrid=.
 To switch between evil and hybrid mode use ~SPC t E y~ and ~M-m t E y~.
+
+** Evilified modes
+Some buffers (such as Magit, for using git from within Emacs), are not for
+editing text, and provide their own keybindings for certain operations. These
+often conflict with Vim bindings. To make such buffers behave Vim-like in a
+consistent manner, they use a special state called /evilified/ state. In
+evilified state, a handful of keys work as in Evil, namely =/=, =:=, =h=, =j=,
+=k=, =l=, =n=, =N=, =v=, =V=, =gg=, =G=, =C-f=, =C-b=, =C-d=, =C-u= and =C-z=.
+All other keys work as intended by the underlying mode.
+
+Shadowed keys are moved according to the pattern: =a= → =A= → =C-a= → =C-A=
+
+For example, if the mode binds a function to =n=, that is found under =C-n= in
+evilified state, since both =n= and =N= are reserved, but =C-n= is not. On the
+other hand, anything originally bound to =k= will be found on =K=, since =k= is
+reserved but =K= is not. If there is a binding on =K=, that will be moved to
+=C-k=.
+
+In addition to this, =C-g=, being an important escape key in Emacs, is skipped.
+So anything bound to =g= originally will be found on =C-G=, since =g=, =G= and
+=C-g= are all reserved.
 
 ** States
 =Spacemacs= has 10 states:
@@ -1193,6 +1223,10 @@ the [[https://github.com/emacs-helm/helm/wiki][Helm documentation wiki]].
 The command bound to ~C-z~ is much more useful than the one bound to Tab, so it
 makes sense to swap them. It's also recommended [[http://tuhdo.github.io/helm-intro.html][here]].
 
+*** Helm focus
+If you find yourself unable to return focus to Helm (after a careless
+mouse-click for example), use ~SPC w b~ to return focus to the minibuffer.
+
 *** Helm micro-state
 =Spacemacs= defines a [[#micro-states][micro-state]] for =Helm= to make it work like [[https://github.com/Shougo/unite.vim][Vim's Unite]]
 plugin.
@@ -1594,7 +1628,6 @@ to keep finger on the home row.
 | ~C-j~       | go to previous candidate          |
 | ~C-k~       | go to next candidate              |
 | ~C-l~       | enter current directory           |
-
 
 *** Ido
 Spacemacs displays the =ido= minibuffer vertically thanks to the
