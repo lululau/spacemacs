@@ -34,6 +34,10 @@
         (evil-indent-textobject :location (recipe :fetcher github :repo "TheBB/evil-indent-textobject"))
         evil-jumper
         evil-lisp-state
+        ;; for testing purpose, contribute by reporting bugs and sending PRs
+        ;; to https://github.com/gabesoft/evil-mc
+        ;; To enable it add `(global-evil-mc-mode)' to user-config function
+        (evil-mc :location (recipe :fetcher github :repo "gabesoft/evil-mc"))
         evil-nerd-commenter
         evil-matchit
         evil-numbers
@@ -72,7 +76,6 @@
         recentf
         smartparens
         smooth-scrolling
-        (solarized-theme :location local)
         spaceline
         spray
         vi-tilde-fringe
@@ -95,14 +98,13 @@
     :init
     (progn
       (define-key spacemacs-mode-map "o" 'spacemacs/ace-buffer-links)
-      (eval-after-load "info"
-        '(define-key Info-mode-map "o" 'ace-link-info))
-      (eval-after-load "help-mode"
-        '(define-key help-mode-map "o" 'ace-link-help))
-      (eval-after-load "eww"
-        '(progn
-           (define-key eww-link-keymap "o" 'ace-link-eww)
-           (define-key eww-mode-map "o" 'ace-link-eww))))
+      (with-eval-after-load 'info
+        (define-key Info-mode-map "o" 'ace-link-info))
+      (with-eval-after-load 'help-mode
+        (define-key help-mode-map "o" 'ace-link-help))
+      (with-eval-after-load 'eww
+        (define-key eww-link-keymap "o" 'ace-link-eww)
+        (define-key eww-mode-map "o" 'ace-link-eww)))
     :config
     (progn
       (defvar spacemacs--link-pattern "~?/.+\\|\s\\[")
@@ -118,10 +120,10 @@
         "Ace jump to links in `spacemacs' buffer."
         (interactive)
         (let ((res (avy--with-avy-keys spacemacs/ace-buffer-links
-                    (avy--process
-                        (spacemacs//collect-spacemacs-buffer-links)
-                        #'avy--overlay-pre))))
-            (when res
+                                       (avy--process
+                                        (spacemacs//collect-spacemacs-buffer-links)
+                                        #'avy--overlay-pre))))
+          (when res
             (goto-char (1+ res))
             (widget-button-press (point))))))))
 
@@ -306,12 +308,11 @@
             (ahs-backward)
             )))
 
-      (eval-after-load 'evil
-        '(progn
-           (define-key evil-motion-state-map (kbd "*")
-             'spacemacs/enter-ahs-forward)
-           (define-key evil-motion-state-map (kbd "#")
-             'spacemacs/enter-ahs-backward)))
+      (with-eval-after-load 'evil
+        (define-key evil-motion-state-map (kbd "*")
+          'spacemacs/enter-ahs-forward)
+        (define-key evil-motion-state-map (kbd "#")
+          'spacemacs/enter-ahs-backward))
 
       (defun spacemacs/symbol-highlight ()
         "Highlight the symbol under point with `auto-highlight-symbol'."
@@ -393,6 +394,7 @@
 (defun spacemacs/init-avy ()
   (use-package avy
     :defer t
+    :commands (spacemacs/avy-open-url)
     :init
     (progn
       (setq avy-keys (number-sequence ?a ?z))
@@ -400,9 +402,22 @@
       (setq avy-background t)
       (evil-leader/set-key
         "SPC" 'avy-goto-word-or-subword-1
-        "l" 'avy-goto-line))
+        "l" 'avy-goto-line
+        "xo" 'spacemacs/avy-open-url))
     :config
-    (evil-leader/set-key "`" 'avy-pop-mark)))
+    (progn
+      (defun spacemacs/avy-goto-url()
+        "Use avy to go to an URL in the buffer."
+        (interactive)
+        (avy--generic-jump "https?://" nil 'pre))
+      (defun spacemacs/avy-open-url ()
+        "Use avy to select an URL in the buffer and open it."
+        (interactive)
+        (save-excursion
+          (spacemacs/avy-goto-url)
+          (browse-url-at-point)))
+      (evil-leader/set-key "`" 'avy-pop-mark))
+      ))
 
 (defun spacemacs/init-buffer-move ()
   (use-package buffer-move
@@ -578,6 +593,10 @@
     (progn
       (setq evil-lisp-state-global t)
       (setq evil-lisp-state-leader-prefix "k"))))
+
+(defun spacemacs/init-evil-mc ()
+  (use-package evil-mc
+    :defer t))
 
 ;; other commenting functions in funcs.el with keybinds in keybindings.el
 (defun spacemacs/init-evil-nerd-commenter ()
@@ -952,9 +971,9 @@ For instance pass En as source for english."
                    ((symbol-function 'thing-at-point)
                     (lambda (thing)
                       (let ((res (if (region-active-p)
-                          (buffer-substring-no-properties
-                           (region-beginning) (region-end))
-                          (this-fn thing))))
+                                     (buffer-substring-no-properties
+                                      (region-beginning) (region-end))
+                                   (this-fn thing))))
                         (when res (rxt-quote-pcre res))))))
           (funcall func dir)))
 
@@ -974,7 +993,7 @@ For instance pass En as source for english."
                       (if (fboundp func)
                           func
                         (intern (format "%s-%s"  base x))))))
-                     tools)
+              tools)
            (t 'helm-do-grep))))
 
       ;; Search in current file ----------------------------------------------
@@ -1168,10 +1187,10 @@ If DEFAULT-INPUTP is non nil then the current region or symbol at point
 are used as default input."
         (interactive)
         (let ((projectile-require-project-root nil))
-         (call-interactively
-          (spacemacs//helm-do-search-find-tool "helm-project-do"
-                                               dotspacemacs-search-tools
-                                               default-inputp))))
+          (call-interactively
+           (spacemacs//helm-do-search-find-tool "helm-project-do"
+                                                dotspacemacs-search-tools
+                                                default-inputp))))
 
       (defun spacemacs/helm-project-smart-do-search-region-or-symbol ()
         "Search in current project using `dotspacemacs-search-tools' with
@@ -1427,8 +1446,8 @@ It will toggle the overlay under point or create an overlay of one character."
     :defer t
     :init
     (progn
-      (eval-after-load 'info
-        '(require 'info+))
+      (with-eval-after-load 'info
+        (require 'info+))
       (setq Info-fontify-angle-bracketed-flag nil))))
 
 (defun spacemacs/init-leuven-theme ()
@@ -1700,13 +1719,6 @@ It will toggle the overlay under point or create an overlay of one character."
     (ad-activate 'next-line)
     (ad-disable-advice 'isearch-repeat 'after 'isearch-smooth-scroll)
     (ad-activate 'isearch-repeat)))
-
-(defun spacemacs/init-solarized-theme ()
-  (use-package solarized
-    :init
-    (progn
-      (deftheme solarized-dark "The dark variant of the Solarized colour theme")
-      (deftheme solarized-light "The light variant of the Solarized colour theme"))))
 
 (defun spacemacs/init-spaceline ()
   (use-package spaceline-config

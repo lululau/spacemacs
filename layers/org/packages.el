@@ -15,7 +15,7 @@
     company
     company-emoji
     emoji-cheat-sheet-plus
-    evil-org
+    (evil-org :location local)
     gnuplot
     htmlize
     ;; org is installed by `org-plus-contrib'
@@ -48,16 +48,7 @@
     :config
     (progn
       (evil-leader/set-key-for-mode 'org-mode
-        "mC" 'evil-org-recompute-clocks
-
-        ;; evil-org binds these keys, so we bind them back to their original
-        ;; value
-        "t" (lookup-key evil-leader--default-map "t")
-        "a" (lookup-key evil-leader--default-map "a")
-        "b" (lookup-key evil-leader--default-map "b")
-        "c" (lookup-key evil-leader--default-map "c")
-        "l" (lookup-key evil-leader--default-map "l")
-        "o" (lookup-key evil-leader--default-map "o"))
+        "mC" 'evil-org-recompute-clocks)
       (evil-define-key 'normal evil-org-mode-map
         "O" 'evil-open-above)
       (spacemacs|diminish evil-org-mode " ⓔ" " e"))))
@@ -83,8 +74,8 @@
             org-startup-with-inline-images t
             org-src-fontify-natively t)
 
-      (eval-after-load 'org-indent
-        '(spacemacs|hide-lighter org-indent-mode))
+      (with-eval-after-load 'org-indent
+        (spacemacs|hide-lighter org-indent-mode))
       (setq org-startup-indented t)
       (let ((dir (configuration-layer/get-layer-property 'org :dir)))
         (setq org-export-async-init-file (concat dir "org-async-init.el")))
@@ -198,15 +189,14 @@ Will work on both org-mode and any mode that accepts plain html."
           "mxu" (spacemacs|org-emphasize spacemacs/org-underline ?_)
           "mxv" (spacemacs|org-emphasize spacemacs/org-verbose ?=))
 
-      (eval-after-load "org-agenda"
-        '(progn
-           (define-key org-agenda-mode-map "j" 'org-agenda-next-line)
-           (define-key org-agenda-mode-map "k" 'org-agenda-previous-line)
-           ;; Since we override SPC, let's make RET do that functionality
-           (define-key org-agenda-mode-map
-             (kbd "RET") 'org-agenda-show-and-scroll-up)
-           (define-key org-agenda-mode-map
-             (kbd "SPC") evil-leader--default-map))))
+      (with-eval-after-load 'org-agenda
+        (define-key org-agenda-mode-map "j" 'org-agenda-next-line)
+        (define-key org-agenda-mode-map "k" 'org-agenda-previous-line)
+        ;; Since we override SPC, let's make RET do that functionality
+        (define-key org-agenda-mode-map
+          (kbd "RET") 'org-agenda-show-and-scroll-up)
+        (define-key org-agenda-mode-map
+          (kbd "SPC") evil-leader--default-map)))
     :config
     (progn
       ;; setup org directory
@@ -221,6 +211,9 @@ Will work on both org-mode and any mode that accepts plain html."
       (require 'org-indent)
       (define-key global-map "\C-cl" 'org-store-link)
       (define-key global-map "\C-ca" 'org-agenda)
+
+      ;; Open links and files with RET in normal state
+      (evil-define-key 'normal org-mode-map (kbd "RET") 'org-open-at-point)
 
       ;; We add this key mapping because an Emacs user can change
       ;; `dotspacemacs-major-mode-emacs-leader-key' to `C-c' and the key binding

@@ -49,9 +49,6 @@ then this is used. If ~/.spacemacs does not exist, then check
 for init.el in dotspacemacs-directory and use this if it
 exists. Otherwise, fallback to ~/.spacemacs")
 
-(defvar dotspacemacs-verbose-loading nil
-  "If non nil output loading progess in `*Messages*' buffer.")
-
 (defvar dotspacemacs-distribution 'spacemacs
   "Base distribution to use. This is a layer contained in the directory
 `+distribution'. For now available distributions are `spacemacs-base'
@@ -261,7 +258,9 @@ Called with `C-u C-u' skips `dotspacemacs/user-config' _and_ preleminary tests."
                   (spacemacs//restore-powerline (current-buffer))))
             (switch-to-buffer-other-window dotspacemacs-test-results-buffer)
             (spacemacs-buffer/warning "Some tests failed, check `%s' buffer"
-                                      dotspacemacs-test-results-buffer)))))))
+                                      dotspacemacs-test-results-buffer))))))
+  (when (configuration-layer/package-usedp 'spaceline)
+    (spacemacs//set-powerline-for-startup-buffers)))
 
 (defun dotspacemacs/get-variable-string-list ()
   "Return a list of all the dotspacemacs variables as strings."
@@ -473,7 +472,11 @@ If MSG is not nil then display a message in `*Messages'."
    (spacemacs//test-var 'stringp 'dotspacemacs-leader-key "is a string")
    (spacemacs//test-var 'stringp 'dotspacemacs-emacs-leader-key "is a string")
    (spacemacs//test-var
-    'stringp 'dotspacemacs-major-mode-leader-key "is a string")
+    (lambda (x) (or (null x) (stringp x)))
+    'dotspacemacs-major-mode-leader-key "is a string or nil")
+   (spacemacs//test-var
+    (lambda (x) (or (null x) (stringp x)))
+    'dotspacemacs-major-mode-emacs-leader-key "is a string or nil")
    (spacemacs//test-var 'stringp 'dotspacemacs-command-key "is a string")
    (insert (format
             (concat "** RESULTS: "

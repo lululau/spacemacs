@@ -6,15 +6,15 @@
  - [[#description][Description]]
  - [[#install][Install]]
  - [[#key-bindings][Key bindings]]
-     - [[#srefactor][srefactor]]
+   - [[#working-with-lisp-files-barfage-slurpage--more][Working with lisp files (barfage, slurpage & more)]]
+   - [[#leader][Leader]]
+   - [[#srefactor][srefactor]]
 
 * Description
-
 This layer gathers all the configuration related to emacs-lisp. This should
 always be in your dotfile, it is not recommended to uninstall it.
 
 * Install
-
 To use this contribution add it to your =~/.spacemacs=
 
 #+BEGIN_SRC emacs-lisp
@@ -22,6 +22,15 @@ To use this contribution add it to your =~/.spacemacs=
 #+END_SRC
 
 * Key bindings
+** Working with lisp files (barfage, slurpage & more)
+Spacemacs comes with a special ~lisp-state~ for working with lisp code that
+supports slurpage, barfage and more tools you'll likely want when working with
+lisp.
+
+As this state works the same for all files, the documentation is in global
+[[https://github.com/syl20bnr/spacemacs/blob/master/doc/DOCUMENTATION.org#lisp-key-bindings][DOCUMENTATION.org]]. In general, use ~SPC k~ to interact with the lisp-state.
+
+** Leader
 
 | Key Binding                | Description                                                |
 |----------------------------+------------------------------------------------------------|
@@ -39,9 +48,7 @@ To use this contribution add it to your =~/.spacemacs=
 | ~SPC m d m~                | open [[https://github.com/joddie/macrostep][macrostep]] micro-state                                 |
 
 ** srefactor
-
-The [[file:../../semantic/README.org][semantic-layer]] should be installed for these key bindings
-to become active.
+The [[file:../../semantic/README.org][semantic]] layer should be installed for these key bindings to become active.
 
 | Key Binding | Description             |
 |-------------+-------------------------|

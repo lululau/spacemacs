@@ -47,6 +47,7 @@
         subword
         undo-tree
         (uniquify :location built-in)
+        (url :location built-in)
         use-package
         which-key
         whitespace
@@ -70,20 +71,20 @@
     (progn
       ;; Minor modes abbrev --------------------------------------------------------
       (when (display-graphic-p)
-        (eval-after-load "eproject"
-          '(diminish 'eproject-mode " eⓅ"))
-        (eval-after-load "flymake"
-          '(diminish 'flymake-mode " Ⓕ2")))
+        (with-eval-after-load 'eproject
+          (diminish 'eproject-mode " eⓅ"))
+        (with-eval-after-load 'flymake
+          (diminish 'flymake-mode " Ⓕ2")))
       ;; Minor Mode (hidden) ------------------------------------------------------
-      (eval-after-load 'elisp-slime-nav
-        '(diminish 'elisp-slime-nav-mode))
-      (eval-after-load "hi-lock"
-        '(diminish 'hi-lock-mode))
-      (eval-after-load "abbrev"
-        '(diminish 'abbrev-mode))
-      (eval-after-load "subword"
-        '(when (eval-when-compile (version< "24.3.1" emacs-version))
-           (diminish 'subword-mode))))))
+      (with-eval-after-load 'elisp-slime-nav
+        (diminish 'elisp-slime-nav-mode))
+      (with-eval-after-load 'hi-lock
+        (diminish 'hi-lock-mode))
+      (with-eval-after-load 'abbrev
+        (diminish 'abbrev-mode))
+      (with-eval-after-load 'subword
+        (when (eval-when-compile (version< "24.3.1" emacs-version))
+          (diminish 'subword-mode))))))
 
 (defun spacemacs-base/init-eldoc ()
   (use-package eldoc
@@ -403,7 +404,7 @@ Example: (evil-map visual \"<\" \"<gv\")"
         '(progn
            ;; (define-key compilation-mode-map (kbd dotspacemacs-leader-key) nil)
            (define-key compilation-mode-map (kbd "h") nil)))
-      ;; (eval-after-load "dired" '(define-key dired-mode-map (kbd
+      ;; (with-eval-after-load "dired" (define-key dired-mode-map (kbd
       ;;   dotspacemacs-leader-key) nil))
       ;; evil-leader does not get activated in existing buffers, so we have to
       ;; force it here
@@ -464,8 +465,8 @@ Example: (evil-map visual \"<\" \"<gv\")"
     :config
     (progn
       (when (and dotspacemacs-helm-resize
-                  (or (eq dotspacemacs-helm-position 'bottom)
-                      (eq dotspacemacs-helm-position 'top)))
+                 (or (eq dotspacemacs-helm-position 'bottom)
+                     (eq dotspacemacs-helm-position 'top)))
         (setq helm-autoresize-min-height 10)
         (helm-autoresize-mode 1))
 
@@ -499,14 +500,14 @@ Example: (evil-map visual \"<\" \"<gv\")"
 Removes the automatic guessing of the initial value based on thing at point. "
         (interactive "P")
         (let* ((hist          (and arg helm-ff-history (helm-find-files-history)))
-                (default-input hist )
-                (input         (cond ((and (eq major-mode 'dired-mode) default-input)
-                                    (file-name-directory default-input))
+               (default-input hist )
+               (input         (cond ((and (eq major-mode 'dired-mode) default-input)
+                                     (file-name-directory default-input))
                                     ((and (not (string= default-input ""))
-                                            default-input))
+                                          default-input))
                                     (t (expand-file-name (helm-current-directory))))))
-            (set-text-properties 0 (length input) nil input)
-            (helm-find-files-1 input ))))
+          (set-text-properties 0 (length input) nil input)
+          (helm-find-files-1 input ))))
     :init
     (progn
       (setq helm-prevent-escaping-from-minibuffer t
@@ -540,6 +541,10 @@ Removes the automatic guessing of the initial value based on thing at point. "
       ;; helm-locate uses es (from everything on windows, which doesnt like fuzzy)
       (setq helm-locate-fuzzy-match (executable-find "locate"))
 
+      ;; Use helm to provide :ls, unless ibuffer is used
+      (unless (configuration-layer/package-usedp 'ibuffer)
+        (evil-ex-define-cmd "buffers" 'helm-buffers-list))
+
       (defun spacemacs//helm-do-grep-region-or-symbol (&optional targs use-region-or-symbol-p)
         "Version of `helm-do-grep' with a default input."
         (interactive)
@@ -549,23 +554,23 @@ Removes the automatic guessing of the initial value based on thing at point. "
              ((symbol-function 'helm-do-grep-1)
               (lambda (targets &optional recurse zgrep exts default-input region-or-symbol-p)
                 (let* ((new-input (when region-or-symbol-p
-                                   (if (region-active-p)
-                                       (buffer-substring-no-properties
-                                        (region-beginning) (region-end))
-                                     (thing-at-point 'symbol t))))
-                      (quoted-input (when new-input (rxt-quote-pcre new-input))))
+                                    (if (region-active-p)
+                                        (buffer-substring-no-properties
+                                         (region-beginning) (region-end))
+                                      (thing-at-point 'symbol t))))
+                       (quoted-input (when new-input (rxt-quote-pcre new-input))))
                   (this-fn targets recurse zgrep exts default-input quoted-input))))
              (preselection (or (dired-get-filename nil t)
                                (buffer-file-name (current-buffer))))
              (targets   (if targs
                             targs
                           (helm-read-file-name
-                          "Search in file(s): "
-                          :marked-candidates t
-                          :preselect (and helm-do-grep-preselect-candidate
-                                          (if helm-ff-transformer-show-only-basename
-                                              (helm-basename preselection)
-                                            preselection))))))
+                           "Search in file(s): "
+                           :marked-candidates t
+                           :preselect (and helm-do-grep-preselect-candidate
+                                           (if helm-ff-transformer-show-only-basename
+                                               (helm-basename preselection)
+                                             preselection))))))
           (helm-do-grep-1 targets nil nil nil nil use-region-or-symbol-p)))
 
       (defun spacemacs/helm-file-do-grep ()
@@ -611,9 +616,9 @@ Removes the automatic guessing of the initial value based on thing at point. "
         (interactive)
         (if (get-buffer "*helm ag results*")
             (switch-to-buffer-other-window "*helm ag results*")
-            (if (get-buffer "*hgrep*")
-                (switch-to-buffer-other-window "*hgrep*")
-                (message "No previous search buffer found"))))
+          (if (get-buffer "*hgrep*")
+              (switch-to-buffer-other-window "*hgrep*")
+            (message "No previous search buffer found"))))
 
       ;; use helm by default for M-x
       (unless (configuration-layer/package-usedp 'smex)
@@ -836,12 +841,15 @@ ARG non nil means that the editing style is `vim'."
       ;; Swap default TAB and C-z commands.
       ;; For GUI.
       (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+      (define-key helm-find-files-map (kbd "S-<tab>") 'helm-find-files-up-one-level)
+      (define-key helm-find-files-map (kbd "<backtab>") 'helm-find-files-up-one-level)
       ;; For terminal.
       (define-key helm-map (kbd "TAB") 'helm-execute-persistent-action)
+      (define-key helm-find-files-map (kbd "S-TAB") 'helm-find-files-up-one-level)
       (define-key helm-map (kbd "C-z") 'helm-select-action)
 
-      (eval-after-load "helm-mode" ; required
-        '(spacemacs|hide-lighter helm-mode)))))
+      (with-eval-after-load 'helm-mode ; required
+        (spacemacs|hide-lighter helm-mode)))))
 
 (defun spacemacs-base/init-helm-descbinds ()
   (use-package helm-descbinds
@@ -886,9 +894,11 @@ ARG non nil means that the editing style is `vim'."
 
 (defun spacemacs-base/init-helm-spacemacs ()
   (use-package helm-spacemacs
-    :commands helm-spacemacs
+    :commands (helm-spacemacs helm-spacemacs-faq)
     :init
-    (evil-leader/set-key "feh" 'helm-spacemacs)))
+    (progn
+      (evil-leader/set-key "feh" 'helm-spacemacs)
+      (evil-leader/set-key "fef" 'helm-spacemacs-faq))))
 
 (defun spacemacs-base/init-hs-minor-mode ()
   ;; required for evil folding
@@ -1255,9 +1265,12 @@ ARG non nil means that the editing style is `vim'."
   (use-package saveplace
     :init
     (progn
+      (if (fboundp 'save-place-mode)
+          ;; Emacs 25 has a proper mode for `save-place'
+          (save-place-mode)
+        (setq save-place t))
       ;; Save point position between sessions
-      (setq save-place t
-            save-place-file (concat spacemacs-cache-directory "places")))))
+      (setq save-place-file (concat spacemacs-cache-directory "places")))))
 
 (defun spacemacs-base/init-spacemacs-theme ()
   (use-package spacemacs-theme
@@ -1317,6 +1330,10 @@ ARG non nil means that the editing style is `vim'."
   (setq uniquify-buffer-name-style 'post-forward-angle-brackets
         ;; don't screw special buffers
         uniquify-ignore-buffers-re "^\\*"))
+
+(defun spacemacs-base/init-url ()
+  ;; gravatars from magit use this to store their cache
+  (setq url-configuration-directory (concat spacemacs-cache-directory "url/")))
 
 (defun spacemacs-base/init-use-package ())
 
@@ -1390,6 +1407,7 @@ ARG non nil means that the editing style is `vim'."
             which-key-prevent-C-h-from-cycling t
             which-key-echo-keystrokes 0.02
             which-key-max-description-length 32
+            which-key-sort-order 'which-key-key-order-alpha
             which-key-idle-delay dotspacemacs-which-key-delay)
       (which-key-mode)
       (spacemacs|diminish which-key-mode " Ⓚ" " K"))))

@@ -11,15 +11,17 @@
    - [[#anaconda-dependencies][Anaconda dependencies]]
    - [[#automatic-buffer-formatting-on-save][Automatic buffer formatting on save]]
    - [[#autoflake][autoflake]]
+   - [[#pylookup][pylookup]]
  - [[#key-bindings][Key Bindings]]
    - [[#inferior-repl-process][Inferior REPL process]]
    - [[#running-python-script-in-shell][Running Python Script in shell]]
    - [[#testing][Testing]]
    - [[#refactoring][Refactoring]]
    - [[#other-python-commands][Other Python commands]]
+ - [[#configuration][Configuration]]
+   - [[#fill-column][Fill column]]
 
 * Description
-
 This layer adds support for the Python language.
 
 ** Features:
@@ -42,7 +44,6 @@ To use this contribution add it to your =~/.spacemacs=
 #+END_SRC
 
 ** Test runner
-
 Both =nose= and =pytest= are supported. By default =nose= is used.
 To choose your test runner set the layer variable =python-test-runner= to
 either =nose= or =pytest=.
@@ -75,7 +76,6 @@ setting your ~PYTHONPATH~ as explained at
 https://github.com/proofit404/anaconda-mode#pythonpath
 
 ** Automatic buffer formatting on save
-
 To enable automatic buffer formatting on save with  [[https://github.com/google/yapf][YAPF]] set the variable
 =python-enable-yapf-format-on-save= to =t=.
 
@@ -90,6 +90,10 @@ To be able to suppress unused imports easily, install [[https://github.com/myint
 #+BEGIN_SRC sh
   pip install autoflake
 #+END_SRC
+
+** pylookup
+To use =pylookup= on ~SPC m h H~, make sure you update the database first, using
+~SPC : pylookup-update~.
 
 * Key Bindings
 
@@ -167,3 +171,10 @@ Test commands (start with ~m t~ or ~m T~):
 | ~SPC m h H~ | open documentation in =firefox= using [pylookup][pylookup]                   |
 | ~SPC m v~   | activate a virtual environment with [[https://github.com/yyuu/pyenv][pyenv]]                                    |
 | ~SPC m V~   | activate a virtual environment with  [[https://github.com/jorgenschaefer/pyvenv][pyvenv]]                                  |
+* Configuration
+** Fill column
+If you want to customize the fill column value, use something like this inside the ~user-init~ function in your ~.spacemacs~:
+
+#+BEGIN_SRC elisp
+(setq python-fill-column 99)
+#+END_SRC

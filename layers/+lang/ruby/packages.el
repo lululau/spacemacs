@@ -61,7 +61,7 @@
 
 
 (defun ruby/post-init-flycheck ()
-  (add-hook 'enh-ruby-mode-hook 'flycheck-mode))
+  (spacemacs/add-flycheck-hook 'enh-ruby-mode))
 
 (defun ruby/init-ruby-tools ()
   (use-package ruby-tools
@@ -124,5 +124,5 @@
 (when (configuration-layer/layer-usedp 'auto-completion)
   (defun ruby/post-init-company ()
     (spacemacs|add-company-hook enh-ruby-mode)
-    (eval-after-load 'company-dabbrev-code
-      '(push 'enh-ruby-mode company-dabbrev-code-modes))))
+    (with-eval-after-load 'company-dabbrev-code
+      (push 'enh-ruby-mode company-dabbrev-code-modes))))

@@ -22,7 +22,7 @@
     ))
 
 (defun rust/post-init-flycheck ()
-  (add-hook 'rust-mode-hook 'flycheck-mode))
+  (spacemacs/add-flycheck-hook 'rust-mode))
 
 (when (configuration-layer/layer-usedp 'syntax-checking)
   (defun rust/init-flycheck-rust ()
@@ -44,7 +44,8 @@
         "mcc" 'spacemacs/rust-cargo-build
         "mct" 'spacemacs/rust-cargo-test
         "mcd" 'spacemacs/rust-cargo-doc
-        "mcx" 'spacemacs/rust-cargo-run))))
+        "mcx" 'spacemacs/rust-cargo-run
+        "mcC" 'spacemacs/rust-cargo-clean))))
 
 (defun rust/init-toml-mode ()
   (use-package toml-mode
@@ -61,6 +62,9 @@
       :init (push 'company-racer company-backends-rust-mode))))
 
 (defun rust/init-racer ()
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-copy-env "RUST_SRC_PATH"))
+
   (use-package racer
     :if rust-enable-racer
     :defer t

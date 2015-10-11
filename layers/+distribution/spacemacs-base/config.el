@@ -106,6 +106,11 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 ;; Highlight and allow to open http link at point in programming buffers
 ;; goto-address-prog-mode only highlights links in strings and comments
 (add-hook 'prog-mode-hook 'goto-address-prog-mode)
+;; Highlight and follow bug references in comments and strings
+(add-hook 'prog-mode-hook 'bug-reference-prog-mode)
+
+;; Keep focus while navigating help buffers
+(setq help-window-select 't)
 
 ;; ---------------------------------------------------------------------------
 ;; Edit
@@ -117,7 +122,7 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 
 ;; use only spaces and no tabs
 (setq-default indent-tabs-mode nil
-              default-tab-width 2)
+              tab-width 2)
 
 ;; Text
 (setq longlines-show-hard-newlines t)
@@ -143,8 +148,8 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 ;; The C-d rebinding that most shell-like buffers inherit from
 ;; comint-mode assumes non-evil configuration with its
 ;; `comint-delchar-or-maybe-eof' function, so we disable it
-(eval-after-load 'comint
-  '(define-key comint-mode-map (kbd "C-d") nil))
+(with-eval-after-load 'comint
+  (define-key comint-mode-map (kbd "C-d") nil))
 
 ;; ---------------------------------------------------------------------------
 ;; UI
@@ -203,7 +208,7 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
               (null dotspacemacs-auto-save-file-location))
     (make-directory autosave-dir t)))
 ;; Choose auto-save location
-(case dotspacemacs-auto-save-file-location
+(cl-case dotspacemacs-auto-save-file-location
   (cache (let ((autosave-dir (concat spacemacs-auto-save-directory "site/")))
            (add-to-list 'auto-save-file-name-transforms
                         `(".*" ,autosave-dir t) 'append)

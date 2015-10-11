@@ -105,14 +105,15 @@
                                                           ""))))
 
 (defun emacs-lisp/post-init-flycheck ()
+  (spacemacs/add-flycheck-hook 'emacs-lisp-mode)
   ;; Make flycheck recognize packages in loadpath
   ;; i.e (require 'company) will not give an error now
   (setq flycheck-emacs-lisp-load-path 'inherit))
 
 (defun emacs-lisp/post-init-semantic ()
   (semantic/enable-semantic-mode 'emacs-lisp-mode)
-  (eval-after-load 'semantic
-    '(semantic-default-elisp-setup)))
+  (with-eval-after-load 'semantic
+    (semantic-default-elisp-setup)))
 
 (defun emacs-lisp/post-init-srefactor ()
   (add-hook 'emacs-lisp-mode-hook 'spacemacs/lazy-load-srefactor)

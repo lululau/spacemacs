@@ -26,7 +26,7 @@
 
 (when (configuration-layer/layer-usedp 'syntax-checking)
   (defun d/post-init-flycheck ()
-    (add-hook 'd-mode-hook 'flycheck-mode))
+    (spacemacs/add-flycheck-hook 'd-mode))
   (defun d/init-flycheck-dmd-dub ()
     (use-package flycheck-dmd-dub :defer t
       :init (add-hook 'd-mode-hook 'flycheck-dmd-dub-set-include-path))))
@@ -34,5 +34,5 @@
 (when (configuration-layer/layer-usedp 'auto-completion)
   (defun d/post-init-company ()
     ;; Need to convince company that this C-derived mode is a code mode.
-    (eval-after-load 'company-dabbrev-code '(push 'd-mode company-dabbrev-code-modes))
+    (with-eval-after-load 'company-dabbrev-code (push 'd-mode company-dabbrev-code-modes))
     (spacemacs|add-company-hook d-mode)))

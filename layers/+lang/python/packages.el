@@ -123,7 +123,7 @@
       (defun python-default ()
         (setq mode-name "Python"
               tab-width 4
-              fill-column 79
+              fill-column python-fill-column
               ;; auto-indent on colon doesn't work well with if statement
               electric-indent-chars (delq ?: electric-indent-chars))
         (annotate-pdb)
@@ -155,8 +155,8 @@
     (progn
       (add-hook 'inferior-python-mode-hook 'smartparens-mode)
       ;; add support for `ahs-range-beginning-of-defun' for python-mode
-      (eval-after-load 'auto-highlight-symbol
-        '(add-to-list 'ahs-plugin-bod-modes 'python-mode))
+      (with-eval-after-load 'auto-highlight-symbol
+        (add-to-list 'ahs-plugin-bod-modes 'python-mode))
 
       (defun python-shell-send-buffer-switch ()
         "Send buffer content to shell and switch to it in insert mode."
@@ -262,7 +262,7 @@
     (add-hook `python-mode-hook `turn-on-evil-matchit-mode))
 
 (defun python/post-init-flycheck ()
-  (add-hook 'python-mode-hook 'flycheck-mode))
+  (spacemacs/add-flycheck-hook 'python-mode))
 
 (defun python/init-hy-mode ()
   (use-package hy-mode
