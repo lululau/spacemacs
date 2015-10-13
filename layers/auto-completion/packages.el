@@ -163,8 +163,7 @@
     :defer t
     :init
     (with-eval-after-load 'company
-      (define-key company-active-map (kbd "C-/") 'helm-company)
-      (define-key company-mode-map (kbd "C-/") 'helm-company))))
+      (define-key company-active-map (kbd "C-/") 'helm-company))))
 
 (defun auto-completion/init-hippie-exp ()
   ;; replace dabbrev-expand

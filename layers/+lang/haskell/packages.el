@@ -94,6 +94,7 @@
 
       (evil-leader/set-key-for-mode 'haskell-mode
         "mgg"  'haskell-mode-jump-to-def-or-tag
+        "mgi"  'haskell-navigate-imports
         "mf"   'haskell-mode-stylish-buffer
 
         "msb"  'haskell-process-load-or-reload
@@ -109,8 +110,8 @@
         "mhd"  'inferior-haskell-find-haddock
         "mhh"  'hoogle
         "mhH"  'hoogle-lookup-from-local
-        "mhi"  'haskell-process-do-info
-        "mht"  'haskell-process-do-type
+        "mhi"  (lookup-key haskell-mode-map (kbd "C-c C-i"))
+        "mht"  (lookup-key haskell-mode-map (kbd "C-c C-t"))
         "mhT"  'spacemacs/haskell-process-do-type-on-prev-line
         "mhy"  'hayoo
 
@@ -161,6 +162,8 @@
         (setq haskell-process-path-ghci "ghci-ng")
 
         (evil-leader/set-key-for-mode 'haskell-mode
+          ;; function suggested in
+          ;; https://github.com/chrisdone/ghci-ng#using-with-haskell-mode
           "mu"   'haskell-mode-find-uses
           "mht"  'haskell-mode-show-type-at
           "mgg"  'haskell-mode-goto-loc))
@@ -189,7 +192,26 @@
     (add-hook 'evil-insert-state-entry-hook 'spacemacs//haskell-indentation-show-guides)
     (add-hook 'evil-emacs-state-entry-hook 'spacemacs//haskell-indentation-show-guides)
     (add-hook 'evil-insert-state-exit-hook 'spacemacs//haskell-indentation-hide-guides)
-    (add-hook 'evil-emacs-state-exit-hook 'spacemacs//haskell-indentation-hide-guides)))
+    (add-hook 'evil-emacs-state-exit-hook 'spacemacs//haskell-indentation-hide-guides))
+
+  ;; align rules for Haskell
+  (with-eval-after-load 'align
+    (add-to-list 'align-rules-list
+                 '(haskell-types
+                   (regexp . "\\(\\s-+\\)\\(::\\|∷\\)\\s-+")
+                   (modes . '(haskell-mode literate-haskell-mode))))
+    (add-to-list 'align-rules-list
+                 '(haskell-assignment
+                   (regexp . "\\(\\s-+\\)=\\s-+")
+                   (modes . '(haskell-mode literate-haskell-mode))))
+    (add-to-list 'align-rules-list
+                 '(haskell-arrows
+                   (regexp . "\\(\\s-+\\)\\(->\\|→\\)\\s-+")
+                   (modes . '(haskell-mode literate-haskell-mode))))
+    (add-to-list 'align-rules-list
+                 '(haskell-left-arrows
+                   (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
+                   (modes . '(haskell-mode literate-haskell-mode))))))
 
 (defun haskell/init-haskell-snippets ()
   ;; manually load the package since the current implementation is not lazy
