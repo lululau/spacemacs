@@ -56,17 +56,9 @@
     :config
     (progn
 
-      (defun spacemacs//time-machine-ms-on-enter ()
-        "Initiate git-timemachine properly with goden-ratio support."
-        (let ((golden-ratio (when (boundp 'golden-ratio-mode)
-                              golden-ratio-mode)))
-          (when (bound-and-true-p golden-ratio-mode) (golden-ratio-mode -1))
-          (git-timemachine)
-          (when golden-ratio (golden-ratio-mode))))
-
       (spacemacs|define-micro-state time-machine
         :doc "[p] [N] previous [n] next [c] current [Y] copy hash [q] quit"
-        :on-enter (spacemacs//time-machine-ms-on-enter)
+        :on-enter (let (golden-ratio-mode) (call-interactively 'git-timemachine))
         :on-exit (git-timemachine-quit)
         :persistent t
         :bindings
@@ -110,12 +102,26 @@
         (magit-diff "HEAD"))
 
       (evil-leader/set-key
-        "gb" 'magit-blame
+        "gb" 'spacemacs/git-blame-micro-state
         "gl" 'magit-log-all
         "gL" 'magit-log-buffer-file
         "gs" 'magit-status
         "gd" 'spacemacs/magit-diff-head
-        "gC" 'magit-commit))
+        "gC" 'magit-commit)
+
+      (spacemacs|define-micro-state git-blame
+        :doc (concat "Press [b] again to blame further in the history, "
+                     "[q] to go up or quit.")
+        :on-enter (let (golden-ratio-mode) (call-interactively 'magit-blame))
+        :persistent t
+        :bindings
+        ("b" magit-blame)
+        ;; here we use the :exit keyword because we should exit the
+        ;; micro-state only if the magit-blame-quit effectively disable
+        ;; the magit-blame mode.
+        ("q" nil :exit (progn
+                         (magit-blame-quit)
+                         (not (bound-and-true-p magit-blame-mode))))))
     :config
     (progn
       ;; seems to be necessary at the time of release

@@ -1199,6 +1199,19 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
         (interactive)
         (spacemacs/helm-project-smart-do-search t))
 
+      ;; This overrides the default C-s action in helm-projectile-switch-project
+      ;; to search using ag/pt/whatever instead of just grep
+      (with-eval-after-load 'helm-projectile
+        (defun spacemacs/helm-project-smart-do-search-in-dir (dir)
+          (interactive)
+          (let ((default-directory dir))
+            (spacemacs/helm-project-smart-do-search)))
+        (define-key helm-projectile-projects-map
+          (kbd "C-s")
+          (lambda ()
+            (interactive)
+            (helm-exit-and-execute-action 'spacemacs/helm-project-smart-do-search-in-dir))))
+
       ;; evilify the helm-grep buffer
       (evilify helm-grep-mode helm-grep-mode-map
                (kbd "RET") 'helm-grep-mode-jump-other-window
@@ -1229,7 +1242,8 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
         "stf" 'spacemacs/helm-files-do-pt
         "stF" 'spacemacs/helm-files-do-pt-region-or-symbol
         ;; current project scope
-        "/"   'spacemacs/helm-project-smart-do-search-region-or-symbol
+        "/"   'spacemacs/helm-project-smart-do-search
+        "*"   'spacemacs/helm-project-smart-do-search-region-or-symbol
         "sp"  'spacemacs/helm-project-smart-do-search
         "sP"  'spacemacs/helm-project-smart-do-search-region-or-symbol
         "sap" 'spacemacs/helm-project-do-ag
@@ -1462,9 +1476,7 @@ It will toggle the overlay under point or create an overlay of one character."
     (evil-leader/set-key "tr" 'linum-relative-toggle)
     :config
     (progn
-      (setq linum-format 'linum-relative)
-      (setq linum-relative-current-symbol "")
-      (linum-relative-toggle))))
+      (setq linum-relative-current-symbol ""))))
 
 (defun spacemacs/init-move-text ()
   (use-package move-text

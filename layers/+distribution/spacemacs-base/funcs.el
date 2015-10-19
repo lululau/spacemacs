@@ -111,7 +111,7 @@ the current state and point position."
   (let ((counter (or count 1)))
     (while (> counter 0)
       (join-line 1)
-      (sp-newline)
+      (newline-and-indent)
       (setq counter (1- counter)))))
 
 ;; from Prelude
@@ -855,16 +855,6 @@ Compare them on count first,and in case of tie sort them alphabetically."
           (message (substring formated 0 -2))
         (message "No words.")))
     words))
-
-;; byte compile elisp files
-(defun byte-compile-current-buffer ()
-  "`byte-compile' current buffer if it's emacs-lisp-mode and compiled file exists."
-  (interactive)
-  (when (and (eq major-mode 'emacs-lisp-mode)
-             (file-exists-p (byte-compile-dest-file buffer-file-name)))
-    (byte-compile-file buffer-file-name)))
-
-(add-hook 'after-save-hook 'byte-compile-current-buffer)
 
 ;; indent on paste
 ;; from Prelude: https://github.com/bbatsov/prelude
