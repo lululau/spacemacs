@@ -5,6 +5,7 @@
 * Table of Contents                                                   :TOC@4:
  - [[#description][Description]]
    - [[#features][Features:]]
+   - [[#note][Note]]
  - [[#install][Install]]
    - [[#layer][Layer]]
    - [[#github-support][Github support]]
@@ -12,6 +13,7 @@
    - [[#different-bullets][Different bullets]]
  - [[#key-bindings][Key bindings]]
    - [[#org][Org]]
+   - [[#org-with-evil-org-mode][Org with evil-org-mode]]
      - [[#tables][Tables]]
      - [[#tree-][Tree ]]
      - [[#element-insertion][Element insertion]]
@@ -33,11 +35,15 @@ This layer enables  [[http://orgmode.org/][org mode]] for Spacemacs.
 - A [[http://pomodorotechnique.com/][pomodoro method]] integration via [[https://github.com/lolownia/org-pomodoro][org-pomodoro]]
 - TODO capture via [[https://github.com/waymondo/org-repo-todo][org-repo-todo]]
 - presentation mode via [[https://github.com/rlister/org-present][org-present]]
+- 
+** Note
+Since version 0.104, spacemacs uses the `org` version from the org ELPA
+repository instead of the one shipped with emacs. Then, any `org` related code
+should not be loaded before `dotspacemacs/user-config`, otherwise both versions
+will be loaded and will conflict.
 
 * Install
-
 ** Layer
-
 To use this contribution add it to your =~/.spacemacs=
 
 #+BEGIN_SRC emacs-lisp
@@ -45,7 +51,6 @@ To use this contribution add it to your =~/.spacemacs=
 #+END_SRC
 
 ** Github support
-
 To install Github related extensions like [[https://github.com/larstvei/ox-gfm][ox-gfm]] to export to Github
 flavored markdown set the variable =org-enable-github-support= to =t=.
 
@@ -56,7 +61,6 @@ flavored markdown set the variable =org-enable-github-support= to =t=.
 #+END_SRC
 
 ** Gnuplot support
-
 Org-mode support the plotting of data within tables through [[http://www.gnuplot.info/][Gnuplot]] as
 demonstrated [[http://orgmode.org/worg/org-tutorials/org-plot.html][here]]; unfortunately, this is [[https://github.com/bruceravel/gnuplot-mode/issues/15][not terribly well supported]] on Windows
 at this stage.  It is possible to disable the configuration of gnuplot support
@@ -64,7 +68,6 @@ as usual by adding the package =gnuplot= to your =dotspacemacs-excluded-packages
 variable.
 
 ** Different bullets
-
 You can tweak the bullets displayed in the org buffer in the function
 =dotspacemacs/user-config= of your dotfile by setting the variable
 =org-bullets-bullet-list=. By default the list is set to =("◉" "○" "✸" "✿")=.
@@ -75,6 +78,24 @@ You can tweak the bullets displayed in the org buffer in the function
 
 * Key bindings
 ** Org
+| Key Binding | Description                    |
+|-------------+--------------------------------|
+| ~SPC a o #~ | org agenda list stuck projects |
+| ~SPC a o /~ | org occur in agenda files      |
+| ~SPC a o a~ | org agenda list                |
+| ~SPC a o c~ | org capture                    |
+| ~SPC a o e~ | org store agenda views         |
+| ~SPC a o l~ | org store link                 |
+| ~SPC a o m~ | org tags view                  |
+| ~SPC a o o~ | org agenda                     |
+| ~SPC a o O~ | org clock out                  |
+| ~SPC a o s~ | org search view                |
+| ~SPC a o t~ | org todo list                  |
+| ~SPC C c~   | org-capture                    |
+| ~SPC C t~   | ort/capture-todo               |
+| ~SPC C T~   | ort/capture-checkitem          |
+
+** Org with evil-org-mode
 | Key Binding                                  | Description                                  |
 |----------------------------------------------+----------------------------------------------|
 | ~SPC m '~                                    | org-edit-special                             |
@@ -221,12 +242,9 @@ org-present must be activated explicitly by typing: ~SPC : org-present~
 | ~q~         | quit           |
 
 ** Org-repo-todo
-| Key Binding | Description           |
-|-------------+-----------------------|
-| ~SPC C c~   | org-capture           |
-| ~SPC C t~   | ort/capture-todo      |
-| ~SPC C T~   | ort/capture-checkitem |
-| ~SPC m g t~ | ort/goto-todos        |
+| Key Binding | Description    |
+|-------------+----------------|
+| ~SPC m g t~ | ort/goto-todos |
 
 ** Org-MIME
 | Key Binding | Description                                       |
