@@ -106,6 +106,7 @@
 
       (evil-leader/set-key
         "gb" 'spacemacs/git-blame-micro-state
+        "gi" 'magit-init
         "gl" 'magit-log-all
         "gL" 'magit-log-buffer-file
         "gs" 'magit-status
@@ -295,7 +296,7 @@
     :init (progn
             (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
             (with-eval-after-load 'magit
-              (define-key magit-mode-map "#f" 'magit-gitflow-popup)))
+              (define-key magit-mode-map "%" 'magit-gitflow-popup)))
     :config (spacemacs|diminish magit-gitflow-mode "Flow")))
 
 (defun git/init-magit-svn ()
