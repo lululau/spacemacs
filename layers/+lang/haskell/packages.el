@@ -67,8 +67,6 @@
       ;; hooks
       (add-hook 'haskell-mode-hook 'spacemacs/init-haskell-mode)
       (add-hook 'haskell-cabal-mode-hook 'haskell-cabal-hook)
-      (unless haskell-enable-shm-support
-        (add-hook 'haskell-mode-hook 'haskell-indentation-mode))
 
       ;; settings
       (setq
@@ -270,8 +268,10 @@
       :if (configuration-layer/package-usedp 'company)
       :defer t
       :init
-      (push '(company-ghc company-dabbrev-code company-yasnippet)
-            company-backends-haskell-mode)))
+      (push (if haskell-enable-ghc-mod-support
+                '(company-ghc company-dabbrev-code company-yasnippet)
+              '(company-dabbrev-code company-yasnippet))
+              company-backends-haskell-mode)))
 
   (defun haskell/init-company-cabal ()
     (use-package company-cabal

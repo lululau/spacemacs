@@ -5,13 +5,12 @@
 * Table of Contents                                                   :TOC@4:
  - [[#description][Description]]
  - [[#install][Install]]
-     - [[#layer][Layer]]
-     - [[#geeknote][geeknote]]
-     - [[#geeknoteel][geeknote.el]]
+   - [[#layer][Layer]]
+   - [[#geeknote][geeknote]]
+   - [[#geeknoteel][geeknote.el]]
  - [[#key-bindings][Key Bindings]]
 
 * Description
-
 This layer groups together packages to work with [[https://evernote.com/][Evernote]].
 
 It uses the non official Evernote command line tool [[http://www.geeknote.me][geeknote]] which allows users
@@ -22,9 +21,7 @@ default, =geeknote.el= doesn't have key bindings defined. This contribution
 layer provides key bindings for all of geeknote.el's exposed features.
 
 * Install
-
 ** Layer
-
 To use this contribution add it to your =~/.spacemacs=
 
 #+BEGIN_SRC emacs-lisp
@@ -32,13 +29,11 @@ To use this contribution add it to your =~/.spacemacs=
 #+END_SRC
 
 ** geeknote
-
 The command =geeknote= is expected to be present in your =$PATH=. To
 obtain this utility, please refer to the official geeknote
 [[http://www.geeknote.me/documentation/][documentation]].
 
 ** geeknote.el
-
 =geeknote.el= relies on having a correctly setup geeknote editor. To set
 this up, run the following command in your terminal after successfully
 installing =geeknote=:
@@ -47,9 +42,10 @@ installing =geeknote=:
   $ geeknote settings --editor "emacsclient"
 #+END_SRC
 
-If you would prefer to customize the geeknote command to be used
-such as specifying the path to the geeknote python script, please
-refer to the =geeknote.el= [[https://github.com/avendael/emacs-geeknote][documentation]].
+If you would prefer to customize the geeknote command to be used such as
+specifying the path to the geeknote python script, please refer to the
+=geeknote.el= [[https://github.com/avendael/emacs-geeknote][documentation]]. For more information about setting up =$PATH=,
+check out the corresponding section in the FAQ (~SPC f e h $PATH RET~).
 
 * Key Bindings
 
