@@ -26,7 +26,8 @@
     (progn
       (add-hook 'elixir-mode-hook 'alchemist-mode)
       (setq alchemist-project-compile-when-needed t)
-      (push 'alchemist-company company-backends-elixir-mode))
+      (push 'alchemist-company company-backends-elixir-mode)
+      (push 'alchemist-company company-backends-alchemist-iex-mode))
     :config
     (spacemacs/declare-prefix-for-mode 'elixir-mode "mc" "compile")
     (spacemacs/declare-prefix-for-mode 'elixir-mode "me" "eval")
@@ -89,10 +90,23 @@
       "mc:" 'alchemist-compile
 
       "mgg" 'alchemist-goto-definition-at-point
-      "m," 'alchemist-goto-jump-back)))
+      "m," 'alchemist-goto-jump-back)
+
+    (dolist (mode (list alchemist-compile-mode-map
+                        alchemist-eval-mode-map
+                        alchemist-execute-mode-map
+                        alchemist-message-mode-map
+                        alchemist-help-minor-mode-map
+                        alchemist-mix-mode-map
+                        alchemist-macroexpand-mode-map
+                        alchemist-refcard-mode-map
+                        alchemist-test-report-mode-map))
+      (evil-define-key 'normal mode
+        (kbd "q") 'quit-window))))
 
 (defun elixir/post-init-company ()
-  (spacemacs|add-company-hook elixir-mode))
+  (spacemacs|add-company-hook elixir-mode)
+  (spacemacs|add-company-hook alchemist-iex-mode))
 
 (defun elixir/init-elixir-mode ()
   (use-package elixir-mode

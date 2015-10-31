@@ -17,7 +17,6 @@
         ace-window
         adaptive-wrap
         aggressive-indent
-        auto-dictionary
         auto-highlight-symbol
         avy
         buffer-move
@@ -167,16 +166,6 @@
     (progn
       (add-hook 'diff-auto-refine-mode-hook 'spacemacs/toggle-aggressive-indent-off)
       (spacemacs|diminish aggressive-indent-mode " Ⓘ" " I"))))
-
-(defun spacemacs/init-auto-dictionary ()
-  (use-package auto-dictionary
-    :disabled t
-    :defer t
-    :init
-    (progn
-      (add-hook 'flyspell-mode-hook '(lambda () (auto-dictionary-mode 1)))
-      (evil-leader/set-key
-        "Sd" 'adict-change-dictionary))))
 
 (defun spacemacs/init-auto-highlight-symbol ()
   (use-package auto-highlight-symbol
@@ -1555,24 +1544,24 @@ It will toggle the overlay under point or create an overlay of one character."
 
       (defun spacemacs//neotree-key-bindings ()
         "Set the key bindings for a neotree buffer."
-        (define-key evil-motion-state-local-map (kbd "TAB") 'neotree-stretch-toggle)
-        (define-key evil-motion-state-local-map (kbd "RET") 'neotree-enter)
-        (define-key evil-motion-state-local-map (kbd "|")   'neotree-enter-vertical-split)
-        (define-key evil-motion-state-local-map (kbd "-")   'neotree-enter-horizontal-split)
-        (define-key evil-motion-state-local-map (kbd "?")   'evil-search-backward)
-        (define-key evil-motion-state-local-map (kbd "c")   'neotree-create-node)
-        (define-key evil-motion-state-local-map (kbd "d")   'neotree-delete-node)
-        (define-key evil-motion-state-local-map (kbd "g")   'neotree-refresh)
-        (define-key evil-motion-state-local-map (kbd "h")   'spacemacs/neotree-collapse-or-up)
-        (define-key evil-motion-state-local-map (kbd "H")   'neotree-select-previous-sibling-node)
-        (define-key evil-motion-state-local-map (kbd "J")   'neotree-select-down-node)
-        (define-key evil-motion-state-local-map (kbd "K")   'neotree-select-up-node)
-        (define-key evil-motion-state-local-map (kbd "l")   'spacemacs/neotree-expand-or-open)
-        (define-key evil-motion-state-local-map (kbd "L")   'neotree-select-next-sibling-node)
-        (define-key evil-motion-state-local-map (kbd "q")   'neotree-hide)
-        (define-key evil-motion-state-local-map (kbd "r")   'neotree-rename-node)
-        (define-key evil-motion-state-local-map (kbd "R")   'neotree-change-root)
-        (define-key evil-motion-state-local-map (kbd "s")   'neotree-hidden-file-toggle))
+        (define-key evil-motion-state-local-map (kbd "TAB")  'neotree-stretch-toggle)
+        (define-key evil-motion-state-local-map (kbd "RET")  'neotree-enter)
+        (define-key evil-motion-state-local-map (kbd "|")    'neotree-enter-vertical-split)
+        (define-key evil-motion-state-local-map (kbd "-")    'neotree-enter-horizontal-split)
+        (define-key evil-motion-state-local-map (kbd "?")    'evil-search-backward)
+        (define-key evil-motion-state-local-map (kbd "c")    'neotree-create-node)
+        (define-key evil-motion-state-local-map (kbd "d")    'neotree-delete-node)
+        (define-key evil-motion-state-local-map (kbd "gr")   'neotree-refresh)
+        (define-key evil-motion-state-local-map (kbd "h")    'spacemacs/neotree-collapse-or-up)
+        (define-key evil-motion-state-local-map (kbd "H")    'neotree-select-previous-sibling-node)
+        (define-key evil-motion-state-local-map (kbd "J")    'neotree-select-down-node)
+        (define-key evil-motion-state-local-map (kbd "K")    'neotree-select-up-node)
+        (define-key evil-motion-state-local-map (kbd "l")    'spacemacs/neotree-expand-or-open)
+        (define-key evil-motion-state-local-map (kbd "L")    'neotree-select-next-sibling-node)
+        (define-key evil-motion-state-local-map (kbd "q")    'neotree-hide)
+        (define-key evil-motion-state-local-map (kbd "r")    'neotree-rename-node)
+        (define-key evil-motion-state-local-map (kbd "R")    'neotree-change-root)
+        (define-key evil-motion-state-local-map (kbd "s")    'neotree-hidden-file-toggle))
 
       (evil-leader/set-key
         "ft" 'neotree-toggle
