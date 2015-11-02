@@ -15,6 +15,7 @@
         gist
         git-link
         github-browse-file
+        github-clone
         ;; not up to date
         ;; helm-gist
         magit-gh-pulls
@@ -29,7 +30,6 @@
                "f" 'gist-fetch-current
                "K" 'gist-kill-current
                "o" 'gist-browse-current-url)
-
       (evil-leader/set-key
         "ggb" 'gist-buffer
         "ggB" 'gist-buffer-private
@@ -60,7 +60,14 @@
     :defer t
     :init
     (evil-leader/set-key
-      "gfb" 'github-browse-file)))
+      "gho" 'github-browse-file)))
+
+(defun github/init-github-clone ()
+  (use-package github-clone
+    :defer t
+    :init
+    (evil-leader/set-key
+      "gh C-c" 'github-clone)))
 
 (defun github/init-git-link ()
   (use-package git-link
@@ -81,10 +88,10 @@
           (call-interactively 'git-link-commit)))
 
       (evil-leader/set-key
-        "gfl" 'git-link
-        "gfL" 'spacemacs/git-link-copy-url-only
-        "gfc" 'git-link-commit
-        "gfC" 'spacemacs/git-link-commit-copy-url-only)
+        "ghl" 'git-link
+        "ghL" 'spacemacs/git-link-copy-url-only
+        "ghc" 'git-link-commit
+        "ghC" 'spacemacs/git-link-commit-copy-url-only)
       ;; default is to open the generated link
       (setq git-link-open-in-browser t))))
 
