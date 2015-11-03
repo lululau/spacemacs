@@ -13,6 +13,7 @@
 (setq spacemacs-packages
       '(
         ;; default
+        ace-jump-helm-line
         ace-link
         ace-window
         adaptive-wrap
@@ -68,6 +69,7 @@
         open-junk-file
         leuven-theme
         linum-relative
+        lorem-ipsum
         move-text
         neotree
         pcre2el
@@ -90,6 +92,13 @@
   (push 'paradox spacemacs-packages))
 
 ;; Initialization of packages
+
+(defun spacemacs/init-ace-jump-helm-line ()
+  (use-package ace-jump-helm-line
+    :defer t
+    :init
+    (with-eval-after-load 'helm
+      (define-key helm-map (kbd "C-q") 'ace-jump-helm-line))))
 
 (defun spacemacs/init-ace-link ()
   (use-package ace-link
@@ -1458,12 +1467,28 @@ It will toggle the overlay under point or create an overlay of one character."
 
 (defun spacemacs/init-linum-relative ()
   (use-package linum-relative
-    :commands linum-relative-toggle
+    :commands (linum-relative-toggle linum-relative-on)
     :init
-    (evil-leader/set-key "tr" 'linum-relative-toggle)
+    (progn
+      (when (eq dotspacemacs-line-numbers 'relative)
+        (linum-relative-on))
+      (evil-leader/set-key "tr" 'linum-relative-toggle))
     :config
     (progn
       (setq linum-relative-current-symbol ""))))
+
+(defun spacemacs/init-lorem-ipsum ()
+  (use-package lorem-ipsum
+    :commands (lorem-ipsum-insert-list
+               lorem-ipsum-insert-paragraphs
+               lorem-ipsum-insert-sentences)
+    :init
+    (progn
+      (spacemacs/declare-prefix "xil" "lorem ipsum")
+      (evil-leader/set-key
+        "xill" 'lorem-ipsum-insert-list
+        "xilp" 'lorem-ipsum-insert-paragraphs
+        "xils" 'lorem-ipsum-insert-sentences))))
 
 (defun spacemacs/init-move-text ()
   (use-package move-text

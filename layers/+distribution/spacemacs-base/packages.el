@@ -541,9 +541,6 @@ Removes the automatic guessing of the initial value based on thing at point. "
             helm-semantic-fuzzy-match t
             helm-buffers-fuzzy-matching t)
 
-      ;; helm-locate uses es (from everything on windows, which doesnt like fuzzy)
-      (setq helm-locate-fuzzy-match (executable-find "locate"))
-
       ;; Use helm to provide :ls, unless ibuffer is used
       (unless (configuration-layer/package-usedp 'ibuffer)
         (evil-ex-define-cmd "buffers" 'helm-buffers-list))
@@ -623,6 +620,15 @@ Removes the automatic guessing of the initial value based on thing at point. "
               (switch-to-buffer-other-window "*hgrep*")
             (message "No previous search buffer found"))))
 
+      (defun spacemacs/helm-faces ()
+        "Describe face."
+        (interactive)
+        (require 'helm-elisp)
+        (let ((default (thing-at-point 'symbol)))
+          (helm :sources (list (helm-def-source--emacs-faces default))
+                :buffer "*helm faces*"
+                :preselect (and default (concat "\\_<" (regexp-quote default) "\\_>")))))
+
       ;; use helm by default for M-x
       (unless (configuration-layer/package-usedp 'smex)
         (global-set-key (kbd "M-x") 'helm-M-x))
@@ -636,6 +642,7 @@ Removes the automatic guessing of the initial value based on thing at point. "
         "fL"   'helm-locate
         "fr"   'helm-recentf
         "hb"   'helm-filtered-bookmarks
+        "hdF"  'spacemacs/helm-faces
         "hi"   'helm-info-at-point
         "hl"   'helm-resume
         "hm"   'helm-man-woman
@@ -724,6 +731,11 @@ Removes the automatic guessing of the initial value based on thing at point. "
     :config
     (progn
       (helm-mode +1)
+
+      ;; helm-locate uses es (from everything on windows, which doesnt like fuzzy)
+      (helm-locate-set-command)
+      (setq helm-locate-fuzzy-match (string-match "locate" helm-locate-command))
+
       (defun spacemacs//set-dotted-directory ()
         "Set the face of diretories for `.' and `..'"
         (set-face-attribute 'helm-ff-dotted-directory
@@ -1246,18 +1258,22 @@ ARG non nil means that the editing style is `vim'."
   (use-package recentf
     :defer t
     :init
-    ;; lazy load recentf
-    (add-hook 'find-file-hook (lambda () (unless recentf-mode
-                                           (recentf-mode)
-                                           (recentf-track-opened-file))))
+    (progn
+      ;; lazy load recentf
+      (add-hook 'find-file-hook (lambda () (unless recentf-mode
+                                             (recentf-mode)
+                                             (recentf-track-opened-file))))
+      (setq recentf-save-file (concat spacemacs-cache-directory "recentf")
+            recentf-max-saved-items 1000
+            recentf-auto-cleanup 'never
+            recentf-auto-save-timer (run-with-idle-timer 600 t
+                                                         'recentf-save-list)))
     :config
-    (add-to-list 'recentf-exclude (expand-file-name spacemacs-cache-directory))
-    (add-to-list 'recentf-exclude (expand-file-name package-user-dir))
-    (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
-    (setq recentf-save-file (concat spacemacs-cache-directory "recentf"))
-    (setq recentf-max-saved-items 100)
-    (setq recentf-auto-cleanup 'never)
-    (setq recentf-auto-save-timer (run-with-idle-timer 600 t 'recentf-save-list))))
+    (progn
+      (add-to-list 'recentf-exclude
+                   (expand-file-name spacemacs-cache-directory))
+      (add-to-list 'recentf-exclude (expand-file-name package-user-dir))
+      (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'"))))
 
 (defun spacemacs-base/init-restart-emacs()
   (use-package restart-emacs

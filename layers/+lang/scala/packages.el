@@ -152,9 +152,9 @@
         "mrt"     'ensime-import-type-at-point
         "mrv"     'ensime-refactor-extract-local
 
-        "mta"     'ensime-sbt-do-test
-        "mtr"     'ensime-sbt-do-test-quick
-        "mtt"     'ensime-sbt-do-test-only
+        "mta"     'ensime-sbt-do-test-dwim
+        "mtr"     'ensime-sbt-do-test-quick-dwim
+        "mtt"     'ensime-sbt-do-test-only-dwim
 
         "msa"     'ensime-inf-load-file
         "msb"     'ensime-inf-eval-buffer
@@ -172,7 +172,12 @@
         (defun scala/disable-flycheck-scala ()
           (push 'scala flycheck-disabled-checkers))
 
-        (add-hook 'ensime-mode-hook 'scala/disable-flycheck-scala)))))
+        (add-hook 'ensime-mode-hook 'scala/disable-flycheck-scala))
+
+      ;; Enable Expand Region integration from Ensime.  Ignore load errors to
+      ;; handle older Ensime versions gracefully.
+      (when (configuration-layer/package-usedp 'expand-region)
+        (require 'ensime-expand-region nil 'noerror)))))
 
 (defun scala/init-noflet ())
 
