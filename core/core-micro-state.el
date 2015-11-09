@@ -37,6 +37,13 @@ Characters enclosed in `[]' will have this face applied to them."
                         :bold t)))
 (spacemacs/defface-micro-state-faces)
 
+(defun spacemacs//micro-state-set-minibuffer-height (str)
+  "Set the max mini windows size given a string STR."
+  (let ((line-count (1+ (how-many-str "\n" str))))
+    (when (and (> line-count max-mini-window-height)
+               (> line-count 10))
+      (setq max-mini-window-height line-count))))
+
 (defmacro spacemacs|define-micro-state (name &rest props)
   "Define a micro-state called NAME.
 
@@ -94,7 +101,9 @@ used."
          (doc (spacemacs/mplist-get props :doc))
          (persistent (plist-get props :persistent))
          (disable-leader (plist-get props :disable-evil-leader))
-         (msg-func (if (plist-get props :use-minibuffer) 'message 'corelv-message))
+         (msg-func (if (plist-get props :use-minibuffer)
+                       'message
+                     'corelv-message))
          (exec-binding (plist-get props :execute-binding-on-enter))
          (on-enter (spacemacs/mplist-get props :on-enter))
          (on-exit (spacemacs/mplist-get props :on-exit))
@@ -106,13 +115,14 @@ used."
     `(progn (defun ,func ()
               ,(format "%S micro-state." name)
               (interactive)
+              ,@on-enter
               (let ((doc ,@doc))
                 (when doc
+                  (spacemacs//micro-state-set-minibuffer-height doc)
                   (apply ',msg-func (list (spacemacs//micro-state-propertize-doc
-                                      (format "%S: %s" ',name doc))))))
+                                           (format "%S: %s" ',name doc))))))
               ,(when exec-binding
                  (spacemacs//micro-state-auto-execute bindings))
-              ,@on-enter
               (,(if (version< emacs-version "24.4")
                     'set-temporary-overlay-map
                   'set-transient-map)
@@ -153,17 +163,19 @@ used."
          (binding-pre (spacemacs/mplist-get binding :pre))
          (binding-post (spacemacs/mplist-get binding :post))
          (wrapper-name (intern (format "spacemacs//%S-%S-%s" name wrapped key)))
-         (doc-body `((let ((bdoc ,@binding-doc)
-                           (defdoc ,@default-doc))
-                       (if bdoc
-                           (apply ',msg-func
-                                  (list (spacemacs//micro-state-propertize-doc
-                                    (format "%S: %s" ',name bdoc))))
-                         (when (and defdoc
-                                    ',wrapped (not (plist-get ',binding :exit)))
-                           (apply ',msg-func
-                                  (list (spacemacs//micro-state-propertize-doc
-                                    (format "%S: %s" ',name defdoc)))))))))
+         (doc-body
+          `((let ((bdoc ,@binding-doc)
+                  (defdoc ,@default-doc))
+              (if bdoc
+                  (apply ',msg-func
+                         (list (spacemacs//micro-state-propertize-doc
+                                (format "%S: %s" ',name bdoc))))
+                (when (and defdoc
+                           ',wrapped (not (plist-get ',binding :exit)))
+                  (spacemacs//micro-state-set-minibuffer-height defdoc)
+                  (apply ',msg-func
+                         (list (spacemacs//micro-state-propertize-doc
+                                (format "%S: %s" ',name defdoc)))))))))
          (wrapper-func
           (if (and (boundp wrapped)
                    (eval `(keymapp ,wrapped)))
@@ -181,7 +193,9 @@ used."
                    (setq throwp nil))
                  ,@binding-post
                  (when throwp (throw 'exit nil)))
-               ,@doc-body))))
+               (when ,@doc-body
+                 (spacemacs//micro-state-set-minibuffer-height ,@doc-body)
+                 ,@doc-body)))))
     (append (list (car binding) (eval wrapper-func)) binding)))
 
 (defun spacemacs//micro-state-fill-map-sexps (wrappers)
