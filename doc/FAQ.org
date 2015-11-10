@@ -10,9 +10,9 @@
    - [[The powerline separators have no anti-aliasing, what can I do?][The powerline separators have no anti-aliasing, what can I do?]]
    - [[Why is after-init-hook not executed?][Why is after-init-hook not executed?]]
    - [[What is the difference between =spacemacs-base= and =spacemacs= distributions?][What is the difference between =spacemacs-base= and =spacemacs= distributions?]]
-   - [[How can I change or define an alias for an =evil-leader= prefix?][How can I change or define an alias for an =evil-leader= prefix?]]
    - [[Should I place my settings in =user-init= or =user-config=?][Should I place my settings in =user-init= or =user-config=?]]
    - [[Why do some of my =org=-related settings cause problems?][Why do some of my =org=-related settings cause problems?]]
+   - [[Why is Spacemacs hanging on startup?][Why is Spacemacs hanging on startup?]]
  - [[How do I...][How do I...]]
    - [[Disable a package completely?][Disable a package completely?]]
    - [[Disable a package only for a specific major-mode?][Disable a package only for a specific major-mode?]]
@@ -22,6 +22,7 @@
    - [[Disable evilification of a mode?][Disable evilification of a mode?]]
    - [[Include underscores in word motions?][Include underscores in word motions?]]
    - [[Setup =$PATH=?][Setup =$PATH=?]]
+   - [[Change or define an alias for an =evil-leader= prefix?][Change or define an alias for an =evil-leader= prefix?]]
  - [[Windows][Windows]]
    - [[Why do the fonts look crappy on Windows?][Why do the fonts look crappy on Windows?]]
    - [[Why is there no Spacemacs logo in the startup buffer?][Why is there no Spacemacs logo in the startup buffer?]]
@@ -70,18 +71,6 @@ Set the distribution with =dotspacemacs-distribution= variable. The default is
 check out the =packages.el= file in the respective folders in the
 =+distribution= folder of the =layers/= directory.
 
-** How can I change or define an alias for an =evil-leader= prefix?
-It is possible to change an =evil-leader= prefix by binding its keymap to
-another sequence. For instance, if you want to switch ~SPC y~
-(=evil-avy-goto-line=) with ~SPC l~ (=perspectives= layer) to make the later
-easier to reach, you can use:
-
-#+begin_src emacs-lisp
-(evil-leader/set-key
-  "y" (lookup-key evil-leader--default-map "l")
-  "l" 'evil-avy-goto-line)
-#+end_src
-
 ** Should I place my settings in =user-init= or =user-config=?
 Any variable that layer configuration code will *read* and *act on* must be set
 in =user-init=, and any variable that Spacemacs explicitly sets but you wish to
@@ -94,6 +83,21 @@ Since version 0.104, spacemacs uses the `org` version from the org ELPA
 repository instead of the one shipped with emacs. Then, any `org` related code
 should not be loaded before `dotspacemacs/user-config`, otherwise both versions
 will be loaded and will conflict.
+
+** Why is Spacemacs hanging on startup?
+This is probably related to Helm using Tramp which tries to figure out some
+SSH/DNS settings at startup. The root cause is probably your ISP redirecting
+non-existing addresses to their own servers.
+
+Try using these settings in the ~user-init~ function in your ~.spacemacs~
+configuration:
+
+#+BEGIN_SRC elisp
+  (setq tramp-ssh-controlmaster-options
+        "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
+#+END_SRC
+
+See [[https://github.com/syl20bnr/spacemacs/issues/3422#issuecomment-148919047][issue #3422]] and [[https://github.com/emacs-helm/helm/issues/1000#issuecomment-119487649][helm issue #1000]] for details.
 
 * How do I...
 ** Disable a package completely?
@@ -237,6 +241,30 @@ In that case you have the option of updating the value of =exec-path= in the
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'exec-path "~/.local/bin/")
 #+END_SRC
+
+** Change or define an alias for an =evil-leader= prefix?
+It is possible to change an =evil-leader= prefix by binding its keymap to
+another sequence. For instance, if you want to switch ~SPC S~ (spelling) with
+~SPC d~ (used by dash) to make the former easier to reach, you can use:
+
+#+begin_src emacs-lisp
+(defun my-evil-leader/swap-keys (key1 key2)
+  (let ((map1 (lookup-key evil-leader--default-map key1))
+        (map2 (lookup-key evil-leader--default-map key2)))
+    (evil-leader/set-key key1 map2 key2 map1)))
+(my-evil-leader/swap-keys "S" "d")
+#+end_src
+
+If you want to define your own alias, like using ~SPC é~ (because it's an
+unmapped key on your keyboard-layout for instance) for accessing ~SPC w~
+(windows management), you can use this:
+
+#+begin_src emacs-lisp
+(defun my-evil-leader/alias-of (key1 key2)
+  (let ((map (lookup-key evil-leader--default-map key2)))
+    (evil-leader/set-key key1 map)))
+(my-evil-leader/alias-of "é" "w")
+#+end_src
 
 * Windows
 ** Why do the fonts look crappy on Windows?

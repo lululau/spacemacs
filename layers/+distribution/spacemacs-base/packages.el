@@ -614,20 +614,23 @@ Removes the automatic guessing of the initial value based on thing at point. "
       (defun spacemacs/last-search-buffer ()
         "open last helm-ag or hgrep buffer."
         (interactive)
-        (if (get-buffer "*helm ag results*")
-            (switch-to-buffer-other-window "*helm ag results*")
-          (if (get-buffer "*hgrep*")
-              (switch-to-buffer-other-window "*hgrep*")
-            (message "No previous search buffer found"))))
+        (cond ((get-buffer "*helm ag results*")
+               (switch-to-buffer-other-window "*helm ag results*"))
+              ((get-buffer "*helm-ag*")
+               (helm-resume "*helm-ag*"))
+              ((get-buffer "*hgrep*")
+               (switch-to-buffer-other-window "*hgrep*"))
+              (t
+               (message "No previous search buffer found"))))
 
       (defun spacemacs/helm-faces ()
         "Describe face."
         (interactive)
         (require 'helm-elisp)
-        (let ((default (thing-at-point 'symbol)))
-          (helm :sources (list (helm-def-source--emacs-faces default))
-                :buffer "*helm faces*"
-                :preselect (and default (concat "\\_<" (regexp-quote default) "\\_>")))))
+        (let ((default (or (face-at-point) (thing-at-point 'symbol))))
+          (helm :sources (helm-def-source--emacs-faces
+                          (format "%s" (or default "default")))
+                :buffer "*helm faces*")))
 
       ;; use helm by default for M-x
       (unless (configuration-layer/package-usedp 'smex)
