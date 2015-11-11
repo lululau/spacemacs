@@ -826,6 +826,22 @@ path."
                    pkg-name layer err))))))
           (oref pkg :post-layers))))
 
+(defun configuration-layer//cleanup-rollback-directory ()
+  "Clean up the rollback directory."
+  (let* ((dirattrs (delq nil
+                         (mapcar (lambda (d)
+                                   (unless (eq t d) d))
+                                 (directory-files-and-attributes
+                                  configuration-layer-rollback-directory
+                                  nil "\\`\\(\\.\\{0,2\\}[^.\n].*\\)\\'" t))))
+         (dirs (sort dirattrs
+                     (lambda (d e)
+                       (time-less-p (nth 6 d) (nth 6 e))))))
+    (dotimes (c (- (length dirs) dotspacemacs-max-rollback-slots))
+      (delete-directory (concat configuration-layer-rollback-directory
+                                "/" (car (pop dirs)))
+                        t t))))
+
 (defun configuration-layer/update-packages (&optional always-update)
   "Update packages.
 
@@ -900,6 +916,7 @@ If called with a prefix argument ALWAYS-UPDATE, assume yes to update."
            (format "\n--> %s package(s) to be updated.\n" upgraded-count))
           (spacemacs-buffer/append
            "\nEmacs has to be restarted to actually install the new packages.\n")
+          (configuration-layer//cleanup-rollback-directory)
           (spacemacs//redisplay))
       (spacemacs-buffer/append "--> All packages are up to date.\n")
       (spacemacs//redisplay))))

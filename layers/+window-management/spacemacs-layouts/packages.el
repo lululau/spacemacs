@@ -13,15 +13,17 @@
 
 (defun spacemacs-layouts/init-persp-mode ()
   (use-package persp-mode
-    :commands spacemacs/layouts-micro-state
     :diminish persp-mode
     :init
     (progn
-      (setq persp-nil-name "Default"
-            persp-auto-resume-time -1
+      (setq persp-auto-resume-time (if dotspacemacs-auto-resume-layouts 1 -1)
+            persp-nil-name dotspacemacs-default-layout-name
             persp-reset-windows-on-nil-window-conf nil
             persp-set-last-persp-for-new-frames nil
             persp-save-dir spacemacs-layouts-directory)
+
+      ;; always activate persp-mode
+      (persp-mode)
 
       (defvar spacemacs--layouts-ms-doc-toggle 0
         "Display a short doc when nil, full doc otherwise.")
@@ -35,16 +37,6 @@
 
       (defvar spacemacs--layouts-autosave-timer nil
         "Timer for layouts auto-save.")
-
-      (when dotspacemacs-default-layout-name
-        ;; load `persp-mode' if default perspective must be
-        ;; displayed
-        (unless (bound-and-true-p persp-mode)
-          ;; we need this check because calling persp-mode again seems to
-          ;; reset the list of perspectives...
-          (when (stringp dotspacemacs-default-layout-name)
-            (setq persp-nil-name dotspacemacs-default-layout-name))
-          (persp-mode)))
 
       (defun spacemacs/jump-to-last-layout ()
         "Open the previously selected layout."
@@ -81,10 +73,9 @@
   [C]                  close other layout(s) (buffers are not closed)
   [l]                  jump to a layout
   [L]                  load saved layouts
-  [n] [C-n] or [C-l]   next layout
-  [N] [C-p] or [C-h]   previous layout
+  [n] or [C-l]         next layout
+  [N] or [p] or [C-h]  previous layout
   [o]                  custom layouts
-  [p]                  open project and create associated layout
   [r]                  remove current buffer from layout
   [R]                  rename or create layout
   [s]                  save layouts
@@ -107,7 +98,6 @@
                     spacemacs--layouts-ms-documentation))))
 
       (spacemacs|define-micro-state layouts
-        :on-enter (unless (bound-and-true-p persp-mode) (persp-mode))
         :doc (spacemacs//layouts-ms-doc)
         :use-minibuffer t
         :evil-leader "l"
@@ -128,8 +118,6 @@
         ("<return>" nil :exit t)
         ("C-h" persp-prev)
         ("C-l" persp-next)
-        ("C-n" persp-next)
-        ("C-p" persp-prev)
         ("a" persp-add-buffer :exit t)
         ("A" persp-import-buffers :exit t)
         ("b" spacemacs/persp-helm-mini :exit t)
@@ -140,7 +128,7 @@
         ("n" persp-next)
         ("N" persp-prev)
         ("o" spacemacs/select-custom-layout :exit t)
-        ("p" spacemacs/helm-persp-switch-project :exit t)
+        ("p" persp-prev)
         ("r" persp-remove-buffer :exit t)
         ("R" spacemacs/layouts-ms-rename :exit t)
         ("s" persp-save-state-to-file :exit t)
@@ -306,4 +294,4 @@ format so they are supported by the
                (fboundp 'safe-persp-name) (fboundp 'get-frame-persp)
                (or (not (equal persp-nil-name
                                (safe-persp-name (get-frame-persp))))
-                   dotspacemacs-default-layout-name))))
+                   dotspacemacs-display-default-layout))))
