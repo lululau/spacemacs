@@ -115,6 +115,7 @@ Will work on both org-mode and any mode that accepts plain html."
         "md" 'org-deadline
         "me" 'org-export-dispatch
         "mf" 'org-set-effort
+        "mP" 'org-set-property
         "m:" 'org-set-tags
 
         "ma" 'org-agenda
@@ -220,6 +221,7 @@ Will work on both org-mode and any mode that accepts plain html."
 
       ;; Add global evil-leader mappings. Used to access org-agenda
       ;; functionalities – and a few others commands – from any other mode.
+      (spacemacs/declare-prefix "ao" "org")
       (evil-leader/set-key
         ;; org-agenda
         "ao#" 'org-agenda-list-stuck-projects
