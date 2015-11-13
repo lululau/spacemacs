@@ -1,10 +1,11 @@
 #+TITLE: Spacemacs documentation
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/readtheorg.css" />
 
 * Spacemacs documentation                                   :TOC_4_org:noexport:
  - [[Core Pillars][Core Pillars]]
    - [[Mnemonic][Mnemonic]]
-   - [[Discoverability][Discoverability]]
-   - [[Consistency][Consistency]]
+   - [[Discoverable][Discoverable]]
+   - [[Consistent][Consistent]]
    - [[Crowd-Configured][Crowd-Configured]]
  - [[Goals][Goals]]
  - [[Screenshots][Screenshots]]
@@ -193,7 +194,7 @@ Spacemacs organizes key bindings by mnemonic namespaces as much as possible.
 If you are looking for commands to operate on your buffer, they are right under
 ~SPC b~, if you want to operate on your project, then it is ~SPC p~, etc...
 
-** Discoverability
+** Discoverable
 Spacemacs comes with a dedicated major mode =spacemacs-mode=. Its goal is to
 give useful feedbacks and easily perform maintenance tasks.
 
@@ -203,7 +204,7 @@ more.
 [[https://github.com/justbur/emacs-which-key][which-key]] is enabled by default, it will display all the available key bindings
 in a dedicated popup buffer.
 
-** Consistency
+** Consistent
 Similar functionalities should have the same key binding no matter which major
 is currently active. For instance if you are looking for the definition of a
 function, the binding is ~SPC m g g~, =m= for =major mode= and =g g= for =go to
@@ -1114,52 +1115,13 @@ can be reached using the =control= key.
 | ~SPC t y~   | =ⓨ=     | y     | [[https://github.com/capitaomorte/yasnippet][yasnippet]] mode                              |
 
 **** Customizing the mode-line
-The mode-line consists of a number of /segments/ arranged on the left and right
-sides. These are defined in the variables =spacemacs-mode-line-left= and
-=spacemacs-mode-line-right=.
+Spacemacs uses [[https://github.com/TheBB/spaceline][Spaceline]] to provide its mode-line. It consists of a number of
+/segments/ arranged on the left and right sides. These are defined in the
+variables =spaceline-left= and =spaceline-right=. Segments can be defined using
+=spaceline-define-segment=, and added to the appropriate location in the left or
+right hand side variables.
 
-To collect several segments together, use a list. Powerline separators are
-inserted between each /top-level/ segment. This allows you to group segments
-together without graphical separators between.
-#+BEGIN_SRC emacs-lisp
-(segment-a segment-b segment-c)
-#+END_SRC
-
-Properties can be applied to segments as well, e.g.
-#+BEGIN_SRC emacs-lisp
-(segment :property value :other-property other-value)
-#+END_SRC
-or for a list,
-#+BEGIN_SRC emacs-lisp
-((segment-a segment-b)
- :property value
- :other-property other-value)
-#+END_SRC
-
-The available properties are all optional.
-- =:fallback= :: defines another segment to fall back on if the original segment
-     should produce no output.
-- =:separator= :: override the default separator between segments (does not
-     apply to the graphical powerline separators).
-- =:face= :: the face to render the segment with. This is a form that can be
-     evaluated, so for a literal face make sure it is quoted.
-- =:when= :: A form whose value determines whether the segment is shown or not.
-- =:tight= :: Set to true if the segment must be rendered with no 'breathing
-     room' on the sides. Use =:tight-left= and =:tight-right= for finer control.
-
-Segments themselves can be defined using =spacemacs|define-mode-line-segment=.
-Properties can also be specified there. For example,
-#+BEGIN_SRC emacs-lisp
-(spacemacs|define-mode-line-segment name
-  value-of-segment
-  :face state-face)
-#+END_SRC
-
-During evaluation of segments, the following additional bindings are useful.
-- =default-face= :: The default face to use for this segment.
-- =other-face= :: The 'other' face (the default face for the neighboring segments).
-- =state-face= :: The face representing the current evil state.
-- =active= :: Whether the window is currently active or not.
+Please see the Spaceline documentation for more information.
 
 * Commands
 ** Vim key bindings
@@ -2575,6 +2537,7 @@ Spacemacs binds a few commands to support compiling a project.
    | ~SPC c c~   | use =helm-make= via projectile |
    | ~SPC c C~   | compile                        |
    | ~SPC c r~   | recompile                      |
+   | ~SPC c q~   | close compilation window       |
 
 ** Modes
 *** Major Mode leader key
