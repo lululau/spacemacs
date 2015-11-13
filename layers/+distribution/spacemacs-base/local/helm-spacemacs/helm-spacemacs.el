@@ -29,6 +29,7 @@
 (require 'cl)
 (require 'ht)
 (require 'helm)
+(require 'helm-command)
 (require 'helm-org)
 (require 'core-configuration-layer)
 
@@ -164,7 +165,10 @@
   "Return the sorted candidates for package source."
   (let (result)
     (dolist (pkg helm-spacemacs-all-packages)
-      (push (format "(%S) package: %S" (oref pkg :owner) (oref pkg :name))
+      (push (format "%s (%S layer)"
+                    (propertize (symbol-name (oref pkg :name))
+                                'face 'font-lock-type-face)
+                    (oref pkg :owner))
             result))
     (sort result 'string<)))
 
@@ -182,7 +186,19 @@
     (dolist (toggle spacemacs-toggles)
       (let* ((toggle-symbol (symbol-name (car toggle)))
              (toggle-name (capitalize (replace-regexp-in-string "-" " " toggle-symbol)))
-             (toggle-doc (format "%s: %s" toggle-name (plist-get (cdr toggle) :documentation))))
+             (toggle-doc (format "%s: %s"
+                                 toggle-name
+                                 (propertize
+                                  (or (plist-get (cdr toggle) :documentation) "")
+                                  'face 'font-lock-doc-face))))
+        (when (plist-member (cdr toggle) :evil-leader)
+          (let ((key (key-description
+                      (kbd (concat dotspacemacs-leader-key " "
+                                   (plist-get (cdr toggle) :evil-leader))))))
+            (setq toggle-doc
+                  (format "%s (%s)"
+                          toggle-doc
+                          (propertize key 'face 'helm-M-x-key)))))
         (if (plist-member (cdr toggle) :documentation)
             (push `(,toggle-doc . ,toggle-symbol) result)
           (push `(,toggle-name . ,toggle-symbol) result))))
@@ -235,17 +251,14 @@
 (defun helm-spacemacs//package-action-goto-init-func (candidate)
   "Open the file `packages.el' and go to the init function."
   (save-match-data
-    (string-match "^(\\(.+\\))\s\\(.+\\):\s\\(.+\\)$" candidate)
-    (let* ((layer (match-string 1 candidate))
-           (type (match-string 2 candidate))
-           (package (match-string 3 candidate))
+    (string-match "^\\(.+\\)\s(\\(.+\\) layer)$" candidate)
+    ;; (string-match "^(\\(.+\\))\s\\(.+\\):\s\\(.+\\)$" candidate)
+    (let* ((package (match-string 1 candidate))
+           (layer (match-string 2 candidate))
            (path (file-name-as-directory
                   (concat (ht-get configuration-layer-paths (intern layer))
                           layer)))
-           (filename (cond ((string-equal "package" type)
-                            (concat path "packages.el"))
-                           ;; TODO remove extensions in 0.105.0
-                           (t (concat path "extensions.el")))))
+           (filename (concat path "packages.el")))
       (find-file filename)
       (goto-char (point-min))
       (re-search-forward (format "init-%s" package))
@@ -276,20 +289,26 @@
     (candidate-number-limit)
     (action . (("Go to question" . helm-spacemacs//faq-goto-marker)))))
 
+(defun helm-spacemacs//faq-candidate (cand)
+  (let ((str (substring-no-properties (car cand))))
+    (when (string-match "\\`\\([^/]*\\)/\\(.*\\)\\'" str)
+      (cons (concat (propertize
+                     (match-string 1 str)
+                     'face 'font-lock-type-face)
+                    ": " (match-string 2 str))
+            (cdr cand)))))
+
 (defun helm-spacemacs//faq-candidates ()
-  (delq nil (mapcar (lambda (c)
-                      (let ((str (substring-no-properties (car c))))
-                        (when (string-match "\\`\\([^/]*\\)/\\(.*\\)\\'" str)
-                          (cons (concat (match-string 1 str) ": "
-                                        (match-string 2 str))
-                                (cdr c)))))
-                    (with-temp-buffer
-                      (insert-file-contents helm-spacemacs--faq-filename)
-                      (org-mode)
-                      (mapcar '(lambda (candidate)
-                                 `(,(car candidate) . ,(marker-position (cdr candidate))))
-                              (helm-get-org-candidates-in-file (current-buffer) 1 8 nil t))
-                      ))))
+  (delq nil
+        (mapcar 'helm-spacemacs//faq-candidate
+                (with-temp-buffer
+                  (insert-file-contents helm-spacemacs--faq-filename)
+                  (org-mode)
+                  (mapcar (lambda (candidate)
+                            (cons (car candidate)
+                                  (marker-position (cdr candidate))))
+                          (helm-get-org-candidates-in-file
+                           (current-buffer) 1 8 nil t))))))
 
 (defun helm-spacemacs//faq-goto-marker (marker)
   (find-file helm-spacemacs--faq-filename)
