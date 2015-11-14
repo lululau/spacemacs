@@ -146,7 +146,6 @@
       ;; don't display eldoc on modeline
       (spacemacs|hide-lighter eldoc-mode))))
 
-
 (defun spacemacs-base/init-evil ()
   (use-package evil
     :init
@@ -382,7 +381,15 @@ Example: (evil-map visual \"<\" \"<gv\")"
           ;; free variable reference. The line above fixes this
           (if smartparens-strict-mode
               (call-interactively 'sp-backward-delete-char)
-            ad-do-it))))))
+            ad-do-it)))
+
+      ;; Define history commands for comint
+      (evil-define-key 'insert comint-mode-map
+        (kbd "C-k") 'comint-next-input
+        (kbd "C-j") 'comint-previous-input)
+      (evil-define-key 'normal comint-mode-map
+        (kbd "C-k") 'comint-next-input
+        (kbd "C-j") 'comint-previous-input))))
 
 (defun spacemacs-base/init-evil-escape ()
   (use-package evil-escape
@@ -1230,14 +1237,12 @@ ARG non nil means that the editing style is `vim'."
                projectile-vc)
     :init
     (progn
-      ;; note for Windows: GNU find or Cygwin find must be in path
-      ;; default parameters are not supported on Windows, we default
-      ;; to simplest call to find.
-      (when (spacemacs/system-is-mswindows)
-        (setq projectile-generic-command "find . -type f"))
-      (setq projectile-enable-caching t
-            projectile-indexing-method 'alien
-            projectile-sort-order 'recentf
+      ;; note for Windows: GNU find or Cygwin find must be in path to enable
+      ;; fast indexing
+      (when (and (spacemacs/system-is-mswindows) (executable-find "find"))
+          (setq  projectile-indexing-method 'alien)
+                 projectile-generic-command "find . -type f")
+      (setq projectile-sort-order 'recentf
             projectile-cache-file (concat spacemacs-cache-directory
                                           "projectile.cache")
             projectile-known-projects-file (concat spacemacs-cache-directory

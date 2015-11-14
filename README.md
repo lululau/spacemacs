@@ -1,5 +1,5 @@
 <a name="top"></a>
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/syl20bnr/spacemacs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/syl20bnr/spacemacs.svg)](https://travis-ci.org/syl20bnr/spacemacs) [![Buy A Drink](https://img.shields.io/badge/Paypal-Buy%20a%20Drink-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ESFVNPKP4Y742) [![Recommend Spacemacs](https://img.shields.io/badge/Slant-Recommend-ff69b4.svg)](http://www.slant.co/topics/12/~what-are-the-best-programming-text-editors)[![Twitter][]](http://www.twitter.com/spacemacs)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/syl20bnr/spacemacs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/syl20bnr/spacemacs.svg)](https://travis-ci.org/syl20bnr/spacemacs)   [![Made with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/develop/assets/spacemacs-badge.svg)](http://github.com/syl20bnr/spacemacs)  [![Buy A Drink](https://img.shields.io/badge/Paypal-Buy%20a%20Drink-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ESFVNPKP4Y742) [![Recommend Spacemacs](https://img.shields.io/badge/Slant-Recommend-ff69b4.svg)](http://www.slant.co/topics/12/~what-are-the-best-programming-text-editors)[![Twitter][]](http://www.twitter.com/spacemacs)
 ***
 <p align="center"><img src="/doc/img/title2.png" alt="Spacemacs"/></p>
 <p align="center">
@@ -85,7 +85,7 @@ organised in configuration layers following a set of
 # Documentation
 
 A comprehensive documentation is available for each layer by pressing
-<kbd>SPC f e h</kbd>. 
+<kbd>SPC f e h</kbd>.
 
 To go to the general documentation [click here][DOCUMENTATION.org].
 
@@ -273,7 +273,28 @@ bugs, helping the community on the [Gitter Chat][] or sending pull requests.
 If you want to show your support financially you can buy a drink to the
 maintainer by clicking on the [Paypal badge](#top).
 
-Thank you !
+If you used spacemacs in a project and you want to show that fact, you can use
+the spacemacs badge ![https://github.com/syl20bnr/spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/develop/assets/spacemacs-badge.svg).
+
+- For Markdown:
+
+   ```
+   [![Built with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/develop/assets/spacemacs-badge.svg)](http://github.com/syl20bnr/spacemacs)
+   ```
+
+- For HTML:
+
+   ```
+   <a href="https://github.com/syl20bnr/spacemacs"><img src="https://cdn.rawgit.com/syl20bnr/spacemacs/develop/assets/spacemacs-badge.svg" /></a>
+   ```
+
+- For Org-mode:
+
+   ```
+   [[https://github.com/syl20bnr/spacemacs][file:https://cdn.rawgit.com/syl20bnr/spacemacs/develop/assets/spacemacs-badge.svg]]
+   ```
+
+Thank you!
 
 [Twitter]: http://i.imgur.com/tXSoThF.png
 [CONTRIBUTE.org]: doc/CONTRIBUTE.org

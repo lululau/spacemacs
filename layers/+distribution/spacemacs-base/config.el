@@ -58,7 +58,6 @@
                                        ("xa"  "align")
                                        ("xd"  "delete")
                                        ("xg"  "google-translate")
-                                       ("xi"  "insert")
                                        ("xl"  "lines")
                                        ("xm"  "move")
                                        ("xt"  "transpose")
@@ -196,6 +195,9 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
       (spacemacs/toggle-frame-fullscreen)
     (if dotspacemacs-maximized-at-startup
         (add-hook 'window-setup-hook 'toggle-frame-maximized))))
+
+;; Highlight keywords like TODO, FIXME, etc.
+(add-hook 'prog-mode-hook 'spacemacs/highlight-TODO-words)
 
 ;; ---------------------------------------------------------------------------
 ;; Session
