@@ -241,6 +241,10 @@ NOT USED FOR NOW :-)")
   "List of items to show in the startup buffer. If nil it is disabled.
 Possible values are: `recents' `bookmarks' `projects'.")
 
+(defvar dotspacemacs-startup-recent-list-size 5
+  "Number of recent files to show in the startup buffer. Ignored if
+`dotspacemacs-startup-lists' doesn't include `recents'.")
+
 (defvar dotspacemacs-excluded-packages '()
   "A list of packages and/or extensions that will not be install and loaded.")
 
@@ -355,7 +359,7 @@ If ARG is non nil then Ask questions to the user before installing the dotfile."
                  "What distribution of spacemacs would you like to start with? "
                  '(("The standard distribution, recommended. (spacemacs)"
                     spacemacs)
-                   ("A mininalist distribution that you can build on. (spacemacs-base)"
+                   ("A minimalist distribution that you can build on. (spacemacs-base)"
                     spacemacs-base)))))))))
     (with-current-buffer (find-file-noselect
                        (concat dotspacemacs-template-directory
