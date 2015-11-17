@@ -1277,27 +1277,28 @@ bindings.
 information about functions, variables, modes etc. These commands are bound
 thusly:
 
-| Key Binding | Description                                               |
-|-------------+-----------------------------------------------------------|
-| ~SPC h d b~ | describe bindings in a =helm= buffer                      |
-| ~SPC h d c~ | describe current character under point                    |
-| ~SPC h d f~ | describe a function                                       |
-| ~SPC h d F~ | describe a face                                           |
-| ~SPC h d k~ | describe a key                                            |
-| ~SPC h d m~ | describe current modes                                    |
-| ~SPC h d p~ | describe a package                                        |
-| ~SPC h d s~ | copy system information that you can paste in gitter chat |
-| ~SPC h d t~ | describe a theme                                          |
-| ~SPC h d v~ | describe a variable                                       |
+| Key Binding | Description                                                        |
+|-------------+--------------------------------------------------------------------|
+| ~SPC h d b~ | describe bindings in a =helm= buffer                               |
+| ~SPC h d c~ | describe current character under point                             |
+| ~SPC h d f~ | describe a function                                                |
+| ~SPC h d F~ | describe a face                                                    |
+| ~SPC h d k~ | describe a key                                                     |
+| ~SPC h d m~ | describe current modes                                             |
+| ~SPC h d p~ | describe a package                                                 |
+| ~SPC h d s~ | copy system information that you can paste in gitter chat          |
+| ~SPC h d t~ | describe a theme                                                   |
+| ~SPC h d v~ | describe a variable                                                |
 
 Other help key bindings:
 
-| Key Binding | Description                                   |
-|-------------+-----------------------------------------------|
-| ~SPC h i~   | search in info pages with the symbol at point |
-| ~SPC h k~   | show top-level bindings with =which-key=      |
-| ~SPC h L~   | go to library a implementation                |
-| ~SPC h m~   | search available man pages                    |
+| Key Binding | Description                                                        |
+|-------------+--------------------------------------------------------------------|
+| ~SPC h SPC~ | discover Spacemacs documentation, layers and packages using =helm= |
+| ~SPC h i~   | search in info pages with the symbol at point                      |
+| ~SPC h k~   | show top-level bindings with =which-key=                           |
+| ~SPC h L~   | go to library a implementation                                     |
+| ~SPC h m~   | search available man pages                                         |
 
 *** Available layers
 All layers can be easily discovered via =helm-spacemacs= accessible with ~SPC f
@@ -1619,6 +1620,8 @@ navigate between =Emacs= and Spacemacs specific files.
 | ~SPC f e i~ | open the all mighty =init.el=                                      |
 | ~SPC f e R~ | resync the dotfile with spacemacs                                  |
 | ~SPC f e v~ | display and copy the spacemacs version                             |
+
+Additionally, ~SPC h SPC~ is a alias for ~SPC f e h~.
 
 **** Browsing files with Helm
 In =vim= and  =hybrid= styles, Spacemacs remap the navigation in Helm find-files
@@ -2122,11 +2125,13 @@ The font size of the current buffer can be adjusted with the commands:
 | Key Binding   | Description                                                                |
 |---------------+----------------------------------------------------------------------------|
 | ~SPC z x +~   | scale up the font and initiate the font scaling micro-state                |
+| ~SPC z x =~   | scale up the font and initiate the font scaling micro-state                |
 | ~SPC z x -~   | scale down the font and initiate the font scaling micro-state              |
-| ~SPC z x =~   | reset the font size (no scaling) and initiate the font scaling micro-state |
+| ~SPC z x 0~   | reset the font size (no scaling) and initiate the font scaling micro-state |
 | ~+~           | increase the font size                                                     |
+| ~=~           | increase the font size                                                     |
 | ~-~           | decrease the font size                                                     |
-| ~=~           | reset the font size                                                        |
+| ~0~           | reset the font size                                                        |
 | Any other key | leave the font scaling micro-state                                         |
 
 Note that /only/ the text of the current buffer is scaled, the other buffers,
@@ -2136,15 +2141,17 @@ a frame use the =zoom frame= bindings (see next section).
 **** Frame
 You can zoom in and out the whole content of the frame with the commands:
 
-| Key Binding   | Description                      |
-|---------------+----------------------------------|
-| ~SPC z f +~   | zoom in the frame content        |
-| ~SPC z f -~   | zoom out the frame content       |
-| ~SPC z f =~   | reset the frame content size     |
-| ~+~           | zoom in                          |
-| ~-~           | zoom out                         |
-| ~=~           | reset zoom                       |
-| Any other key | leave the zoom frame micro-state |
+| Key Binding   | Description                                                             |
+|---------------+-------------------------------------------------------------------------|
+| ~SPC z f +~   | zoom in the frame content and initiate the frame scaling micro-state    |
+| ~SPC z f =~   | zoom in the frame content and initiate the frame scaling micro-state    |
+| ~SPC z f -~   | zoom out the frame content and initiate the frame scaling micro-state   |
+| ~SPC z f 0~   | reset the frame content size and initiate the frame scaling micro-state |
+| ~+~           | zoom in                                                                 |
+| ~=~           | zoom in                                                                 |
+| ~-~           | zoom out                                                                |
+| ~0~           | reset zoom                                                              |
+| Any other key | leave the zoom frame micro-state                                        |
 
 *** Increase/Decrease numbers
 Spacemacs uses [[https://github.com/cofi/evil-numbers][evil-numbers]] to easily increase or increase numbers.
