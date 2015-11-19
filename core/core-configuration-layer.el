@@ -24,9 +24,22 @@
 (require 'core-spacemacs-buffer)
 
 (unless package--initialized
-  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("org" . "http://orgmode.org/elpa/")
-                           ("gnu" . "https://elpa.gnu.org/packages/")))
+  (let ((archives '((melpa . "melpa.org/packages/")
+                    ("org" . "orgmode.org/elpa/")
+                    ("gnu" . "elpa.gnu.org/packages/"))))
+    (setq package-archives
+          (mapcar (lambda (x)
+                    (cons (car x) (concat
+                                   (if (and dotspacemacs-elpa-https
+                                            ;; for now org ELPA repository does
+                                            ;; not support HTTPS
+                                            ;; TODO when org ELPA repo support
+                                            ;; HTTPS remove the check
+                                            ;; `(not (equal "org" (car x)))'
+                                            (not (equal "org" (car x))))
+                                       "https://"
+                                     "http://") (cdr x))))
+                  archives)))
   ;; optimization, no need to activate all the packages so early
   (setq package-enable-at-startup nil)
   (package-initialize 'noactivate)
@@ -111,6 +124,11 @@
          :initform nil
          :type (satisfies (lambda (x) (member x '(nil pre))))
          :documentation "Initialization step.")
+   (protected :initarg :protected
+              :initform nil
+              :type boolean
+              :documentation
+              "If non-nil then this package cannot be excluded.")
    (excluded :initarg :excluded
              :initform nil
              :type boolean
@@ -234,10 +252,17 @@ Properties that can be copied are `:location', `:step' and `:excluded'."
          (location (when (listp pkg) (plist-get (cdr pkg) :location)))
          (step (when (listp pkg) (plist-get (cdr pkg) :step)))
          (excluded (when (listp pkg) (plist-get (cdr pkg) :excluded)))
+         (protected (when (listp pkg) (plist-get (cdr pkg) :protected)))
+         (copyp (not (null obj)))
          (obj (if obj obj (cfgl-package name-str :name name-sym))))
     (when location (oset obj :location location))
     (when step (oset obj :step step))
     (oset obj :excluded excluded)
+    ;; cannot override protected packages
+    (unless copyp
+      (oset obj :protected protected)
+      (when protected
+        (push name-sym configuration-layer--protected-packages)))
     obj))
 
 (defun configuration-layer/get-packages (layers &optional dotfile)
@@ -743,7 +768,8 @@ path."
     (spacemacs-buffer/loading-animation)
     (let ((pkg-name (oref pkg :name)))
       (cond
-       ((oref pkg :excluded)
+       ((and (oref pkg :excluded)
+             (not (oref pkg :protected)))
         (spacemacs-buffer/message
          (format "%S ignored since it has been excluded." pkg-name)))
        ((null (oref pkg :owner))
