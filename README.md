@@ -125,7 +125,13 @@ We recommend the homebrew [emacs-mac-port][] formula:
 ```sh
 $ brew tap railwaycat/homebrew-emacsmacport
 $ brew install emacs-mac --with-spacemacs-icon  # OR, brew cask install emacs-mac
+$ brew linkapps
 ```
+
+Please note: these homebrew commands will install Emacs, and link it to your
+`/Applications` directory. You still need to run the `git clone` mentioned at
+the start of this file. That will populate your `~/.emacs.d` directory, which
+is what transforms a regular Emacs into Spacemacs.
 
 It is also recommended to add the [osx layer][] to your [dotfile][]:
 
@@ -274,7 +280,7 @@ If you want to show your support financially you can buy a drink to the
 maintainer by clicking on the [Paypal badge](#top).
 
 If you used spacemacs in a project and you want to show that fact, you can use
-the spacemacs badge ![https://github.com/syl20bnr/spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/develop/assets/spacemacs-badge.svg).
+the spacemacs badge: [![Built with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg)](http://github.com/syl20bnr/spacemacs)
 
 - For Markdown:
 
