@@ -19,8 +19,16 @@
     :config
     (progn
       (spacemacs/set-leader-keys-for-major-mode 'scheme-mode
+        ","  'lisp-state-toggle-lisp-state
+
         "cc" 'geiser-compile-current-buffer
         "cp" 'geiser-add-to-load-path
+
+        "eb" 'geiser-eval-buffer
+        "ee" 'geiser-eval-last-sexp
+        "ef" 'geiser-eval-definition
+        "el" 'lisp-state-eval-sexp-end-of-line
+        "er" 'geiser-eval-region
 
         "gg" 'geiser-edit-symbol-at-point
         "gb" 'geiser-pop-symbol-stack
@@ -47,10 +55,10 @@
         "sF" 'geiser-eval-definition-and-go
         "se" 'geiser-eval-last-sexp
         "sr" 'geiser-eval-region
-        "sR" 'geiser-eval-region-and-go))))
+        "sR" 'geiser-eval-region-and-go
+        "ss" 'geiser-set-scheme))))
 
 (when (configuration-layer/layer-usedp 'auto-completion)
-
   (defun scheme/post-init-company ()
     ;; Geiser provides completion as long as company mode is loaded.
     (spacemacs|add-company-hook scheme-mode)))
