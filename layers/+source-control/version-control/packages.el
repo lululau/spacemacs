@@ -32,7 +32,7 @@
   (use-package diff-hl
     :init
     (progn
-      (setq diff-hl-side 'right)
+      (setq diff-hl-side 'left)
       (when (eq version-control-diff-tool 'diff-hl)
         (when version-control-global-margin
           (global-diff-hl-mode))
