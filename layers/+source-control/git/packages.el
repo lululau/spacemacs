@@ -94,10 +94,14 @@
 
 (defun git/init-magit ()
   (use-package magit
-    :commands (magit-status
-               magit-blame-mode
-               magit-log
-               magit-commit)
+    :commands (magit-blame-mode
+               magit-commit-popup
+               magit-diff-popup
+               magit-fetch-popup
+               magit-log-popup
+               magit-pull-popup
+               magit-push-popup
+               magit-status)
     :init
     (progn
       (setq magit-completing-read-function 'magit-builtin-completing-read)
@@ -115,13 +119,21 @@
       (spacemacs/declare-prefix "gd" "diff")
       (spacemacs/set-leader-keys
         "gb" 'spacemacs/git-blame-micro-state
-        "gc" 'magit-commit
+        "gc" 'magit-commit-popup
         "gC" 'magit-checkout
-        "gdh" 'spacemacs/magit-diff-head
+        "gd" 'magit-diff-popup
+        "gD" 'spacemacs/magit-diff-head
+        "ge" 'magit-ediff-compare
+        "gE" 'magit-ediff-show-working-tree
+        "gf" 'magit-fetch-popup
+        "gF" 'magit-pull-popup
         "gi" 'magit-init
-        "gl" 'magit-log-all
+        "gl" 'magit-log-popup
         "gL" 'magit-log-buffer-file
-        "gs" 'magit-status)
+        "gP" 'magit-push-popup
+        "gs" 'magit-status
+        "gS" 'magit-stage-file
+        "gU" 'magit-unstage-file)
 
       (spacemacs|define-micro-state git-blame
         :doc (concat "Press [b] again to blame further in the history, "
