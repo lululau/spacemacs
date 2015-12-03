@@ -25,7 +25,6 @@
 (require 'core-toggle)
 (require 'core-micro-state)
 (require 'core-use-package-ext)
-(require 'core-emacs-ext)
 
 (defgroup spacemacs nil
   "Spacemacs customizations."
@@ -81,7 +80,6 @@ initialization."
   (dotspacemacs|call-func dotspacemacs/init "Calling dotfile init...")
   (dotspacemacs|call-func dotspacemacs/user-init "Calling dotfile user init...")
   ;; spacemacs init
-  (require 'core-configuration-layer)
   (switch-to-buffer (get-buffer-create spacemacs-buffer-name))
   (setq initial-buffer-choice (lambda () (get-buffer spacemacs-buffer-name)))
   (spacemacs-buffer/set-mode-line "")
@@ -89,17 +87,6 @@ initialization."
   (setq inhibit-startup-screen t)
   ;; silence ad-handle-definition about advised functions getting redefined
   (setq ad-redefinition-action 'accept)
-  ;; default theme
-  (let ((default-theme (car dotspacemacs-themes)))
-    (spacemacs/load-theme default-theme)
-    ;; protect used themes from deletion as orphans
-    (setq configuration-layer--protected-packages
-          (append
-           (delq nil (mapcar 'spacemacs//get-theme-package
-                             dotspacemacs-themes))
-           configuration-layer--protected-packages))
-    (setq-default spacemacs--cur-theme default-theme)
-    (setq-default spacemacs--cycle-themes (cdr dotspacemacs-themes)))
   ;; removes the GUI elements
   (when (and (fboundp 'tool-bar-mode) (not (eq tool-bar-mode -1)))
     (tool-bar-mode -1))
@@ -116,6 +103,20 @@ initialization."
     (spacemacs-buffer/message (concat "No graphical support detected, you won't be"
                                       "able to launch a graphical instance of Emacs"
                                       "with this build.")))
+  ;; initialize the configuration layer system
+  (require 'core-configuration-layer)
+  (configuration-layer/initialize)
+  ;; default theme
+  (let ((default-theme (car dotspacemacs-themes)))
+    (spacemacs/load-theme default-theme)
+    ;; protect used themes from deletion as orphans
+    (setq configuration-layer--protected-packages
+          (append
+           (delq nil (mapcar 'spacemacs//get-theme-package
+                             dotspacemacs-themes))
+           configuration-layer--protected-packages))
+    (setq-default spacemacs--cur-theme default-theme)
+    (setq-default spacemacs--cycle-themes (cdr dotspacemacs-themes)))
   ;; font
   (if (find-font (font-spec :name (car dotspacemacs-default-font)))
       (spacemacs/set-default-font dotspacemacs-default-font)
@@ -127,9 +128,9 @@ initialization."
   ;; dash is required to prevent a package.el bug with f on 24.3.1
   (spacemacs/load-or-install-protected-package 'dash t)
   (spacemacs/load-or-install-protected-package 's t)
+  (spacemacs/load-or-install-protected-package 'bind-map t)
   ;; bind-key is required by use-package
   (spacemacs/load-or-install-protected-package 'bind-key t)
-  (spacemacs/load-or-install-protected-package 'bind-map t)
   (spacemacs/load-or-install-protected-package 'use-package t)
   (setq use-package-verbose init-file-debug)
   ;; package-build is required by quelpa
