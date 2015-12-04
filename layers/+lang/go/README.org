@@ -1,4 +1,4 @@
-#+TITLE: GO contribution layer for Spacemacs
+#+TITLE: GO layer
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/readtheorg.css" />
 
 [[file:img/go.png]]
@@ -31,6 +31,7 @@ You will need =gocode= and =godef=:
   go get -u -v github.com/nsf/gocode
   go get -u -v github.com/rogpeppe/godef
   go get -u -v golang.org/x/tools/cmd/oracle
+  go get -u -v golang.org/x/tools/cmd/gorename
 #+END_SRC
 
 Make sure that =gocode= executable is in your PATH. For information about
