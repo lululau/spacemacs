@@ -9,7 +9,7 @@
 ;; This file is not part of GNU Emacs.
 ;;
 ;;; License: GPLv3
-(setq spacemacs-layouts-packages '(persp-mode spaceline))
+(setq spacemacs-layouts-packages '(persp-mode spaceline eyebrowse))
 
 (defun spacemacs-layouts/init-persp-mode ()
   (use-package persp-mode
@@ -81,6 +81,7 @@
   [s]                  save all layouts
   [S]                  save layouts by names
   [t]                  show a buffer without adding it to current layout
+  [w]                  workspaces micro-state
   [x]                  kill layout and its buffers
   [X]                  kill other layout(s) and their buffers")
 
@@ -135,6 +136,7 @@
         ("s" persp-save-state-to-file :exit t)
         ("S" persp-save-to-file-by-names :exit t)
         ("t" persp-temporarily-display-buffer :exit t)
+        ("w" spacemacs/layout-workspaces-micro-state :exit t)
         ("x" spacemacs/layouts-ms-kill)
         ("X" spacemacs/layouts-ms-kill-other :exit t))
 
@@ -298,3 +300,8 @@ format so they are supported by the
                (or (not (equal persp-nil-name
                                (safe-persp-name (get-frame-persp))))
                    dotspacemacs-display-default-layout))))
+
+(defun spacemacs-layouts/post-init-eyebrowse ()
+  (add-hook 'persp-before-switch-functions #'spacemacs/update-eyebrowse-for-perspective)
+  (add-hook 'eyebrowse-post-window-switch-hook #'spacemacs/save-eyebrowse-for-perspective)
+  (add-hook 'persp-activated-hook #'spacemacs/load-eyebrowse-for-perspective))

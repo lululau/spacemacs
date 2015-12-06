@@ -19,10 +19,8 @@
   "If non-nil, use `enh-ruby-mode' package instead of the built-in Ruby Mode.")
 
 (defvar ruby-version-manager nil
-  "If non nil, defines the Ruby version manager (i.e. rbenv, rvm)")
-
-(defvar ruby-use-ruby-test nil
-  "If non-nil, use `ruby-test-mode' package instead of `rspec-mode'.")
+  "If non nil, defines the Ruby version manager.
+Possible values are `rbenv', `rvm' or `chruby'.)")
 
 (defvar ruby-test-runner 'ruby-test
   "Test runner to use. Possible values are `ruby-test' or `rspec'.")

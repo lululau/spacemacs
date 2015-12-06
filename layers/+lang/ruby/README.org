@@ -17,8 +17,11 @@
      - [[Ruby-test-mode][Ruby-test-mode]]
 
 * Description
-This layer provides support for the Ruby language with [[https://github.com/zenspider/enhanced-ruby-mode][enh-ruby-mode]] and [[https://github.com/dgutov/robe][robe-mode]].
-Optionally Enh Ruby Mode can be replaced with the built-in Emacs Ruby Mode.
+This layer provides support for the Ruby language with the following feature:
+- version manager (rbenv, rvm or chruby)
+- test runner (ruby-test and rspec)
+- linter (rubocop)
+- interactive REPL and code navigation (robe)
 
 * Install
 To use this contribution add it to your =~/.spacemacs=
@@ -60,15 +63,22 @@ specific documentation for details and caveats):
 #+END_SRC
 
 ** Ruby version management
-This layer supports the use of [[https://rvm.io/][RVM]] and [[https://github.com/sstephenson/rbenv][Rbenv]].
-To enable it, set the =ruby-version-manager= var in your =~/.spacemacs=:
+This layer supports [[https://rvm.io/][RVM]], [[https://github.com/sstephenson/rbenv][Rbenv]], and [[https://github.com/postmodern/chruby][Chruby]]. You can choose the default version
+manager by setting the variable =ruby-version-manager= in your dotfile, for
+example:
 
 #+BEGIN_SRC emacs-lisp
   (defun dotspacemacs-configuration-layers ()
-     '((ruby :variables ruby-version-manager 'rbenv)))
+     '((ruby :variables ruby-version-manager 'rvm)))
 #+END_SRC
 
-Possible values are =rbenv= and =rvm=.
+When a version manager is enabled it will use the currently activated ruby
+except if a =.ruby-version= file exists in which case the ruby version of
+this file is used.
+=rvm= will also try to look for a =.rvmrc= and =gemfile=, the priority order is
+=.rvmrc= then =.ruby-version= then =gemfile=.
+
+Note: Only one version manager at a time can be enabled.
 
 ** Test runner
 This layer supports both =RSpec= and =ruby-test= test runners (frameworks).
@@ -120,12 +130,16 @@ directory local variables.
 *** RSpec-mode
 When =ruby-test-runner= equals =rspec=.
 
-| Key binding | Description          |
-|-------------+----------------------|
-| ~SPC m t a~ | run all specs        |
-| ~SPC m t l~ | run last failed spec |
-| ~SPC m t r~ | re-run last spec     |
-| ~SPC m t t~ | run spec at pointer  |
+| Key binding | Description                        |
+|-------------+------------------------------------|
+| ~SPC m t a~ | run all specs                      |
+| ~SPC m t c~ | =rspec-verify-continue=            |
+| ~SPC m t e~ | =rspec-toggle-example-pendingness= |
+| ~SPC m t f~ | run method                         |
+| ~SPC m t l~ | run last failed spec               |
+| ~SPC m t m~ | =rspec-verify-matching=            |
+| ~SPC m t r~ | re-run last spec                   |
+| ~SPC m t t~ | run spec at pointer                |
 
 *** Ruby-test-mode
 When =ruby-test-runner= equals =ruby-test=.
