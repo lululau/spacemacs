@@ -19,7 +19,6 @@
 (require 'package)
 (require 'warnings)
 (require 'ht)
-(require 'request)
 (require 'core-dotspacemacs)
 (require 'core-funcs)
 (require 'core-spacemacs-buffer)
@@ -150,6 +149,7 @@ directory with a name starting with `+'.")
 
 (defun configuration-layer/initialize ()
   "Initialize `package.el'."
+  (configuration-layer//parse-command-line-arguments)
   (unless package--initialized
     (setq package-archives (configuration-layer//resolve-package-archives
                             configuration-layer--elpa-archives))
@@ -163,6 +163,12 @@ directory with a name starting with `+'.")
     (unless (or (package-installed-p 'python) (version< emacs-version "24.3"))
       (add-to-list 'package-archives
                    '("marmalade" . "https://marmalade-repo.org/packages/")))))
+
+(defun configuration-layer//parse-command-line-arguments ()
+  "Handle command line arguments."
+  (when (member "--insecure" command-line-args)
+    (setq command-line-args (delete "--insecure" command-line-args))
+    (setq dotspacemacs-elpa-https nil)))
 
 (defun configuration-layer//resolve-package-archives (archives)
   "Resolve HTTP handlers for each archive in ARCHIVES and return a list
@@ -213,19 +219,17 @@ refreshed during the current session."
                    (car archive) i count) t))
         (spacemacs//redisplay)
         (setq i (1+ i))
-        (request (cdr archive) :sync t :type "GET"
-                 :timeout configuration-layer--refresh-package-timeout
-                 :error
-                 (function* (lambda (&key error-thrown &allow-other-keys)
-                              (configuration-layer//set-error)
-                              (spacemacs-buffer/append
-                               (format "\n%s: %s"
-                                       (car error-thrown)
-                                       (cdr error-thrown)))))
-                 :status-code
-                 '((200 . (lambda (&rest _)
-                            (let ((package-archives (list archive)))
-                              (package-refresh-contents)))))))
+        (unless (eq 'error (with-timeout
+                               (dotspacemacs-elpa-timeout
+                                (progn
+                                  (spacemacs-buffer/append
+                                   (format
+                                    "\nError while contacting %s repository!"
+                                    (car archive)))
+                                  'error))
+                             (url-retrieve-synchronously (cdr archive))))
+          (let ((package-archives (list archive)))
+            (package-refresh-contents))))
       (package-read-all-archive-contents)
       (unless quiet (spacemacs-buffer/append "\n")))))
 
