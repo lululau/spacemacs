@@ -47,9 +47,14 @@
 (global-set-key (kbd "<left-margin> <double-mouse-1>") 'spacemacs/select-current-block)
 (global-set-key (kbd "<left-margin> <drag-mouse-1>") 'spacemacs/mu-select-linum)
 
-;; let TAB jump between links in help buffers
+;; motions keys for help buffers
 (evil-define-key 'motion help-mode-map (kbd "<tab>") 'forward-button)
 (evil-define-key 'motion help-mode-map (kbd "S-<tab>") 'backward-button)
+(evil-define-key 'motion help-mode-map (kbd "]") 'help-go-forward)
+(evil-define-key 'motion help-mode-map (kbd "gf") 'help-go-forward)
+(evil-define-key 'motion help-mode-map (kbd "[") 'help-go-back)
+(evil-define-key 'motion help-mode-map (kbd "gb") 'help-go-back)
+(evil-define-key 'motion help-mode-map (kbd "gh") 'help-follow-symbol)
 
 ;; ---------------------------------------------------------------------------
 ;; evil-leader key bindings
@@ -167,6 +172,7 @@ Ensure that helm is required before calling FUNC."
 ;; Compilation ----------------------------------------------------------------
 (spacemacs/set-leader-keys
   "cC" 'compile
+  "ck" 'kill-compilation
   "cr" 'recompile
   "cq" 'spacemacs/close-compilation-window)
 

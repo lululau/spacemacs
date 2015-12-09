@@ -1452,8 +1452,20 @@ It will toggle the overlay under point or create an overlay of one character."
     :defer t
     :commands (open-junk-file)
     :init
-    (spacemacs/set-leader-keys "fJ" 'open-junk-file)
-    (setq open-junk-file-directory (concat spacemacs-cache-directory "junk/%Y/%m/%d-%H%M%S."))))
+    (setq open-junk-file-format (concat spacemacs-cache-directory "junk/%Y/%m/%d-%H%M%S."))
+    (defun spacemacs/helm-open-junk-file (&optional arg)
+      "Open junk file
+Open junk file using helm, with `prefix-arg' search in junk files"
+      (interactive "P")
+      (require 'helm)
+      (let* ((fname (format-time-string open-junk-file-format (current-time)))
+             (junk-dir (file-name-directory fname))
+             (helm-ff-newfile-prompt-p nil)
+             (default-directory junk-dir))
+        (if arg
+             (spacemacs/helm-files-smart-do-search)
+          (helm-find-files-1 fname))))
+    (spacemacs/set-leader-keys "fJ" 'spacemacs/helm-open-junk-file)))
 
 (defun spacemacs/init-info+ ()
   (use-package info+
@@ -1513,7 +1525,6 @@ It will toggle the overlay under point or create an overlay of one character."
     :commands neo-global--window-exists-p
     :init
     (progn
-      (add-to-list 'evil-motion-state-modes 'neotree-mode)
       (setq neo-window-width 32
             neo-create-file-auto-open t
             neo-banner-message nil
@@ -1573,31 +1584,34 @@ It will toggle the overlay under point or create an overlay of one character."
 
       (defun spacemacs//neotree-key-bindings ()
         "Set the key bindings for a neotree buffer."
-        (define-key evil-motion-state-local-map (kbd "TAB")  'neotree-stretch-toggle)
-        (define-key evil-motion-state-local-map (kbd "RET")  'neotree-enter)
-        (define-key evil-motion-state-local-map (kbd "|")    'neotree-enter-vertical-split)
-        (define-key evil-motion-state-local-map (kbd "-")    'neotree-enter-horizontal-split)
-        (define-key evil-motion-state-local-map (kbd "?")    'evil-search-backward)
-        (define-key evil-motion-state-local-map (kbd "c")    'neotree-create-node)
-        (define-key evil-motion-state-local-map (kbd "d")    'neotree-delete-node)
-        (define-key evil-motion-state-local-map (kbd "gr")   'neotree-refresh)
-        (define-key evil-motion-state-local-map (kbd "h")    'spacemacs/neotree-collapse-or-up)
-        (define-key evil-motion-state-local-map (kbd "H")    'neotree-select-previous-sibling-node)
-        (define-key evil-motion-state-local-map (kbd "J")    'neotree-select-down-node)
-        (define-key evil-motion-state-local-map (kbd "K")    'neotree-select-up-node)
-        (define-key evil-motion-state-local-map (kbd "l")    'spacemacs/neotree-expand-or-open)
-        (define-key evil-motion-state-local-map (kbd "L")    'neotree-select-next-sibling-node)
-        (define-key evil-motion-state-local-map (kbd "q")    'neotree-hide)
-        (define-key evil-motion-state-local-map (kbd "r")    'neotree-rename-node)
-        (define-key evil-motion-state-local-map (kbd "R")    'neotree-change-root)
-        (define-key evil-motion-state-local-map (kbd "s")    'neotree-hidden-file-toggle))
+        (evilified-state-evilify-map neotree-mode-map
+          :mode neotree-mode
+          :bindings
+          (kbd "TAB")  'neotree-stretch-toggle
+          (kbd "RET") 'neotree-enter
+          (kbd "|") 'neotree-enter-vertical-split
+          (kbd "-") 'neotree-enter-horizontal-split
+          (kbd "?") 'evil-search-backward
+          (kbd "c") 'neotree-create-node
+          (kbd "d") 'neotree-delete-node
+          (kbd "gr") 'neotree-refresh
+          (kbd "h") 'spacemacs/neotree-collapse-or-up
+          (kbd "H") 'neotree-select-previous-sibling-node
+          (kbd "J") 'neotree-select-down-node
+          (kbd "K") 'neotree-select-up-node
+          (kbd "l") 'spacemacs/neotree-expand-or-open
+          (kbd "L") 'neotree-select-next-sibling-node
+          (kbd "q") 'neotree-hide
+          (kbd "r") 'neotree-rename-node
+          (kbd "R") 'neotree-change-root
+          (kbd "s") 'neotree-hidden-file-toggle))
 
       (spacemacs/set-leader-keys
         "ft" 'neotree-toggle
         "pt" 'neotree-find-project-root))
 
     :config
-    (spacemacs/add-to-hook 'neotree-mode-hook '(spacemacs//neotree-key-bindings))))
+    (spacemacs//neotree-key-bindings)))
 
 (defun spacemacs/init-pcre2el ()
   (use-package pcre2el
