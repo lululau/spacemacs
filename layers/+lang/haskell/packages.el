@@ -30,7 +30,7 @@
     :defer t))
 
 (defun haskell/post-init-flycheck ()
-  (spacemacs/add-flycheck-hook 'haskell-mode))
+  (spacemacs/add-flycheck-hook 'haskell-mode-hook))
 
 (when (configuration-layer/layer-usedp 'syntax-checking)
   (defun haskell/init-flycheck-haskell ()
@@ -133,7 +133,7 @@
         "gi"  'haskell-navigate-imports
         "f"   'haskell-mode-stylish-buffer
 
-        "sb"  'haskell-process-load-or-reload
+        "sb"  'haskell-process-load-file
         "sc"  'haskell-interactive-mode-clear
         "ss"  'spacemacs/haskell-interactive-bring
         "sS"  'haskell-interactive-switch
@@ -161,7 +161,7 @@
         "dr"  'haskell-debug/refresh)
 
       ;; configure C-c C-l so it doesn't throw any errors
-      (bind-key "C-c C-l" 'haskell-process-load-or-reload haskell-mode-map)
+      (bind-key "C-c C-l" 'haskell-process-load-file haskell-mode-map)
 
       ;; Switch back to editor from REPL
       (spacemacs/set-leader-keys-for-major-mode 'haskell-interactive-mode

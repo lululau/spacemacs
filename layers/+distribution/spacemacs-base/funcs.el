@@ -312,9 +312,20 @@ argument takes the kindows rotate backwards."
 ;; from magnars
 (defun spacemacs/sudo-edit (&optional arg)
   (interactive "p")
-  (if (or arg (not buffer-file-name))
-      (find-file (concat "/sudo:root@localhost:" (read-file-name "File: ")))
-    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+  (let ((fname (if (or arg (not buffer-file-name)) (read-file-name "File: ") buffer-file-name)))
+    (find-file
+     (cond ((string-match-p "^/ssh:" fname)
+            (with-temp-buffer
+              (insert fname)
+              (search-backward ":")
+              (let ((last-match-end nil)
+                    (last-ssh-hostname nil))
+                (while (string-match "@\\\([^:|]+\\\)" fname last-match-end)
+                  (setq last-ssh-hostname (or (match-string 1 fname) last-ssh-hostname))
+                  (setq last-match-end (match-end 0)))
+                (insert (format "|sudo:%s" (or last-ssh-hostname "localhost"))))
+              (buffer-string)))
+           (t (concat "/sudo:root@localhost:" fname))))))
 
 ;; found at http://emacswiki.org/emacs/KillingBuffers
 (defun spacemacs/kill-other-buffers ()
@@ -394,10 +405,8 @@ argument takes the kindows rotate backwards."
   (delete-other-windows)
   (split-window-right))
 
-(defun spacemacs/home ()
-  "Go to home Spacemacs buffer"
-  (interactive)
-  (switch-to-buffer "*spacemacs*"))
+(defalias 'spacemacs/home 'spacemacs-buffer/goto-buffer
+  "Go to home Spacemacs buffer")
 
 (defun spacemacs/insert-line-above-no-indent (count)
   (interactive "p")
@@ -619,31 +628,6 @@ current window."
   (delete-region (point-min) (point-max))
   (clipboard-yank)
   (deactivate-mark))
-
-;; hide mode line
-;; from http://bzg.fr/emacs-hide-mode-line.html
-(defvar-local hidden-mode-line-mode nil)
-(define-minor-mode hidden-mode-line-mode
-  "Minor mode to hide the mode-line in the current buffer."
-  :init-value nil
-  :global t
-  :variable hidden-mode-line-mode
-  :group 'editing-basics
-  (if hidden-mode-line-mode
-      (setq hide-mode-line mode-line-format
-            mode-line-format nil)
-    (setq mode-line-format hide-mode-line
-          hide-mode-line nil))
-  (force-mode-line-update)
-  ;; Apparently force-mode-line-update is not always enough to
-  ;; redisplay the mode-line
-  (redraw-display)
-  (when (and (called-interactively-p 'interactive)
-             hidden-mode-line-mode)
-    (run-with-idle-timer
-     0 nil 'message
-     (concat "Hidden Mode Line Mode enabled.  "
-             "Use M-x hidden-mode-line-mode to make the mode-line appear."))))
 
 ;; BEGIN align functions
 

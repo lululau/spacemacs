@@ -74,8 +74,12 @@ users on `develop' branch must manually pull last commits instead."
   "Periodicly check for new for new Spacemacs version.
 Update `spacemacs-new-version' variable if any new version has been
 found."
-  (if (string-equal "develop" (spacemacs/git-get-current-branch))
-      (message "Skipping check for new version because you are on develop.")
+  (cond
+   ((not dotspacemacs-check-for-update)
+    (message "Skipping check for new version (reason: dotfile)"))
+   ((string-equal "develop" (spacemacs/git-get-current-branch))
+    (message "Skipping check for new version (reason: develop branch)"))
+   (t
     (message "Start checking for new version...")
     (async-start
      `(lambda ()
@@ -96,7 +100,7 @@ found."
     (when interval
       (setq spacemacs-version-check-timer
             (run-at-time t (timer-duration interval)
-                         'spacemacs/check-for-new-version)))))
+                         'spacemacs/check-for-new-version))))))
 
 (defun spacemacs/get-last-version ()
   "Return the last tagged version."

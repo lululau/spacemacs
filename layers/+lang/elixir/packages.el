@@ -66,13 +66,14 @@
       "mx" 'alchemist-mix-run
       "mh" 'alchemist-mix-help
 
+      "sc" 'alchemist-iex-compile-this-buffer
       "si" 'alchemist-iex-run
       "sI" 'alchemist-iex-project-run
       "sl" 'alchemist-iex-send-current-line
       "sL" 'alchemist-iex-send-current-line-and-go
+      "sm" 'alchemist-iex-reload-module
       "sr" 'alchemist-iex-send-region
       "sR" 'alchemist-iex-send-region-and-go
-      "sc" 'alchemist-iex-compile-this-buffer
 
       "ta" 'alchemist-mix-test
       "tb" 'alchemist-mix-test-this-buffer
@@ -80,6 +81,7 @@
       "tf" 'alchemist-test-file
       "tn" 'alchemist-test-jump-to-next-test
       "tp" 'alchemist-test-jump-to-previous-test
+      "tr" 'alchemist-mix-rerun-last-test
 
       "xb" 'alchemist-execute-this-buffer
       "xf" 'alchemist-execute-file

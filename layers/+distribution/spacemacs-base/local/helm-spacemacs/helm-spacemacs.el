@@ -95,6 +95,11 @@
       (when (or (equal file-extension "md")
                 (equal file-extension "org"))
         (push filename result)))
+
+    ;; CONTRIBUTING.org is a special case as it should be at the root of the
+    ;; repository to be linked as the contributing guide on Github.
+    (push "CONTRIBUTING.org" result)
+
     ;; delete DOCUMENTATION.org to make it the first guide
     (delete "DOCUMENTATION.org" result)
     (push "DOCUMENTATION.org" result)
@@ -102,7 +107,7 @@
     ;; give each document an appropriate title
     (mapcar (lambda (r)
               (cond
-               ((string-equal r "CONTRIBUTE.org")
+               ((string-equal r "CONTRIBUTING.org")
                 `("How to contribute to Spacemacs" . ,r))
                ((string-equal r "CONVENTIONS.org")
                 `("Spacemacs conventions" . ,r))
@@ -124,7 +129,12 @@
 
 (defun helm-spacemacs//documentation-action-open-file (candidate)
   "Open documentation FILE."
-  (let ((file (concat spacemacs-docs-directory candidate)))
+  (let ((file (if (string= candidate "CONTRIBUTING.org")
+                  ;; CONTRIBUTING.org is a special case as it should be at the
+                  ;; root of the repository to be linked as the contributing
+                  ;; guide on Github.
+                  (concat user-emacs-directory candidate)
+                (concat spacemacs-docs-directory candidate))))
     (cond ((and (equal (file-name-extension file) "md")
                 (not helm-current-prefix-arg))
            (condition-case nil
@@ -143,6 +153,7 @@
   `((name . "Layers")
     (candidates . ,(sort (configuration-layer/get-layers-list) 'string<))
     (candidate-number-limit)
+    (keymap . ,helm-spacemacs--layer-map)
     (action . (("Open README.org"
                 . helm-spacemacs//layer-action-open-readme)
                ("Open packages.el"
@@ -150,8 +161,19 @@
                ;; TODO remove extensions in 0.105.0
                ("Open extensions.el"
                 . helm-spacemacs//layer-action-open-extensions)
+               ("Add Layer"
+                . helm-spacemacs//layer-action-add-layer)
                ("Open README.org (for editing)"
                 . helm-spacemacs//layer-action-open-readme-edit)))))
+
+(defvar helm-spacemacs--layer-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map helm-map)
+    (define-key map (kbd "<S-return>") '(lambda () (interactive)
+                                          ;; Add Layer
+                                          (helm-select-nth-action 3)))
+    map)
+  "Keymap for Spacemacs Layers sources")
 
 (defun helm-spacemacs//package-source ()
   "Construct the helm source for the packages."
@@ -234,6 +256,20 @@
 (defun helm-spacemacs//layer-action-open-readme (candidate)
   "Open the `README.org' file of the passed CANDIDATE for reading."
   (helm-spacemacs//layer-action-open-file "README.org" candidate))
+
+(defun helm-spacemacs//layer-action-add-layer (candidate)
+  "Adds layer to dotspacemacs file and reloads configuration"
+  (if (configuration-layer/layer-usedp (intern candidate))
+      (message "Layer already added.")
+    (let ((dotspacemacs   (find-file-noselect (dotspacemacs/location))))
+      (with-current-buffer dotspacemacs
+        (beginning-of-buffer)
+        (let ((insert-point (re-search-forward
+                             "dotspacemacs-configuration-layers *\n?.*\\((\\)")))
+          (insert (format "\n%s\n" candidate))
+          (indent-region insert-point (+ insert-point (length candidate)))
+          (save-current-buffer)))
+      (dotspacemacs/sync-configuration-layers))))
 
 (defun helm-spacemacs//layer-action-open-readme-edit (candidate)
   "Open the `README.org' file of the passed CANDIDATE for editing."

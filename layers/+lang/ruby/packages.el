@@ -24,6 +24,7 @@
         ruby-test-mode
         ruby-tools
         rvm
+        smartparens
         ))
 (if ruby-enable-enh-ruby-mode
     (add-to-list 'ruby-packages 'enh-ruby-mode)
@@ -80,22 +81,15 @@
     :config
     (progn
       (setq enh-ruby-deep-indent-paren nil
-            enh-ruby-hanging-paren-deep-indent-level 2)
-      (sp-with-modes 'enh-ruby-mode
-        (sp-local-pair
-         "{" "}"
-         :pre-handlers '(sp-ruby-pre-handler)
-         :post-handlers '(sp-ruby-post-handler
-                          (spacemacs/smartparens-pair-newline-and-indent "RET"))
-         :suffix "")))))
+            enh-ruby-hanging-paren-deep-indent-level 2))))
 
 (defun ruby/post-init-evil-matchit ()
   (dolist (hook '(ruby-mode-hook enh-ruby-mode-hook))
     (add-hook hook `turn-on-evil-matchit-mode)))
 
 (defun ruby/post-init-flycheck ()
-  (spacemacs/add-flycheck-hook 'ruby-mode)
-  (spacemacs/add-flycheck-hook 'enh-ruby-mode))
+  (spacemacs/add-flycheck-hook 'ruby-mode-hook)
+  (spacemacs/add-flycheck-hook 'enh-ruby-mode-hook))
 
 (defun ruby/init-rbenv ()
   (use-package rbenv
@@ -167,6 +161,7 @@
       (dolist (mode '(ruby-mode enh-ruby-mode))
         (spacemacs/set-leader-keys-for-major-mode mode
           "ta" 'rspec-verify-all
+          "tb" 'rspec-verify
           "tc" 'rspec-verify-continue
           "te" 'rspec-toggle-example-pendingness
           "tf" 'rspec-verify-method
@@ -199,12 +194,7 @@
     (progn
       (spacemacs/set-leader-keys-for-major-mode 'ruby-mode
         "'" 'ruby-toggle-string-quotes
-        "{" 'ruby-toggle-block)
-      (sp-with-modes 'ruby-mode
-        (sp-local-pair "{" "}"
-                       :pre-handlers '(sp-ruby-pre-handler)
-                       :post-handlers '(sp-ruby-post-handler (spacemacs/smartparens-pair-newline-and-indent "RET"))
-                       :suffix "")))))
+        "{" 'ruby-toggle-block))))
 
 (defun ruby/init-ruby-tools ()
   (use-package ruby-tools
@@ -252,3 +242,14 @@
       (setq rspec-use-rvm t)
       (spacemacs/add-to-hooks 'rvm-activate-corresponding-ruby
                               '(ruby-mode-hook enh-ruby-mode-hook)))))
+
+(defun ruby/post-init-smartparens ()
+  (spacemacs|use-package-add-hook smartparens
+    :post-config
+    (sp-with-modes (if ruby-enable-enh-ruby-mode 'enh-ruby-mode 'ruby-mode)
+      (sp-local-pair
+       "{" "}"
+       :pre-handlers '(sp-ruby-pre-handler)
+       :post-handlers '(sp-ruby-post-handler
+                        (spacemacs/smartparens-pair-newline-and-indent "RET"))
+       :suffix ""))))
