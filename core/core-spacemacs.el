@@ -48,8 +48,11 @@
 
 (defun spacemacs/init ()
   "Perform startup initialization."
+  ;; silence ad-handle-definition about advised functions getting redefined
+  (setq ad-redefinition-action 'accept)
   ;; this is for a smoother UX at startup (i.e. less graphical glitches)
   (hidden-mode-line-mode)
+  (spacemacs//removes-gui-elements)
   ;; explicitly set the prefered coding systems to avoid annoying prompt
   ;; from emacs (especially on Microsoft Windows)
   (prefer-coding-system 'utf-8)
@@ -59,27 +62,6 @@
   (dotspacemacs/load-file)
   (dotspacemacs|call-func dotspacemacs/init "Calling dotfile init...")
   (dotspacemacs|call-func dotspacemacs/user-init "Calling dotfile user init...")
-  ;; removes the GUI elements
-  (when (and (fboundp 'tool-bar-mode) (not (eq tool-bar-mode -1)))
-    (tool-bar-mode -1))
-  (when (and (fboundp 'scroll-bar-mode) (not (eq scroll-bar-mode -1)))
-    (scroll-bar-mode -1))
-  ;; tooltips in echo-aera
-  (when (and (fboundp 'tooltip-mode) (not (eq tooltip-mode -1)))
-    (tooltip-mode -1))
-  (unless (eq window-system 'mac)
-    (when (and (fboundp 'menu-bar-mode) (not (eq menu-bar-mode -1)))
-      (menu-bar-mode -1)))
-  ;; spacemacs init
-  (spacemacs-buffer/goto-buffer)
-  (setq initial-buffer-choice (lambda () (get-buffer spacemacs-buffer-name)))
-  ;; silence ad-handle-definition about advised functions getting redefined
-  (setq ad-redefinition-action 'accept)
-  ;; for convenience and user support
-  (unless (fboundp 'tool-bar-mode)
-    (spacemacs-buffer/message (concat "No graphical support detected, you won't be"
-                                      "able to launch a graphical instance of Emacs"
-                                      "with this build.")))
   ;; initialize the configuration layer system
   (require 'core-configuration-layer)
   (configuration-layer/initialize)
@@ -99,6 +81,9 @@
       (spacemacs/set-default-font dotspacemacs-default-font)
     (spacemacs-buffer/warning "Cannot find font \"%s\"!"
                               (car dotspacemacs-default-font)))
+  ;; spacemacs init
+  (spacemacs-buffer/goto-buffer)
+  (setq initial-buffer-choice (lambda () (get-buffer spacemacs-buffer-name)))
   ;; mandatory dependencies
   ;; dash is required to prevent a package.el bug with f on 24.3.1
   (spacemacs/load-or-install-protected-package 'dash t)
@@ -126,10 +111,29 @@
   ;; Use C-u as scroll-up (must be set before actually loading evil)
   (spacemacs/load-or-install-protected-package 'evil t)
   (require 'core-keybindings)
+  ;; for convenience and user support
+  (unless (fboundp 'tool-bar-mode)
+    (spacemacs-buffer/message (concat "No graphical support detected, you won't be"
+                                      "able to launch a graphical instance of Emacs"
+                                      "with this build.")))
   ;; check for new version
   (if dotspacemacs-mode-line-unicode-symbols
       (setq-default spacemacs-version-check-lighter "[⇪]"))
   (spacemacs/set-new-version-lighter-mode-line-faces))
+
+(defun spacemacs//removes-gui-elements ()
+  "Remove the menu bar, tool bar and scroll bars."
+  ;; removes the GUI elements
+  (unless (eq window-system 'mac)
+    (when (and (fboundp 'menu-bar-mode) (not (eq menu-bar-mode -1)))
+      (menu-bar-mode -1)))
+  (when (and (fboundp 'scroll-bar-mode) (not (eq scroll-bar-mode -1)))
+    (scroll-bar-mode -1))
+  (when (and (fboundp 'tool-bar-mode) (not (eq tool-bar-mode -1)))
+    (tool-bar-mode -1))
+  ;; tooltips in echo-aera
+  (when (and (fboundp 'tooltip-mode) (not (eq tooltip-mode -1)))
+    (tooltip-mode -1)))
 
 (defun spacemacs/maybe-install-dotfile ()
   "Install the dotfile if it does not exist."
