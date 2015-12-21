@@ -23,7 +23,7 @@
 (require 'core-funcs)
 (require 'core-spacemacs-buffer)
 
-(defconst configuration-layer--refresh-package-timeout dotspacemacs-elpa-timeout
+(defvar configuration-layer--refresh-package-timeout dotspacemacs-elpa-timeout
   "Timeout in seconds to reach a package archive page.")
 
 (defconst configuration-layer-template-directory
@@ -147,8 +147,13 @@ the path for this layer.")
   "List of strings corresponding to category names. A category is a
 directory with a name starting with `+'.")
 
+(defvar update-packages-alist '()
+  "Used to collect information about rollback packages in the
+cache folder.")
+
 (defun configuration-layer/initialize ()
   "Initialize `package.el'."
+  (setq configuration-layer--refresh-package-timeout dotspacemacs-elpa-timeout)
   (configuration-layer//parse-command-line-arguments)
   (unless package--initialized
     (setq package-archives (configuration-layer//resolve-package-archives
@@ -699,7 +704,8 @@ path."
            (mapcar 'car
                    (object-assoc-list
                     :name configuration-layer--used-distant-packages))))
-         (noinst-count (length noinst-pkg-names)))
+         (noinst-count (length noinst-pkg-names))
+         installed-count)
     ;; installation
     (when noinst-pkg-names
       (spacemacs-buffer/append
@@ -1150,11 +1156,11 @@ to select one."
               (memq pkg-name configuration-layer--protected-packages))
     (if (ht-contains? dependencies pkg-name)
         (let ((parents (ht-get dependencies pkg-name)))
-          (reduce (lambda (x y) (and x y))
-                  (mapcar (lambda (p) (configuration-layer//is-package-orphan
-                                       p dist-pkgs dependencies))
-                          parents)
-                  :initial-value t))
+          (cl-reduce (lambda (x y) (and x y))
+                     (mapcar (lambda (p) (configuration-layer//is-package-orphan
+                                          p dist-pkgs dependencies))
+                             parents)
+                     :initial-value t))
       (not (object-assoc pkg-name :name dist-pkgs)))))
 
 (defun configuration-layer//get-package-directory (pkg-name)
@@ -1247,7 +1253,8 @@ to select one."
                    configuration-layer--used-distant-packages
                    implicit-packages
                    dependencies))
-         (orphans-count (length orphans)))
+         (orphans-count (length orphans))
+         deleted-count)
     ;; (message "dependencies: %s" dependencies)
     ;; (message "implicit: %s" implicit-packages)
     ;; (message "orphans: %s" orphans)

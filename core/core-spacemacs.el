@@ -60,10 +60,9 @@
   ;; packages.
   (setq-default evil-want-C-u-scroll t)
   (dotspacemacs/load-file)
+  (require 'core-configuration-layer)
   (dotspacemacs|call-func dotspacemacs/init "Calling dotfile init...")
   (dotspacemacs|call-func dotspacemacs/user-init "Calling dotfile user init...")
-  ;; initialize the configuration layer system
-  (require 'core-configuration-layer)
   (configuration-layer/initialize)
   ;; default theme
   (let ((default-theme (car dotspacemacs-themes)))
@@ -86,11 +85,15 @@
   (setq initial-buffer-choice (lambda () (get-buffer spacemacs-buffer-name)))
   ;; mandatory dependencies
   ;; dash is required to prevent a package.el bug with f on 24.3.1
-  (spacemacs/load-or-install-protected-package 'dash t)
-  (spacemacs/load-or-install-protected-package 's t)
+  ;; (spacemacs/load-or-install-protected-package 'dash t)
+  ;; (spacemacs/load-or-install-protected-package 's t)
+
+  ;; evil is required by bind-map
+  (spacemacs/load-or-install-protected-package 'evil t)
   (spacemacs/load-or-install-protected-package 'bind-map t)
   ;; bind-key is required by use-package
   (spacemacs/load-or-install-protected-package 'bind-key t)
+  (spacemacs/load-or-install-protected-package 'which-key t)
   (spacemacs/load-or-install-protected-package 'use-package t)
   (setq use-package-verbose init-file-debug)
   ;; package-build is required by quelpa
@@ -101,20 +104,15 @@
         quelpa-persistent-cache-file (expand-file-name "cache" quelpa-dir)
         quelpa-update-melpa-p nil)
   (spacemacs/load-or-install-protected-package 'quelpa t)
-  ;; inject use-package hooks for easy customization of
-  ;; stock package configuration
+  ;; inject use-package hooks for easy customization of stock package
+  ;; configuration
   (setq use-package-inject-hooks t)
-  ;; which-key
-  (spacemacs/load-or-install-protected-package 'which-key t)
-  ;; evil must be installed at the beginning of the
-  ;; boot sequence.
-  ;; Use C-u as scroll-up (must be set before actually loading evil)
-  (spacemacs/load-or-install-protected-package 'evil t)
   (require 'core-keybindings)
   ;; for convenience and user support
   (unless (fboundp 'tool-bar-mode)
-    (spacemacs-buffer/message (concat "No graphical support detected, you won't be"
-                                      "able to launch a graphical instance of Emacs"
+    (spacemacs-buffer/message (concat "No graphical support detected, "
+                                      "you won't be able to launch a "
+                                      "graphical instance of Emacs"
                                       "with this build.")))
   ;; check for new version
   (if dotspacemacs-mode-line-unicode-symbols

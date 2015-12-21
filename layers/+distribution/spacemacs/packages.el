@@ -586,11 +586,8 @@
 
 (defun spacemacs/init-evil-lisp-state ()
   (use-package evil-lisp-state
-    :init (setq evil-lisp-state-global t
-                ;; TODO work-around to be removed when the fix is available in
-                ;; MELPA
-                evil-lisp-state-leader (concat dotspacemacs-leader-key " k"))
-    :config (evil-lisp-state-leader (concat dotspacemacs-leader-key " k"))))
+    :init (setq evil-lisp-state-global t)
+    :config (spacemacs/set-leader-keys "k" evil-lisp-state-map)))
 
 (defun spacemacs/init-evil-mc ()
   (use-package evil-mc
@@ -1575,7 +1572,6 @@ Open junk file using helm, with `prefix-arg' search in junk files"
 (defun spacemacs/init-pcre2el ()
   (use-package pcre2el
     :defer t
-    :commands rxt-fontify-regexp-at-point
     :init
     (progn
       (spacemacs/declare-prefix "R" "pcre2el")
@@ -1596,8 +1592,7 @@ Open junk file using helm, with `prefix-arg' search in junk files"
         "Res" 'rxt-elisp-to-sre
         "Re'" 'rxt-elisp-to-strings
         "Ret" 'rxt-toggle-elisp-rx
-        "Rt"  'rxt-toggle-elisp-rx
-        "Rh"  'rxt-fontify-regexp-at-point))))
+        "Rt"  'rxt-toggle-elisp-rx))))
 
 (defun spacemacs/init-paradox ()
   (use-package paradox
@@ -1779,8 +1774,10 @@ Open junk file using helm, with `prefix-arg' search in junk files"
       (setq spaceline-org-clock-p nil)
 
       (defun spacemacs//evil-state-face ()
-        (let ((state (if (eq 'operator evil-state) evil-previous-state evil-state)))
-          (intern (format "spacemacs-%S-face" state))))
+        (if (bound-and-true-p evil-state)
+            (let ((state (if (eq 'operator evil-state) evil-previous-state evil-state)))
+              (intern (format "spacemacs-%S-face" state)))
+          'face-of-god))
       (setq spaceline-highlight-face-func 'spacemacs//evil-state-face)
 
       (let ((unicodep (dotspacemacs|symbol-value

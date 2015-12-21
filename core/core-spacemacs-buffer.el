@@ -54,7 +54,7 @@ version the release note it displayed")
   (evil-define-key 'motion spacemacs-buffer-mode-map (kbd "C-i") 'widget-forward)
   ;; motion state since this is a special mode
   (unless (eq dotspacemacs-editing-style 'emacs)
-    (add-to-list 'evil-motion-state-modes 'spacemacs-buffer-mode)))
+    (evil-set-initial-state 'spacemacs-buffer-mode 'motion)))
 
 (defun spacemacs-buffer/insert-banner-and-buttons ()
   "Choose a banner according to `dotspacemacs-startup-banner'and insert it
@@ -144,7 +144,7 @@ If ALL is non-nil then truly all banners can be selected."
            (size (image-size spec))
            (width (car size))
            (left-margin (floor (- spacemacs-buffer--banner-length width) 2)))
-      (beginning-of-buffer)
+      (goto-char (point-min))
       (insert "\n")
       (insert (make-string (- left-margin 1) ?\ ))
       (insert-image spec)
@@ -181,9 +181,9 @@ CAPTION is the title of the note.
 TAG-STRING is the label of the button for additional action.
 HELP-STRING is the help message of the button for additional action."
   (save-excursion
-    (beginning-of-buffer)
+    (goto-char (point-min))
     (search-forward "Search in Spacemacs\]")
-    (next-line)
+    (forward-line)
     (let* ((note (concat "\n" (spacemacs//render-framed-text file
                                                              spacemacs-buffer--banner-length
                                                              caption))))

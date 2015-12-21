@@ -220,7 +220,8 @@
       (defun evil-insert-state-cursor-hide ()
         (setq evil-insert-state-cursor '((hbar . 0))))
 
-      (evil-mode 1))
+      (unless (eq dotspacemacs-editing-style 'emacs)
+        (evil-mode 1)))
     :config
     (progn
       ;; bind function keys
@@ -239,14 +240,29 @@
       (define-key evil-window-map (kbd "<right>") 'evil-window-right)
       (define-key evil-window-map (kbd "<up>") 'evil-window-up)
       (define-key evil-window-map (kbd "<down>") 'evil-window-down)
-
       (spacemacs/set-leader-keys "re" 'evil-show-registers)
+      (define-key evil-visual-state-map (kbd "<escape>") 'keyboard-quit)
+      ;; motions keys for help buffers
+      (evil-define-key 'motion help-mode-map (kbd "<tab>") 'forward-button)
+      (evil-define-key 'motion help-mode-map (kbd "S-<tab>") 'backward-button)
+      (evil-define-key 'motion help-mode-map (kbd "]") 'help-go-forward)
+      (evil-define-key 'motion help-mode-map (kbd "gf") 'help-go-forward)
+      (evil-define-key 'motion help-mode-map (kbd "[") 'help-go-back)
+      (evil-define-key 'motion help-mode-map (kbd "gb") 'help-go-back)
+      (evil-define-key 'motion help-mode-map (kbd "gh") 'help-follow-symbol)
 
-      ;; After major mode has changed, reset evil-shift-width
-      (add-hook 'after-change-major-mode-hook 'spacemacs//set-evil-shift-width 'append)
+      ;; replace `dired-goto-file' with `helm-find-files', since `helm-find-files'
+      ;; can do the same thing and with fuzzy matching and other features.
+      (with-eval-after-load 'dired
+        (evil-define-key 'normal dired-mode-map "J" 'spacemacs/helm-find-files)
+        (define-key dired-mode-map "j" 'spacemacs/helm-find-files)
+        (evil-define-key 'normal dired-mode-map (kbd dotspacemacs-leader-key)
+          spacemacs-default-map))
 
       ;; It's better that the default value is too small than too big
       (setq-default evil-shift-width 2)
+      ;; After major mode has changed, reset evil-shift-width
+      (add-hook 'after-change-major-mode-hook 'spacemacs//set-evil-shift-width 'append)
 
       (defmacro evil-map (state key seq)
         "Map for a given STATE a KEY to a sequence SEQ of keys.
@@ -413,7 +429,8 @@ Example: (evil-map visual \"<\" \"<gv\")"
 (defun spacemacs-base/init-evil-escape ()
   (use-package evil-escape
     :init
-    (evil-escape-mode)
+    (unless (eq dotspacemacs-editing-style 'emacs)
+      (evil-escape-mode))
     :config
     (spacemacs|hide-lighter evil-escape-mode)))
 
@@ -988,9 +1005,7 @@ ARG non nil means that the editing style is `vim'."
         (holy-mode))
       (spacemacs|add-toggle holy-mode
         :status holy-mode
-        :on (progn (when (bound-and-true-p hybrid-mode)
-                     (hybrid-mode -1))
-                   (holy-mode))
+        :on (holy-mode)
         :off (holy-mode -1)
         :documentation "Globally toggle holy mode."
         :evil-leader "tEe")

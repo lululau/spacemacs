@@ -29,9 +29,10 @@
         :bindings
         "c"  'elfeed-db-compact
         "gr" 'elfeed-update
+        "gR" 'elfeed-search-update--force
+        "gu" 'elfeed-unjam
         "o"  'elfeed-load-opml
         "q"  'quit-window
-        "r"  'elfeed-search-update--force
         "w"  'elfeed-web-start
         "W"  'elfeed-web-stop)
       (evilified-state-evilify-map elfeed-show-mode-map

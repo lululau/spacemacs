@@ -175,7 +175,7 @@
    - [[Keeping the server alive][Keeping the server alive]]
    - [[Troubleshoot][Troubleshoot]]
      - [[Loading fails][Loading fails]]
-     - [[I have no file ~/.spacemacs][I have no file ~/.spacemacs]]
+     - [[Upgrading/Downgrading Emacs version][Upgrading/Downgrading Emacs version]]
  - [[Achievements][Achievements]]
    - [[Issues][Issues]]
    - [[Merged Pull Requests][Merged Pull Requests]]
@@ -672,6 +672,10 @@ in =evil-hybrid-state-map= keymap instead of =evil-insert-state-map=.
 
 Hybrid mode can be enabled by setting =dotspacemacs-editing-style= to =hybrid=.
 To switch between evil and hybrid mode use ~SPC t E y~ and ~M-m t E y~.
+
+The default state in hybrid mode can be changed by setting the variable
+=hybrid-mode-default-state= to a state value, the default is =normal=, set it
+to =hybrid= to start in hybrid insert state instead of normal state.
 
 ** Evilified modes
 Some buffers (such as Magit, for using git from within Emacs), are not for
@@ -2673,9 +2677,10 @@ errors should appear inline in the startup buffer. Spacemacs should still be
 usable, if it is not the case then restart Emacs with =emacs --debug-init= and
 open a [[https://github.com/syl20bnr/spacemacs/issues][Github issue]] with the backtrace.
 
-*** I have no file ~/.spacemacs
-You have to manually copy the =~/.emacs.d/core/templates/.spacemacs.template=
-file to =~/.spacemacs=
+*** Upgrading/Downgrading Emacs version
+To ensure that packages are correctly compiled for the new Emacs version you
+installed, be sure to run the interactive command =spacemacs/recompile-elpa=
+with ~SPC : spacemacs/recompile-elpa~.
 
 * Achievements
 ** Issues
