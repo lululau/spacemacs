@@ -17,6 +17,7 @@
 (require 'core-emacs-backports)
 (require 'core-release-management)
 (require 'core-auto-completion)
+(require 'core-display-init)
 (require 'core-themes-support)
 (require 'core-fonts-support)
 (require 'core-spacemacs-buffer)
@@ -76,10 +77,11 @@
     (setq-default spacemacs--cur-theme default-theme)
     (setq-default spacemacs--cycle-themes (cdr dotspacemacs-themes)))
   ;; font
-  (if (find-font (font-spec :name (car dotspacemacs-default-font)))
-      (spacemacs/set-default-font dotspacemacs-default-font)
-    (spacemacs-buffer/warning "Cannot find font \"%s\"!"
-                              (car dotspacemacs-default-font)))
+  (spacemacs|do-after-display-system-init
+   (if (find-font (font-spec :name (car dotspacemacs-default-font)))
+       (spacemacs/set-default-font dotspacemacs-default-font)
+     (spacemacs-buffer/warning "Cannot find font \"%s\"!"
+                               (car dotspacemacs-default-font))))
   ;; spacemacs init
   (spacemacs-buffer/goto-buffer)
   (setq initial-buffer-choice (lambda () (get-buffer spacemacs-buffer-name)))
@@ -158,7 +160,7 @@
    (lambda ()
      ;; Ultimate configuration decisions are given to the user who can defined
      ;; them in his/her ~/.spacemacs file
-     ;; TODO remove support for dotspacemacs/config in 0.105
+     ;; TODO remove support for dotspacemacs/config in 0.106
      (if (fboundp 'dotspacemacs/user-config)
          (dotspacemacs|call-func dotspacemacs/user-config
                                  "Calling dotfile user config...")

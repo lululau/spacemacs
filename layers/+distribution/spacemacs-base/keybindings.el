@@ -124,7 +124,7 @@ Ensure that helm is required before calling FUNC."
   "fo" 'spacemacs/open-in-external-app
   "fR" 'spacemacs/rename-current-buffer-file
   "fS" 'evil-write-all
-  "fs" 'spacemacs/write-file
+  "fs" 'save-buffer
   "fvd" 'add-dir-local-variable
   "fvf" 'add-file-local-variable
   "fvp" 'add-file-local-variable-prop-line
@@ -553,15 +553,14 @@ otherwise it is scaled down."
 (defun spacemacs/toggle-transparency ()
   "Toggle between transparent or opaque display."
   (interactive)
-  ;; Define alpha if it's nil
-  (if (eq (frame-parameter (selected-frame) 'alpha) nil)
-      (set-frame-parameter (selected-frame) 'alpha '(100 100)))
-  ;; Do the actual toggle
-  (if (/= (cadr (frame-parameter (selected-frame) 'alpha)) 100)
-      (set-frame-parameter (selected-frame) 'alpha '(100 100))
-    (set-frame-parameter (selected-frame) 'alpha
-                         (list dotspacemacs-active-transparency
-                               dotspacemacs-inactive-transparency)))
+  (let* ((frame (selected-frame))
+         (alpha (frame-parameter frame 'alpha)))
+    (set-frame-parameter
+     frame 'alpha
+     (if (or (null alpha) (= (cdr-safe alpha) 100))
+         (cons dotspacemacs-active-transparency
+               dotspacemacs-inactive-transparency)
+       '(100 . 100))))
   ;; Immediately enter the micro-state, but also keep toggle
   ;; accessible from helm-spacemacs
   (spacemacs/scale-transparency-micro-state))
@@ -572,7 +571,8 @@ otherwise it is scaled down."
   (let* ((current-alpha (car (frame-parameter (selected-frame) 'alpha)))
          (increased-alpha (- current-alpha 5)))
     (when (>= increased-alpha frame-alpha-lower-limit)
-      (set-frame-parameter (selected-frame) 'alpha (list increased-alpha increased-alpha)))))
+      (set-frame-parameter (selected-frame) 'alpha
+                           (cons increased-alpha increased-alpha)))))
 
 (defun spacemacs/decrease-transparency ()
   "Decrease transparency of current frame."
@@ -580,7 +580,8 @@ otherwise it is scaled down."
   (let* ((current-alpha (car (frame-parameter (selected-frame) 'alpha)))
          (decreased-alpha (+ current-alpha 5)))
     (when (<= decreased-alpha 100)
-      (set-frame-parameter (selected-frame) 'alpha (list decreased-alpha decreased-alpha)))))
+      (set-frame-parameter (selected-frame) 'alpha
+                           (cons decreased-alpha decreased-alpha)))))
 
 (spacemacs|define-micro-state scale-transparency
   :doc "[+] increase [-] decrease [T] toggle transparency [q] quit"

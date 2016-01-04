@@ -593,7 +593,7 @@ bindings live. There are two related commands from this package which are used
 as follows.
 
 #+BEGIN_SRC emacs-lisp
-(evil-leader/set-key "C-]" 'forward-char)
+(spacemacs/set-leader-keys "C-]" 'forward-char)
 (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode "C-]" 'forward-char)
 #+END_SRC
 
@@ -609,7 +609,7 @@ like ~SPC ac~ for =calc-dispatch=. Nesting bindings is easy.
 
 #+BEGIN_SRC emacs-lisp
 (spacemacs/declare-prefix "]" "bracket-prefix")
-(evil-leader/set-key "]]" 'double-bracket-command)
+(spacemacs/set-leader-keys "]]" 'double-bracket-command)
 #+END_SRC
 
 The first line declares ~SPC ]~ to be a prefix and the second binds the key
@@ -929,7 +929,7 @@ and ~T~):
 | ~SPC T T~   | toggle frame transparency and enter transparency micro-state |
 
 *Note*: These toggles are all available via the =helm-spacemacs= interface (press
-~SPC f e h~ to display the =helm-spacemacs= buffer).
+~SPC h SPC~ to display the =helm-spacemacs= buffer).
 
 **** Global line numbers
 Line numbers can be toggled on in all =prog-mode= and =text-mode= buffers by
@@ -1190,7 +1190,7 @@ Additional text objects are defined in Spacemacs:
 ~SPC o~ and ~SPC m o~ are reserved for the user. Setting key bindings behind
 these is *guaranteed* to never conflict with Spacemacs default key bindings.
 
-*Example:* Put =(evil-leader/set-key "oc" 'org-capture)= inside
+*Example:* Put =(spacemacs/set-leader-keys "oc" 'org-capture)= inside
 =dotspacemacs/user-config= in your =~/.spacemacs= file, to be able to use ~SPC o
 c~ to run org mode capture.
 
@@ -1613,13 +1613,10 @@ navigate between =Emacs= and Spacemacs specific files.
 | ~SPC f e c~ | open =ido= in the =contrib= folder                                 |
 | ~SPC f e d~ | open the spacemacs dotfile (=~/.spacemacs=)                        |
 | ~SPC f e D~ | open =ediff= buffer of =~/.spacemacs= and =.spacemacs.template=    |
-| ~SPC f e h~ | discover Spacemacs documentation, layers and packages using =helm= |
 | ~SPC f e f~ | discover the =FAQ= using =helm=                                    |
 | ~SPC f e i~ | open the all mighty =init.el=                                      |
 | ~SPC f e R~ | resync the dotfile with spacemacs                                  |
 | ~SPC f e v~ | display and copy the spacemacs version                             |
-
-Additionally, ~SPC h SPC~ is a alias for ~SPC f e h~.
 
 **** Browsing files with Helm
 In =vim= and  =hybrid= styles, Spacemacs remap the navigation in Helm find-files
