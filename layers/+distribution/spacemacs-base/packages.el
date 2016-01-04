@@ -542,7 +542,8 @@ Removes the automatic guessing of the initial value based on thing at point. "
             helm-split-window-in-side-p t
             helm-always-two-windows t
             helm-echo-input-in-header-line t
-            helm-imenu-execute-action-at-once-if-one nil)
+            helm-imenu-execute-action-at-once-if-one nil
+            helm-org-format-outline-path t)
 
       ;; hide minibuffer in Helm session, since we use the header line already
       (defun helm-hide-minibuffer-maybe ()
@@ -590,10 +591,9 @@ Removes the automatic guessing of the initial value based on thing at point. "
                           (helm-read-file-name
                            "Search in file(s): "
                            :marked-candidates t
-                           :preselect (and helm-do-grep-preselect-candidate
-                                           (if helm-ff-transformer-show-only-basename
-                                               (helm-basename preselection)
-                                             preselection))))))
+                           :preselect (if helm-ff-transformer-show-only-basename
+                                          (helm-basename preselection)
+                                        preselection)))))
           (helm-do-grep-1 targets nil nil nil nil use-region-or-symbol-p)))
 
       (defun spacemacs/helm-file-do-grep ()

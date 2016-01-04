@@ -7,7 +7,7 @@
    - [[Discoverable][Discoverable]]
    - [[Consistent][Consistent]]
    - [[Crowd-Configured][Crowd-Configured]]
- - [[Goals][Goals]]
+ - [[Highlighted feature][Highlighted feature]]
  - [[Screenshots][Screenshots]]
  - [[Who can benefit from this?][Who can benefit from this?]]
  - [[Update and Rollback][Update and Rollback]]
@@ -186,102 +186,77 @@
  - [[Thank you][Thank you]]
 
 * Core Pillars
-Four core pillars: Mnemonic, Discoverability, Consistency, "Crowd-Configured".
+Four core pillars: Mnemonic, Discoverable, Consistent and "Crowd-Configured".
 
-If any of these core pillars is violated open an issue and we'll fix it.
+If any of these core pillars is violated open an issue and we'll try our best
+to fix it.
 
 ** Mnemonic
-Spacemacs organizes key bindings by mnemonic namespaces as much as possible.
-If you are looking for commands to operate on your buffer, they are right under
-~SPC b~, if you want to operate on your project, then it is ~SPC p~, etc...
+Key bindings are organized using mnemonic prefixes like ~b~ for buffer, ~p~ for
+project, ~s~ for search, ~h~ for help etc...
 
 ** Discoverable
-Spacemacs comes with a dedicated major mode =spacemacs-buffer-mode=. Its goal is
-to give useful feedbacks and easily perform maintenance tasks.
-
-It also comes with dedicated [[https://github.com/emacs-helm/helm][helm]] sources to quickly find layers, packages and
-more.
-
-[[https://github.com/justbur/emacs-which-key][which-key]] is enabled by default, it will display all the available key bindings
-in a dedicated popup buffer.
+Innovative real-time display of available key bindings. Simple query
+system to quickly find available layers, packages and more.
 
 ** Consistent
-Similar functionalities should have the same key binding no matter which major
-is currently active. For instance if you are looking for the definition of a
-function, the binding is ~SPC m g g~, =m= for =major mode= and =g g= for =go to
-thing at point=. No matter what is the major mode it is the same binding to
-perform this action.
-
-This is also true for the documentation, each configuration layer comes with an
-associated =README.org= file with the same base layout.
-
-The consistency core pillar is supported by a convention file: [[file:CONVENTIONS.org][CONVENTIONS]]
+Similar functionalities have the same key binding everywhere thanks to a
+clearly defined set of conventions. Documentation is mandatory for any layer
+that ships with Spacemacs.
 
 ** Crowd-Configured
-By defining an very light structure called =configuration layer= which is easy
-to understand, Spacemacs makes it easy to contribute additional support.
+Community-driven configuration provides curated packages tuned by power users
+and bugs are fixed quickly.
 
-The conventions in [[file:CONVENTIONS.org][CONVENTIONS]] make it easy to get
-the spacemacs way and keep consistency even if there are a lot of contributions.
+* Highlighted feature
+- *Bring the efficiency of modal editing* to the powerful Emacs lisp platform.
+  Modal UX is optional and Spacemacs can be used with only Emacs key bindings.
 
-=Crowd-configuration= is the most powerful pillar of Spacemacs. Anybody can
-submit upstream improvements to configuration layers or a whole new one. Any
-user can easily and directly use this layer by adding it to a list in a dotfile.
-It is even possible to exclude /any/ unwanted packages.
+- Integrate nicely with =Evil= states (=Vim= modes).
 
-* Goals
--  *Bring the power of modal editing* to the powerful Emacs editing platform.
+- *Keep your fingers on the home row* for quicker editing with support for
+  QWERTY and BEPO layouts.
 
--  Integrate nicely with =Evil= states (=Vim= modes): Spacemacs tries to *keep
-   your fingers on the home row* as much as possible, no matter the mode you are
-   in.
+- *Minimalistic and nice graphical UI*, keep your available screen space for
+  what matters: your text files.
 
--  *Crowd-configured*: Contribute easily your improvements and new configuration
-   layers.
+- *Fast boot time*, packages and configuration are lazy-loaded as much as
+  possible.
 
--  *Minimalistic and nice graphical UI*, keep your available screen space for
-   what matters: your text files.
+- *Lower the risk of RSI* by heavily using the space bar instead of modifiers.
+  If you have issues with your thumbs you can still use Spacemacs using
+  modifiers.
 
--  *Mnemonic and consistent key bindings* which should be easier to learn and
-   remember and be the same in all major modes.
+- Contribute easily your improvements and new configuration layers.
 
--  *Fast boot time*, everything is lazy-loaded.
-
--  *Lower the risk of RSI* by heavily using the space bar instead of modifiers.
-
--  Hopefully, if it's not already the case:
-
-    Ɛ>Ɛ>Ɛ> *make you love modal editing!* <3<3<3
+- *Very active and helpful community* on =Gitter= and =IRC=
+  (via Gitter IRC bridge)
 
 * Screenshots
-/Startup/ [[file:img/spacemacs-startup.png]]
 
 /Python/ [[file:img/spacemacs-python.png]]
-
-/Terminal (urxvt)/ [[file:img/spacemacs-urxvt.png]]
 
 *Note*: Even though screenshots are updated frequently, Spacemacs is evolving
 quickly and the screenshots may not reflect exactly the current state of the
 project.
 
 * Who can benefit from this?
-Spacemacs is first intended to be used by *Vim users* who want to go to the
-next level by using Emacs. There is a [[./VIMUSERS.org][guide]] for these users to supplement the
-documentation.
+- Spacemacs was initially intended to be used by *Vim users* who want to go to
+  the next level by using Emacs (see [[./VIMUSERS.org][guide]] for Vimmers). But it is now
+  perfectly *usable by non Vim users* by choosing the =emacs= editing style.
 
-It is also a good fit for people wanting to *lower the [[http://en.wikipedia.org/wiki/Repetitive_strain_injury][risk of RSI]]* induced by
-the default Emacs key bindings (this is an assumption, there are no official
-studies to prove this).
+- It is also a good fit for people wanting to *lower the [[http://en.wikipedia.org/wiki/Repetitive_strain_injury][risk of RSI]]* induced by
+  the default Emacs key bindings (this is an assumption, there are no official
+  studies to prove this!). If you have issues using your thumbs you can still
+  use the =emacs= editing style which puts the leader key on a modifier
+  combination.
 
-Emacs users wanting to learn *a different way to edit files* or wanting to learn
-Vim key bindings.
+- Emacs users wanting to learn *a different way to edit files* or wanting to
+  learn Vim key bindings or even wanting to mix both editing styles by setting
+  their style to =hybrid=.
 
-Emacs users who want a neatly organized configuration to go along with the
-default Emacs keybindings (Yes, Spacemacs can be used without Vim keybindings).
-
-As a side note, if you are a programmer and you don't know Vim key bindings yet,
-I deeply recommend you to learn the basics as recommended in [[http://sachachua.com/blog/2013/05/how-to-learn-emacs-a-hand-drawn-one-pager-for-beginners/][Sacha Chua's
-one-page guide]] about how to learn Emacs.
+- Emacs users wanting a simple but deep configuration system that greatly
+  *lower the risk of .emacs bankruptcy*.
 
 * Update and Rollback
 ** Update Spacemacs repository
@@ -363,7 +338,7 @@ Where:
 
 =Packages= are =ELPA= packages which can be installed from an =ELPA= compliant
 repository, local packages in a layer's =local= folder, or packages that can be
-installed from an online source using =[[https://github.com/quelpa/quelpa][quelpa]]=.
+installed from an online source using [[https://github.com/quelpa/quelpa][quelpa]].
 
 ** Packages
 *** Within a layer
@@ -1485,11 +1460,11 @@ Windows manipulation commands (start with ~w~):
 | ~SPC w p m~            | open messages buffer in a popup window                                      |
 | ~SPC w p p~            | close the current sticky popup window                                       |
 | ~SPC w R~              | rotate windows clockwise                                                    |
-| ~SPC w s~ or ~SPC w /~ | horizontal split                                                            |
+| ~SPC w s~ or ~SPC w -~ | horizontal split                                                            |
 | ~SPC w S~              | horizontal split and focus new window                                       |
 | ~SPC w u~              | undo window layout (used to effectively undo a closed window)               |
 | ~SPC w U~              | redo window layout                                                          |
-| ~SPC w v~ or ~SPC w -~ | vertical split                                                              |
+| ~SPC w v~ or ~SPC w /~ | vertical split                                                              |
 | ~SPC w V~              | vertical split and focus new window                                         |
 | ~SPC w w~              | cycle and focus between windows                                             |
 | ~SPC w SPC~            | select window using [[https://github.com/abo-abo/ace-window][ace-window]]                                              |
@@ -1513,8 +1488,8 @@ window resizing.
 | ~7~           | go to window number 7                                         |
 | ~8~           | go to window number 8                                         |
 | ~9~           | go to window number 9                                         |
-| ~-~           | vertical split                                                |
-| ~/~           | horizontal split                                              |
+| ~/~           | vertical split                                                |
+| ~-~           | horizontal split                                              |
 | ~[~           | shrink window horizontally                                    |
 | ~]~           | enlarge window horizontally                                   |
 | ~{~           | shrink window vertically                                      |
