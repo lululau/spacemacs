@@ -241,7 +241,7 @@
   (spacemacs|use-package-add-hook magit :post-config BODY)
   :config
   (progn
-    (bepo/evil-correct-keys 'motion magit-mode-map
+    (bepo/evil-correct-keys evil-magit-state magit-mode-map
       "j"
       "k"
       "C-j"
