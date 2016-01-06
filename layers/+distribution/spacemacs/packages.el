@@ -1810,8 +1810,7 @@ Open junk file using helm, with `prefix-arg' search in junk files"
                                (format (concat "Do you want to update to the newest "
                                                "version %s ?") spacemacs-new-version))
                               (progn
-                                (spacemacs/switch-to-version spacemacs-new-version)
-                                (setq spacemacs-mode-line-new-version-lighterp nil))
+                                (spacemacs/switch-to-version spacemacs-new-version))
                             (message "Update aborted."))))
                       map)))
 
@@ -1819,8 +1818,7 @@ Open junk file using helm, with `prefix-arg' search in junk files"
         (spacemacs-powerline-new-version
          (spacemacs/get-new-version-lighter-face
           spacemacs-version spacemacs-new-version))
-        :when (and spacemacs-new-version
-                   spacemacs-mode-line-new-version-lighterp))
+        :when spacemacs-new-version)
 
       (spaceline-spacemacs-theme '(new-version :when active))
       (spaceline-helm-mode t)
