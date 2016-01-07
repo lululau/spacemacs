@@ -13,6 +13,8 @@
 (defconst emacs-start-time (current-time))
 
 (require 'subr-x nil 'noerror)
+(require 'core-debug)
+(require 'core-command-line)
 (require 'core-dotspacemacs)
 (require 'core-emacs-backports)
 (require 'core-release-management)
@@ -49,6 +51,7 @@
 
 (defun spacemacs/init ()
   "Perform startup initialization."
+  (when spacemacs-debugp (spacemacs/init-debug))
   ;; silence ad-handle-definition about advised functions getting redefined
   (setq ad-redefinition-action 'accept)
   ;; this is for a smoother UX at startup (i.e. less graphical glitches)
@@ -83,12 +86,16 @@
      (spacemacs-buffer/warning "Cannot find font \"%s\"!"
                                (car dotspacemacs-default-font))))
   ;; spacemacs init
+  (setq inhibit-startup-screen t)
   (spacemacs-buffer/goto-buffer)
-  ;; explicitly recreate the home buffer for the first GUI client
-  (spacemacs|do-after-display-system-init
-   (kill-buffer (get-buffer spacemacs-buffer-name))
-   (spacemacs-buffer/goto-buffer))
-  (setq initial-buffer-choice (lambda () (get-buffer spacemacs-buffer-name)))
+  (unless (display-graphic-p)
+    ;; explicitly recreate the home buffer for the first GUI client
+    ;; in order to correctly display the logo
+    (spacemacs|do-after-display-system-init
+     (kill-buffer (get-buffer spacemacs-buffer-name))
+     (spacemacs-buffer/goto-buffer)))
+  (setq initial-buffer-choice nil)
+  (setq inhibit-startup-screen t)
   ;; mandatory dependencies
   ;; dash is required to prevent a package.el bug with f on 24.3.1
   ;; (spacemacs/load-or-install-protected-package 'dash t)
