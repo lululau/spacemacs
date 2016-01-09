@@ -391,15 +391,17 @@
 (defun spacemacs/init-avy ()
   (use-package avy
     :defer t
-    :commands (spacemacs/avy-open-url)
+    :commands (spacemacs/avy-open-url avy-pop-mark)
     :init
     (progn
       (setq avy-all-windows 'all-frames)
       (setq avy-background t)
       (spacemacs/set-leader-keys
-        "SPC" 'avy-goto-word-or-subword-1
-        "y" 'avy-goto-line
-        "xo" 'spacemacs/avy-open-url))
+        "jc" 'evil-avy-goto-char-2
+        "jl" 'evil-avy-goto-line
+        "ju" 'avy-pop-mark
+        "jU" 'spacemacs/avy-goto-url
+        "jw" 'evil-avy-goto-word-or-subword-1))
     :config
     (progn
       (defun spacemacs/avy-goto-url()
@@ -411,9 +413,7 @@
         (interactive)
         (save-excursion
           (spacemacs/avy-goto-url)
-          (browse-url-at-point)))
-      (spacemacs/set-leader-keys "`" 'avy-pop-mark))
-      ))
+          (browse-url-at-point))))))
 
 (defun spacemacs/init-buffer-move ()
   (use-package buffer-move
@@ -588,8 +588,10 @@
                   (if evil-jumper-mode
                       (progn
                         (define-key evil-motion-state-map (kbd "TAB") 'evil-jumper/forward)
+                        (define-key evil-motion-state-map (kbd "<C-i>") 'evil-jumper/forward)
                         (define-key evil-motion-state-map (kbd "C-o") 'evil-jumper/backward))
                     (define-key evil-motion-state-map (kbd "TAB") 'evil-jump-forward)
+                    (define-key evil-motion-state-map (kbd "<C-i>") 'evil-jump-forward)
                     (define-key evil-motion-state-map (kbd "C-o") 'evil-jump-backward))))
       (evil-jumper-mode t)
       (setcdr evil-jumper-mode-map nil))))
@@ -1726,11 +1728,10 @@ Open junk file using helm, with `prefix-arg' search in junk files"
     :config
     (progn
       (setq scroll-margin 5)
-      ;; add hooks here only for emacs built-in packages
+      ;; add hooks here only for emacs built-in packages that are not owned
+      ;; by a layer.
       (spacemacs/add-to-hooks 'spacemacs//unset-scroll-margin
-                              '(messages-buffer-mode-hook
-                                comint-mode-hook
-                                term-mode-hook))))
+                              '(messages-buffer-mode-hook))))
 
   (unless dotspacemacs-smooth-scrolling
     ;; deactivate smooth-scrolling advices

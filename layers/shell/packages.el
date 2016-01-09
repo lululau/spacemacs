@@ -19,8 +19,10 @@
         xterm-color
         shell
         shell-pop
+        smooth-scrolling
         term
         eshell
+        eshell-z
         eshell-prompt-extras
         esh-help
         magit
@@ -153,6 +155,13 @@ is achieved by adding the relevant text properties."
       (evil-define-key 'insert eshell-mode-map
         (kbd "C-k") 'eshell-previous-matching-input-from-input
         (kbd "C-j") 'eshell-next-matching-input-from-input))))
+
+(defun shell/init-eshell-z ()
+  (use-package eshell-z
+    :defer t
+    :init
+    (with-eval-after-load 'eshell
+      (require 'eshell-z))))
 
 (defun shell/init-esh-help ()
   (use-package esh-help
@@ -312,6 +321,12 @@ is achieved by adding the relevant text properties."
         "asm" 'shell-pop-multiterm
         "ast" 'shell-pop-ansi-term
         "asT" 'shell-pop-term))))
+
+(defun shell/post-init-smooth-scrolling ()
+  (spacemacs/add-to-hooks 'spacemacs//unset-scroll-margin
+                          '(eshell-mode-hook
+                            comint-mode-hook
+                            term-mode-hook)))
 
 (defun shell/init-term ()
   (defun term-send-tab ()

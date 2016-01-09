@@ -1,0 +1,65 @@
+-*- mode: org -*-
+
+This file containes the change log for the next major version of Spacemacs.
+
+* Release 0.106.x
+** 0.106.0 (no date)
+*** IMPORTANT: Breaking changes
+- Key binding ~SPC :~ acting as M-x as been replaced by ~SPC SPC~.
+  If you want to revert to the old ~SPC :~ key binding set the new
+  variable =dotspacemacs-emacs-command-key= to "SPC".
+- Key bindings ~SPC j h~ and ~SPC j l~ have been moved to ~SPC j 0~ and
+  ~SPC j $~ respectively.
+*** Dotfile changes
+- The variable =dotspacemacs-command-key= has been renamed to
+  =dotspacemacs-emacs-command-key= (the old name is still valid though).
+- New variable =dotspacemacs-emacs-command-key= which is the key to
+  press after the leader key to execute =M-x=.
+*** Distribution layer changes
+- Command prefix ~SPC j~ is now also for =jumping=, introduced key bindings are:
+  - ~SPC j 0~ to go to the beginning of line (and set a mark at the previous location in the line)
+  - ~SPC j $~ to go to the end of line (and set a mark at the previous location in the line)
+  - ~SPC j b~ to jump to a bookmark
+  - ~SPC j c~ to jump to a character in the buffer (works as an evil motion)
+  - ~SPC j d~ to jump to a listing of the current directory
+  - ~SPC j D~ to jump to a listing of the current directory (other window)
+  - ~SPC j f~ to jump to the definition of the function under the point
+  - ~SPC j i~ to jump to a definition in buffer (imenu)
+  - ~SPC j I~ to jump to a definition in any buffer (imenu)
+  - ~SPC j k~ to jump to next line and indent it using auto-indent rules
+  - ~SPC j l~ to jump to a line with avy (works as an evil motion)
+  - ~SPC j u~ to undo a jump (go back to previous location)
+  - ~SPC j U~ to jump to a URL in the current buffer
+  - ~SPC j v~ to jump to the definition/declaration of the variable under the point
+  - ~SPC j w~ to jump to a word in the current buffer (works as an evil motion)
+  (thanks to justbur)
+*** Layer changes
+**** Ansible
+- Change key binding ~SPC m a ?~ to ~SPC m h a~
+**** Auto-completion
+- New layer variable =auto-completion-complete-with-key-sequence-delay= to
+  set the delay in second between the keys of sequence used to select
+  the auto-completion candidate (thanks to MadAnd)
+**** CSharp
+- New key bindings
+  - ~SPC m g c~ to go to member in current file
+  - ~SPC m g I~ to find implementations using ido
+  - ~SPC m g U~ to find usages of symbol under cursor using ido
+  - ~SPC m r M~ to rename symbol under cursor interactively
+  (thanks to retran)
+**** Javascript
+- New layer variable =javascript-disable-tern-port-files=, when non nil
+  tern port files are not created. Default value is nil. (thanks to mijoharas)
+**** mu4e
+- Add =mu4e-maildirs-extension= package (thanks to choppsv1)
+**** Python
+- New key bindings to manage virtual environments:
+  - ~SPC m V a~ to activate a virtual environment in any directory
+  - ~SPC m V d~ to deactivate the active virtual environment
+  - ~SPC m V w~ to work on virtual environment in ~WORKON_HOME~
+  (thanks to cpaulik)
+**** Shell
+- New =eshell-z= package (thanks to CestDiego)
+*** Other fixes and improvements
+- Typos and documentation improvements (thanks to cpaulik, TheBB)
+

@@ -40,7 +40,10 @@ version the release note it displayed")
     map)
   "Keymap for spacemacs buffer mode.")
 
-(define-derived-mode spacemacs-buffer-mode special-mode "Spacemacs buffer"
+(with-eval-after-load 'evil
+  (evil-make-overriding-map spacemacs-buffer-mode-map 'motion))
+
+(define-derived-mode spacemacs-buffer-mode fundamental-mode "Spacemacs buffer"
   "Spacemacs major mode for startup screen.
 
 \\<spacemacs-buffer-mode-map>
@@ -48,7 +51,8 @@ version the release note it displayed")
   :group 'spacemacs
   :syntax-table nil
   :abbrev-table nil
-  (setq truncate-lines t)
+  (setq buffer-read-only t
+        truncate-lines t)
   (page-break-lines-mode)
   ;; needed to make tab work correctly in terminal
   (evil-define-key 'motion spacemacs-buffer-mode-map (kbd "C-i") 'widget-forward)
