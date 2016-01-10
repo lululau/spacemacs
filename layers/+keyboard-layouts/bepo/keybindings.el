@@ -24,7 +24,7 @@
       "wC" 'evil-window-move-far-left
       "wL" 'ace-delete-window
       "wQ" 'ace-delete-window)
-    (setq aw-keys '(?t ?e ?s ?i ?r ?u ?n ?a ?c ?,))))
+    (setq aw-keys '(?t ?e ?s ?i ?r ?u ?n ?a))))
 
 (bepo|config avy
   :description
@@ -233,6 +233,20 @@
     ;; HACK: Forced to correct wrong behaviour
     (bepo/set-in-state helm-generic-files-map "C-s" 'helm-previous-line)
     (bepo/set-in-state helm-generic-files-map "C-k" 'helm-ff-run-grep)))
+
+(bepo|config ivy
+  :description
+  "Remap `ivy' bindings."
+  :loader
+  (spacemacs|use-package-add-hook ivy :post-config BODY)
+  :config
+  (progn
+    (bepo/correct-keys ivy-minibuffer-map
+      "C-h"
+      "C-j"
+      "C-k"
+      "C-l"
+      )))
 
 (bepo|config magit
   :description
