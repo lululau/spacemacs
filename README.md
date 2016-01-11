@@ -44,6 +44,7 @@
     - [Manual update (on master branch)](#manual-update-on-master-branch)
     - [On develop branch](#on-develop-branch)
     - [Revert to a specific version](#revert-to-a-specific-version)
+- [Quotes](#quotes)
 - [Contributions](#contributions)
 - [Communities](#communities)
 - [License](#license)
@@ -199,11 +200,14 @@ For efficient searches we recommend to install `pt` ([the platinum searcher][]).
 
 3. Launch Emacs. Spacemacs will automatically install the packages it requires.
    If you get an error regarding package downloads then you may try to disable
-   HTTPS protocol by starting Emacs with
+   the HTTPS protocol by starting Emacs with
 
    ```sh
    emacs --insecure
    ```
+
+   You may wish to clear out your `.emacs.d/elpa` directory before doing this,
+   so that any corrupted packages you may have downloaded will be reinstalled.
 
 4. Restart Emacs to complete the installation.
 
@@ -271,6 +275,12 @@ branch, for instance to revert to the last `0.103`:
 **After you update, either manually, or automatically, you are advised to update
   your packages by clicking the `[Update Packages]` button on the Spacemacs Home
   Buffer.**
+
+# Quotes
+
+[Quote][quote01] by [ashnur](https://github.com/ashnur):
+
+    «I feel that spacemacs is an aircraft carrier and I am playing table tennis on the deck as a freerider.»
 
 # Contributions
 
@@ -354,3 +364,4 @@ Thank you!
 [icon-repository]: https://github.com/nashamri/spacemacs-logo
 [Stack Exchange]: http://emacs.stackexchange.com/questions/tagged/spacemacs
 [Reddit]: https://www.reddit.com/r/spacemacs
+[quote01]: https://gitter.im/syl20bnr/spacemacs?at=568e627a0cdaaa62045a7df6

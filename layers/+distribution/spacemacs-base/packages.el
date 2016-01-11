@@ -485,10 +485,8 @@ Example: (evil-map visual \"<\" \"<gv\")"
 (defun spacemacs-base/init-hl-todo ()
   (use-package hl-todo
     :defer t
-    :init
-    (progn
-      (add-hook 'text-mode-hook 'hl-todo-mode)
-      (add-hook 'prog-mode-hook 'hl-todo-mode))))
+    :init (spacemacs/add-to-hooks 'hl-todo-mode '(text-mode-hook
+                                                  prog-mode-hook))))
 
 (defun spacemacs-base/init-hs-minor-mode ()
   ;; required for evil folding
@@ -968,6 +966,8 @@ Example: (evil-map visual \"<\" \"<gv\")"
                ("spacemacs/default-pop-shell" . "open shell")
                ("spacemacs/helm-project-smart-do-search-region-or-symbol" . "smart search w/input")
                ("spacemacs/helm-project-smart-do-search" . "smart search")
+               ("spacemacs/search-project-auto-region-or-symbol" . "search project w/input")
+               ("spacemacs/search-project-auto" . "search project")
                ("helm-descbinds" . "show keybindings")
                ("sp-split-sexp" . "split sexp")
                ("avy-goto-line" . "avy line")

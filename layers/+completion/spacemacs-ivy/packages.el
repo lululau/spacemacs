@@ -69,7 +69,9 @@ that directory."
                                  (executable-find tool))
                         (throw 'tool tool)))
                     (throw 'tool "grep"))))
-      (setq counsel--git-grep-dir (or initial-directory default-directory))
+      (setq counsel--git-grep-dir
+            (or initial-directory
+                (read-directory-name "Start from directory: ")))
       (ivy-read
        (format "%s from [%s]: "
                tool
@@ -192,6 +194,8 @@ Helm hack."
         ;; jump
         ;; projects
         "pp"  'projectile-switch-project
+        ;; register/ring
+        "ry"  'counsel-yank-pop
         ;; jumping
         "sj"  'counsel-imenu
         ;; themes
@@ -201,8 +205,8 @@ Helm hack."
         "*"   'spacemacs/search-project-auto-region-or-symbol
         "sf"  'spacemacs/search-auto
         "sF"  'spacemacs/search-auto-region-or-symbol
-        "sp"  'spacemacs/search-project
-        "sP"  'spacemacs/search-project-region-or-symbol
+        "sp"  'spacemacs/search-project-auto
+        "sP"  'spacemacs/search-project-auto-region-or-symbol
         "saf" 'spacemacs/search-ag
         "saF" 'spacemacs/search-ag-region-or-symbol
         "sap" 'spacemacs/search-project-ag
@@ -235,7 +239,8 @@ Helm hack."
         "fr" 'ivy-recentf
         "ir" 'ivy-resume
         "bb" 'ivy-switch-buffer)
-      (setq ivy-height 15)
+      (setq ivy-height 15
+            ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
       (with-eval-after-load 'recentf
         ;; merge recentf and bookmarks into buffer switching. If we set this
         ;; before recentf loads, then ivy-mode loads recentf for us,
