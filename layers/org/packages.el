@@ -1,7 +1,6 @@
 ;;; packages.el --- Org Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2014 Sylvain Benner
-;; Copyright (c) 2014-2015 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -20,6 +19,7 @@
     flyspell
     gnuplot
     htmlize
+    mu4e
     ;; org and org-agenda are installed by `org-plus-contrib'
     (org :location built-in)
     (org-agenda :location built-in)
@@ -74,6 +74,11 @@
     :init (spacemacs/set-leader-keys-for-major-mode 'org-mode
             "tp" 'org-plot/gnuplot)))
 
+(defun org/pre-init-mu4e ()
+  ;; Load org-mu4e when mu4e is actually loaded
+  (spacemacs|use-package-add-hook mu4e
+    :post-config (require 'org-mu4e)))
+
 ;; dummy init function to force installation of `org-plus-contrib'
 (defun org/init-org-plus-contrib ())
 
@@ -99,7 +104,10 @@
             (concat spacemacs-cache-directory ".org-id-locations")
             org-log-done t
             org-startup-with-inline-images t
-            org-src-fontify-natively t)
+            org-src-fontify-natively t
+            ;; this is consistent with the value of
+            ;; `helm-org-headings-max-depth'.
+            org-imenu-depth 8)
 
       (with-eval-after-load 'org-indent
         (spacemacs|hide-lighter org-indent-mode))

@@ -1,7 +1,6 @@
 ;;; packages.el --- mu4e Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2014 Sylvain Benner
-;; Copyright (c) 2014-2015 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -11,8 +10,14 @@
 ;;; License: GPLv3
 
 (setq mu4e-packages
-      '((mu4e :location built-in)
-        (mu4e-maildirs-extension)))
+      '(
+        ;; mu4e is not a built-in package
+        ;; This is a hack because mu4e is installed as part of
+        ;; mu installation.
+        (mu4e :location built-in)
+        mu4e-maildirs-extension
+        org
+        ))
 
 (defun mu4e/init-mu4e ()
   (use-package mu4e
@@ -45,3 +50,9 @@
   (use-package mu4e-maildirs-extension
     :defer t
     :init (with-eval-after-load 'mu4e (mu4e-maildirs-extension-load))))
+
+(defun mu4e/post-init-org ()
+  ;; load org-mu4e when org is actually loaded
+  (with-eval-after-load 'org (require 'org-mu4e)))
+
+

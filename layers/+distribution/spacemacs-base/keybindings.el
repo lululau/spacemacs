@@ -1,7 +1,6 @@
 ;;; keybindings.el --- Spacemacs Base Layer key-bindings File
 ;;
-;; Copyright (c) 2012-2014 Sylvain Benner
-;; Copyright (c) 2014-2015 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -75,8 +74,6 @@
   "bw"  'read-only-mode)
 ;; Cycling settings -----------------------------------------------------------
 (spacemacs/set-leader-keys "Tn" 'spacemacs/cycle-spacemacs-theme)
-;; describe functions ---------------------------------------------------------
-(spacemacs/set-leader-keys "hds" 'spacemacs/describe-system-info)
 ;; errors ---------------------------------------------------------------------
 (spacemacs/set-leader-keys
   "en" 'spacemacs/next-error
@@ -111,6 +108,7 @@
   "hdc" 'describe-char
   "hdf" 'describe-function
   "hdk" 'describe-key
+  "hdl" 'spacemacs/describe-last-keys
   "hdp" 'describe-package
   "hds" 'spacemacs/describe-system-info
   "hdt" 'describe-theme

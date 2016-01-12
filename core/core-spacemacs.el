@@ -1,7 +1,6 @@
 ;;; core-spacemacs.el --- Spacemacs Core File
 ;;
-;; Copyright (c) 2012-2014 Sylvain Benner
-;; Copyright (c) 2014-2015 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -101,6 +100,8 @@
   (setq initial-buffer-choice nil)
   (setq inhibit-startup-screen t)
   ;; bootstrap packages
+  (spacemacs/load-or-install-protected-package 'dash t)
+  (spacemacs/load-or-install-protected-package 's t)
   (setq evil-want-Y-yank-to-eol dotspacemacs-remap-Y-to-y$
         evil-ex-substitute-global dotspacemacs-ex-substitute-global)
   (spacemacs/load-or-install-protected-package 'evil t)
@@ -204,6 +205,8 @@
                           "- Spacemacs: %s\n"
                           "- Spacemacs branch: %s (rev. %s)\n"
                           "- Distribution: %s\n"
+                          "- Editing style: %s\n"
+                          "- Completion: %s\n"
                           "- Layers:\n```elisp\n%s```\n")
                   system-type
                   emacs-version
@@ -211,6 +214,12 @@
                   (spacemacs/git-get-current-branch)
                   (spacemacs/git-get-current-branch-rev)
                   dotspacemacs-distribution
+                  dotspacemacs-editing-style
+                  (cond ((configuration-layer/layer-usedp 'spacemacs-helm)
+                         'helm)
+                        ((configuration-layer/layer-usedp 'spacemacs-ivy)
+                         'ivy)
+                        (t 'helm))
                   (pp dotspacemacs-configuration-layers))))
     (kill-new sysinfo)
     (message sysinfo)
@@ -218,4 +227,21 @@
                      "You can paste it in the gitter chat.\n"
                      "Check the *Messages* buffer if you need to review it"))))
 
+(defun spacemacs/describe-last-keys ()
+  "Gathers info about your Emacs last keys and copies to clipboard."
+  (interactive)
+  (view-lossage)
+  (let* ((lossage-buffer "*Help*")
+         (lossage (format "#### Emacs last keys\n```text\n%s```\n"
+                          (with-current-buffer lossage-buffer
+                            (buffer-string)))))
+    (kill-buffer lossage-buffer)
+    (kill-new lossage)
+    (message lossage)
+    (message (concat "Information has been copied to clipboard.\n"
+                     (propertize
+                      "PLEASE REVIEW THE DATA BEFORE GOING FURTHER AS IT CAN CONTAIN SENSITIVE DATA (PASSWORD, ...)\n"
+                      'face 'font-lock-warning-face)
+                     "You can paste it in the gitter chat.\n"
+                     "Check the *Messages* buffer if you need to review it"))))
 (provide 'core-spacemacs)

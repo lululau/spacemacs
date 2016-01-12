@@ -1,7 +1,6 @@
 ;;; packages.el --- Rust Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2014 Sylvain Benner
-;; Copyright (c) 2015 Chris Hoeppner & Contributors
+;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
 ;;
 ;; Author: Chris Hoeppner <me@mkaito.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -18,6 +17,7 @@
     flycheck-rust
     rust-mode
     toml-mode
+    rustfmt
     ))
 
 (when (configuration-layer/layer-usedp 'syntax-checking)
@@ -72,3 +72,15 @@
       (spacemacs/declare-prefix-for-mode 'rust-mode "mg" "goto")
       (spacemacs/set-leader-keys-for-major-mode 'rust-mode
         "gg" 'racer-find-definition))))
+
+(defun rust/init-rustfmt ()
+  (use-package rustfmt
+    :defer t
+    :init
+    (progn
+      (when rust-enable-rustfmt-on-save
+          (spacemacs/add-to-hook 'rust-mode-hook
+                                 '(rustfmt-enable-on-save)))
+
+      (spacemacs/set-leader-keys-for-major-mode 'rust-mode
+        "=" 'rustfmt-format-buffer))))
