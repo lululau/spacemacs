@@ -18,6 +18,7 @@
         aggressive-indent
         auto-highlight-symbol
         avy
+        bracketed-paste
         buffer-move
         (centered-cursor :location local)
         clean-aindent-mode
@@ -402,6 +403,13 @@
           (spacemacs/avy-goto-url)
           (browse-url-at-point))))))
 
+(defun spacemacs/init-bracketed-paste ()
+  (use-package bracketed-paste
+    :defer t
+    :init
+    ;; Enable bracketed-paste for tty
+    (add-hook 'tty-setup-hook 'bracketed-paste-enable)))
+
 (defun spacemacs/init-buffer-move ()
   (use-package buffer-move
     :defer t
@@ -462,10 +470,6 @@
     :init
     (spacemacs/set-leader-keys
       "xwd" 'define-word-at-point)))
-
-(defun spacemacs/init-dired+ ()
-  (use-package dired+
-    :defer t))
 
 (defun spacemacs/init-doc-view ()
   (use-package doc-view
@@ -1604,4 +1608,3 @@ on whether the spacemacs-ivy layer is used or not, with
       ;; Font size, either with ctrl + mouse wheel
       (global-set-key (kbd "<C-wheel-up>") 'spacemacs/zoom-frm-in)
       (global-set-key (kbd "<C-wheel-down>") 'spacemacs/zoom-frm-out))))
-

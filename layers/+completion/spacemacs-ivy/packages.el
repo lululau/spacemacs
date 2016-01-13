@@ -179,12 +179,14 @@ Helm hack."
         (interactive)
         (call-interactively 'describe-mode))
 
+      (define-key counsel-find-file-map (kbd "C-h") 'counsel-up-directory)
       (spacemacs/set-leader-keys
         dotspacemacs-emacs-command-key 'counsel-M-x
         ;; files
         "ff"  'counsel-find-file
         "fL"  'counsel-locate
         ;; help
+        "?"   'counsel-descbinds
         "hdf" 'counsel-describe-function
         "hdm" 'spacemacs/describe-mode
         "hdv" 'counsel-describe-variable
@@ -222,8 +224,10 @@ Helm hack."
         "skF" 'spacemacs/search-ack-region-or-symbol
         "skp" 'spacemacs/search-project-ack
         "skP" 'spacemacs/search-project-ack-region-or-symbol)
+
+      ;; Note: Must be set before which-key is loaded.
+      (setq prefix-help-command 'counsel-descbinds)
       ;; TODO: Commands to port
-      (spacemacs//ivy-command-not-implemented-yet "?")
       (spacemacs//ivy-command-not-implemented-yet "jI"))))
 
 (defun spacemacs-ivy/init-flx ())
@@ -257,10 +261,11 @@ Helm hack."
         (cond
          (arg
           ;; better navigation on homerow
-          ;; rebind `describe-key' for convenience
           (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-next-line)
           (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line)
           (define-key ivy-minibuffer-map (kbd "C-h") (kbd "DEL"))
+          ;; Move C-h to C-S-h
+          (define-key ivy-minibuffer-map (kbd "C-S-h") help-map)
           (define-key ivy-minibuffer-map (kbd "C-l") 'ivy-alt-done)
           (define-key ivy-minibuffer-map (kbd "<escape>")
             'minibuffer-keyboard-quit))
@@ -281,14 +286,21 @@ Helm hack."
 
 (defun spacemacs-ivy/init-ivy-spacemacs-help ()
   (use-package ivy-spacemacs-help
+    :commands (ivy-spacemacs-help-dotspacemacs
+               ivy-spacemacs-help
+               ivy-spacemacs-help-faq
+               ivy-spacemacs-help-layers
+               ivy-spacemacs-help-packages
+               ivy-spacemacs-help-docs
+               ivy-spacemacs-help-toggles)
     :init (spacemacs/set-leader-keys
-            "h SPC d"    'ivy-spacemacs-help-docs
-            "h SPC ."    'ivy-spacemacs-help-dotspacemacs
-            ;; "h SPC f" 'ivy-spacemacs-help-faq
-            "h SPC l"    'ivy-spacemacs-help-layers
-            "h SPC SPC"  'ivy-spacemacs-help
-            "h SPC p"    'ivy-spacemacs-help-packages
-            "h SPC t"    'ivy-spacemacs-help-toggles)))
+            "h ."   'ivy-spacemacs-help-dotspacemacs
+            "h SPC" 'ivy-spacemacs-help
+            "h f"   'ivy-spacemacs-help-faq
+            "h l"   'ivy-spacemacs-help-layers
+            "h p"   'ivy-spacemacs-help-packages
+            "h r"   'ivy-spacemacs-help-docs
+            "h t"   'ivy-spacemacs-help-toggles)))
 
 (defun spacemacs-ivy/init-swiper ()
   (use-package swiper
