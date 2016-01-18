@@ -99,6 +99,7 @@
        - [[Smooth scrolling][Smooth scrolling]]
      - [[Vim motions with avy][Vim motions with avy]]
        - [[ace-link mode][ace-link mode]]
+     - [[Unimpaired bindings][Unimpaired bindings]]
      - [[Jumping, Joining and Splitting][Jumping, Joining and Splitting]]
        - [[Jumping][Jumping]]
        - [[Joining and splitting][Joining and splitting]]
@@ -545,9 +546,8 @@ can be set directly in the =dotspacemacs-configuration-layers= like this:
 
 *** Excluding packages
 You can exclude packages you don't want to install with the variable
-=dotspacemacs-excluded-packages=, this variable can exclude both packages and
-extensions (see [[Configuration layers][Configuration layers]] for more info on
-packages and extensions).
+=dotspacemacs-excluded-packages= (see [[Configuration layers][Configuration layers]] for more info
+on packages).
 
 For instance to disable the =rainbow-delimiters= package:
 
@@ -660,7 +660,8 @@ editing text, and provide their own keybindings for certain operations. These
 often conflict with Vim bindings. To make such buffers behave Vim-like in a
 consistent manner, they use a special state called /evilified/ state. In
 evilified state, a handful of keys work as in Evil, namely =/=, =:=, =h=, =j=,
-=k=, =l=, =n=, =N=, =v=, =V=, =gg=, =G=, =C-f=, =C-b=, =C-d=, =C-u= and =C-z=.
+=k=, =l=, =n=, =N=, =v=, =V=, =gg=, =G=, =C-f=, =C-b=, =C-d=, =C-e=, =C-u=,
+=C-y= and =C-z=.
 All other keys work as intended by the underlying mode.
 
 Shadowed keys are moved according to the pattern: =a= → =A= → =C-a= → =C-A=
@@ -1308,7 +1309,6 @@ All layers can be easily discovered via =helm-spacemacs-help= accessible with
 The following helm actions are available:
   - default: open the layer =README.org=
   - 2nd: open the layer =packages.el=
-  - 3nd: open the layer =extensions.el=
 
 **** Available packages in Spacemacs
 =helm-spacemacs-help= also lists all the packages available in Spacemacs. The
@@ -1403,16 +1403,16 @@ On Windows, you may want to disable it. To disable the smooth scrolling set the
 Spacemacs uses the =evil= integration of [[https://github.com/abo-abo/avy][avy]] which enables the
 invocation of =avy= during motions.
 
-It is useful for deleting visually a set of lines, try the following sequence in
-a buffer containing some text: ~d SPC y~
+For instance, it is useful for deleting a set of visual lines from the current line.
+Try the following sequence in a buffer containing some text: ~d SPC j l~, followed by
+selecting an avy candidate.
 
 | Key Binding | Description                                        |
 |-------------+----------------------------------------------------|
-| ~SPC SPC~   | initiate avy jump word                             |
-| ~SPC y~     | initiate avy jump line                             |
-| ~SPC `~     | go back to the previous location (before the jump) |
-
-*Hint*: you may change to char mode by ~C-c C-c~ in word mode.
+| ~SPC j j~   | initiate avy jump char                             |
+| ~SPC j w~   | initiate avy jump word                             |
+| ~SPC j l~   | initiate avy jump line                             |
+| ~SPC j u~   | go back to the previous location (before the jump) |
 
 **** ace-link mode
 Similar to =avy=, [[https://github.com/abo-abo/ace-link][ace-link]] allows one to jump to any link in
@@ -1421,6 +1421,34 @@ Similar to =avy=, [[https://github.com/abo-abo/ace-link][ace-link]] allows one t
 | Key Binding | Description                                           |
 |-------------+-------------------------------------------------------|
 | ~o~         | initiate ace link mode in =help-mode= and =info-mode= |
+
+*** Unimpaired bindings
+Spacemacs comes with a built-in port of [[https://github.com/tpope/vim-unimpaired][tpope's vim-unimpaired]].
+
+This plugin provides several pairs of bracket maps using ~[~ to denote
+previous, and ~]~ as next.
+
+| KeyBindings | Description                      |
+|-------------+----------------------------------|
+| ~[ SPC~     | Insert space above               |
+| ~] SPC~     | Insert space below               |
+| ~[ b~       | Go to previous buffer            |
+| ~] b~       | Go to next buffer                |
+| ~[ f~       | Go to previous file in directory |
+| ~] f~       | Go to next file in directory     |
+| ~[ l~       | Go to the previous error         |
+| ~] l~       | Go to the next error             |
+| ~[ h~       | Go to the previous vcs hunk      |
+| ~] h~       | Go to the next vcs hunk          |
+| ~[ t~       | Go to the previous frame         |
+| ~] t~       | Go to the next frame             |
+| ~[ w~       | Go to the previous window        |
+| ~] w~       | Go to the next window            |
+| ~[ e~       | Move line up                     |
+| ~] e~       | Move line down                   |
+| ~[ p~       | Paste above current line         |
+| ~] p~       | Paste below current line         |
+| ~g p~       | Select pasted text               |
 
 *** Jumping, Joining and Splitting
 The ~SPC j~ prefix is for jumping, joining and splitting.
@@ -1619,43 +1647,45 @@ Spacemacs marks buffers as useful. For instructions, see the [[file:FAQ.org::Cha
 **** Files manipulations key bindings
 Files manipulation commands (start with ~f~):
 
-| Key Binding | Description                                                    |
-|-------------+----------------------------------------------------------------|
-| ~SPC f b~   | go to file bookmarks                                           |
-| ~SPC f c~   | copy current file to a different location                      |
-| ~SPC f C d~ | convert file from unix to dos encoding                         |
-| ~SPC f C u~ | convert file from dos to unix encoding                         |
-| ~SPC f D~   | delete a file and the associated buffer (ask for confirmation) |
-| ~SPC f E~   | open a file with elevated privileges (sudo edit)               |
-| ~SPC f f~   | open file with =helm= (or =ido=)                               |
-| ~SPC f F~   | try to open the file under point =helm=                        |
-| ~SPC f j~   | jump to the current buffer file in dired                       |
-| ~SPC f l~   | open file literally in =fundamental mode=                      |
-| ~SPC f L~   | Locate a file (using =locate=)                                 |
-| ~SPC f o~   | open a file using the default external program                 |
-| ~SPC f R~   | rename the current file                                        |
-| ~SPC f s~   | save a file                                                    |
-| ~SPC f S~   | save all files                                                 |
-| ~SPC f r~   | open a recent file with =helm=                                 |
-| ~SPC f t~   | toggle file tree side bar using [[https://github.com/jaypei/emacs-neotree][NeoTree]]                        |
-| ~SPC f v d~ | add a directory variable                                       |
-| ~SPC f v f~ | add a local variable to the current file                       |
-| ~SPC f v p~ | add a local variable to the first line of the current file     |
-| ~SPC f y~   | show current file absolute path in the minibuffer              |
+| Key Binding | Description                                                                                                                     |
+|-------------+---------------------------------------------------------------------------------------------------------------------------------|
+| ~SPC f b~   | go to file bookmarks                                                                                                            |
+| ~SPC f c~   | copy current file to a different location                                                                                       |
+| ~SPC f C d~ | convert file from unix to dos encoding                                                                                          |
+| ~SPC f C u~ | convert file from dos to unix encoding                                                                                          |
+| ~SPC f D~   | delete a file and the associated buffer (ask for confirmation)                                                                  |
+| ~SPC f E~   | open a file with elevated privileges (sudo edit)                                                                                |
+| ~SPC f f~   | open file with =helm= (or =ido=)                                                                                                |
+| ~SPC f F~   | try to open the file under point =helm=                                                                                         |
+| ~SPC f j~   | jump to the current buffer file in dired                                                                                        |
+| ~SPC f J~   | open a junk file, in mode determined by the file extension provided (defaulting to =fundamental mode=), using =helm= (or =ivy=) |
+| ~SPC f l~   | open file literally in =fundamental mode=                                                                                       |
+| ~SPC f L~   | Locate a file (using =locate=)                                                                                                  |
+| ~SPC f o~   | open a file using the default external program                                                                                  |
+| ~SPC f R~   | rename the current file                                                                                                         |
+| ~SPC f s~   | save a file                                                                                                                     |
+| ~SPC f S~   | save all files                                                                                                                  |
+| ~SPC f r~   | open a recent file with =helm=                                                                                                  |
+| ~SPC f t~   | toggle file tree side bar using [[https://github.com/jaypei/emacs-neotree][NeoTree]]                                                                                         |
+| ~SPC f v d~ | add a directory variable                                                                                                        |
+| ~SPC f v f~ | add a local variable to the current file                                                                                        |
+| ~SPC f v p~ | add a local variable to the first line of the current file                                                                      |
+| ~SPC f y~   | show current file absolute path in the minibuffer                                                                               |
 
 **** Emacs and Spacemacs files
 Convenient key bindings are located under the prefix ~SPC f e~ to quickly
 navigate between =Emacs= and Spacemacs specific files.
 
-| Key Binding | Description                                                        |
-|-------------+--------------------------------------------------------------------|
-| ~SPC f e c~ | open =ido= in the =contrib= folder                                 |
-| ~SPC f e d~ | open the spacemacs dotfile (=~/.spacemacs=)                        |
-| ~SPC f e D~ | open =ediff= buffer of =~/.spacemacs= and =.spacemacs.template=    |
-| ~SPC f e f~ | discover the =FAQ= using =helm=                                    |
-| ~SPC f e i~ | open the all mighty =init.el=                                      |
-| ~SPC f e R~ | resync the dotfile with spacemacs                                  |
-| ~SPC f e v~ | display and copy the spacemacs version                             |
+| Key Binding | Description                                                     |
+|-------------+-----------------------------------------------------------------|
+| ~SPC f e c~ | open =ido= in the =contrib= folder                              |
+| ~SPC f e d~ | open the spacemacs dotfile (=~/.spacemacs=)                     |
+| ~SPC f e D~ | open =ediff= buffer of =~/.spacemacs= and =.spacemacs.template= |
+| ~SPC f e f~ | discover the =FAQ= using =helm=                                 |
+| ~SPC f e i~ | open the all mighty =init.el=                                   |
+| ~SPC f e l~ | locate an Emacs library                                         |
+| ~SPC f e R~ | resync the dotfile with spacemacs                               |
+| ~SPC f e v~ | display and copy the spacemacs version                          |
 
 **** Browsing files with Helm
 In =vim= and  =hybrid= styles, Spacemacs remap the navigation in Helm find-files
@@ -1957,7 +1987,6 @@ called =pt=.
 | ~SPC r l~              | resume the last =completion= buffer                                      |
 | ~SPC r s~ or ~SPC s l~ | resume search buffer (completion or converted search buffer)             |
 | ~SPC s `~              | go back to the previous place reached with =helm-ag=                     |
-| ~SPC s L~              | search for library implementation                                        |
 | Prefix argument        | will ask for file extensions                                             |
 
 **** Searching in current file
@@ -2160,6 +2189,11 @@ Text related commands (start with ~x~):
     | ~SPC x g l~ | set languages used by translate commands                      |
     | ~SPC x g t~ | translate current word using Google Translate                 |
     | ~SPC x g T~ | reverse source and target languages                           |
+    | ~SPC x j c~ | set the justification to center                               |
+    | ~SPC x j f~ | set the justification to full                                 |
+    | ~SPC x j l~ | set the justification to left                                 |
+    | ~SPC x j n~ | set the justification to none                                 |
+    | ~SPC x j r~ | set the justification to right                                |
     | ~SPC x J~   | move down a line of text (enter micro-state)                  |
     | ~SPC x K~   | move up a line of text (enter micro-state)                    |
     | ~SPC x l s~ | sort lines                                                    |
@@ -2658,12 +2692,13 @@ variable =dotspacemacs-persistent-server= to =t= in your =~./spacemacs=.
 When this variable is set to =t=, the only way to quit Emacs /and/ kill the
 server is to use the following bindings:
 
-| Keybinding | Description                                                        |
-|------------+--------------------------------------------------------------------|
-| ~SPC q q~  | Quit Emacs and kill the server, prompt for changed buffers to save |
-| ~SPC q Q~  | Quit Emacs and kill the server, lose all unsaved changes.          |
-| ~SPC q s~  | Save the buffers, quit Emacs and kill the server                   |
-| ~SPC q z~  | Kill the current frame                                             |
+| Keybinding | Description                                                              |
+|------------+--------------------------------------------------------------------------|
+| ~SPC q q~  | Quit Emacs and kill the server, prompt for changed buffers to save       |
+| ~SPC q Q~  | Quit Emacs and kill the server, lose all unsaved changes.                |
+| ~SPC q r~  | Restart both Emacs and the server, prompting to save any changed buffers |
+| ~SPC q s~  | Save the buffers, quit Emacs and kill the server                         |
+| ~SPC q z~  | Kill the current frame                                                   |
 
 ** Troubleshoot
 *** Loading fails

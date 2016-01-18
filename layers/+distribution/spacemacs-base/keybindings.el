@@ -67,6 +67,7 @@
   "b C-k" 'spacemacs/kill-matching-buffers-rudely
   "bP"  'spacemacs/copy-clipboard-to-whole-buffer
   "bn"  'spacemacs/next-useful-buffer
+  "bN"  'spacemacs/new-empty-buffer
   "bp"  'spacemacs/previous-useful-buffer
   "bR"  'spacemacs/safe-revert-buffer
   "bs"  'spacemacs/switch-to-scratch-buffer
@@ -342,6 +343,11 @@
   "xa)" 'spacemacs/align-repeat-right-paren
   "xc"  'count-region
   "xdw" 'delete-trailing-whitespace
+  "xjc" 'set-justification-center
+  "xjf" 'set-justification-full
+  "xjl" 'set-justification-left
+  "xjn" 'set-justification-none
+  "xjr" 'set-justification-right
   "xls" 'spacemacs/sort-lines
   "xlu" 'spacemacs/uniquify-lines
   "xtc" 'transpose-chars

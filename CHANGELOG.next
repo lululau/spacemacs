@@ -5,6 +5,14 @@ This file containes the change log for the next major version of Spacemacs.
 * Release 0.106.x
 ** 0.106.0 (no date)
 *** IMPORTANT: Breaking changes
+- =extensions= are deprecated as announced in previous releases, if you still
+  have =extensions= directories you must rename them to =local= and move
+  the contents of the =extensions.el= files to the =packages.el= files adding
+  the keyword =:location local= to them in the package list. Refer to other
+  layers for examples (for instance the =python= layer)
+- =<package>-excluded-packages= variables are now deprecated as announced is
+  previous releases, you must now  use the keyword =:excluded t= of the package
+  list, see the =vim-empty-lines= layer for example.
 - Key binding ~SPC :~ acting as M-x as been replaced by ~SPC SPC~.
   If you want to revert to the old ~SPC :~ key binding set the new
   variable =dotspacemacs-emacs-command-key= to ":".
@@ -22,12 +30,13 @@ This file containes the change log for the next major version of Spacemacs.
   moved to different key bindings:
   - ~SPC h b~ for =helm-filetered-bookmarks~is now ~SPC f b~
   - ~SPC h l~ for =helm-resume= is now ~SPC r l~
-  - ~SPC h L~ for =helm-locate-library= is now ~SPC s L~
+  - ~SPC h L~ for =helm-locate-library= is now ~SPC f e l~
 *** Hot new features
 - Support for Ivy, add the =spacemacs-ivy= layer to your dotfile and
   restart to replace =Helm= by =Ivy=.
 *** New Layers
 - asm in =+lang= (thanks to thudo)
+- csv in =+lang= (thanks to jb55)
 - spacemacs-ivy in =completion= (thanks to justbur)
 - spacemacs-helm in =completion= (moved from spacemacs-base) (thanks to justbur)
 *** Dotfile changes
@@ -39,6 +48,10 @@ This file containes the change log for the next major version of Spacemacs.
   the behavior of the =g= flag in =:subsitute= ex-command is inverted.
   Default value is nil (thanks to fbergroth)
 *** Distribution layer changes
+- New =evil-ediff= package (thanks to justbur)
+- Move =unimpaired= layer to =spacemacs= layer
+- New key binding ~SPC b N~ and evil ex-command =:enew= to open a new empty
+  buffer (thanks to balajisivaraman)
 - Command prefix ~SPC j~ is now also for =jumping=, introduced key bindings are:
   - ~SPC j 0~ to go to the beginning of line (and set a mark at the previous
     location in the line)
@@ -63,6 +76,24 @@ This file containes the change log for the next major version of Spacemacs.
     point
   - ~SPC j w~ to jump to a word in the current buffer (works as an evil motion)
   (thanks to justbur)
+- New key bindings under ~SPC h~:
+  - ~SPC h .~ to search for dotfile variables
+  - ~SPC h f~ to search for FAQ
+  - ~SPC h l~ to search for layers
+  - ~SPC h p~ to search for packages
+  - ~SPC h r~ to search for documentation files
+  - ~SPC h t~ to search for toggles
+  (thanks to justbur)
+- New text justification key bindings:
+  - ~SPC x j c~ to set the justification to center
+  - ~SPC x j f~ to set the justification to full
+  - ~SPC x j l~ to set the justification to left
+  - ~SPC x j n~ to set the justification to none
+  - ~SPC x j r~ to set the justification to right
+  (thanks to StreakyCobra)
+- New key binding ~SPC h d d~ for =helm-apropos= (thanks to StreakyCobra)
+- New key bindings ~[ f~ and ~] f~ to go to the next or previous file in current
+  directory (thanks to fbergroth)
 *** Layer changes
 **** Ansible
 - Change key binding ~SPC m a ?~ to ~SPC m h a~
@@ -70,6 +101,8 @@ This file containes the change log for the next major version of Spacemacs.
 - New layer variable =auto-completion-complete-with-key-sequence-delay= to
   set the delay in second between the keys of sequence used to select
   the auto-completion candidate (thanks to MadAnd)
+**** Clojure
+- Remove indentation rules (thanks to ernestas)
 **** CSharp
 - New key bindings
   - ~SPC m g c~ to go to member in current file
@@ -77,9 +110,13 @@ This file containes the change log for the next major version of Spacemacs.
   - ~SPC m g U~ to find usages of symbol under cursor using ido
   - ~SPC m r M~ to rename symbol under cursor interactively
   (thanks to retran)
+**** Haskell
+- New =helm-hoogle= package under ~SPC m h f~ (thanks to jb55)
 **** Helm
 - Rename action =Add layer= to =Install layer= in =helm-spacemacs-help=
   (thanks to CestDiego)
+- Fix =helm-source-header= face not updating when changing themes
+  (thanks to ghoot)
 **** Javascript
 - New layer variable =javascript-disable-tern-port-files=, when non nil
   tern port files are not created. Default value is nil. (thanks to mijoharas)
@@ -102,9 +139,19 @@ This file containes the change log for the next major version of Spacemacs.
 - New layer variable =rust-enable-rustfmt-on-save= (thanks to isphinx)
 - New package =rustfmt= with new key binding ~SPC m =~ to format the buffer
   (thanks to isphinx)
-
 **** Shell
 - New =eshell-z= package (thanks to CestDiego)
+*** Core Changes 
+- New functions =configuration-layer/remove-layer= and
+  =configuration-layer/remove-layers=.
+- New keyword =:skip-install= for packages, if non-nil then Spacemacs does not
+  handle the installation for the package (i.e. it has to be installed by
+  something else).
 *** Other fixes and improvements
-- Typos and documentation improvements (thanks to cpaulik, TheBB)
-
+- Typos and documentation improvements (thanks to balajisivaraman, cpaulik,
+  TheBB)
+*** Core team members
+- Sylvain Benner (syl20bnr)
+- Eivind Fonn (TheBB)
+- Fabien Dubosson (StreakyCobra)
+- Justin Burkett (justbur)
