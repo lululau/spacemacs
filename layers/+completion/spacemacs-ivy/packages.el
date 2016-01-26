@@ -12,7 +12,6 @@
 (setq spacemacs-ivy-packages
       '(counsel
         flx
-        hydra
         ;; hack since ivy is part for swiper but I like to
         ;; treat it as a stand-alone package
         (ivy :location built-in)
@@ -22,16 +21,63 @@
 
 (defun spacemacs-ivy/init-counsel ()
   (defvar spacemacs--counsel-commands
-    '(("ag" . "ag --vimgrep %S .")
-      ("pt" . "pt.exe -e --nocolor --nogroup --column %S .")
-      ("ack" . "ack --nocolor --nogroup --column %S .")
-      ("grep" . "grep -nrP %S ."))
+    '(("ag" . "ag --vimgrep %s %S .")
+      ("pt" . "pt -e --nocolor --nogroup --column %s %S .")
+      ("ack" . "ack --nocolor --nogroup --column %s %S .")
+      ("grep" . "grep -nrP %s %S ."))
     "Alist of search commands and their corresponding commands
 with options to run in the shell.")
 
   (defvar spacemacs--counsel-search-max-path-length 30
     "Truncate the current path in counsel search if it is longer
 than this amount.")
+
+  (defvar spacemacs--counsel-initial-cands-shown nil)
+  (defvar spacemacs--counsel-initial-number-cand 100)
+
+  (defun spacemacs//counsel-async-command (cmd)
+    (let* ((counsel--process " *counsel*")
+           (proc (get-process counsel--process))
+           (buff (get-buffer counsel--process)))
+      (when proc
+        (delete-process proc))
+      (when buff
+        (kill-buffer buff))
+      (setq proc (start-process-shell-command
+                  counsel--process
+                  counsel--process
+                  cmd))
+      (setq spacemacs--counsel-initial-cands-shown nil)
+      (setq counsel--async-time (current-time))
+      (set-process-sentinel proc #'counsel--async-sentinel)
+      (set-process-filter proc #'spacemacs//counsel-async-filter)))
+
+  (defun spacemacs//counsel-async-filter (process str)
+    (with-current-buffer (process-buffer process)
+      (insert str))
+    (when (or (null spacemacs--counsel-initial-cands-shown)
+              (time-less-p
+               ;; 0.5s
+               '(0 0 500000 0)
+               (time-since counsel--async-time)))
+      (let (size display-now)
+        (with-current-buffer (process-buffer process)
+          (goto-char (point-min))
+          (setq size (- (buffer-size) (forward-line (buffer-size))))
+          (when (and (null spacemacs--counsel-initial-cands-shown)
+                     (> size spacemacs--counsel-initial-number-cand))
+            (setq ivy--all-candidates
+                  (split-string (buffer-string) "\n" t))
+            (setq display-now t)
+            (setq spacemacs--counsel-initial-cands-shown t)))
+        (let ((ivy--prompt
+               (format (ivy-state-prompt ivy-last)
+                       size)))
+          (if display-now
+              (ivy--insert-minibuffer
+               (ivy--format ivy--all-candidates))
+            (ivy--insert-prompt))))
+      (setq counsel--async-time (current-time))))
 
   ;; see `counsel-ag-function'
   (defun spacemacs//make-counsel-search-function (tool)
@@ -41,11 +87,16 @@ than this amount.")
         "Grep in the current directory for STRING."
         (if (< (length string) 3)
             (counsel-more-chars 3)
-          (let ((default-directory counsel--git-grep-dir)
-                (regex (counsel-unquote-regex-parens
-                        (setq ivy--old-re
-                              (ivy--regex string)))))
-            (counsel--async-command (format base-cmd regex))
+          (let* ((default-directory counsel--git-grep-dir)
+                 (args (if (string-match-p " -- " string)
+                           (let ((split (split-string string " -- ")))
+                             (prog1 (pop split)
+                               (setq string (mapconcat #'identity split " -- "))))
+                         ""))
+                 (regex (counsel-unquote-regex-parens
+                         (setq ivy--old-re
+                               (ivy--regex string)))))
+            (spacemacs//counsel-async-command (format base-cmd args regex))
             nil)))))
 
   ;; see `counsel-ag'
@@ -72,16 +123,17 @@ that directory."
             (or initial-directory
                 (read-directory-name "Start from directory: ")))
       (ivy-read
-       (format "%s from [%s]: "
-               tool
-               (if (< (length counsel--git-grep-dir)
-                      spacemacs--counsel-search-max-path-length)
-                   counsel--git-grep-dir
-                 (concat
-                  "..." (substring counsel--git-grep-dir
-                                   (- (length counsel--git-grep-dir)
-                                      spacemacs--counsel-search-max-path-length)
-                                   (length counsel--git-grep-dir)))))
+       (concat "%-5d "
+               (format "%s from [%s]: "
+                       tool
+                       (if (< (length counsel--git-grep-dir)
+                              spacemacs--counsel-search-max-path-length)
+                           counsel--git-grep-dir
+                         (concat
+                          "..." (substring counsel--git-grep-dir
+                                           (- (length counsel--git-grep-dir)
+                                              spacemacs--counsel-search-max-path-length)
+                                           (length counsel--git-grep-dir))))))
        (spacemacs//make-counsel-search-function tool)
        :initial-input initial-input
        :dynamic-collection t
@@ -137,6 +189,12 @@ that directory."
          (interactive)
          (spacemacs/counsel-search ,tools t (projectile-project-root))))))
 
+  (defun spacemacs/counsel-search-docs ()
+    "Search spacemacs docs using `spacemacs/counsel-search'"
+    (interactive)
+    (spacemacs/counsel-search dotspacemacs-search-tools
+                              nil spacemacs-docs-directory))
+
   (defun spacemacs/counsel-git-grep-region-or-symbol ()
     "Use `counsel-git-grep' to search for the selected region or
  the symbol under the point in the current project with git grep."
@@ -190,6 +248,7 @@ Helm hack."
         "hdf" 'counsel-describe-function
         "hdm" 'spacemacs/describe-mode
         "hdv" 'counsel-describe-variable
+        "hR"  'spacemacs/counsel-search-docs
         ;; insert
         "iu"  'counsel-unicode-char
         ;; jump
@@ -224,6 +283,7 @@ Helm hack."
         "skF" 'spacemacs/search-ack-region-or-symbol
         "skp" 'spacemacs/search-project-ack
         "skP" 'spacemacs/search-project-ack-region-or-symbol)
+      (global-set-key (kbd "M-x") 'counsel-M-x)
 
       ;; Note: Must be set before which-key is loaded.
       (setq prefix-help-command 'counsel-descbinds)
@@ -232,26 +292,17 @@ Helm hack."
 
 (defun spacemacs-ivy/init-flx ())
 
-(defun spacemacs-ivy/init-hydra ())
-
 (defun spacemacs-ivy/init-ivy ()
   (use-package ivy
     :config
     (progn
       (spacemacs/set-leader-keys
+        "a'" 'spacemacs/ivy-available-repls
         "fr" 'ivy-recentf
         "ir" 'ivy-resume
         "bb" 'ivy-switch-buffer)
       (setq ivy-height 15
-            ivy-re-builders-alist '((t . ivy--regex-ignore-order))
-            colir-compose-method (lambda (c1 c2) c1))
-      (with-eval-after-load 'colir
-        ;; override colir-blend to remove bad rendering with spacemacs-dark
-        ;; theme
-        (defun colir-blend (c1 c2)
-          "Blend the two colors C1 and C2 using `colir-compose-method'.
-C1 and C2 are triples of floats in [0.0 1.0] range."
-          (apply #'color-rgb-to-hex (cl-mapcar colir-compose-method c1 c2))))
+            ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
       (with-eval-after-load 'recentf
         ;; merge recentf and bookmarks into buffer switching. If we set this
         ;; before recentf loads, then ivy-mode loads recentf for us,
@@ -263,6 +314,16 @@ C1 and C2 are triples of floats in [0.0 1.0] range."
       (ivy-mode 1)
       (global-set-key (kbd "C-c C-r") 'ivy-resume)
       (global-set-key (kbd "<f6>") 'ivy-resume)
+
+      (defun spacemacs/ivy-available-repls ()
+        "Show available repls."
+        (interactive)
+        (ivy-read "Repls: "
+                  (mapcar #'car spacemacs-repl-list)
+                  :action (lambda (candidate)
+                            (let ((repl (cdr (assoc candidate spacemacs-repl-list))))
+                              (require (car repl))
+                              (call-interactively (cdr repl))))))
 
       (defun spacemacs//hjkl-completion-navigation (&optional arg)
         "Set navigation on `jklh'. ARG non nil means Vim like movements."

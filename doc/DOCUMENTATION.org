@@ -1302,6 +1302,16 @@ Navigation key bindings in =help-mode=:
 | ~g f~ or ~]~ | go forward (same as clicking on =[forward]= button) |
 | ~g h~        | go to help for symbol under point                   |
 
+Reporting an issue:
+
+| Key Binding     | Description                                                                          |
+|-----------------+--------------------------------------------------------------------------------------|
+| ~SPC h I~       | Open a page for creating a new Spacemacs issue on GitHub with information pre-filled |
+| ~SPC u SPC h I~ | Open a page for creating a new Spacemacs issue on GitHub with information pre-filled |
+
+/Note:/ If these two bindings are used with the =*Backtrace*= buffer open, the
+backtrace is automatically included
+
 *** Available layers
 All layers can be easily discovered via =helm-spacemacs-help= accessible with
 ~SPC f e h~.
@@ -1512,6 +1522,7 @@ Windows manipulation commands (start with ~w~):
 | ~SPC w c~              | close a window                                                              |
 | ~SPC w C~              | delete another window using [[https://github.com/abo-abo/ace-window][ace-delete-window]]                               |
 | ~SPC w d~              | toggle window dedication (dedicated window cannot be reused by a mode)      |
+| ~SPC w f~              | toggle follow mode                                                          |
 | ~SPC w h~              | move to window on the left                                                  |
 | ~SPC w H~              | move window to the left                                                     |
 | ~SPC w j~              | move to window below                                                        |
@@ -1657,6 +1668,7 @@ Files manipulation commands (start with ~f~):
 | ~SPC f E~   | open a file with elevated privileges (sudo edit)                                                                                |
 | ~SPC f f~   | open file with =helm= (or =ido=)                                                                                                |
 | ~SPC f F~   | try to open the file under point =helm=                                                                                         |
+| ~SPC f h~   | open binary file with =hexl= (a hex editor)                                                                                     |
 | ~SPC f j~   | jump to the current buffer file in dired                                                                                        |
 | ~SPC f J~   | open a junk file, in mode determined by the file extension provided (defaulting to =fundamental mode=), using =helm= (or =ivy=) |
 | ~SPC f l~   | open file literally in =fundamental mode=                                                                                       |
@@ -1670,7 +1682,7 @@ Files manipulation commands (start with ~f~):
 | ~SPC f v d~ | add a directory variable                                                                                                        |
 | ~SPC f v f~ | add a local variable to the current file                                                                                        |
 | ~SPC f v p~ | add a local variable to the first line of the current file                                                                      |
-| ~SPC f y~   | show current file absolute path in the minibuffer                                                                               |
+| ~SPC f y~   | show and copy current file absolute path in the minibuffer                                                                      |
 
 **** Emacs and Spacemacs files
 Convenient key bindings are located under the prefix ~SPC f e~ to quickly

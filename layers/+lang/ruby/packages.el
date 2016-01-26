@@ -16,6 +16,7 @@
         company
         evil-matchit
         flycheck
+        popwin
         rbenv
         robe
         rspec-mode
@@ -90,6 +91,10 @@
   (spacemacs/add-flycheck-hook 'ruby-mode-hook)
   (spacemacs/add-flycheck-hook 'enh-ruby-mode-hook))
 
+(defun ruby/post-init-popwin ()
+  (push '("*rspec-compilation*" :dedicated t :position bottom :stick t :noselect t :height 0.4)
+        popwin:special-display-config))
+
 (defun ruby/init-rbenv ()
   (use-package rbenv
     :if (equal ruby-version-manager 'rbenv)
@@ -146,15 +151,8 @@
 (defun ruby/init-rspec-mode ()
   (use-package rspec-mode
     :defer t
-    :init
-    (progn
-      (defun spacemacs//ruby-enable-rspec-mode ()
-        "Conditionally enable `rspec-mode'"
-        (when (eq 'rspec ruby-test-runner)
-          (rspec-mode)))
-      (spacemacs/add-to-hooks
-       'spacemacs//ruby-enable-rspec-mode '(ruby-mode-hook
-                                            enh-ruby-mode-hook)))
+    ;; there is no :init block to add the hooks since rspec-mode
+    ;; setup the hook via an autoload
     :config
     (progn
       (spacemacs|hide-lighter rspec-mode)

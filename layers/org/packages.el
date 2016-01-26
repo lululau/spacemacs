@@ -233,15 +233,6 @@ Will work on both org-mode and any mode that accepts plain html."
         "xu" (spacemacs|org-emphasize spacemacs/org-underline ?_)
         "xv" (spacemacs|org-emphasize spacemacs/org-verbose ?=))
 
-      (with-eval-after-load 'org-agenda
-        (define-key org-agenda-mode-map "j" 'org-agenda-next-line)
-        (define-key org-agenda-mode-map "k" 'org-agenda-previous-line)
-        ;; Since we override SPC, let's make RET do that functionality
-        (define-key org-agenda-mode-map
-          (kbd "RET") 'org-agenda-show-and-scroll-up)
-        (define-key org-agenda-mode-map
-          (kbd "SPC") spacemacs-default-map))
-
       ;; Add global evil-leader mappings. Used to access org-agenda
       ;; functionalities – and a few others commands – from any other mode.
       (spacemacs/declare-prefix "ao" "org")
@@ -308,7 +299,19 @@ Will work on both org-mode and any mode that accepts plain html."
   (use-package org-agenda
     :defer t
     :init
-    (setq org-agenda-restore-windows-after-quit t)
+    (progn
+      (setq org-agenda-restore-windows-after-quit t)
+      (spacemacs/set-leader-keys-for-major-mode 'org-agenda-mode
+        ":" 'org-agenda-set-tags
+        "a" 'org-agenda
+	"d" 'org-agenda-deadline
+        "f" 'org-agenda-set-effort
+        "I" 'org-agenda-clock-in
+        "O" 'org-agenda-clock-out
+        "P" 'org-agenda-set-property
+        "q" 'org-agenda-refile
+        "Q" 'org-agenda-clock-cancel
+        "s" 'org-agenda-schedule))
     :config
     (evilified-state-evilify-map org-agenda-mode-map
       :mode org-agenda-mode
@@ -320,7 +323,9 @@ Will work on both org-mode and any mode that accepts plain html."
       (kbd "M-h") 'org-agenda-earlier
       (kbd "M-l") 'org-agenda-later
       (kbd "gd") 'org-agenda-toggle-time-grid
-      (kbd "gr") 'org-agenda-redo)))
+      (kbd "gr") 'org-agenda-redo
+      (kbd "M-RET") 'org-agenda-show-and-scroll-up
+      (kbd "RET") 'org-agenda-goto)))
 
 (defun org/init-org-bullets ()
   (use-package org-bullets
