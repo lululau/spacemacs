@@ -1,6 +1,5 @@
 (setq clojure-packages
   '(
-    align-cljlet
     cider
     cider-eval-sexp-fu
     clj-refactor
@@ -11,21 +10,13 @@
     subword
    ))
 
-(defun clojure/init-align-cljlet ()
-  (use-package align-cljlet
-    :defer t
-    :init
-    (add-hook 'clojure-mode-hook (lambda () (require 'align-cljlet)))
-    :config
-    (dolist (mode '(clojure-mode clojurescript-mode))
-      (spacemacs/set-leader-keys-for-major-mode mode
-        "fl" 'align-cljlet))))
 
 (defun clojure/init-cider ()
   (use-package cider
     :defer t
     :init
     (progn
+      (spacemacs/register-repl 'cider 'cider-jack-in "cider")
       (setq cider-stacktrace-default-filters '(tooling dup)
             cider-repl-pop-to-buffer-on-connect nil
             cider-prompt-save-file-on-load nil
@@ -226,6 +217,7 @@ If called with a prefix argument, uses the other-window instead."
           "gg" 'cider-find-var
           "gr" 'cider-jump-to-resource
 
+          "'"  'cider-jack-in
           "sb" 'cider-load-buffer
           "sB" 'spacemacs/cider-send-buffer-in-repl-and-focus
           "sc" 'cider-connect
@@ -355,7 +347,8 @@ If called with a prefix argument, uses the other-window instead."
 
       (dolist (m '(clojure-mode clojurec-mode clojurescript-mode clojurex-mode))
         (spacemacs/set-leader-keys-for-major-mode m
-          "Ti" 'spacemacs/clojure-mode-toggle-default-indent-style))
+          "Ti" 'spacemacs/clojure-mode-toggle-default-indent-style
+          "fl" 'clojure-align))
 
       (when clojure-enable-fancify-symbols
         (dolist (m '(clojure-mode clojurescript-mode clojurec-mode clojurex-mode))

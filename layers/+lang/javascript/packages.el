@@ -57,8 +57,8 @@
       (push 'company-tern company-backends-js2-mode))))
 
 (defun javascript/post-init-flycheck ()
-  (dolist (hook '(coffee-mode-hook js2-mode-hook json-mode-hook))
-    (spacemacs/add-flycheck-hook hook)))
+  (dolist (mode '(coffee-mode js2-mode json-mode))
+    (spacemacs/add-flycheck-hook mode)))
 
 (defun javascript/init-js-doc ()
   (use-package js-doc
@@ -214,7 +214,10 @@
 (defun javascript/init-skewer-mode ()
   (use-package skewer-mode
     :defer t
-    :init (add-hook 'js2-mode-hook 'skewer-mode)
+    :init
+    (progn
+      (spacemacs/register-repl 'skewer-mode 'spacemacs/skewer-start-repl "skewer")
+      (add-hook 'js2-mode-hook 'skewer-mode))
     :config
     (progn
       (defun spacemacs/skewer-start-repl ()
@@ -250,6 +253,7 @@
         (evil-insert-state))
 
       (spacemacs/set-leader-keys-for-major-mode 'js2-mode
+        "'" 'spacemacs/skewer-start-repl
         "ee" 'skewer-eval-last-expression
         "eE" 'skewer-eval-print-last-expression
         "sb" 'skewer-load-buffer

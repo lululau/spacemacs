@@ -145,7 +145,9 @@
        ediff-window-setup-function 'ediff-setup-windows-plain
        ;; emacs is evil and decrees that vertical shall henceforth be horizontal
        ediff-split-window-function 'split-window-horizontally
-       ediff-merge-split-window-function 'split-window-horizontally))))
+       ediff-merge-split-window-function 'split-window-horizontally)
+      ;; restore window layout when done
+      (add-hook 'ediff-quit-hook #'winner-undo))))
 
 (defun spacemacs-base/init-evil-ediff ()
   (use-package evil-ediff
@@ -246,6 +248,7 @@
       (spacemacs/set-leader-keys "re" 'evil-show-registers)
       (define-key evil-visual-state-map (kbd "<escape>") 'keyboard-quit)
       ;; motions keys for help buffers
+      (evil-define-key 'motion help-mode-map (kbd "ESC") 'quit-window)
       (evil-define-key 'motion help-mode-map (kbd "<tab>") 'forward-button)
       (evil-define-key 'motion help-mode-map (kbd "S-<tab>") 'backward-button)
       (evil-define-key 'motion help-mode-map (kbd "]") 'help-go-forward)
@@ -308,7 +311,7 @@ Example: (evil-map visual \"<\" \"<gv\")"
       (define-key evil-normal-state-map
         (kbd "gd") 'spacemacs/evil-smart-goto-definition)
 
-      ;; scrolling micro state
+      ;; scrolling transient state
       (defun spacemacs/scroll-half-page-up ()
         "Scroll half a page up while keeping cursor in middle of page."
         (interactive)
@@ -337,7 +340,7 @@ Example: (evil-map visual \"<\" \"<gv\")"
         "n<" 'spacemacs/scroll-transient-state/spacemacs/scroll-half-page-up
         "n>" 'spacemacs/scroll-transient-state/spacemacs/scroll-half-page-down)
 
-      ;; pasting micro-state
+      ;; pasting transient-state
       (spacemacs|define-transient-state paste
         :title "Pasting Transient State"
         :doc "\n[%s(length kill-ring-yank-pointer)/%s(length kill-ring)] \
@@ -348,7 +351,7 @@ below. Anything else exits."
         ("K" evil-paste-pop-next)
         ("p" evil-paste-after)
         ("P" evil-paste-before))
-      (when dotspacemacs-enable-paste-micro-state
+      (when dotspacemacs-enable-paste-transient-state
         (define-key evil-normal-state-map "p" 'spacemacs/paste-transient-state/evil-paste-after)
         (define-key evil-normal-state-map "P" 'spacemacs/paste-transient-state/evil-paste-before))
 
@@ -502,7 +505,8 @@ below. Anything else exits."
         :evil-leader "tEe")
       (spacemacs|diminish holy-mode " Ⓔe" " Ee"))))
 
-(defun spacemacs-base/init-hybrid-mode ()
+(defun spacemacs-base/init-hybrid-mode ())
+(defun spacemacs-base/post-init-evil ()
   (use-package hybrid-mode
     :config
     (progn
@@ -551,7 +555,7 @@ below. Anything else exits."
         "Setup the minibuffer."
         ;; Since ido is implemented in a while loop where each
         ;; iteration setup a whole new minibuffer, we have to keep
-        ;; track of any activated ido navigation micro-state and force
+        ;; track of any activated ido navigation transient-state and force
         ;; the reactivation at each iteration.
         (when spacemacs--ido-navigation-ms-enabled
           (spacemacs/ido-navigation-micro-state)))
@@ -561,7 +565,7 @@ below. Anything else exits."
         (when spacemacs--ido-navigation-ms-face-cookie-minibuffer
           (face-remap-remove-relative
            spacemacs--ido-navigation-ms-face-cookie-minibuffer))
-        ;; be sure to wipe any previous micro-state flag
+        ;; be sure to wipe any previous transient-state flag
         (setq spacemacs--ido-navigation-ms-enabled nil)
         ;; overwrite the key bindings for ido vertical mode only
         (define-key ido-completion-map (kbd "C-<return>") 'ido-select-text)
@@ -591,7 +595,7 @@ below. Anything else exits."
         (define-key ido-completion-map (kbd "<down>") 'ido-next-match)
         (define-key ido-completion-map (kbd "<left>") 'ido-delete-backward-updir)
         (define-key ido-completion-map (kbd "<right>") 'ido-exit-minibuffer)
-        ;; initiate micro-state
+        ;; initiate transient-state
         (define-key ido-completion-map (kbd "M-SPC") 'spacemacs/ido-navigation-micro-state)
         (define-key ido-completion-map (kbd "s-M-SPC") 'spacemacs/ido-navigation-micro-state)
         )
@@ -644,7 +648,7 @@ below. Anything else exits."
           result))
 
       (defvar spacemacs--ido-navigation-ms-enabled nil
-        "Flag which is non nil when ido navigation micro-state is enabled.")
+        "Flag which is non nil when ido navigation transient-state is enabled.")
 
       (defvar spacemacs--ido-navigation-ms-face-cookie-minibuffer nil
         "Cookie pointing to the local face remapping.")
@@ -653,28 +657,28 @@ below. Anything else exits."
         `((t :background ,(face-attribute 'error :foreground)
              :foreground "black"
              :weight bold))
-        "Face for ido minibuffer prompt when ido micro-state is activated."
+        "Face for ido minibuffer prompt when ido transient-state is activated."
         :group 'spacemacs)
 
       (defun spacemacs//ido-navigation-ms-set-face ()
-        "Set faces for ido navigation micro-state."
+        "Set faces for ido navigation transient-state."
         (setq spacemacs--ido-navigation-ms-face-cookie-minibuffer
               (face-remap-add-relative
                'minibuffer-prompt
                'spacemacs-ido-navigation-ms-face)))
 
       (defun spacemacs//ido-navigation-ms-on-enter ()
-        "Initialization of ido micro-state."
+        "Initialization of ido transient-state."
         (setq spacemacs--ido-navigation-ms-enabled t)
         (spacemacs//ido-navigation-ms-set-face))
 
       (defun spacemacs//ido-navigation-ms-on-exit ()
-        "Action to perform when exiting ido micro-state."
+        "Action to perform when exiting ido transient-state."
         (face-remap-remove-relative
          spacemacs--ido-navigation-ms-face-cookie-minibuffer))
 
       (defun spacemacs//ido-navigation-ms-full-doc ()
-        "Full documentation for ido navigation micro-state."
+        "Full documentation for ido navigation transient-state."
         "
   [?]          display this help
   [e]          enter dired
@@ -985,7 +989,7 @@ below. Anything else exits."
                ("spacemacs/toggle-holy-mode" . "emacs (holy-mode)")
                ("evil-lisp-state-\\(.+\\)" . "\\1")
                ("\\(.+\\)-transient-state/\\(.+\\)" . "\\2")
-               ("\\(.+\\)-transient-state/body" . "\\1-micro-state"))))
+               ("\\(.+\\)-transient-state/body" . "\\1-transient-state"))))
         (dolist (nd new-descriptions)
           ;; ensure the target matches the whole string
           (push (cons (concat "\\`" (car nd) "\\'") (cdr nd))

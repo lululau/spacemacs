@@ -320,7 +320,7 @@
         "sh" 'spacemacs/symbol-highlight
         "sH" 'spacemacs/goto-last-searched-ahs-symbol)
 
-      ;; micro-state to easily jump from a highlighted symbol to the others
+      ;; transient-state to easily jump from a highlighted symbol to the others
       (dolist (sym '(ahs-forward
                      ahs-forward-definition
                      ahs-backward
@@ -366,8 +366,8 @@
       (spacemacs|define-transient-state symbol-highlight
         :title "Symbol Highlight Transient State"
         :doc "
-%s(symbol-highlight-doc)  [_n_] forward [_N_ or p] backward   [_R_] restart      [_e_] iedit       [_b_] search buffers
-%s(make-string (length (symbol-highlight-doc)) 32)  [_d_/_D_] fwd/bwd definition [_r_] change range [_/_] search proj [_f_] search files"
+%s(symbol-highlight-doc)  [_n_/_N_/_p_] next/prev/prev   [_R_] restart      [_e_] iedit       [_b_] search buffers
+%s(make-string (length (symbol-highlight-doc)) 32)  [_d_/_D_]^^   next/prev def'n  [_r_] change range [_/_] search proj [_f_] search files"
         :before-exit (spacemacs//ahs-ms-on-exit)
         :bindings
         ("d" ahs-forward-definition)
@@ -394,7 +394,7 @@
 (defun spacemacs/init-avy ()
   (use-package avy
     :defer t
-    :commands (spacemacs/avy-open-url spacemacs/avy-goto-url avy-pop-mark)
+    :commands (spacemacs/avy-goto-url avy-pop-mark)
     :init
     (progn
       (setq avy-all-windows 'all-frames)
@@ -405,20 +405,12 @@
         "jl" 'evil-avy-goto-line
         "ju" 'avy-pop-mark
         "jU" 'spacemacs/avy-goto-url
-        "jw" 'evil-avy-goto-word-or-subword-1
-        "xo" 'spacemacs/avy-open-url))
+        "jw" 'evil-avy-goto-word-or-subword-1))
     :config
-    (progn
-      (defun spacemacs/avy-goto-url()
-        "Use avy to go to an URL in the buffer."
-        (interactive)
-        (avy--generic-jump "https?://" nil 'pre))
-      (defun spacemacs/avy-open-url ()
-        "Use avy to select an URL in the buffer and open it."
-        (interactive)
-        (save-excursion
-          (spacemacs/avy-goto-url)
-          (browse-url-at-point))))))
+    (defun spacemacs/avy-goto-url()
+      "Use avy to go to an URL in the buffer."
+      (interactive)
+      (avy--generic-jump "https?://" nil 'pre))))
 
 (defun spacemacs/init-bracketed-paste ()
   (use-package bracketed-paste
@@ -496,7 +488,7 @@
       "/"  'spacemacs/doc-view-search-new-query
       "?"  'spacemacs/doc-view-search-new-query-backward
       "gg" 'doc-view-first-page
-      "G"  'doc-view-last-page
+      "G"  'spacemacs/doc-view-goto-page
       "gt" 'doc-view-goto-page
       "h"  'doc-view-previous-page
       "j"  'doc-view-next-line-or-next-page
@@ -519,6 +511,14 @@
         "Initiate a new query."
         (interactive)
         (doc-view-search 'newquery t))
+
+      (defun spacemacs/doc-view-goto-page (&optional count)
+        (interactive (list
+                      (when current-prefix-arg
+                        (prefix-numeric-value current-prefix-arg))))
+        (if (null count)
+            (doc-view-last-page)
+          (doc-view-goto-page count)))
 
       ;; fixed a weird issue where toggling display does not
       ;; swtich to text mode
@@ -949,10 +949,6 @@
 
 (defun spacemacs/init-google-translate ()
   (use-package google-translate
-    :commands (google-translate-query-translate
-               google-translate-at-point
-               google-translate-query-translate-reverse
-               google-translate-at-point-reverse)
     :init
     (progn
       (defun spacemacs/set-google-translate-languages (source target)
@@ -967,17 +963,15 @@ For instance pass En as source for English."
         (setq google-translate-default-source-language (downcase source))
         (setq google-translate-default-target-language (downcase target)))
       (spacemacs/set-leader-keys
+        "xgl" 'spacemacs/set-google-translate-languages
         "xgQ" 'google-translate-query-translate-reverse
         "xgq" 'google-translate-query-translate
         "xgT" 'google-translate-at-point-reverse
         "xgt" 'google-translate-at-point))
-    :config
-    (progn
-      (require 'google-translate-default-ui)
       (setq google-translate-enable-ido-completion t)
       (setq google-translate-show-phonetic t)
       (setq google-translate-default-source-language "en")
-      (setq google-translate-default-target-language "fr"))))
+      (setq google-translate-default-target-language "fr")))
 
 (defun spacemacs/init-hexl ()
   (use-package hexl
@@ -1624,15 +1618,13 @@ on whether the spacemacs-ivy layer is used or not, with
         "9" 'select-window-9)
       (window-numbering-mode 1))
 
-    (defun spacemacs//window-numbering-assign (windows)
-      "Custom number assignment for special buffers."
-      (mapc (lambda (w)
-              (when (and (boundp 'neo-global--window)
-                         (eq w neo-global--window))
-                (window-numbering-assign w 0)))
-            windows))
-    (add-hook 'window-numbering-before-hook 'spacemacs//window-numbering-assign)
-    (add-hook 'neo-after-create-hook '(lambda (w) (window-numbering-update)))))
+    ;; make sure neotree is always 0
+    (defun spacemacs//window-numbering-assign ()
+      "Custom number assignment for neotree."
+      (when (and (boundp 'neo-buffer-name)
+                 (string= (buffer-name) neo-buffer-name))
+        0))
+    (setq window-numbering-assign-func #'spacemacs//window-numbering-assign)))
 
 (defun spacemacs/init-volatile-highlights ()
   (use-package volatile-highlights

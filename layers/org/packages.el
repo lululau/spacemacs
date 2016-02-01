@@ -112,13 +112,28 @@
 
       (with-eval-after-load 'org-indent
         (spacemacs|hide-lighter org-indent-mode))
-      (setq org-startup-indented t)
       (let ((dir (configuration-layer/get-layer-property 'org :dir)))
         (setq org-export-async-init-file (concat dir "org-async-init.el")))
       (defmacro spacemacs|org-emphasize (fname char)
         "Make function for setting the emphasis in org mode"
         `(defun ,fname () (interactive)
                 (org-emphasize ,char)))
+
+      ;; Follow the confirm and abort conventions
+      (with-eval-after-load 'org-capture
+        (spacemacs/set-leader-keys-for-minor-mode 'org-capture-mode
+          dotspacemacs-major-mode-leader-key 'org-capture-finalize
+          "c" 'org-capture-finalize
+          "k" 'org-capture-kill
+          "a" 'org-capture-kill
+          "r" 'org-capture-refile))
+
+      (with-eval-after-load 'org-src
+        (spacemacs/set-leader-keys-for-minor-mode 'org-src-mode
+          "'" 'org-edit-src-exit
+          "c" 'org-edit-src-exit
+          "a" 'org-edit-src-abort
+          "k" 'org-edit-src-abort))
 
       ;; Insert key for org-mode and markdown a la C-h k
       ;; from SE endless http://emacs.stackexchange.com/questions/2206/i-want-to-have-the-kbd-tags-for-my-blog-written-in-org-mode/2208#2208
@@ -259,7 +274,6 @@ Will work on both org-mode and any mode that accepts plain html."
                     (2 font-lock-function-name-face)
                     (3 font-lock-comment-face prepend))))
 
-      (require 'org-indent)
       (define-key global-map "\C-cl" 'org-store-link)
       (define-key global-map "\C-ca" 'org-agenda)
       (define-key global-map "\C-cc" 'org-capture)
