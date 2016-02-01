@@ -256,7 +256,7 @@ Available PROPS:
              ;; Check for Clashes
              (if ,already-defined?
                  (unless (equal ,already-defined? ,name)
-                   (warn "Replacing existing binding \"%s\" for %s with %s"
+                   (spacemacs-buffer/warning "Replacing existing binding \"%s\" for %s with %s"
                          ,binding ,already-defined? ,name )
                    (push '(,binding . ,name) spacemacs--custom-layout-alist))
                (push '(,binding . ,name) spacemacs--custom-layout-alist)))))
@@ -279,7 +279,7 @@ Available PROPS:
                          (format "[%s] %s"
                                  (car custom-persp) (cdr custom-persp)))
                        spacemacs--custom-layout-alist " ")
-          (warn (format "`spacemacs--custom-layout-alist' variable is empty" ))))
+          (spacemacs-buffer/warning (format "`spacemacs--custom-layout-alist' variable is empty" ))))
 
       (defun spacemacs//update-custom-layouts ()
         "Ensure the custom-perspectives micro-state is updated.
@@ -302,8 +302,30 @@ format so they are supported by the
       (defadvice persp-activate (before spacemacs//save-toggle-layout activate)
         (setq spacemacs--last-selected-layout persp-last-persp-name))
       (add-hook 'persp-mode-hook 'spacemacs//layout-autosave)
-      ;; By default, persp mode wont affect either helm or ido
-      (remove-hook 'ido-make-buffer-list-hook 'persp-restrict-ido-buffers))))
+
+      (defun spacemacs/alternate-buffer-in-persp ()
+        "Switch back and forth between current and last buffer in the
+current perspective."
+        (interactive)
+        (with-persp-buffer-list ()
+          (switch-to-buffer (other-buffer (current-buffer) t))))
+
+      (defun spacemacs-layouts/non-restricted-buffer-list ()
+        (interactive)
+        (remove-hook 'ido-make-buffer-list-hook  #'persp-restrict-ido-buffers)
+        (helm-mini)
+        (add-hook 'ido-make-buffer-list-hook  #'persp-restrict-ido-buffers))
+
+      (spacemacs/declare-prefix "b" "persp-buffers")
+      (spacemacs/declare-prefix "B" "global-buffers")
+
+      ;; Override SPC TAB to only change buffers in perspective
+      (spacemacs/set-leader-keys
+        "TAB"  'spacemacs/alternate-buffer-in-persp
+        "ba"   'persp-add-buffer
+        "br"   'persp-remove-buffer
+        "Bb"   'spacemacs-layouts/non-restricted-buffer-list
+        ))))
 
 (defun spacemacs-layouts/post-init-spaceline ()
   (setq spaceline-display-default-perspective
