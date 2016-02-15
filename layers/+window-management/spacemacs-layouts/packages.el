@@ -24,7 +24,9 @@
     :diminish persp-mode
     :init
     (progn
-      (setq persp-auto-resume-time (if dotspacemacs-auto-resume-layouts 1 -1)
+      (setq persp-auto-resume-time (if (or dotspacemacs-auto-resume-layouts
+                                           spacemacs-force-resume-layouts)
+                                       1 -1)
             persp-nil-name dotspacemacs-default-layout-name
             persp-reset-windows-on-nil-window-conf nil
             persp-set-last-persp-for-new-frames nil
@@ -101,8 +103,8 @@
   [_A_]^^^^       add all buffers from another layout
   [_a_]^^^^       add all the buffers from another layout in the current one
   [_b_]^^^^       select a buffer in the current layout
-  [_c_]^^^^       close the current layout and keep its buffers
-  [_C_]^^^^       close the other layouts and keep their buffers
+  [_d_]^^^^       close the current layout and keep its buffers
+  [_D_]^^^^       close the other layouts and keep their buffers
   [_h_]^^^^       go to default layout
   [_l_]^^^^       select/create a layout with helm
   [_L_]^^^^       load layouts from file
@@ -137,8 +139,8 @@
         ("a" persp-add-buffer :exit t)
         ("A" persp-import-buffers :exit t)
         ("b" spacemacs/persp-helm-mini :exit t)
-        ("c" spacemacs/layouts-ms-close)
-        ("C" spacemacs/layouts-ms-close-other :exit t)
+        ("d" spacemacs/layouts-ms-close)
+        ("D" spacemacs/layouts-ms-close-other :exit t)
         ("h" spacemacs/layout-goto-default :exit t)
         ("l" spacemacs/helm-perspectives :exit t)
         ("L" persp-load-state-from-file :exit t)

@@ -1183,6 +1183,7 @@ on whether the spacemacs-ivy layer is used or not, with
       (spacemacs/set-leader-keys "tr" 'linum-relative-toggle))
     :config
     (progn
+      (spacemacs|hide-lighter linum-relative-mode)
       (setq linum-relative-current-symbol ""))))
 
 (defun spacemacs/init-lorem-ipsum ()

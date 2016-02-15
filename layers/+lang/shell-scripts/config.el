@@ -1,4 +1,4 @@
-;;; packages.el --- elm Layer packages File for Spacemacs
+;;; config.el --- Shell Scripts Layer Configuration File for Spacemacs
 ;;
 ;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
 ;;
@@ -9,13 +9,6 @@
 ;;
 ;;; License: GPLv3
 
-(setq elm-packages
-    '(
-      company
-      elm-mode
-      flycheck
-      flycheck-elm
-      popwin
-      smartparens
-      ))
-
+;; variables
+(spacemacs|defvar-company-backends sh-mode)
+(spacemacs|defvar-company-backends fish-mode)
