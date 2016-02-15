@@ -12,6 +12,7 @@
 (setq mu4e-packages
       '(
         (mu4e :skip-install t)
+        mu4e-alert
         mu4e-maildirs-extension
         org
         ))
@@ -29,10 +30,26 @@
         :mode mu4e-main-mode
         :bindings
         (kbd "j") 'mu4e~headers-jump-to-maildir)
-      (evilified-state-evilify-map mu4e-headers-mode-map
-        :mode mu4e-headers-mode)
-      (evilified-state-evilify-map mu4e-view-mode-map
-        :mode mu4e-view-mode)
+
+      (evilified-state-evilify-map
+       mu4e-headers-mode-map
+       :mode mu4e-headers-mode
+       :bindings
+       (kbd "C-j") 'mu4e-headers-next
+       (kbd "C-k") 'mu4e-headers-prev
+       (kbd "J") (lambda ()
+                   (interactive)
+                   (mu4e-headers-mark-thread nil '(read))))
+
+      (evilified-state-evilify-map
+       mu4e-view-mode-map
+       :mode mu4e-view-mode
+       :bindings
+       (kbd "C-j") 'mu4e-view-headers-next
+       (kbd "C-k") 'mu4e-view-headers-prev
+       (kbd "J") (lambda ()
+                   (interactive)
+                    (mu4e-view-mark-thread '(read))))
 
       (setq mu4e-completing-read-function
             (if (configuration-layer/layer-usedp 'spacemacs-ivy)
@@ -45,6 +62,15 @@
       (when mu4e-account-alist
         (add-hook 'mu4e-compose-pre-hook 'mu4e/set-account)
         (add-hook 'message-sent-hook 'mu4e/mail-account-reset)))))
+
+(defun mu4e/init-mu4e-alert ()
+  (use-package mu4e-alert
+    :defer t
+    :init (with-eval-after-load 'mu4e
+            (when mu4e-enable-notifications
+              (mu4e-alert-enable-notifications))
+            (when mu4e-enable-mode-line
+              (mu4e-alert-enable-mode-line-display)))))
 
 (defun mu4e/init-mu4e-maildirs-extension ()
   (use-package mu4e-maildirs-extension
