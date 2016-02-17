@@ -47,6 +47,10 @@
             ahs-idle-interval 0.25
             ahs-inhibit-face-list nil)
 
+      ;; since we are creating our own maps,
+      ;; prevent the default keymap from getting created
+      (setq auto-highlight-symbol-mode-map (make-sparse-keymap))
+
       (spacemacs|add-toggle automatic-symbol-highlight
         :status (timerp ahs-idle-timer)
         :on (progn
@@ -150,15 +154,13 @@
             (progn
               (spacemacs/integrate-evil-search t)
               (spacemacs/ahs-highlight-now-wrapper)
-              (when (configuration-layer/package-usedp 'evil-jumper)
-                (evil-set-jump))
+              (evil-set-jump)
               (spacemacs/symbol-highlight-transient-state/body)
               (ahs-forward))
           (progn
             (spacemacs/integrate-evil-search nil)
             (spacemacs/ahs-highlight-now-wrapper)
-            (when (configuration-layer/package-usedp 'evil-jumper)
-              (evil-set-jump))
+            (evil-set-jump)
             (spacemacs/symbol-highlight-transient-state/body)
             (ahs-backward))))
 
@@ -229,9 +231,14 @@
 
       (defun ahs-to-iedit ()
         (interactive)
-        (if (configuration-layer/package-usedp 'evil-iedit-state)
-            (evil-iedit-state/iedit-mode)
-          (ahs-edit-mode t)))
+        (cond
+         ((and (not (eq dotspacemacs-editing-style 'emacs))
+               (configuration-layer/package-usedp 'evil-iedit-state))
+          (evil-iedit-state/iedit-mode))
+         ((and (eq dotspacemacs-editing-style 'emacs)
+               (configuration-layer/package-usedp 'iedit))
+          (iedit-mode))
+         (t (ahs-edit-mode t))))
 
       (spacemacs|define-transient-state symbol-highlight
         :title "Symbol Highlight Transient State"
