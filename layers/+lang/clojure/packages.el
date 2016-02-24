@@ -57,7 +57,7 @@ the focus."
 `insert state'."
         (interactive)
         (cider-insert-last-sexp-in-repl t)
-        (evil-insert-state))
+        (spacemacs/normal-to-insert-state))
 
       (defun spacemacs/cider-send-region-to-repl (start end)
         "Send region to REPL and evaluate it without changing
@@ -72,7 +72,7 @@ the focus."
         (interactive "r")
         (cider-insert-in-repl
          (buffer-substring-no-properties start end) t)
-        (evil-insert-state))
+        (spacemacs/normal-to-insert-state))
 
       (defun spacemacs/cider-send-function-to-repl ()
         "Send current function to REPL and evaluate it without changing
@@ -85,7 +85,7 @@ the focus."
 `insert state'."
         (interactive)
         (cider-insert-defun-in-repl t)
-        (evil-insert-state))
+        (spacemacs/normal-to-insert-state))
 
       (defun spacemacs/cider-send-ns-form-to-repl ()
         "Send buffer's ns form to REPL and evaluate it without changing
@@ -98,7 +98,7 @@ the focus."
 `insert state'."
         (interactive)
         (cider-insert-ns-form-in-repl t)
-        (evil-insert-state))
+        (spacemacs/normal-to-insert-state))
 
       (defun spacemacs/cider-send-buffer-in-repl-and-focus ()
         "Send the current buffer in the REPL and switch to the REPL in
@@ -106,7 +106,7 @@ the focus."
         (interactive)
         (cider-load-buffer)
         (cider-switch-to-repl-buffer)
-        (evil-insert-state))
+        (spacemacs/normal-to-insert-state))
 
       (defun spacemacs/cider-test-run-focused-test ()
         (interactive)
@@ -229,6 +229,7 @@ If called with a prefix argument, uses the other-window instead."
           "sI" 'cider-jack-in-clojurescript
           "sn" 'spacemacs/cider-send-ns-form-to-repl
           "sN" 'spacemacs/cider-send-ns-form-to-repl-focus
+          "so" 'cider-repl-switch-to-other
           "sq" 'cider-quit
           "sr" 'spacemacs/cider-send-region-to-repl
           "sR" 'spacemacs/cider-send-region-to-repl-focus
@@ -263,6 +264,7 @@ If called with a prefix argument, uses the other-window instead."
 
         "sc" 'cider-repl-clear-buffer
         "sn" 'cider-repl-set-ns
+        "so" 'cider-repl-switch-to-other
         "sq" 'cider-quit
         "ss" 'cider-switch-to-last-clojure-buffer
         "sx" 'cider-refresh

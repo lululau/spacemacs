@@ -142,8 +142,8 @@ is achieved by adding the relevant text properties."
       (require 'esh-opt)
 
       ;; quick commands
-      (defalias 'e 'find-file-other-window)
-      (defalias 'd 'dired)
+      (defalias 'eshell/e 'find-file-other-window)
+      (defalias 'eshell/d 'dired)
       (setenv "PAGER" "cat")
 
       ;; support `em-smart'
@@ -193,12 +193,12 @@ is achieved by adding the relevant text properties."
           "Correctly revert to insert state after selection."
           (interactive)
           (helm-eshell-history)
-          (evil-insert-state))
+          (spacemacs/normal-to-insert-state))
         (defun spacemacs/helm-shell-history ()
           "Correctly revert to insert state after selection."
           (interactive)
           (helm-comint-input-ring)
-          (evil-insert-state))
+          (spacemacs/normal-to-insert-state))
         (defun spacemacs/init-helm-eshell ()
           "Initialize helm-eshell."
           ;; this is buggy for now

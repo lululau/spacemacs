@@ -226,6 +226,12 @@
       (defun evil-insert-state-cursor-hide ()
         (setq evil-insert-state-cursor '((hbar . 0))))
 
+      (defun spacemacs/normal-to-insert-state ()
+        "Switches to evil-insert-state if the current state is
+evil-normal state."
+        (when (evil-normal-state-p)
+          (evil-insert-state)))
+
       (unless (eq dotspacemacs-editing-style 'emacs)
         (evil-mode 1)))
     :config
@@ -312,35 +318,33 @@ Example: (evil-map visual \"<\" \"<gv\")"
         (kbd "gd") 'spacemacs/evil-smart-goto-definition)
 
       ;; scrolling transient state
-      (defun spacemacs/scroll-half-page-up ()
-        "Scroll half a page up while keeping cursor in middle of page."
-        (interactive)
-        (evil-window-top)
-        (let ((recenter-redisplay nil))
-          (recenter nil)))
-      (defun spacemacs/scroll-half-page-down ()
-        "Scroll half a page down while keeping cursor in middle of page."
-        (interactive)
-        (evil-window-bottom)
-        ;; required to make repeated presses idempotent
-        (evil-next-visual-line)
-        (let ((recenter-redisplay nil))
-          (recenter nil)))
       (spacemacs|define-transient-state scroll
         :title "Scrolling Transient State"
         :bindings
         ("," evil-scroll-page-up "page up")
         ("." evil-scroll-page-down "page down")
         ;; half page
-        ("<" spacemacs/scroll-half-page-up "half page up")
-        (">" spacemacs/scroll-half-page-down "half page down"))
+        ("<" evil-scroll-up "half page up")
+        (">" evil-scroll-down "half page down"))
       (spacemacs/set-leader-keys
         "n," 'spacemacs/scroll-transient-state/evil-scroll-page-up
         "n." 'spacemacs/scroll-transient-state/evil-scroll-page-down
-        "n<" 'spacemacs/scroll-transient-state/spacemacs/scroll-half-page-up
-        "n>" 'spacemacs/scroll-transient-state/spacemacs/scroll-half-page-down)
+        "n<" 'spacemacs/scroll-transient-state/scroll-half-page-up
+        "n>" 'spacemacs/scroll-transient-state/scroll-half-page-down)
 
       ;; pasting transient-state
+      (evil-define-command spacemacs//transient-state-0 ()
+        :keep-visual t
+        :repeat nil
+        (interactive)
+        (if current-prefix-arg
+            (progn
+              (setq this-command #'digit-argument)
+              (call-interactively #'digit-argument))
+          (setq this-command #'evil-beginning-of-line
+                hydra-deactivate t)
+          (call-interactively #'evil-beginning-of-line)))
+
       (spacemacs|define-transient-state paste
         :title "Pasting Transient State"
         :doc "\n[%s(length kill-ring-yank-pointer)/%s(length kill-ring)] \
@@ -350,7 +354,8 @@ below. Anything else exits."
         ("C-j" evil-paste-pop)
         ("C-k" evil-paste-pop-next)
         ("p" evil-paste-after)
-        ("P" evil-paste-before))
+        ("P" evil-paste-before)
+        ("0" spacemacs//transient-state-0))
       (when dotspacemacs-enable-paste-transient-state
         (define-key evil-normal-state-map "p" 'spacemacs/paste-transient-state/evil-paste-after)
         (define-key evil-normal-state-map "P" 'spacemacs/paste-transient-state/evil-paste-before))
@@ -406,11 +411,11 @@ below. Anything else exits."
 
       ;; Define history commands for comint
       (evil-define-key 'insert comint-mode-map
-        (kbd "C-k") 'comint-next-input
-        (kbd "C-j") 'comint-previous-input)
+        (kbd "C-k") 'comint-previous-input
+        (kbd "C-j") 'comint-next-input)
       (evil-define-key 'normal comint-mode-map
-        (kbd "C-k") 'comint-next-input
-        (kbd "C-j") 'comint-previous-input))))
+        (kbd "C-k") 'comint-previous-input
+        (kbd "C-j") 'comint-next-input))))
 
 (defun spacemacs-base/init-evil-escape ()
   (use-package evil-escape
