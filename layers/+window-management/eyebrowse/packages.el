@@ -23,11 +23,44 @@
       (define-key evil-motion-state-map "gt" 'eyebrowse-next-window-config)
       (define-key evil-motion-state-map "gT" 'eyebrowse-prev-window-config)
 
+      (spacemacs/set-leader-keys "bW" 'spacemacs/goto-buffer-workspace)
+
+      (defun spacemacs/find-workspace (buffer)
+        "Find Eyebrowse workspace containing BUFFER.
+If several workspaces contain BUFFER, return the first one. Workspaces are
+ordered by slot number.
+If no workspace contains
+BUFFER, return nil."
+        ;; the second element of a workspace is its window-state object
+        (--find (memq buffer (spacemacs/window-state-get-buffers (cadr it)))
+                (eyebrowse--get 'window-configs)))
+
+      (defun spacemacs/display-in-workspace (buffer alist)
+        "Display BUFFER's workspace.
+Return BUFFER's window, if exists, otherwise nil.
+If BUFFER is already visible in current workspace, just return its window
+without switching workspaces."
+        (or (get-buffer-window buffer)
+            (-when-let (workspace (spacemacs/find-workspace buffer))
+              (eyebrowse-switch-to-window-config (car workspace))
+              (get-buffer-window buffer))))
+
+      (defun spacemacs/goto-buffer-workspace (buffer)
+        "Switch to BUFFER's window in BUFFER's workspace.
+If BUFFER isn't displayed in any workspace, display it in the current
+workspace, preferably in the current window."
+        (interactive "B")
+        (pop-to-buffer buffer '((;; reuse buffer window from some workspace
+                                 spacemacs/display-in-workspace
+                                 ;; fallback to display in current window
+                                 display-buffer-same-window)
+                                (inhibit-same-window . nil))))
+
       (defun spacemacs/workspaces-ms-rename ()
         "Rename a workspace and get back to transient-state."
         (interactive)
         (eyebrowse-rename-window-config (eyebrowse--get 'current-slot) nil)
-        (spacemacs/workspaces-micro-state))
+        (spacemacs/workspaces-transient-state/body))
 
       (defun spacemacs//workspaces-ms-get-slot-name (window-config)
         "Return the name for the given window-config"
