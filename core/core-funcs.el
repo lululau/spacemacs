@@ -27,27 +27,25 @@ directory is returned.
 If LOG is non-nil a message is displayed in spacemacs-buffer-mode buffer.
 FILE-TO-LOAD is an explicit file to load after the installation."
   (let ((warning-minimum-level :error))
-    (condition-case nil
-        (require pkg)
-      (error
-       ;; not installed, we try to initialize package.el only if required to
-       ;; precious seconds during boot time
-       (require 'cl)
-       (let ((pkg-elpa-dir (spacemacs//get-package-directory pkg)))
-         (if pkg-elpa-dir
-             (add-to-list 'load-path pkg-elpa-dir)
-           ;; install the package
-           (when log
-             (spacemacs-buffer/append
-              (format "(Bootstrap) Installing %s...\n" pkg))
-             (spacemacs//redisplay))
-           (configuration-layer/retrieve-package-archives 'quiet)
-           (package-install pkg)
-           (setq pkg-elpa-dir (spacemacs//get-package-directory pkg)))
-         (require pkg nil 'noerror)
-         (when file-to-load
-           (load-file (concat pkg-elpa-dir file-to-load)))
-         pkg-elpa-dir)))))
+    (unless (require pkg nil 'noerror)
+      ;; not installed, we try to initialize package.el only if required to
+      ;; precious seconds during boot time
+      (require 'cl)
+      (let ((pkg-elpa-dir (spacemacs//get-package-directory pkg)))
+        (if pkg-elpa-dir
+            (add-to-list 'load-path pkg-elpa-dir)
+          ;; install the package
+          (when log
+            (spacemacs-buffer/append
+             (format "(Bootstrap) Installing %s...\n" pkg))
+            (spacemacs//redisplay))
+          (configuration-layer/retrieve-package-archives 'quiet)
+          (package-install pkg)
+          (setq pkg-elpa-dir (spacemacs//get-package-directory pkg)))
+        (require pkg nil 'noerror)
+        (when file-to-load
+          (load-file (concat pkg-elpa-dir file-to-load)))
+        pkg-elpa-dir))))
 
 (defun spacemacs//get-package-directory (pkg)
   "Return the directory of PKG. Return nil if not found."

@@ -367,12 +367,14 @@ Properties that can be copied are `:location', `:step' and `:excluded'."
          (location (when (listp pkg) (plist-get (cdr pkg) :location)))
          (step (when (listp pkg) (plist-get (cdr pkg) :step)))
          (excluded (when (listp pkg) (plist-get (cdr pkg) :excluded)))
+         (toggle (when (listp pkg) (plist-get (cdr pkg) :toggle)))
          (protected (when (listp pkg) (plist-get (cdr pkg) :protected)))
          (copyp (not (null obj)))
          (obj (if obj obj (cfgl-package name-str :name name-sym))))
     (when location (oset obj :location location))
     (when step (oset obj :step step))
     (oset obj :excluded excluded)
+    (when toggle (oset obj :toggle toggle))
     ;; cannot override protected packages
     (unless copyp
       (oset obj :protected protected)
@@ -921,7 +923,7 @@ path."
              pkg-name (if layer (format "@%S" layer) "")
              installed-count noinst-count) t)
     (unless (package-installed-p pkg-name)
-      (condition-case err
+      (condition-case-unless-debug err
           (cond
            ((or (null pkg) (eq 'elpa location))
             (configuration-layer//install-from-elpa pkg-name)

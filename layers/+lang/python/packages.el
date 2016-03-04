@@ -199,7 +199,8 @@
       (let ((dir (configuration-layer/get-layer-local-dir 'python)))
         (setq pylookup-dir (concat dir "pylookup/")
               pylookup-program (concat pylookup-dir "pylookup.py")
-              pylookup-db-file (concat pylookup-dir "pylookup.db"))))))
+              pylookup-db-file (concat pylookup-dir "pylookup.db")))
+        (setq pylookup-completing-read 'completing-read))))
 
 (defun python/init-pytest ()
   (use-package pytest
@@ -391,7 +392,7 @@
 paths for Python then prevent the buffer to be switched. This
 issue might be fixed in Emacs 25. Until then, we need it here to
 fix this issue."
-    (condition-case nil
+    (condition-case-unless-debug nil
         ad-do-it
       (error nil))))
 
