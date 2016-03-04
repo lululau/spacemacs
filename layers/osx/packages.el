@@ -34,8 +34,7 @@
         :post-config
         ;; Disable fuzzy matchting to make mdfind work with helm-locate
         ;; https://github.com/emacs-helm/helm/issues/799
-        (setq helm-locate-fuzzy-match nil)
-        (setq helm-locate-command "mdfind -name %s %s")))))
+        (setq helm-locate-fuzzy-match nil)))))
 
 (defun osx/init-launchctl ()
   (use-package launchctl
