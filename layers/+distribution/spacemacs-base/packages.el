@@ -252,7 +252,6 @@ evil-normal state."
       (define-key evil-window-map (kbd "<up>") 'evil-window-up)
       (define-key evil-window-map (kbd "<down>") 'evil-window-down)
       (spacemacs/set-leader-keys "re" 'evil-show-registers)
-      (define-key evil-visual-state-map (kbd "<escape>") 'keyboard-quit)
       ;; motions keys for help buffers
       (evil-define-key 'motion help-mode-map (kbd "<escape>") 'quit-window)
       (evil-define-key 'motion help-mode-map (kbd "<tab>") 'forward-button)
@@ -412,9 +411,10 @@ below. Anything else exits."
             ad-do-it)))
 
       ;; Define history commands for comint
-      (evil-define-key 'insert comint-mode-map
-        (kbd "C-k") 'comint-previous-input
-        (kbd "C-j") 'comint-next-input)
+      (when (eq dotspacemacs-editing-style 'vim)
+        (evil-define-key 'insert comint-mode-map
+          (kbd "C-k") 'comint-previous-input
+          (kbd "C-j") 'comint-next-input))
       (evil-define-key 'normal comint-mode-map
         (kbd "C-k") 'comint-previous-input
         (kbd "C-j") 'comint-next-input))))
@@ -772,14 +772,15 @@ below. Anything else exits."
                projectile-ag
                projectile-compile-project
                projectile-dired
-               projectile-grep
                projectile-find-dir
                projectile-find-file
                projectile-find-tag
                projectile-find-test-file
+               projectile-grep
                projectile-invalidate-cache
                projectile-kill-buffers
                projectile-multi-occur
+               projectile-project-p
                projectile-project-root
                projectile-recentf
                projectile-regenerate-tags
