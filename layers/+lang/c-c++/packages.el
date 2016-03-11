@@ -23,7 +23,7 @@
     helm-cscope
     helm-gtags
     semantic
-    (srefactor :toggle (version<= "24.4" emacs-version))
+    srefactor
     stickyfunc-enhance
     ycmd
     xcscope
@@ -108,8 +108,7 @@
     (spacemacs/helm-gtags-define-keys-for-mode 'c++-mode)))
 
 (defun c-c++/post-init-semantic ()
-  (semantic/enable-semantic-mode 'c-mode)
-  (semantic/enable-semantic-mode 'c++-mode))
+  (spacemacs/add-to-hooks 'semantic-mode '(c-mode-hook c++-mode-hook)))
 
 (defun c-c++/post-init-srefactor ()
   (spacemacs/set-leader-keys-for-major-mode 'c-mode "r" 'srefactor-refactor-at-point)

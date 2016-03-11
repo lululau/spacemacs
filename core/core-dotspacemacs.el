@@ -163,10 +163,6 @@ start.")
 (defvar dotspacemacs-max-rollback-slots 5
   "Maximum number of rollback slots to keep in the cache.")
 
-(defvar dotspacemacs-use-ido nil
-  "If non nil then `ido' replaces `helm' for some commands. For now only
-`find-files' (SPC f f) is replaced.")
-
 (defvar dotspacemacs-helm-resize nil
   "If non nil, `helm' will try to minimize the space it uses.")
 
@@ -175,6 +171,11 @@ start.")
 
 (defvar dotspacemacs-helm-position 'bottom
   "Position in which to show the `helm' mini-buffer.")
+
+(defvar dotspacemacs-large-file-size 1
+  "Size (in MB) above which spacemacs will prompt to open the large file
+literally to avoid performance issues. Opening a file literally means that
+no major mode or minor modes are active.")
 
 (defvar dotspacemacs-auto-save-file-location 'cache
   "Location where to auto-save files. Possible values are `original' to
