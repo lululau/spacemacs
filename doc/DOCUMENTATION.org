@@ -973,6 +973,7 @@ and ~T~):
 
 | Key Binding | Description                                                       |
 |-------------+-------------------------------------------------------------------|
+| ~SPC t 8~   | highlight any character past the 80th column                      |
 | ~SPC t f~   | display the fill column (by default the fill column is set to 80) |
 | ~SPC t h h~ | toggle highlight of the current line                              |
 | ~SPC t h i~ | toggle highlight indentation levels                               |
@@ -1134,31 +1135,33 @@ toggle them.
 Some toggle have two flavors: local and global. The global version of the toggle
 can be reached using the =control= key.
 
-| Key Binding | Unicode | ASCII | Mode                                        |
-|-------------+---------+-------+---------------------------------------------|
-| ~SPC t -~   | =⊝=     | -     | [[http://emacswiki.org/emacs/centered-cursor-mode.el][centered-cursor]]  mode                       |
-| ~SPC t C--~ | =⊝=     |       | global centered cursor                      |
-| ~SPC t a~   | =ⓐ=     | a     | auto-completion                             |
-| ~SPC t c~   | =ⓒ=     | c     | camel case motion with subword mode         |
-| =none=      | =ⓔ=     | e     | [[https://github.com/edwtjo/evil-org-mode][evil-org]] mode                               |
-| ~SPC t E e~ | =Ⓔe=    | Ee    | emacs editing style (holy mode)             |
-| ~SPC t E h~ | =Ⓔh=    | Eh    | hybrid editing style (hybrid mode)          |
-| ~SPC t f~   |         |       | fill-column-indicator mode                  |
-| ~SPC t F~   | =Ⓕ=     | F     | auto-fill mode                              |
-| ~SPC t g~   | =ⓖ=     | g     | [[https://github.com/roman/golden-ratio.el][golden-ratio]] mode                           |
-| ~SPC t h i~ | =ⓗi=    | hi    | toggle highlight indentation levels         |
-| ~SPC t h c~ | =ⓗc=    | hc    | toggle highlight indentation current column |
-| ~SPC t i~   | =ⓘ=     | i     | indentation guide                           |
-| ~SPC t C-i~ | =ⓘ=     | i     | global indentation guide                    |
-| ~SPC t I~   | =Ⓘ=     | I     | aggressive indent mode                      |
-| ~SPC t K~   | =Ⓚ=     | K     | which-key mode                              |
-| ~SPC t p~   | =ⓟ=     | p     | [[https://github.com/Fuco1/smartparens][smartparens]] mode                            |
-| ~SPC t C-p~ | =ⓟ=     |       | global smartparens                          |
-| ~SPC t s~   | =ⓢ=     | s     | syntax checking (flycheck)                  |
-| ~SPC t S~   | =Ⓢ=     | S     | enabled in [[../layers/spell-checking][spell checking layer]] (flyspell)  |
-| ~SPC t w~   | =ⓦ=     | w     | whitespace mode                             |
-| ~SPC t C-w~ | =Ⓦ=     | W     | global whitespace                           |
-| ~SPC t y~   | =ⓨ=     | y     | [[https://github.com/capitaomorte/yasnippet][yasnippet]] mode                              |
+| Key Binding | Unicode | ASCII | Mode                                                 |
+|-------------+---------+-------+------------------------------------------------------|
+| ~SPC t -~   | =⊝=     | -     | [[http://emacswiki.org/emacs/centered-cursor-mode.el][centered-cursor]]  mode                                |
+| ~SPC t 8~   | =⑧=     | 8     | toggle highlight of characters for long lines        |
+| ~SPC t C-8~ | =⑧=     | 8     | global toggle highlight of characters for long lines |
+| ~SPC t C--~ | =⊝=     |       | global centered cursor                               |
+| ~SPC t a~   | =ⓐ=     | a     | auto-completion                                      |
+| ~SPC t c~   | =ⓒ=     | c     | camel case motion with subword mode                  |
+| =none=      | =ⓔ=     | e     | [[https://github.com/edwtjo/evil-org-mode][evil-org]] mode                                        |
+| ~SPC t E e~ | =Ⓔe=    | Ee    | emacs editing style (holy mode)                      |
+| ~SPC t E h~ | =Ⓔh=    | Eh    | hybrid editing style (hybrid mode)                   |
+| ~SPC t f~   |         |       | fill-column-indicator mode                           |
+| ~SPC t F~   | =Ⓕ=     | F     | auto-fill mode                                       |
+| ~SPC t g~   | =ⓖ=     | g     | [[https://github.com/roman/golden-ratio.el][golden-ratio]] mode                                    |
+| ~SPC t h i~ | =ⓗi=    | hi    | toggle highlight indentation levels                  |
+| ~SPC t h c~ | =ⓗc=    | hc    | toggle highlight indentation current column          |
+| ~SPC t i~   | =ⓘ=     | i     | indentation guide                                    |
+| ~SPC t C-i~ | =ⓘ=     | i     | global indentation guide                             |
+| ~SPC t I~   | =Ⓘ=     | I     | aggressive indent mode                               |
+| ~SPC t K~   | =Ⓚ=     | K     | which-key mode                                       |
+| ~SPC t p~   | =ⓟ=     | p     | [[https://github.com/Fuco1/smartparens][smartparens]] mode                                     |
+| ~SPC t C-p~ | =ⓟ=     |       | global smartparens                                   |
+| ~SPC t s~   | =ⓢ=     | s     | syntax checking (flycheck)                           |
+| ~SPC t S~   | =Ⓢ=     | S     | enabled in [[../layers/spell-checking][spell checking layer]] (flyspell)           |
+| ~SPC t w~   | =ⓦ=     | w     | whitespace mode                                      |
+| ~SPC t C-w~ | =Ⓦ=     | W     | global whitespace                                    |
+| ~SPC t y~   | =ⓨ=     | y     | [[https://github.com/capitaomorte/yasnippet][yasnippet]] mode                                       |
 
 **** Customizing the mode-line
 Spacemacs uses [[https://github.com/TheBB/spaceline][Spaceline]] to provide its mode-line. It consists of a number of
@@ -1641,10 +1644,10 @@ selecting an avy candidate.
 
 | Key Binding | Description                                        |
 |-------------+----------------------------------------------------|
+| ~SPC j b~   | go back to the previous location (before the jump) |
 | ~SPC j j~   | initiate avy jump char                             |
 | ~SPC j w~   | initiate avy jump word                             |
 | ~SPC j l~   | initiate avy jump line                             |
-| ~SPC j u~   | go back to the previous location (before the jump) |
 
 **** ace-link mode
 Similar to =avy=, [[https://github.com/abo-abo/ace-link][ace-link]] allows one to jump to any link in
@@ -1693,7 +1696,7 @@ The ~SPC j~ prefix is for jumping, joining and splitting.
 |-------------+-----------------------------------------------------------------------------------|
 | ~SPC j 0~   | go to the beginning of line (and set a mark at the previous location in the line) |
 | ~SPC j $~   | go to the end of line (and set a mark at the previous location in the line)       |
-| ~SPC j b~   | jump to a bookmark                                                                |
+| ~SPC j b~   | undo a jump (go back to previous location)                                        |
 | ~SPC j d~   | jump to a listing of the current directory                                        |
 | ~SPC j D~   | jump to a listing of the current directory (other window)                         |
 | ~SPC j f~   | jump to the definition of the function around point                               |
@@ -1703,8 +1706,7 @@ The ~SPC j~ prefix is for jumping, joining and splitting.
 | ~SPC j J~   | jump to a suite of two characters in the buffer (works as an evil motion)         |
 | ~SPC j k~   | jump to next line and indent it using auto-indent rules                           |
 | ~SPC j l~   | jump to a line with avy (works as an evil motion)                                 |
-| ~SPC j u~   | undo a jump (go back to previous location)                                        |
-| ~SPC j U~   | jump to a URL in the current buffer                                               |
+| ~SPC j u~   | jump to a URL in the current buffer                                               |
 | ~SPC j v~   | jump to the definition/declaration of the variable around point                   |
 | ~SPC j w~   | jump to a word in the current buffer (works as an evil motion)                    |
 
