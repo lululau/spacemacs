@@ -14,6 +14,17 @@
 (defvar spacemacs-repl-list '()
   "List of all registered REPLs.")
 
+(defun spacemacs/system-is-mac ()
+  (eq system-type 'darwin))
+(defun spacemacs/system-is-linux ()
+  (eq system-type 'gnu/linux))
+(defun spacemacs/system-is-mswindows ()
+  (eq system-type 'windows-nt))
+
+(defun spacemacs/window-system-is-mac ()
+  ;; ns is returned instead of mac on Emacs 25+
+  (memq (window-system) '(mac ns)))
+
 (defun spacemacs/load-or-install-protected-package (pkg &optional log file-to-load)
   "Load PKG package, and protect it against being deleted as an orphan.
 See `spacemacs/load-or-install-package' for more information."
@@ -151,16 +162,13 @@ Supported properties:
      (when evil-leader
        `((dolist (key ',evil-leader)
             (spacemacs/set-leader-keys key ',func))))
-
      (when evil-leader-for-mode
        `((dolist (val ',evil-leader-for-mode)
           (spacemacs/set-leader-keys-for-major-mode
             (car val) (cdr val) ',func))))
-
      (when global-key
        `((dolist (key ',global-key)
           (global-set-key (kbd key) ',func))))
-
      (when def-key
        `((dolist (val ',def-key)
           (define-key (eval (car val)) (kbd (cdr val)) ',func)))))))
@@ -171,24 +179,36 @@ Supported properties:
   (find-file file)
   (org-indent-mode)
   (view-mode)
+  ;; Enable `space-doc-mode' if defined.
+  (when (boundp 'space-doc-mode)
+    (space-doc-mode))
   (goto-char (point-min))
-
   (when anchor-text
-    (re-search-forward anchor-text))
+    ;; If `anchor-text' is GitHub style link.
+    (if (string-prefix-p "#" anchor-text)
+        ;; If the toc-org package is loaded.
+        (if (configuration-layer/package-usedp 'toc-org)
+            ;; For each heading. Search the heading that corresponds
+            ;; to `anchor-text'.
+            (while (and (re-search-forward "^[\\*]+\s\\(.*\\).*$" nil t)
+                        (not (string= (toc-org-hrefify-gh (match-string 1))
+                                      anchor-text))))
+          ;; This is not a problem because without the space-doc package
+          ;; those links will be opened in the browser.
+          (message (format (concat "Can't follow the GitHub style anchor: '%s' "
+                                   "without the org layer.") anchor-text)))
+      (re-search-forward anchor-text)))
   (beginning-of-line)
-
   (cond
    ((eq expand-scope 'subtree)
     (outline-show-subtree))
    ((eq expand-scope 'all)
     (outline-show-all))
    (t nil))
-
   ;; Make ~SPC ,~ work, reference:
   ;; http://stackoverflow.com/questions/24169333/how-can-i-emphasize-or-verbatim-quote-a-comma-in-org-mode
   (setcar (nthcdr 2 org-emphasis-regexp-components) " \t\n")
   (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
-
   (setq-local org-emphasis-alist '(("*" bold)
                                    ("/" italic)
                                    ("_" underline)
@@ -196,7 +216,6 @@ Supported properties:
                                    ("~" org-kbd)
                                    ("+"
                                     (:strike-through t))))
-
   (setq-local org-hide-emphasis-markers t))
 
 (defun spacemacs//test-var (pred var test-desc)
