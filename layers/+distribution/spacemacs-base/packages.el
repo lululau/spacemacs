@@ -13,6 +13,8 @@
       '(
         (bookmark :location built-in)
         diminish
+        (dired :location built-in)
+        (dired-x :location built-in)
         (electric-indent-mode :location built-in)
         (ediff :location built-in)
         (eldoc :location built-in)
@@ -82,6 +84,20 @@
       (with-eval-after-load 'subword
         (when (eval-when-compile (version< "24.3.1" emacs-version))
           (diminish 'subword-mode))))))
+
+(defun spacemacs-base/init-dired ()
+  (spacemacs/set-leader-keys
+    "ad" 'dired
+    "fj" 'dired-jump
+    "jd" 'dired-jump
+    "jD" 'dired-jump-other-window))
+
+(defun spacemacs-base/init-dired-x ()
+  (autoload 'dired-jump "dired-x"
+    "Jump to Dired buffer corresponding to current buffer." t)
+
+  (autoload 'dired-jump-other-window "dired-x"
+    "Like \\[dired-jump] (dired-jump) but in other window." t))
 
 (defun spacemacs-base/init-eldoc ()
   (use-package eldoc
@@ -496,6 +512,7 @@
                projectile-recentf
                projectile-regenerate-tags
                projectile-replace
+               projectile-replace-regexp
                projectile-run-async-shell-command-in-root
                projectile-run-shell-command-in-root
                projectile-switch-project
@@ -525,6 +542,7 @@
       (spacemacs/set-leader-keys
         "p!" 'projectile-run-shell-command-in-root
         "p&" 'projectile-run-async-shell-command-in-root
+        "p%" 'projectile-replace-regexp
         "pa" 'projectile-toggle-between-implementation-and-test
         "pc" 'projectile-compile-project
         "pD" 'projectile-dired
