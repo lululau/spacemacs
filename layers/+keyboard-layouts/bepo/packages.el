@@ -19,10 +19,11 @@
     elfeed
     evil
     evil-escape
-    evil-surround
     evil-evilified-state
+    evil-surround
     eyebrowse
     flycheck
+    helm
     ivy
     magit
     neotree
@@ -177,21 +178,6 @@
     :config
     (setq-default evil-escape-key-sequence "gq")))
 
-(defun bepo/pre-init-evil-surround ()
-  (bepo|config evil-surround
-    :description
-    "Remap `evil-surround' bindings and add the `« »' pair."
-    :loader
-    (spacemacs|use-package-add-hook evil-surround :post-init BODY)
-    :config
-    (progn
-      (bepo/evil-correct-keys 'visual evil-surround-mode-map "s")
-      (setq-default
-       evil-surround-pairs-alist (cons '(?« "« " . " »")
-                                       evil-surround-pairs-alist)
-       evil-surround-pairs-alist (cons '(?» "«" . "»")
-                                       evil-surround-pairs-alist)))))
-
 (defun bepo/pre-init-evil-evilified-state ()
   (bepo|config evil-evilified-state
     :description
@@ -204,6 +190,18 @@
       "j"
       "k"
       "l")))
+
+(defun bepo/pre-init-evil-surround ()
+  (bepo|config evil-surround
+    :description
+    "Remap `evil-surround' bindings and add the `« »' pair."
+    :loader
+    (spacemacs|use-package-add-hook evil-surround :post-init BODY)
+    :config
+    (progn
+      (bepo/evil-correct-keys 'visual evil-surround-mode-map "s")
+      (setq-default evil-surround-pairs-alist
+                    (append '((?» "«" . "»") (?« "« " . " »")) evil-surround-pairs-alist)))))
 
 (defun bepo/pre-init-eyebrowse ()
   (bepo|config eyebrowse
