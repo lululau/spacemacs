@@ -95,23 +95,11 @@
     "jD" 'dired-jump-other-window))
 
 (defun spacemacs-base/init-dired-x ()
-  (autoload 'dired-jump "dired-x"
-    "Jump to Dired buffer corresponding to current buffer." t)
+  (use-package dired-x
+    :commands (dired-jump
+               dired-jump-other-window
+               dired-omit-mode)))
 
-  (autoload 'dired-jump-other-window "dired-x"
-    "Like \\[dired-jump] (dired-jump) but in other window." t))
-
-(defun spacemacs-base/init-eldoc ()
-  (use-package eldoc
-    :defer t
-    :config
-    (progn
-      ;; enable eldoc in `eval-expression'
-      (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
-      ;; enable eldoc in IELM
-      (add-hook 'ielm-mode-hook #'eldoc-mode)
-      ;; don't display eldoc on modeline
-      (spacemacs|hide-lighter eldoc-mode))))
 
 (defun spacemacs-base/init-electric-indent-mode ()
   (electric-indent-mode))
