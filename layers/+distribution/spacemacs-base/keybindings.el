@@ -344,7 +344,6 @@
   "w3"  'spacemacs/layout-triple-columns
   "wb"  'spacemacs/switch-to-minibuffer-window
   "wd"  'delete-window
-  "wD"  'ace-delete-window
   "wt"  'spacemacs/toggle-current-window-dedication
   "wf"  'follow-mode
   "wH"  'evil-window-move-far-left
@@ -366,7 +365,8 @@
   "wm"  'spacemacs/toggle-maximize-buffer
   "wM"  'spacemacs-centered-buffer-mode
   "wo"  'other-frame
-  "wR"  'spacemacs/rotate-windows
+  "wr"  'spacemacs/rotate-windows
+  "wR"  'spacemacs/rotate-windows-backward
   "ws"  'split-window-below
   "wS"  'split-window-below-and-focus
   "w-"  'split-window-below
