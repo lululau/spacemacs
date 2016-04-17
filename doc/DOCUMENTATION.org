@@ -1528,10 +1528,10 @@ Navigation key bindings in =help-mode=:
 
 Reporting an issue:
 
-| Key Binding     | Description                                                                          |
-|-----------------+--------------------------------------------------------------------------------------|
-| ~SPC h I~       | Open a page for creating a new Spacemacs issue on GitHub with information pre-filled |
-| ~SPC u SPC h I~ | Open a page for creating a new Spacemacs issue on GitHub with information pre-filled |
+| Key Binding     | Description                                                                              |
+|-----------------+------------------------------------------------------------------------------------------|
+| ~SPC h I~       | Open Spacemacs GitHub issue page with pre-filled information                             |
+| ~SPC u SPC h I~ | Open Spacemacs GitHub issue page with pre-filled information - include last pressed keys |
 
 /Note:/ If these two bindings are used with the =*Backtrace*= buffer open, the
 backtrace is automatically included
@@ -2836,7 +2836,7 @@ To search in a project see [[Searching in a project][project searching]].
 | ~SPC p R~   | replace a string                                        |
 | ~SPC p s~   | see [[Searching in a project][search in project]]                                   |
 | ~SPC p t~   | open =NeoTree= in =projectile= root                     |
-| ~SPC p T~   | find test files                                         |
+| ~SPC p T~   | test project                                            |
 | ~SPC p v~   | open project root in =vc-dir= or =magit=                |
 | ~SPC p y~   | find tags                                               |
 | ~SPC /~     | search in project with the best search tool available   |
@@ -3074,7 +3074,6 @@ with ~SPC SPC spacemacs/recompile-elpa~.
 | The Tiler ([[https://github.com/syl20bnr/spacemacs/pull/4068][eyebrowse integration]])               | [[https://github.com/bmag][bmag]]         |
 | The Geometer ([[https://github.com/TheBB/spaceline][spaceline]])                        | [[https://github.com/TheBB][TheBB]]        |
 | The Librarian (doc-fmt tool and space-doc mode) | [[https://github.com/JAremko][JAremko]]      |
-
 
 * Thank you
 [[Using configuration layers][Jokes aside]], thank you Richard for this great piece of software.
