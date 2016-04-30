@@ -3,6 +3,7 @@
         company
         company-go
         flycheck
+        (flycheck-gometalinter :toggle (executable-find "gometalinter"))
         go-eldoc
         go-mode
         (go-oracle :location site)
@@ -134,3 +135,9 @@
   (use-package go-rename
     :init
     (spacemacs/set-leader-keys-for-major-mode 'go-mode "rn" 'go-rename)))
+
+(defun go/init-flycheck-gometalinter()
+  (use-package flycheck-gometalinter
+    :defer t
+    :init
+    (add-hook 'go-mode-hook 'spacemacs//go-enable-gometalinter t)))

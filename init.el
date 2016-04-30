@@ -12,7 +12,9 @@
 ;; Without this comment emacs25 adds (package-initialize) here
 ;; (package-initialize)
 
+;; increase gc-cons-threshold during init
 (setq gc-cons-threshold 100000000)
+
 (defconst spacemacs-version         "0.105.19" "Spacemacs version.")
 (defconst spacemacs-emacs-min-version   "24.3" "Minimal version of Emacs.")
 
@@ -28,4 +30,5 @@
   (spacemacs-buffer/display-info-box)
   (spacemacs/setup-startup-hook)
   (require 'server)
-  (unless (server-running-p) (server-start)))
+  (unless (server-running-p) (server-start))
+  (add-hook 'emacs-startup-hook (lambda () (setq gc-cons-threshold 800000)) t))

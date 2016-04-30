@@ -31,7 +31,6 @@
     org-repo-todo
     (ox-gfm :location local)
     persp-mode
-    (space-doc :location local)
     ))
 
 (when (configuration-layer/layer-usedp 'auto-completion)
@@ -84,7 +83,9 @@
         "Load all the languages declared in `org-babel-load-languages'."
         (org-babel-do-load-languages 'org-babel-load-languages
                                      org-babel-load-languages))
-      (add-hook 'org-mode-hook 'spacemacs//org-babel-do-load-languages))))
+      (add-hook 'org-mode-hook 'spacemacs//org-babel-do-load-languages)
+      ;; Fix redisplay of inline images after a code block evaluation.
+      (add-hook 'org-babel-after-execute-hook 'spacemacs/ob-fix-inline-images))))
 
 (defun org/init-org ()
   (use-package org
@@ -553,8 +554,3 @@ a Markdown buffer and use this command to convert it.
 (defun org/init-htmlize ()
  (use-package htmlize
    :defer t))
-
-(defun org/init-space-doc ()
-  (use-package space-doc
-    :commands space-doc-mode
-    :config (spacemacs|diminish space-doc-mode " ❤" " d")))
