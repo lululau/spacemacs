@@ -12,7 +12,7 @@
 (setq spacemacs-editing-packages
       '(aggressive-indent
         avy
-        bracketed-paste
+        (bracketed-paste :toggle (version<= emacs-version "25.0.92"))
         clean-aindent-mode
         eval-sexp-fu
         expand-region
