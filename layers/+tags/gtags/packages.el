@@ -22,7 +22,7 @@
     (progn
       (spacemacs|hide-lighter ggtags-mode))))
 
-(when (configuration-layer/layer-usedp 'spacemacs-helm)
+(when (configuration-layer/layer-usedp 'helm)
   (defun gtags/init-helm-gtags ()
     (use-package helm-gtags
       :defer t

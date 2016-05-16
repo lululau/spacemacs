@@ -137,7 +137,7 @@
       (with-eval-after-load 'company
         (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends))))))
 
-(when (configuration-layer/layer-usedp 'spacemacs-helm)
+(when (configuration-layer/layer-usedp 'helm)
   (defun auto-completion/init-helm-c-yasnippet ()
     (use-package helm-c-yasnippet
       :defer t
@@ -146,7 +146,7 @@
         (spacemacs/set-leader-keys "is" 'spacemacs/helm-yas)
         (setq helm-c-yas-space-match-any-greedy t)))))
 
-(when (configuration-layer/layer-usedp 'spacemacs-helm)
+(when (configuration-layer/layer-usedp 'helm)
   (defun auto-completion/init-helm-company ()
     (use-package helm-company
       :if (configuration-layer/package-usedp 'company)
