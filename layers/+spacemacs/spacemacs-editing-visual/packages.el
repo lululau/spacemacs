@@ -22,7 +22,6 @@
         ;; see https://github.com/syl20bnr/spacemacs/issues/2529
         (hl-anything :excluded t)
         indent-guide
-        linum-relative
         rainbow-delimiters
         volatile-highlights
         ))
@@ -369,18 +368,6 @@
         :evil-leader "t TAB"))
     :config
     (spacemacs|diminish indent-guide-mode " ⓘ" " i")))
-
-(defun spacemacs-editing-visual/init-linum-relative ()
-  (use-package linum-relative
-    :commands (linum-relative-toggle linum-relative-on)
-    :init
-    (progn
-      (when (eq dotspacemacs-line-numbers 'relative)
-        (linum-relative-on))
-      (spacemacs/set-leader-keys "tr" 'linum-relative-toggle))
-    :config
-    (progn
-      (setq linum-relative-current-symbol ""))))
 
 (defun spacemacs-editing-visual/init-rainbow-delimiters ()
   (use-package rainbow-delimiters
