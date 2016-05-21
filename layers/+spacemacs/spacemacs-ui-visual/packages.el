@@ -15,6 +15,7 @@
         golden-ratio
         hl-todo
         leuven-theme
+        neotree
         popup
         popwin
         smooth-scrolling
@@ -164,6 +165,55 @@
   (use-package leuven-theme
     :defer t
     :init (setq org-fontify-whole-heading-line t)))
+
+(defun spacemacs-ui-visual/init-neotree ()
+  (use-package neotree
+    :defer t
+    :commands neo-global--window-exists-p
+    :init
+    (progn
+      (setq neo-window-width 32
+            neo-create-file-auto-open t
+            neo-banner-message nil
+            neo-show-updir-line nil
+            neo-mode-line-type 'neotree
+            neo-smart-open t
+            neo-dont-be-alone t
+            neo-persist-show nil
+            neo-show-hidden-files t
+            neo-auto-indent-point t
+            neo-modern-sidebar t
+            neo-vc-integration nil)
+
+      (defun spacemacs//neotree-key-bindings ()
+        "Set the key bindings for a neotree buffer."
+        (evilified-state-evilify-map neotree-mode-map
+          :mode neotree-mode
+          :bindings
+          (kbd "TAB")  'neotree-stretch-toggle
+          (kbd "RET") 'neotree-enter
+          (kbd "|") 'neotree-enter-vertical-split
+          (kbd "-") 'neotree-enter-horizontal-split
+          (kbd "?") 'evil-search-backward
+          (kbd "c") 'neotree-create-node
+          (kbd "d") 'neotree-delete-node
+          (kbd "gr") 'neotree-refresh
+          (kbd "h") 'spacemacs/neotree-collapse-or-up
+          (kbd "H") 'neotree-select-previous-sibling-node
+          (kbd "J") 'neotree-select-down-node
+          (kbd "K") 'neotree-select-up-node
+          (kbd "l") 'spacemacs/neotree-expand-or-open
+          (kbd "L") 'neotree-select-next-sibling-node
+          (kbd "q") 'neotree-hide
+          (kbd "r") 'neotree-rename-node
+          (kbd "R") 'neotree-change-root
+          (kbd "s") 'neotree-hidden-file-toggle))
+
+      (spacemacs/set-leader-keys
+        "ft" 'neotree-toggle
+        "pt" 'neotree-find-project-root))
+    :config
+    (spacemacs//neotree-key-bindings)))
 
 (defun spacemacs-ui-visual/init-popup ())
 
