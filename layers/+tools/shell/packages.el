@@ -24,7 +24,6 @@
         projectile
         (shell :location built-in)
         shell-pop
-        smooth-scrolling
         (term :location built-in)
         xterm-color
         vi-tilde-fringe
@@ -307,12 +306,6 @@ is achieved by adding the relevant text properties."
         "asm" 'spacemacs/shell-pop-multiterm
         "ast" 'spacemacs/shell-pop-ansi-term
         "asT" 'spacemacs/shell-pop-term))))
-
-(defun shell/post-init-smooth-scrolling ()
-  (spacemacs/add-to-hooks 'spacemacs//unset-scroll-margin
-                          '(eshell-mode-hook
-                            comint-mode-hook
-                            term-mode-hook)))
 
 (defun shell/init-term ()
   (spacemacs/register-repl 'term 'term)

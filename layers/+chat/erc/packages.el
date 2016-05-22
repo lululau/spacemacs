@@ -28,7 +28,6 @@
         (erc-yank :location local :excluded t)
         erc-yt
         persp-mode
-        smooth-scrolling
         ))
 
 (when (spacemacs/system-is-mac)
@@ -249,6 +248,3 @@
       (if erc-server-list
           (erc/default-servers)
         (call-interactively 'erc)))))
-
-(defun erc/post-init-smooth-scrolling ()
-  (add-hook 'erc-mode-hook 'spacemacs//unset-scroll-margin))
