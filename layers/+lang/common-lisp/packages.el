@@ -12,11 +12,19 @@
 (setq common-lisp-packages
       '(auto-highlight-symbol
         common-lisp-snippets
+        helm
         slime))
 
 (defun common-lisp/post-init-auto-highlight-symbol ()
   (with-eval-after-load 'auto-highlight-symbol
     (add-to-list 'ahs-plugin-bod-modes 'lisp-mode)))
+
+(when (configuration-layer/layer-usedp 'auto-completion)
+  (defun common-lisp/init-common-lisp-snippets ()))
+
+(defun common-lisp/post-init-helm ()
+  (spacemacs/set-leader-keys-for-major-mode 'lisp-mode
+    "sI" 'spacemacs/helm-slime))
 
 (defun common-lisp/init-slime ()
   (use-package slime
@@ -100,6 +108,3 @@
               ("mg" . "nav")
               ("mm" . "macro")
               ("mt" . "toggle"))))))
-
-(when (configuration-layer/layer-usedp 'auto-completion)
-  (defun common-lisp/init-common-lisp-snippets ()))

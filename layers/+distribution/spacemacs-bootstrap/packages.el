@@ -16,10 +16,8 @@
         (bind-key :step bootstrap)
         (diminish :step bootstrap)
         (evil :step bootstrap)
-        (f :step bootstrap)
         (hydra :step bootstrap)
         (page-break-lines :step bootstrap)
-        (s :step bootstrap)
         (use-package :step bootstrap)
         (which-key :step bootstrap)
         ))
@@ -30,7 +28,9 @@
 
 (defun spacemacs-bootstrap/init-bind-key ())
 
-(defun spacemacs-bootstrap/init-diminish ())
+(defun spacemacs-bootstrap/init-diminish ()
+  (when (not (configuration-layer/package-usedp 'spaceline))
+    (add-hook 'after-load-functions 'spacemacs/diminish-hook)))
 
 (defun spacemacs-bootstrap/init-bind-map ()
   (require 'bind-map)
