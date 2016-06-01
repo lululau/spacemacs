@@ -21,6 +21,7 @@
         link-hint
         lorem-ipsum
         move-text
+        (origami :toggle (eq 'origami dotspacemacs-folding-method))
         pcre2el
         smartparens
         undo-tree
@@ -35,15 +36,11 @@
     :init
     (progn
       (spacemacs|add-toggle aggressive-indent
-        :status aggressive-indent-mode
-        :on (aggressive-indent-mode)
-        :off (aggressive-indent-mode -1)
+        :mode aggressive-indent-mode
         :documentation "Always keep code indented."
         :evil-leader "tI")
       (spacemacs|add-toggle aggressive-indent-globally
-        :status aggressive-indent-mode
-        :on (global-aggressive-indent-mode)
-        :off (global-aggressive-indent-mode -1)
+        :mode aggressive-indent-mode
         :documentation "Always keep code indented globally."
         :evil-leader "t C-I"))
     :config
@@ -161,9 +158,7 @@
     :defer t
     :init
     (spacemacs|add-toggle hungry-delete
-      :status hungry-delete-mode
-      :on (hungry-delete-mode)
-      :off (hungry-delete-mode -1)
+      :mode hungry-delete-mode
       :documentation "Delete consecutive horizontal whitespace with a single key."
       :evil-leader "td")
     :config
@@ -205,6 +200,58 @@
     (spacemacs/set-leader-keys
       "xJ" 'spacemacs/move-text-transient-state/move-text-down
       "xK" 'spacemacs/move-text-transient-state/move-text-up)))
+
+(defun spacemacs-editing/init-origami ()
+  (use-package origami
+    :defer t
+    :init
+    (progn
+      (global-origami-mode)
+      (define-key evil-normal-state-map "za" 'origami-forward-toggle-node)
+      (define-key evil-normal-state-map "zc" 'origami-close-node)
+      (define-key evil-normal-state-map "zC" 'origami-close-node-recursively)
+      (define-key evil-normal-state-map "zO" 'origami-open-node-recursively)
+      (define-key evil-normal-state-map "zo" 'origami-open-node)
+      (define-key evil-normal-state-map "zr" 'origami-open-all-nodes)
+      (define-key evil-normal-state-map "zm" 'origami-close-all-nodes)
+      (define-key evil-normal-state-map "zs" 'origami-show-only-node)
+      (define-key evil-normal-state-map "zn" 'origami-next-fold)
+      (define-key evil-normal-state-map "zp" 'origami-previous-fold)
+      (define-key evil-normal-state-map "zR" 'origami-reset)
+      (define-key evil-normal-state-map (kbd "z <tab>") 'origami-recursively-toggle-node)
+      (define-key evil-normal-state-map (kbd "z TAB") 'origami-recursively-toggle-node)
+
+      (spacemacs|define-transient-state fold
+        :title "Code Fold Transient State"
+        :doc "
+ Close^^            Open^^             Toggle^^         Goto^^         Other^^
+ ───────^^───────── ─────^^─────────── ─────^^───────── ──────^^────── ─────^^─────────
+ [_c_] at point     [_o_] at point     [_a_] at point   [_n_] next     [_s_] single out
+ [_C_] recursively  [_O_] recursively  [_A_] all        [_p_] previous [_R_] reset
+ [_m_] all          [_r_] all          [_TAB_] like org ^^             [_q_] quit"
+        :foreign-keys run
+        :on-enter (unless (bound-and-true-p origami-mode) (origami-mode 1))
+        :bindings
+        ("a" origami-forward-toggle-node)
+        ("A" origami-toggle-all-nodes)
+        ("c" origami-close-node)
+        ("C" origami-close-node-recursively)
+        ("o" origami-open-node)
+        ("O" origami-open-node-recursively)
+        ("r" origami-open-all-nodes)
+        ("m" origami-close-all-nodes)
+        ("n" origami-next-fold)
+        ("p" origami-previous-fold)
+        ("s" origami-show-only-node)
+        ("R" origami-reset)
+        ("TAB" origami-recursively-toggle-node)
+        ("<tab>" origami-recursively-toggle-node)
+        ("q" nil :exit t)
+        ("C-g" nil :exit t)
+        ("<SPC>" nil :exit t))
+      ;; Note: The key binding for the fold transient state is defined in
+      ;; evil config
+      )))
 
 (defun spacemacs-editing/init-pcre2el ()
   (use-package pcre2el
@@ -251,16 +298,12 @@
       (add-hook 'minibuffer-setup-hook 'conditionally-enable-smartparens-mode)
 
       (spacemacs|add-toggle smartparens
-        :status smartparens-mode
-        :on (smartparens-mode)
-        :off (smartparens-mode -1)
+        :mode smartparens-mode
         :documentation "Enable smartparens."
         :evil-leader "tp")
 
       (spacemacs|add-toggle smartparens-globally
-        :status smartparens-mode
-        :on (smartparens-global-mode)
-        :off (smartparens-global-mode -1)
+        :mode smartparens-mode
         :documentation "Enable smartparens globally."
         :evil-leader "t C-p")
 

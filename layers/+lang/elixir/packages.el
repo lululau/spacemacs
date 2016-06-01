@@ -13,10 +13,27 @@
   '(
     alchemist
     company
+    (flycheck-elixir-credo
+     :location (recipe :fetcher github
+                       :repo "smeevil/flycheck-elixir-credo"))
+    (elixir-flycheck-mix-compile
+     :location local
+     :toggle (configuration-layer/package-usedp 'flycheck))
+    (flycheck-elixir-testresult
+     :location (recipe :fetcher github
+                       :repo "smeevil/flycheck-elixir-testresult"
+                       :files ("flycheck_formatter.exs"
+                               "mix_test_helper"
+                               "flycheck-elixir-testresult.el")))
     elixir-mode
+    flycheck
     popwin
     smartparens
     ))
+
+(defun elixir/post-init-company ()
+  (spacemacs|add-company-hook elixir-mode)
+  (spacemacs|add-company-hook alchemist-iex-mode))
 
 (defun elixir/init-alchemist ()
   (use-package alchemist
@@ -25,7 +42,9 @@
     (progn
       (spacemacs/register-repl 'alchemist 'alchemist-iex-run "alchemist")
       (add-hook 'elixir-mode-hook 'alchemist-mode)
-      (setq alchemist-project-compile-when-needed t)
+      (setq alchemist-project-compile-when-needed t
+            alchemist-test-status-modeline nil)
+      ;; setup company backends
       (push 'alchemist-company company-backends-elixir-mode)
       (push 'alchemist-company company-backends-alchemist-iex-mode))
     :config
@@ -107,9 +126,50 @@
       (evil-define-key 'normal mode
         (kbd "q") 'quit-window))))
 
-(defun elixir/post-init-company ()
-  (spacemacs|add-company-hook elixir-mode)
-  (spacemacs|add-company-hook alchemist-iex-mode))
+(defun elixir/init-flycheck-elixir-credo ()
+  (use-package flycheck-elixir-credo
+    :defer t
+    :init (add-hook 'flycheck-mode-hook 'flycheck-elixir-credo-setup)))
+
+(defun elixir/init-elixir-flycheck-mix-compile ()
+  (use-package elixir-flycheck-mix-compile
+    :commands (elixir-flycheck-mix-compile-setup)
+    :init
+    (progn
+      (add-to-list 'safe-local-variable-values
+                   (cons 'elixir-enable-compilation-checking nil))
+      (add-to-list 'safe-local-variable-values
+                   (cons 'elixir-enable-compilation-checking t))
+      (add-hook 'flycheck-mode-hook
+                'spacemacs//elixir-enable-compilation-checking t))
+    :config
+    ;; enable mix_compile_helper executable
+    (let ((layer-path (configuration-layer/get-layer-path 'elixir)))
+      (add-to-list 'exec-path
+                   (concat layer-path
+                           "elixir/local/elixir-flycheck-mix-compile")))))
+
+(defun elixir/init-flycheck-elixir-testresult ()
+  (use-package flycheck-elixir-testresult
+    :defer t
+    :init (add-hook 'flycheck-mode-hook 'flycheck-elixir-testresult-setup)
+    ;; enable mix_test_helper executable
+    :config (add-to-list 'exec-path (spacemacs//get-package-directory
+                                     'flycheck-elixir-testresult))))
+
+(defun elixir/init-elixir-mode ()
+  (use-package elixir-mode
+    :defer t))
+
+(defun elixir/post-init-flycheck ()
+  (spacemacs/add-flycheck-hook 'elixir-mode)
+  (add-hook 'flycheck-mode-hook
+            'spacemacs//elixir-flycheck-check-on-save-only))
+
+(defun elixir/pre-init-popwin ()
+  (spacemacs|use-package-add-hook popwin
+    :post-config
+    (push '("*mix*" :tail t :noselect t) popwin:special-display-config)))
 
 (defun elixir/post-init-smartparens ()
   (spacemacs|use-package-add-hook smartparens
@@ -127,12 +187,3 @@
          :when '(("SPC" "RET"))
          :post-handlers '(:add spacemacs//elixir-do-end-close-action)
          :actions '(insert))))))
-
-(defun elixir/init-elixir-mode ()
-  (use-package elixir-mode
-    :defer t))
-
-(defun elixir/pre-init-popwin ()
-  (spacemacs|use-package-add-hook popwin
-    :post-config
-    (push '("*mix*" :tail t :noselect t) popwin:special-display-config)))
