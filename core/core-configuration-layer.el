@@ -337,7 +337,7 @@ If NO-INSTALL is non nil then install steps are skipped."
       (configuration-layer//configure-packages configuration-layer--packages)
       (configuration-layer//load-layers-files
        configuration-layer--layers '("keybindings.el"))
-      (when (and (eq 'used-only dotspacemacs-download-packages)
+      (when (and (eq 'used dotspacemacs-download-packages)
                  (not configuration-layer-distribution)
                  (not configuration-layer-no-layer))
         (configuration-layer/delete-orphan-packages
@@ -901,10 +901,13 @@ path."
   (setq configuration-layer-paths (configuration-layer//discover-layers))
   (unless configuration-layer-no-layer
     (dolist (layer dotspacemacs-configuration-layers)
-      (let ((layer-name (if (listp layer) (car layer) layer)))
-        (unless (string-match-p "+distribution"
-                                (ht-get configuration-layer-paths layer-name))
-          (configuration-layer/declare-layer layer))))
+      (let* ((layer-name (if (listp layer) (car layer) layer))
+             (layer-path (ht-get configuration-layer-paths layer-name)))
+        (if (stringp layer-path)
+            (unless (string-match-p "+distribution" layer-path)
+              (configuration-layer/declare-layer layer))
+          (spacemacs-buffer/warning "Unknown layer %s declared in dotfile."
+                                    layer-name))))
     (setq configuration-layer--layers (reverse configuration-layer--layers)))
   ;; distribution and bootstrap layers are always first
   (let ((distribution (if configuration-layer-distribution
