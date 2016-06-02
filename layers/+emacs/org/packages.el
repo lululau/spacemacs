@@ -29,7 +29,10 @@
     org-pomodoro
     org-present
     org-repo-todo
-    (ox-gfm :location local)
+    ;; use a for of ox-gfm to fix index generation
+    (ox-gfm :location (recipe :fetcher github :repo "syl20bnr/ox-gfm")
+            :toggle org-enable-github-support)
+    (ox-reveal :toggle org-enable-reveal-js-support)
     persp-mode
     ))
 
@@ -66,6 +69,10 @@
     :defer t
     :init (spacemacs/set-leader-keys-for-major-mode 'org-mode
             "tp" 'org-plot/gnuplot)))
+
+(defun org/init-htmlize ()
+  (use-package htmlize
+    :defer t))
 
 (defun org/pre-init-mu4e ()
   ;; Load org-mu4e when mu4e is actually loaded
@@ -510,55 +517,13 @@ Headline^^            Visit entry^^               Filter^^                    Da
             '("* TODO %?\n%U\n\n%i" :empty-lines 1))))
 
 (defun org/init-ox-gfm ()
-  ;; installing this package from melpa is buggy,
-  ;; so we install it as an extension for now.
-  (use-package ox-gfm
-    :if org-enable-github-support
-    :defer t
-    :init
-    (progn
-      ;; seems to be required otherwise the extension is not
-      ;; loaded properly by org
-      (with-eval-after-load 'org (require 'ox-gfm))
-      (autoload 'org-gfm-export-as-markdown "ox-gfm" "\
- Export current buffer to a Github Flavored Markdown buffer.
+  (spacemacs|use-package-add-hook org :post-config (require 'ox-gfm)))
 
-If narrowing is active in the current buffer, only export its
-narrowed part.
-
-If a region is active, export that region.
-
-A non-nil optional argument ASYNC means the process should happen
-asynchronously.  The resulting buffer should be accessible
-through the `org-export-stack' interface.
-
-When optional argument SUBTREEP is non-nil, export the sub-tree
-at point, extracting information from the headline properties
-first.
-
-When optional argument VISIBLE-ONLY is non-nil, don't export
-contents of hidden elements.
-
-Export is done in a buffer named \"*Org GFM Export*\", which will
-be displayed when `org-export-show-temporary-export-buffer' is
-non-nil.
-
-\(fn &optional ASYNC SUBTREEP VISIBLE-ONLY)" t nil)
-
-      (autoload 'org-gfm-convert-region-to-md "ox-gfm" "\
-Assume the current region has org-mode syntax, and convert it
-to Github Flavored Markdown.  This can be used in any buffer.
-For example, you can write an itemized list in org-mode syntax in
-a Markdown buffer and use this command to convert it.
-
-\(fn)" t nil))))
+(defun org/init-ox-reveal ()
+  (spacemacs|use-package-add-hook org :post-config (require 'ox-reveal)))
 
 (defun org/post-init-persp-mode ()
   (spacemacs|define-custom-layout "@Org"
     :binding "o"
     :body
     (find-file (first (org-agenda-files)))))
-
-(defun org/init-htmlize ()
- (use-package htmlize
-   :defer t))
