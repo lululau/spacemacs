@@ -329,6 +329,9 @@ projectile cache when it's possible and update recentf list."
                (when (fboundp 'recentf-add-file)
                    (recentf-add-file new-name)
                    (recentf-remove-if-non-kept filename))
+               (when (and (configuration-layer/package-usedp 'projectile)
+                          (projectile-project-p))
+                 (call-interactively #'projectile-invalidate-cache))
                (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
 
 (defun spacemacs/delete-file (filename &optional ask-user)
@@ -363,6 +366,9 @@ removal."
       (when (yes-or-no-p "Are you sure you want to delete this file? ")
         (delete-file filename t)
         (kill-buffer buffer)
+        (when (and (configuration-layer/package-usedp 'projectile)
+                   (projectile-project-p))
+          (call-interactively #'projectile-invalidate-cache))
         (message "File '%s' successfully removed" filename)))))
 
 ;; from magnars
@@ -385,11 +391,13 @@ removal."
 
 ;; check when opening large files - literal file open
 (defun spacemacs/check-large-file ()
-  (let ((size (nth 7 (file-attributes (buffer-file-name)))))
+  (let* ((filename (buffer-file-name))
+         (size (nth 7 (file-attributes filename))))
     (when (and
            (not (memq major-mode spacemacs-large-file-modes-list))
            size (> size (* 1024 1024 dotspacemacs-large-file-size))
-           (y-or-n-p "This is a large file, open literally to avoid performance issues?"))
+           (y-or-n-p (format "%s is a large file, open literally to avoid performance issues?"
+                             filename)))
       (setq buffer-read-only t)
       (buffer-disable-undo)
       (fundamental-mode))))
