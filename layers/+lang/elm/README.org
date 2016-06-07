@@ -14,13 +14,15 @@
  - [[#basic-usage-tips][Basic usage tips]]
    - [[#compilation][Compilation]]
    - [[#reactor][Reactor]]
+   - [[#sort-imports-on-save][Sort imports on save]]
  - [[#key-bindings][Key bindings]]
    - [[#elm-make][elm-make]]
    - [[#elm-repl][elm-repl]]
    - [[#elm-reactor][elm-reactor]]
    - [[#elm-package][elm-package]]
      - [[#package-list-buffer][package list buffer]]
-   - [[#elm-oracle][elm-oracle]]
+   - [[#elm-oracle-1][elm-oracle]]
+   - [[#refactoring][Refactoring]]
 
 * Description
 This layer adds support for [[http://elm-lang.org][Elm]].
@@ -113,6 +115,14 @@ can be controlled by passing in these variables in your =~/.spacemacs=:
        elm-reactor-address "0.0.0.0") ; default 127.0.0.1
 #+END_SRC
 
+** Sort imports on save
+Set ~elm-sort-imports-on-save~ to ~t~ to sort the imports in the current file on
+every save.
+
+#+BEGIN_SRC emacs-lisp
+  (elm :variables elm-sort-imports-on-save t)
+#+END_SRC
+
 * Key bindings
 ** elm-make
 
@@ -152,8 +162,6 @@ can be controlled by passing in these variables in your =~/.spacemacs=:
 | Key Binding | Description          |
 |-------------+----------------------|
 | ~g~         | elm-package-refresh  |
-| ~n~         | elm-package-next     |
-| ~p~         | elm-package-previous |
 | ~v~         | elm-package-view     |
 | ~m~         | elm-package-mark     |
 | ~u~         | elm-package-unmark   |
@@ -166,3 +174,8 @@ can be controlled by passing in these variables in your =~/.spacemacs=:
 |-------------+--------------------------|
 | ~SPC m h t~ | elm-oracle-type-at-point |
 
+** Refactoring
+
+| Key Binding | Description      |
+|-------------+------------------|
+| ~SPC m r i~ | elm-sort-imports |
