@@ -25,6 +25,7 @@
     haskell-snippets
     (helm-hoogle :toggle (configuration-layer/package-usedp 'helm))
     hindent
+    hlint-refactor
     shm
     ))
 
@@ -187,14 +188,30 @@
           "hT"  'spacemacs/haskell-process-do-type-on-prev-line
           "hy"  'hayoo
 
-          "dd"  'haskell-debug
+          "da"  'haskell-debug/abandon
           "db"  'haskell-debug/break-on-function
-          "dn"  'haskell-debug/next
-          "dN"  'haskell-debug/previous
           "dB"  'haskell-debug/delete
           "dc"  'haskell-debug/continue
-          "da"  'haskell-debug/abandon
-          "dr"  'haskell-debug/refresh))
+          "dd"  'haskell-debug
+          "dn"  'haskell-debug/next
+          "dN"  'haskell-debug/previous
+          "dp"  'haskell-debug/previous
+          "dr"  'haskell-debug/refresh
+          "ds"  'haskell-debug/step
+          "dt"  'haskell-debug/trace))
+
+      (evilified-state-evilify haskell-debug-mode haskell-debug-mode-map
+        "RET" 'haskell-debug/select
+        "a" 'haskell-debug/abandon
+        "b" 'haskell-debug/break-on-function
+        "c" 'haskell-debug/continue
+        "d" 'haskell-debug/delete
+        "n" 'haskell-debug/next
+        "N" 'haskell-debug/previous
+        "p" 'haskell-debug/previous
+        "r" 'haskell-debug/refresh
+        "s" 'haskell-debug/step
+        "t" 'haskell-debug/trace)
 
       ;; configure C-c C-l so it doesn't throw any errors
       (bind-key "C-c C-l" 'haskell-process-load-file haskell-mode-map)
@@ -308,6 +325,16 @@
       (setq hindent-style haskell-enable-hindent-style)
       (spacemacs/set-leader-keys-for-major-mode 'haskell-mode
         "F" 'hindent-reformat-decl))))
+
+(defun haskell/init-hlint-refactor ()
+  (use-package hlint-refactor
+    :defer t
+    :init
+    (progn
+      (spacemacs/declare-prefix-for-mode 'haskell-mode "mr" "haskell/refactor")
+      (spacemacs/set-leader-keys-for-major-mode 'haskell-mode
+        "rb" 'hlint-refactor-refactor-buffer
+        "rr" 'hlint-refactor-refactor-at-point))))
 
 (defun haskell/init-shm ()
   (use-package shm

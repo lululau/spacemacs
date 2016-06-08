@@ -20,9 +20,11 @@
  - [[Key bindings][Key bindings]]
    - [[Documentation][Documentation]]
    - [[Debug][Debug]]
+   - [[Debug Buffer][Debug Buffer]]
    - [[REPL][REPL]]
    - [[Cabal commands][Cabal commands]]
    - [[Cabal files][Cabal files]]
+   - [[Refactor][Refactor]]
    - [[Ghc-mod][Ghc-mod]]
      - [[Insert template][Insert template]]
  - [[Syntax checking][Syntax checking]]
@@ -65,6 +67,7 @@ file.
 
 ** Dependencies
 This layer requires some [[https://www.haskell.org/cabal/][cabal]] packages:
+- =apply-refact=
 - =hlint=
 - =stylish-haskell=
 - =hasktags=
@@ -74,7 +77,7 @@ This layer requires some [[https://www.haskell.org/cabal/][cabal]] packages:
 To install them, use following command (or the =stack= equivalent):
 
 #+BEGIN_SRC sh
-$ cabal install stylish-haskell hlint hasktags ghc-mod hoogle
+$ cabal install apply-refact stylish-haskell hlint hasktags ghc-mod hoogle
 #+END_SRC
 
 ** Setup PATH
@@ -277,14 +280,31 @@ Debug commands are prefixed by ~SPC m d~:
 
 | Key Binding | Description                                |
 |-------------+--------------------------------------------|
-| ~SPC m d d~ | start debug process, needs to be run first |
+| ~SPC m d a~ | abandon current process                    |
 | ~SPC m d b~ | insert breakpoint at function              |
-| ~SPC m d n~ | next breakpoint                            |
-| ~SPC m d N~ | previous breakpoint                        |
 | ~SPC m d B~ | delete breakpoint                          |
 | ~SPC m d c~ | continue current process                   |
-| ~SPC m d a~ | abandon current process                    |
+| ~SPC m d d~ | start debug process, needs to be run first |
+| ~SPC m d n~ | next breakpoint                            |
+| ~SPC m d N~ | previous breakpoint                        |
+| ~SPC m d p~ | previous breakpoint                        |
 | ~SPC m d r~ | refresh process buffer                     |
+| ~SPC m d s~ | step into the next function                |
+| ~SPC m d t~ | trace the expression                       |
+
+** Debug Buffer
+| Key Binding | Description                                 |
+|-------------+---------------------------------------------|
+| ~RET~       | select object at the point                  |
+| ~a~         | abandon current computation                 |
+| ~b~         | break on function                           |
+| ~c~         | continue the current computation            |
+| ~d~         | delete object at the point                  |
+| ~n~         | go to next step to inspect bindings         |
+| ~N~ or ~p~  | go to previous step to inspect the bindings |
+| ~r~         | refresh the debugger buffer                 |
+| ~s~         | step into the next function                 |
+| ~t~         | trace the expression                        |
 
 ** REPL
 REPL commands are prefixed by ~SPC m s~:
@@ -326,6 +346,16 @@ This commands are available in a cabal file.
 | ~SPC m N~   | go to next section                          |
 | ~SPC m P~   | go to previous section                      |
 | ~SPC m f~   | find or create source-file under the cursor |
+
+** Refactor
+Refactor commands are prefixed by ~SPC m r~:
+
+| Key Binding | Description                                       |
+|-------------+---------------------------------------------------|
+| ~SPC m r b~ | apply all HLint suggestions in the current buffer |
+| ~SPC m r r~ | apply the HLint suggestion under the cursor       |
+
+Only some of the HLint suggestions can be applied.
 
 ** Ghc-mod
 These commands are only available when ghc-mod is enabled.
