@@ -678,24 +678,6 @@ current window."
                               (start-process "" nil "xdg-open" file-path))))
       (message "No file associated to this buffer."))))
 
-(defun spacemacs/next-error (&optional n reset)
-  "Dispatch to flycheck or standard emacs error."
-  (interactive "P")
-  (if (and (boundp 'flycheck-mode)
-           (symbol-value flycheck-mode)
-           (not (get-buffer-window "*compilation*")))
-      (call-interactively 'flycheck-next-error)
-    (call-interactively 'next-error)))
-
-(defun spacemacs/previous-error (&optional n reset)
-  "Dispatch to flycheck or standard emacs error."
-  (interactive "P")
-  (if (and (boundp 'flycheck-mode)
-           (symbol-value flycheck-mode)
-           (not (get-buffer-window "*compilation*")))
-      (call-interactively 'flycheck-previous-error)
-    (call-interactively 'previous-error)))
-
 (defun spacemacs/switch-to-minibuffer-window ()
   "switch to minibuffer window (if active)"
   (interactive)
@@ -1003,3 +985,61 @@ is nonempty."
   "Disable linum if current buffer."
   (when (or 'linum-mode global-linum-mode)
     (linum-mode 0)))
+
+
+;; Generalized next-error system ("gne")
+
+(defun spacemacs//error-delegate ()
+  "Decide which error API to delegate to.
+
+Delegates to flycheck if it is enabled and the next-error buffer
+is not visible. Otherwise delegates to regular Emacs next-error."
+  (if (and (bound-and-true-p flycheck-mode)
+           (let ((buf (next-error-find-buffer)))
+             (not (and buf (get-buffer-window buf)))))
+      'flycheck
+    'emacs))
+
+(defun spacemacs/next-error (&optional n reset)
+  "Dispatch to flycheck or standard emacs error."
+  (interactive "P")
+  (let ((sys (spacemacs//error-delegate)))
+    (cond
+     ((eq 'flycheck sys) (call-interactively 'flycheck-next-error))
+     ((eq 'emacs sys) (call-interactively 'next-error)))))
+
+(defun spacemacs/previous-error (&optional n reset)
+  "Dispatch to flycheck or standard emacs error."
+  (interactive "P")
+  (let ((sys (spacemacs//error-delegate)))
+    (cond
+     ((eq 'flycheck sys) (call-interactively 'flycheck-previous-error))
+     ((eq 'emacs sys) (call-interactively 'previous-error)))))
+
+(defvar-local spacemacs--gne-min-line nil
+  "The first line in the buffer that is a valid result.")
+(defvar-local spacemacs--gne-max-line nil
+  "The last line in the buffer that is a valid result.")
+(defvar-local spacemacs--gne-cur-line 0
+  "The current line in the buffer. (It is problematic to use
+point for this.)")
+(defvar-local spacemacs--gne-line-func nil
+  "The function to call to visit the result on a line.")
+
+(defun spacemacs//gne-next (num reset)
+  "A generalized next-error function. This function can be used
+as `next-error-function' in any buffer that conforms to the
+Spacemacs generalized next-error API.
+
+The variables `spacemacs--gne-min-line',
+`spacemacs--gne-max-line', and `spacemacs--line-func' must be
+set."
+  (when reset (setq spacemacs--gne-cur-line
+                    spacemacs--gne-min-line))
+  (setq spacemacs--gne-cur-line
+        (min spacemacs--gne-max-line
+             (max spacemacs--gne-min-line
+                  (+ num spacemacs--gne-cur-line))))
+  (goto-line spacemacs--gne-cur-line)
+  (funcall spacemacs--gne-line-func
+           (buffer-substring (point-at-bol) (point-at-eol))))
