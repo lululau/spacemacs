@@ -194,14 +194,16 @@ buffer, right justified."
   (save-excursion
     (let* ((maxcol spacemacs-buffer--banner-length)
            (badge-path spacemacs-badge-official-png)
-           (badge (when (image-type-available-p
-                         (intern (file-name-extension badge-path)))
-                  (create-image badge-path)))
+           (badge (when (and (display-graphic-p)
+                             (image-type-available-p
+                              (intern (file-name-extension badge-path)))
+                             (create-image badge-path))))
            (badge-size (when badge (car (image-size badge))))
            (heart-path spacemacs-purple-heart-png)
-           (heart (when (image-type-available-p
-                         (intern (file-name-extension heart-path)))
-                    (create-image heart-path)))
+           (heart (when (and (display-graphic-p)
+                             (image-type-available-p
+                              (intern (file-name-extension badge-path)))
+                             (create-image heart-path))))
            (heart-size (when heart (car (image-size heart))))
            (build-lhs "Made with ")
            (build-rhs " by the community")
@@ -328,7 +330,7 @@ If TYPE is nil, just remove widgets."
                            :action
                            (lambda (&rest ignore)
                              (funcall 'spacemacs/view-org-file
-                                      (concat user-emacs-directory
+                                      (concat spacemacs-start-directory
                                               "CHANGELOG.org")
                                       (format "Release %s.x"
                                               spacemacs-buffer-version-info)
@@ -484,7 +486,7 @@ border."
 (defun spacemacs-buffer/loading-animation ()
   "Display the progress bar by chunk of size
 `spacemacs--loading-dots-chunk-threshold'."
-  (when dotspacemacs-loading-progress-bar
+  (when (and (not noninteractive) dotspacemacs-loading-progress-bar)
     (setq spacemacs-loading-counter (1+ spacemacs-loading-counter))
     (setq spacemacs-loading-value (1+ spacemacs-loading-value))
     (when (>= spacemacs-loading-counter spacemacs-loading-dots-chunk-threshold)
