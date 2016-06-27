@@ -33,7 +33,7 @@
 SPACEMACSDIR environment variable. If neither of these
 directories exist, this variable will be nil.")
 
-(defconst dotspacemacs-filepath
+(defvar dotspacemacs-filepath
   (let* ((default (concat user-home-directory ".spacemacs"))
          (spacemacs-dir-init (when dotspacemacs-directory
                                  (concat dotspacemacs-directory
@@ -618,9 +618,19 @@ error recovery."
     (lambda (x) (member x '(all any current nil)))
     'dotspacemacs-highlight-delimiters "is one of \'all, \'any, \'current or nil")
    (spacemacs//test-list
-    (lambda (x) (member x '(recents bookmarks projects todos agenda)))
-    'dotspacemacs-startup-lists (concat "includes only \'recents, "
-                                        "\'bookmarks or \'projects"))
+    (lambda (x)
+      (let ((el (or (car-safe x) x))
+            (list-size (cdr-safe x)))
+      (member el '(recents bookmarks projects todos agenda))))
+    'dotspacemacs-startup-lists (concat "includes \'recents, "
+                              "\'bookmarks, \'todos, "
+                              "\'agenda or \'projects"))
+   (spacemacs//test-list
+    (lambda (x)
+      (let ((el (or (car-safe x) x))
+            (list-size (cdr-safe x)))
+        (or (null list-size)(numberp list-size))))
+    'dotspacemacs-startup-lists (concat "list size is a number"))
    (spacemacs//test-var 'stringp 'dotspacemacs-leader-key "is a string")
    (spacemacs//test-var 'stringp 'dotspacemacs-emacs-leader-key "is a string")
    (spacemacs//test-var

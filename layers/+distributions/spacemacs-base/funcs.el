@@ -49,6 +49,10 @@
   (dolist (fun funs)
     (add-hook hook fun)))
 
+(defun spacemacs//run-local-vars-mode-hook ()
+  "Run a hook for the major-mode after the local variables have been processed."
+  (run-hooks (intern (format "%S-local-vars-hook" major-mode))))
+
 (defun spacemacs/echo (msg &rest args)
   "Display MSG in echo-area without logging it in *Messages* buffer."
   (interactive)
