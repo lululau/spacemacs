@@ -478,7 +478,7 @@ layer directory."
 If OBJ is non nil then copy PKG properties into OBJ, otherwise create
 a new object.
 Properties that can be copied are `:location', `:step' and `:excluded'.
-If TOGGLEP is non nil then `:toggle' parameter is ignored."
+If TOGGLEP is nil then `:toggle' parameter is ignored."
   (let* ((name-sym (if (listp pkg) (car pkg) pkg))
          (name-str (symbol-name name-sym))
          (location (when (listp pkg) (plist-get (cdr pkg) :location)))
@@ -490,7 +490,7 @@ If TOGGLEP is non nil then `:toggle' parameter is ignored."
          (obj (if obj obj (cfgl-package name-str :name name-sym))))
     (when location (oset obj :location location))
     (when step (oset obj :step step))
-    (oset obj :excluded excluded)
+    (oset obj :excluded (or excluded (oref obj :excluded)))
     (when toggle (oset obj :toggle toggle))
     ;; cannot override protected packages
     (unless copyp

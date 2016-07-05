@@ -421,16 +421,21 @@ example is some niche language where you are only interested in syntax
 highlighting.
 
 You can install such packages by adding them to the variable
-=dotspacemacs-additional-packages= in your dotfile.
+=dotspacemacs-additional-packages= under the =dotspacemacs/layers= function in your dotfile.
+
+For example, to install =llvm-mode= and =dts-mode=:
+#+BEGIN_SRC emacs-lisp
+(defun dotspacemacs/layers ()
+  "Configuration Layers declaration..."
+  (setq-default
+   ;; ...
+   dotspacemacs-additional-packages '(llvm-mode dts-mode)
+   ;; ...
+   ))
+#+END_SRC
 
 If you want to add some configuration for them then put the configuration in
-the =dotspacemacs/user-config= function or consider to create a layer.
-
-Example to install =llvm-mode= and =dts-mode=:
-
-#+BEGIN_SRC emacs-lisp
-(setq dotspacemacs-additional-packages '(llvm-mode dts-mode)
-#+END_SRC
+the =dotspacemacs/user-config= function or consider creating a layer.
 
 ** Packages synchronization
 Spacemacs will only install the packages that are explicitly used by the user.
@@ -984,12 +989,10 @@ You can see samples of all included themes in this [[http://themegallery.robdor.
 
 ** Font
 The default font used by Spacemacs is [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]] by Adobe. It is
-recommended to install it on your system.
+recommended to install it on your system if you wish to use it.
 
 To change the default font set the variable =dotspacemacs-default-font= in your
-=.spacemacs= file.
-
-By default its value is:
+=.spacemacs= file. By default its value is:
 
 #+BEGIN_SRC emacs-lisp
 (setq-default dotspacemacs-default-font '("Source Code Pro"
@@ -998,6 +1001,10 @@ By default its value is:
                                           :width normal
                                           :powerline-scale 1.1))
 #+END_SRC
+
+If the specified font is not found, the fallback one will be used (depends on
+your system). Also note that changing this value has no effect if you are
+running Emacs in terminal.
 
 The properties should be pretty straightforward, it is possible to set any valid
 property of a [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Low_002dLevel-Font.html][font-spec]]:
@@ -1780,7 +1787,8 @@ The ~SPC j~ prefix is for jumping, joining and splitting.
 | ~SPC j b~   | undo a jump (go back to previous location)                                        |
 | ~SPC j d~   | jump to a listing of the current directory                                        |
 | ~SPC j D~   | jump to a listing of the current directory (other window)                         |
-| ~SPC j f~   | jump to the definition of the function around point                               |
+| ~SPC j f~   | jump to the definition of a function                                              |
+| ~SPC j F~   | jump to the definition of the function around point                               |
 | ~SPC j i~   | jump to a definition in buffer (imenu)                                            |
 | ~SPC j I~   | jump to a definition in any buffer (imenu)                                        |
 | ~SPC j j~   | jump to a character in the buffer (works as an evil motion)                       |
@@ -1788,7 +1796,8 @@ The ~SPC j~ prefix is for jumping, joining and splitting.
 | ~SPC j k~   | jump to next line and indent it using auto-indent rules                           |
 | ~SPC j l~   | jump to a line with avy (works as an evil motion)                                 |
 | ~SPC j u~   | jump to a URL in the current buffer                                               |
-| ~SPC j v~   | jump to the definition/declaration of the variable around point                   |
+| ~SPC j v~   | jump to the definition/declaration of a variable                                  |
+| ~SPC j V~   | jump to the definition/declaration of the variable around point                   |
 | ~SPC j w~   | jump to a word in the current buffer (works as an evil motion)                    |
 
 **** Joining and splitting
@@ -2533,6 +2542,7 @@ Text related commands (start with ~x~):
 | ~SPC x U~   | set the selected text to upper case                           |
 | ~SPC x w c~ | count the number of occurrences per word in the select region |
 | ~SPC x w d~ | show dictionary entry of word from wordnik.com                |
+| ~SPC x TAB~ | indent or dedent a region rigidly                             |
 
 *** Text insertion commands
 Text insertion commands (start with ~i~):
