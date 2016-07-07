@@ -14,6 +14,7 @@
         (abbrev :location built-in)
         ace-window
         (bookmark :location built-in)
+        (centered-buffer-mode :location local)
         (dired :location built-in)
         (dired-x :location built-in)
         (electric-indent-mode :location built-in)
@@ -60,7 +61,8 @@
     (progn
       (spacemacs/set-leader-keys
         "bD" 'spacemacs/ace-kill-this-buffer
-        "wC" 'spacemacs/ace-center-window
+        ;; FIXME: Needs new binding.
+        ;; "wC" 'spacemacs/ace-center-window
         "wD" 'spacemacs/ace-delete-window
         "wM" 'ace-swap-window
         "wW" 'ace-window)
@@ -125,7 +127,8 @@
        ediff-split-window-function 'split-window-horizontally
        ediff-merge-split-window-function 'split-window-horizontally)
       ;; show org ediffs unfolded
-      (add-hook 'ediff-prepare-buffer-hook #'outline-show-all)
+      (require 'outline)
+      (add-hook 'ediff-prepare-buffer-hook #'show-all)
       ;; restore window layout when done
       (add-hook 'ediff-quit-hook #'winner-undo))))
 
@@ -496,3 +499,5 @@
       (setq winner-boring-buffers
             (append winner-boring-buffers spacemacs/winner-boring-buffers))
       (winner-mode t))))
+
+(defun spacemacs-base/init-centered-buffer-mode ())
