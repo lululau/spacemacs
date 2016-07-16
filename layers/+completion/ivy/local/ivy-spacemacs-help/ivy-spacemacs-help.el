@@ -154,22 +154,22 @@
 
 (defun ivy-spacemacs-help//layer-action-add-layer (candidate)
   "Adds layer to dotspacemacs file and reloads configuration"
-  (if (configuration-layer/layer-usedp (intern (cdr candidate)))
+  (if (configuration-layer/layer-usedp (intern candidate))
       (message "Layer already added.")
     (let ((dotspacemacs   (find-file-noselect (dotspacemacs/location))))
       (with-current-buffer dotspacemacs
         (beginning-of-buffer)
         (let ((insert-point (re-search-forward
                              "dotspacemacs-configuration-layers *\n?.*\\((\\)")))
-          (insert (format "\n%s\n" (cdr candidate)))
-          (indent-region insert-point (+ insert-point (length (cdr candidate))))
+          (insert (format "\n%s\n" candidate))
+          (indent-region insert-point (+ insert-point (length candidate)))
           (save-current-buffer)))
       (dotspacemacs/sync-configuration-layers))))
 
 (defun ivy-spacemacs-help//layer-action-open-dired (candidate)
   "Open dired at the location of the passed layer CANDIDATE."
   (dired
-   (ivy-spacemacs-help//layer-action-get-directory (cdr candidate))))
+   (ivy-spacemacs-help//layer-action-get-directory candidate)))
 
 (defun ivy-spacemacs-help//layer-action-open-readme-edit (candidate)
   "Open the `README.org' file of the passed CANDIDATE for editing."
@@ -177,7 +177,7 @@
 
 (defun ivy-spacemacs-help//layer-action-open-packages (candidate)
   "Open the `packages.el' file of the passed CANDIDATE."
-  (ivy-spacemacs-help//layer-action-open-file "packages.el" (cdr candidate)))
+  (ivy-spacemacs-help//layer-action-open-file "packages.el" candidate))
 
 ;;;###autoload
 (defun ivy-spacemacs-help-layers ()
