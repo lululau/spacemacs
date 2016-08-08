@@ -32,11 +32,11 @@
     pytest
     (python :location built-in)
     pyvenv
-    py-yapf
     semantic
     smartparens
     stickyfunc-enhance
     xcscope
+    yapfify
     ))
 
 (defun python/init-anaconda-mode ()
@@ -374,14 +374,6 @@
       (define-key inferior-python-mode-map
         (kbd "C-c M-l") 'spacemacs/comint-clear-buffer))))
 
-(defun python/init-py-yapf ()
-  (use-package py-yapf
-    :commands py-yapf-buffer
-    :init (spacemacs/set-leader-keys-for-major-mode 'python-mode
-            "=" 'py-yapf-buffer)
-    :config (when python-enable-yapf-format-on-save
-              (add-hook 'python-mode-hook 'py-yapf-enable-on-save))))
-
 (defun python/post-init-semantic ()
   (when (configuration-layer/package-usedp 'anaconda-mode)
       (add-hook 'python-mode-hook
@@ -418,3 +410,11 @@ fix this issue."
     :post-init
     (spacemacs/set-leader-keys-for-major-mode 'python-mode
       "gi" 'cscope/run-pycscope)))
+
+(defun python/init-yapfify ()
+  (use-package yapfify
+    :defer t
+    :init (spacemacs/set-leader-keys-for-major-mode 'python-mode
+            "=" 'yapfify-buffer)
+    :config (when python-enable-yapf-format-on-save
+              (add-hook 'python-mode-hook 'yapf-mode))))
