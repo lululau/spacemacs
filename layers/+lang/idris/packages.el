@@ -9,8 +9,9 @@
 ;;
 ;;; License: GPLv3
 
-(setq idris-packages '(idris-mode
-                       company
+(setq idris-packages '(company
+                       idris-mode
+                       golden-ratio
                        popwin))
 
 (defun idris/post-init-company ()
@@ -108,6 +109,12 @@
   (evil-set-initial-state 'idris-compiler-notes-mode 'motion)
   (evil-set-initial-state 'idris-hole-list-mode 'motion)
   (evil-set-initial-state 'idris-info-mode 'motion))
+
+(defun idris/pre-init-golden-ratio ()
+  (spacemacs|use-package-add-hook golden-ratio
+    :post-config
+    (add-to-list 'golden-ratio-exclude-buffer-names
+                 "*idris-notes*")))
 
 (defun idris/pre-init-popwin ()
   (spacemacs|use-package-add-hook popwin
