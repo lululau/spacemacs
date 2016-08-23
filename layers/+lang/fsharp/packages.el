@@ -22,7 +22,8 @@
     :init
     (progn
       (setq fsharp-doc-idle-delay .2)
-      (spacemacs/register-repl 'fsharp-mode 'fsharp-show-subshell "F#"))
+      (spacemacs/register-repl 'fsharp-mode 'fsharp-show-subshell "F#")
+      (spacemacs|define-jump-handlers fsharp-mode fsharp-ac/gotodefn-at-point))
     :config
     (progn
 
@@ -56,8 +57,6 @@
 
         "fa" 'fsharp-find-alternate-file
 
-        "gg" 'fsharp-ac/gotodefn-at-point
-
         "ht" 'fsharp-ac/show-tooltip-at-point
 
         "'"  'fsharp-show-subshell
@@ -73,7 +72,7 @@
         "xf" 'fsharp-run-executable-file))))
 
 (defun fsharp/post-init-ggtags ()
-  (add-hook 'fsharp-mode-hook #'spacemacs/ggtags-mode-enable))
+  (add-hook 'fsharp-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
 
 (defun fsharp/post-init-helm-gtags ()
   (spacemacs/helm-gtags-define-keys-for-mode 'fsharp-mode))

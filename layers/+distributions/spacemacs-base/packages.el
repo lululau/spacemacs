@@ -13,6 +13,7 @@
       '(
         (abbrev :location built-in)
         ace-window
+        (archive-mode :location built-in)
         (bookmark :location built-in)
         (centered-buffer-mode :location local)
         (dired :location built-in)
@@ -32,6 +33,7 @@
         (hybrid-mode :location local :step pre)
         (image-mode :location built-in)
         (linum :location built-in)
+        (occur-mode :location built-in)
         (package-menu :location built-in)
         ;; page-break-lines is shipped with spacemacs core
         (page-break-lines :location built-in)
@@ -70,6 +72,11 @@
         "wW" 'ace-window)
       ;; set ace-window keys to home-row
       (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))))
+
+(defun spacemacs-base/init-archive-mode ()
+  (evilified-state-evilify-map archive-mode-map
+    :mode archive-mode
+    :eval-after-load archive-mode))
 
 (defun spacemacs-base/init-bookmark ()
   (use-package bookmark
@@ -227,6 +234,10 @@
     :mode linum-mode
     :documentation "Show the line numbers."
     :evil-leader "tn"))
+
+(defun spacemacs-base/init-occur-mode ()
+  (evilified-state-evilify-map occur-mode-map
+    :mode occur-mode))
 
 (defun spacemacs-base/init-package-menu ()
   (evilified-state-evilify-map package-menu-mode-map

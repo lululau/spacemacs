@@ -42,7 +42,8 @@
       (defun spacemacs//go-set-tab-width ()
         "Set the tab width."
         (setq-local tab-width go-tab-width))
-      (add-hook 'go-mode-hook 'spacemacs//go-set-tab-width))
+      (add-hook 'go-mode-hook 'spacemacs//go-set-tab-width)
+      (spacemacs|define-jump-handlers go-mode godef-jump))
     :config
     (progn
       (add-hook 'before-save-hook 'gofmt-before-save)
@@ -104,7 +105,6 @@
         "xx" 'spacemacs/go-run-main
         "ga" 'ff-find-other-file
         "gc" 'go-coverage
-        "gg" 'godef-jump
         "tt" 'spacemacs/go-run-test-current-function
         "ts" 'spacemacs/go-run-test-current-suite
         "tp" 'spacemacs/go-run-package-tests
@@ -147,7 +147,7 @@
     (add-hook 'go-mode-hook 'spacemacs//go-enable-gometalinter t)))
 
 (defun go/post-init-ggtags ()
-  (add-hook 'go-mode-hook #'spacemacs/ggtags-mode-enable))
+  (add-hook 'go-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
 
 (defun go/post-init-helm-gtags ()
   (spacemacs/helm-gtags-define-keys-for-mode 'go-mode))

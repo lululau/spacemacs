@@ -27,6 +27,7 @@
     (nose :location local)
     org
     pip-requirements
+    py-isort
     pyenv-mode
     (pylookup :location local)
     pytest
@@ -46,12 +47,13 @@
     (progn
       (setq anaconda-mode-installation-directory
             (concat spacemacs-cache-directory "anaconda-mode"))
-      (add-hook 'python-mode-hook 'anaconda-mode))
+      (add-hook 'python-mode-hook 'anaconda-mode)
+      (add-hook 'spacemacs-jump-handlers-python-mode
+                'anaconda-mode-find-definitions))
     :config
     (progn
       (spacemacs/set-leader-keys-for-major-mode 'python-mode
         "hh" 'anaconda-mode-show-doc
-        "gg" 'anaconda-mode-find-definitions
         "ga" 'anaconda-mode-find-assignments
         "gb" 'anaconda-mode-go-back
         "gu" 'anaconda-mode-find-references)
@@ -81,9 +83,9 @@
     :defer t
     :init
     (progn
+      (spacemacs|define-jump-handlers cython-mode anaconda-mode-goto)
       (spacemacs/set-leader-keys-for-major-mode 'cython-mode
         "hh" 'anaconda-mode-view-doc
-        "gg" 'anaconda-mode-goto
         "gu" 'anaconda-mode-usages))))
 
 (defun python/post-init-eldoc ()
@@ -108,7 +110,7 @@
   (spacemacs/helm-gtags-define-keys-for-mode 'python-mode))
 
 (defun python/post-init-ggtags ()
-  (add-hook 'python-mode-hook #'spacemacs/ggtags-mode-enable))
+  (add-hook 'python-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
 
 (defun python/init-helm-pydoc ()
   (use-package helm-pydoc
@@ -144,7 +146,8 @@
 
 (defun python/init-nose ()
   (use-package nose
-    :if (or (eq 'nose python-test-runner) (member 'nose python-test-runner))
+    :if (or (eq 'nose python-test-runner)
+            (if (listp python-test-runner) (member 'nose python-test-runner)))
     :commands (nosetests-one
                nosetests-pdb-one
                nosetests-all
@@ -176,6 +179,15 @@
       ;; company support
       (push 'company-capf company-backends-pip-requirements-mode)
       (spacemacs|add-company-hook pip-requirements-mode))))
+
+(defun python/init-py-isort ()
+  (use-package py-isort
+    :defer t
+    :init
+    (progn
+      (add-hook 'before-save-hook 'spacemacs//python-sort-imports)
+      (spacemacs/set-leader-keys-for-major-mode 'python-mode
+        "rI" 'py-isort-buffer))))
 
 (defun python/init-pyenv-mode ()
   (use-package pyenv-mode
@@ -230,7 +242,8 @@
 
 (defun python/init-pytest ()
   (use-package pytest
-    :if (or (eq 'pytest python-test-runner) (member 'pytest python-test-runner))
+    :if (or (eq 'pytest python-test-runner)
+            (if (listp python-test-runner) (member 'pytest python-test-runner)))
     :defer t
     :commands (pytest-one
                pytest-pdb-one
@@ -247,6 +260,8 @@
     :init
     (progn
       (spacemacs/register-repl 'python 'python-start-or-switch-repl "python")
+
+      (spacemacs|define-jump-handlers python-mode)
 
       (defun python-default ()
         (setq mode-name "Python"
