@@ -628,9 +628,32 @@ you can do it with the following layer declaration.
 (defun dotspacemacs/layers ()
   ;; List of configuration layers to load.
   (setq-default dotspacemacs-configuration-layers
-    '(org
+    '(org git
       (auto-completion :disabled-for org git))))
 #+END_SRC
+
+You can also use the =:enabled-for= construct to disable it for /all/ layers
+/except/ those explicitly identified.
+
+#+BEGIN_SRC emacs-lisp
+(defun dotspacemacs/layers ()
+  ;; List of configuration layers to load.
+  (setq-default dotspacemacs-configuration-layers
+    '(java python c-c++
+      (auto-completion :enabled-for java python))))
+#+END_SRC
+
+Note that =:enabled-for= may be an empty list.
+
+#+BEGIN_SRC emacs-lisp
+(defun dotspacemacs/layers ()
+  ;; List of configuration layers to load.
+  (setq-default dotspacemacs-configuration-layers
+    '(java python c-c++
+      (auto-completion :enabled-for))))
+#+END_SRC
+
+=:enabled-for= takes precedence over =:disabled-for= if both are present.
 
 *** Selecting/Ignoring packages of a layer
 By default a declared layer installs/configures all its associated packages. You
@@ -1507,7 +1530,7 @@ these is *guaranteed* to never conflict with Spacemacs default key bindings.
 c~ to run org mode capture.
 
 ** Completion
-Spacemacs is powered by one of two incrementatal completion and selection
+Spacemacs is powered by one of two incremental completion and selection
 narrowing frameworks: [[https://github.com/emacs-helm/helm][Helm]] (default) or [[https://github.com/abo-abo/swiper][Ivy]]. To use Ivy, add the =ivy= layer to
 your list of enabled layers. If the =ivy= layer is not enabled, Helm will be
 enabled automatically. (Please note that, as Helm is the more mature of the two,
@@ -2960,7 +2983,8 @@ To search in a project see [[Searching in a project][project searching]].
 | ~SPC p D~   | open project root in =dired=                            |
 | ~SPC p f~   | find file                                               |
 | ~SPC p F~   | find file based on path around point                    |
-| ~SPC p G~   | regenerate the project's =etags= / =gtags=              |
+| ~SPC p g~   | find tags                                               |
+| ~SPC p C-g~ | regenerate the project's =etags= / =gtags=              |
 | ~SPC p h~   | find file using =helm=                                  |
 | ~SPC p I~   | invalidate the projectile cache                         |
 | ~SPC p k~   | kill all project buffers                                |
@@ -2971,7 +2995,6 @@ To search in a project see [[Searching in a project][project searching]].
 | ~SPC p t~   | open =NeoTree= in =projectile= root                     |
 | ~SPC p T~   | test project                                            |
 | ~SPC p v~   | open project root in =vc-dir= or =magit=                |
-| ~SPC p y~   | find tags                                               |
 | ~SPC /~     | search in project with the best search tool available   |
 | ~SPC s p~   | see [[Searching in a project][search in project]]                                   |
 | ~SPC s a p~ | run =ag=                                                |

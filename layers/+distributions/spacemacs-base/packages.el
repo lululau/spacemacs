@@ -334,13 +334,12 @@
         "pa" 'projectile-toggle-between-implementation-and-test
         "pc" 'projectile-compile-project
         "pD" 'projectile-dired
-        "pG" 'projectile-regenerate-tags
+        "pg" 'projectile-find-tag
+        "p C-g" 'projectile-regenerate-tags
         "pI" 'projectile-invalidate-cache
         "pk" 'projectile-kill-buffers
-        "po" 'projectile-multi-occur
         "pR" 'projectile-replace
-        "pT" 'projectile-test-project
-        "py" 'projectile-find-tag))
+        "pT" 'projectile-test-project))
     :config
     (progn
       (projectile-global-mode)
