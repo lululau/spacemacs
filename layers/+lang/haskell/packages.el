@@ -111,9 +111,7 @@
        haskell-process-auto-import-loaded-modules t
        ;; Disable haskell-stylish-on-save, as it breaks flycheck highlighting.
        ;; NOTE: May not be true anymore - taksuyu 2015-10-06
-       haskell-stylish-on-save nil)
-      (spacemacs|define-jump-handlers haskell-mode
-                               haskell-mode-jump-to-def-or-tag))
+       haskell-stylish-on-save nil))
     :config
     (progn
       ;; Haskell main editing mode key bindings.
@@ -139,7 +137,8 @@
         (spacemacs/declare-prefix-for-mode mode "ms" "haskell/repl")
         (spacemacs/declare-prefix-for-mode mode "mc" "haskell/cabal")
         (spacemacs/declare-prefix-for-mode mode "mh" "haskell/documentation")
-        (spacemacs/declare-prefix-for-mode mode "md" "haskell/debug"))
+        (spacemacs/declare-prefix-for-mode mode "md" "haskell/debug")
+        (spacemacs/declare-prefix-for-mode mode "mr" "haskell/refactor"))
       (spacemacs/declare-prefix-for-mode 'haskell-interactive-mode "ms" "haskell/repl")
       (spacemacs/declare-prefix-for-mode 'haskell-cabal-mode "ms" "haskell/repl")
 
@@ -284,7 +283,6 @@
     :defer t
     :init
     (progn
-      (spacemacs/declare-prefix-for-mode 'haskell-mode "mr" "haskell/refactor")
       (spacemacs/set-leader-keys-for-major-mode 'haskell-mode
         "rb" 'hlint-refactor-refactor-buffer
         "rr" 'hlint-refactor-refactor-at-point))))

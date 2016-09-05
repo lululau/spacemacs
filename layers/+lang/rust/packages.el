@@ -64,7 +64,6 @@
     :defer t
     :init
     (progn
-      (spacemacs|define-jump-handlers rust-mode)
       (spacemacs/set-leader-keys-for-major-mode 'rust-mode
         "=" 'rust-format-buffer))))
 
@@ -95,4 +94,4 @@
     (progn
       (spacemacs/add-to-hook 'rust-mode-hook '(racer-mode eldoc-mode))
       (spacemacs/declare-prefix-for-mode 'rust-mode "mg" "goto")
-      (add-hook 'spacemacs-jump-handlers-rust-mode 'racer-find-definition))))
+      (add-to-list 'spacemacs-jump-handlers-rust-mode 'racer-find-definition))))

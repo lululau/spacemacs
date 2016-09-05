@@ -51,7 +51,7 @@
     :defer t
     :init
     (progn
-      (add-hook 'spacemacs-jump-handlers-tuareg-mode
+      (add-to-list 'spacemacs-jump-handlers-tuareg-mode
                 'spacemacs/merlin-locate)
       (add-hook 'tuareg-mode-hook 'merlin-mode)
       (setq merlin-completion-with-doc t)
@@ -99,7 +99,6 @@
     :defer t
     :init
     (progn
-      (spacemacs|define-jump-handlers tuareg-mode)
       (spacemacs//init-ocaml-opam)
       (spacemacs/set-leader-keys-for-major-mode 'tuareg-mode
         "ga" 'tuareg-find-alternate-file

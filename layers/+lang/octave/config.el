@@ -1,4 +1,4 @@
-;;; config.el --- ocaml Layer Configuration File for Spacemacs
+;;; packages.el --- Octave Layer packages File for Spacemacs
 ;;
 ;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
 ;;
@@ -9,6 +9,6 @@
 ;;
 ;;; License: GPLv3
 
-(spacemacs|defvar-company-backends merlin-mode)
+;; variables
 
-(spacemacs|define-jump-handlers tuareg-mode)
+(spacemacs|define-jump-handlers octave-mode)

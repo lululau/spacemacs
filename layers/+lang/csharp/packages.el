@@ -32,7 +32,7 @@
         ;; set back this variable to t.
         (setq omnisharp-auto-complete-want-documentation nil))
       (push 'company-omnisharp company-backends-csharp-mode)
-      (add-hook 'spacemacs-jump-handlers-csharp-mode
+      (add-to-list 'spacemacs-jump-handlers-csharp-mode
                 'omnisharp-go-to-definition))
     :config
     (progn
@@ -90,9 +90,7 @@
 
 (defun csharp/init-csharp-mode ()
   (use-package csharp-mode
-    :defer t
-    :init
-    (spacemacs|define-jump-handlers csharp-mode)))
+    :defer t))
 
 (defun csharp/post-init-evil-matchit ()
   (with-eval-after-load 'evil-matchit

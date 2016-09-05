@@ -35,9 +35,8 @@
     :defer t
     :init
     (progn
-      (add-to-list 'auto-mode-alist `("\\.h\\'" . ,c-c++-default-mode-for-headers))
-      (spacemacs|define-jump-handlers c++-mode)
-      (spacemacs|define-jump-handlers c-mode))
+      (add-to-list 'auto-mode-alist
+                   `("\\.h\\'" . ,c-c++-default-mode-for-headers)))
     :config
     (progn
       (require 'compile)
@@ -126,8 +125,8 @@
 (defun c-c++/post-init-ycmd ()
   (add-hook 'c++-mode-hook 'ycmd-mode)
   (add-hook 'c-mode-hook 'ycmd-mode)
-  (add-hook 'spacemacs-jump-handlers-c++-mode '(ycmd-goto :async t))
-  (add-hook 'spacemacs-jump-handlers-c-mode '(ycmd-goto :async t))
+  (add-to-list 'spacemacs-jump-handlers-c++-mode '(ycmd-goto :async t))
+  (add-to-list 'spacemacs-jump-handlers-c-mode '(ycmd-goto :async t))
   (dolist (mode '(c++-mode c-mode))
     (spacemacs/set-leader-keys-for-major-mode mode
       "gG" 'ycmd-goto-imprecise)))
