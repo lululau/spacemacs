@@ -46,6 +46,10 @@
   ;; work properly sometimes.
   (require 'evil)
   (evil-mode 1)
+
+  ;; Use evil as a default jump handler
+  (push 'evil-goto-definition spacemacs-default-jump-handlers)
+
   (require 'cl)
   ;; State cursors
   (defvar spacemacs-evil-cursors '(("normal" "DarkGoldenrod2" box)
@@ -126,7 +130,7 @@
   (evil-ex-define-cmd "enew" 'spacemacs/new-empty-buffer)
 
   (define-key evil-normal-state-map (kbd "K") 'spacemacs/evil-smart-doc-lookup)
-  (define-key evil-normal-state-map (kbd "gd") 'spacemacs/evil-smart-goto-definition)
+  (define-key evil-normal-state-map (kbd "gd") 'spacemacs/jump-to-definition)
 
   ;; scrolling transient state
   (spacemacs|define-transient-state scroll
