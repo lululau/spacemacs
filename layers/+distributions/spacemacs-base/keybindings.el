@@ -234,6 +234,7 @@
   "cr" 'recompile
   "cd" 'spacemacs/close-compilation-window)
 (with-eval-after-load 'compile
+  (evil-define-key 'motion compilation-mode-map (kbd "gf") 'find-file-at-point)
   (define-key compilation-mode-map "r" 'recompile)
   (define-key compilation-mode-map "g" nil))
 ;; narrow & widen -------------------------------------------------------------
@@ -411,6 +412,7 @@
   "ww"  'other-window
   "w/"  'split-window-right
   "w="  'balance-windows
+  "w+"  'spacemacs/window-layout-toggle
   "w_"  'spacemacs/maximize-horizontally)
 ;; text -----------------------------------------------------------------------
 (defalias 'count-region 'count-words-region)
