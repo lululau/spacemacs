@@ -374,6 +374,7 @@
     (golden-ratio)))
 
 (spacemacs/set-leader-keys
+  "w TAB"  'spacemacs/alternate-window
   "w2"  'spacemacs/layout-double-columns
   "w3"  'spacemacs/layout-triple-columns
   "wb"  'spacemacs/switch-to-minibuffer-window
