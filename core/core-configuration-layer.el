@@ -889,11 +889,17 @@ Return nil if package object is not found."
   "Return a sorted list of PACKAGES objects."
   (sort packages (lambda (x y) (string< (symbol-name x) (symbol-name y)))))
 
-(defun configuration-layer/make-all-packages (&optional usedp)
-  "Create objects for _all_ packages.
-USEDP if non-nil indicates that made packages are used packages."
-  (configuration-layer/make-packages-from-layers
-   (configuration-layer/get-layers-list) usedp))
+(defun configuration-layer/make-all-packages (&optional skip-layer-discovery)
+  "Create objects for _all_ packages supported by Spacemacs.
+If SKIP-LAYER-DISCOVERY is non-nil then do not check for new layers."
+  (let ((all-layers (configuration-layer/get-layers-list))
+        (configuration-layer--load-packages-files t)
+        (configuration-layer--package-properties-read-onlyp t)
+        (configuration-layer--inhibit-warnings t))
+    (unless skip-layer-discovery
+      (configuration-layer/discover-layers))
+    (configuration-layer/declare-layers all-layers)
+    (configuration-layer/make-packages-from-layers all-layers)))
 
 (defun configuration-layer/make-packages-from-layers
     (layer-names &optional usedp)
@@ -1120,8 +1126,10 @@ Returns nil if the directory is not a category."
                         (oset indexed-layer :dir sub))
                     (spacemacs-buffer/message
                      "-> Discovered configuration layer: %s" layer-name-str)
-                    (configuration-layer//add-layer
-                     (configuration-layer/make-layer layer-name nil nil sub)))))
+                    (let ((configuration-layer--load-packages-files nil))
+                      (configuration-layer//add-layer
+                       (configuration-layer/make-layer layer-name
+                                                       nil nil sub))))))
                (t
                 ;; layer not found, add it to search path
                 (setq search-paths (cons sub search-paths)))))))))))
