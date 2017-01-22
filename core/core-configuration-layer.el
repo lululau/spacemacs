@@ -315,6 +315,7 @@ The returned list has a `package-archives' compliant format."
    (lambda (x)
      (cons (car x)
            (if (or (string-match-p "http" (cdr x))
+                   (string-prefix-p "~" (cdr x))
                    (string-prefix-p "/" (cdr x)))
                (cdr x)
              (concat
@@ -630,9 +631,10 @@ If TOGGLEP is nil then `:toggle' parameter is ignored."
                  pkg-name (car (oref obj :owners)) layer-name)))
       ;; last owner wins over the previous one
       (object-add-to-list obj :owners layer-name))
-    ;; check consistency betwween package and defined init functions
+    ;; check consistency between package and defined init functions
     (unless (or ownerp
                 (eq 'dotfile layer-name)
+                (eq 'system layer-name)
                 (fboundp pre-init-func)
                 (fboundp post-init-func)
                 (oref obj :excluded))
@@ -1367,17 +1369,22 @@ wether the declared layer is an used one or not."
            installed-count)
       ;; installation
       (when upkg-names
-        (spacemacs-buffer/append
-         (format "Found %s new package(s) to install...\n"
-                 not-inst-count))
-        (configuration-layer/retrieve-package-archives)
-        (setq installed-count 0)
-        (spacemacs//redisplay)
-        (dolist (pkg-name upkg-names)
-          (setq installed-count (1+ installed-count))
-          (configuration-layer//install-package
-           (configuration-layer/get-package pkg-name)))
-        (spacemacs-buffer/append "\n")))))
+        (let ((delayed-warnings-backup delayed-warnings-list))
+          (spacemacs-buffer/append
+           (format "Found %s new package(s) to install...\n"
+                   not-inst-count))
+          (configuration-layer/retrieve-package-archives)
+          (setq installed-count 0)
+          (spacemacs//redisplay)
+          (dolist (pkg-name upkg-names)
+            (setq installed-count (1+ installed-count))
+            (configuration-layer//install-package
+             (configuration-layer/get-package pkg-name)))
+          (spacemacs-buffer/append "\n")
+          (unless init-file-debug
+            ;; get rid of all delayed warnings when byte-compiling packages
+            ;; unless --debug-init was passed on the command line
+            (setq delayed-warnings-list delayed-warnings-backup)))))))
 
 (defun configuration-layer//install-from-elpa (pkg-name)
   "Install PKG from ELPA."
@@ -2041,9 +2048,15 @@ FILE-TO-LOAD is an explicit file to load after the installation."
              (format "(Bootstrap) Installing %s...\n" pkg))
             (spacemacs//redisplay))
           (configuration-layer/retrieve-package-archives 'quiet)
-          (package-install pkg)
+          (let ((delayed-warnings-backup delayed-warnings-list))
+            (package-install pkg)
+            (unless init-file-debug
+              (setq delayed-warnings-list delayed-warnings-backup)))
           (setq pkg-elpa-dir
                 (configuration-layer/get-elpa-package-install-directory pkg)))
+        (unless (configuration-layer/get-package pkg)
+          (let ((obj (configuration-layer/make-package pkg 'system)))
+                (configuration-layer//add-package obj)))
         (require pkg nil 'noerror)
         (when file-to-load
           (load-file (concat pkg-elpa-dir file-to-load)))
@@ -2126,19 +2139,25 @@ Original code from dochang at https://github.com/dochang/elpa-clone"
 (defun configuration-layer/create-elpa-repository (name output-dir)
   "Create an ELPA repository containing all packages supported by Spacemacs."
   (configuration-layer/make-all-packages 'no-discover)
-  (let* ((packages (configuration-layer//get-indexed-elpa-package-names))
-         (archive-contents
-          (mapcar 'configuration-layer//create-archive-contents-item
-                  packages))
-         (path (file-name-as-directory (concat output-dir name))))
-    (unless (file-exists-p path) (make-directory path 'create-parents))
-    (configuration-layer//sync-elpa-packages-files packages path)
-    (push 1 archive-contents)
-    (with-current-buffer (find-file-noselect
-                          (concat path "archive-contents"))
-      (erase-buffer)
-      (prin1 archive-contents (current-buffer))
-      (save-buffer))))
+  (let (package-archive-contents
+        (package-archives '(("melpa" . "https://melpa.org/packages/")
+                            ("org"   . "http://orgmode.org/elpa/")
+                            ("gnu"   . "https://elpa.gnu.org/packages/"))))
+    (package-refresh-contents)
+    (package-read-all-archive-contents)
+    (let* ((packages (configuration-layer//get-indexed-elpa-package-names))
+           (archive-contents
+            (mapcar 'configuration-layer//create-archive-contents-item
+                    packages))
+           (path (file-name-as-directory (concat output-dir name))))
+      (unless (file-exists-p path) (make-directory path 'create-parents))
+      (configuration-layer//sync-elpa-packages-files packages path)
+      (push 1 archive-contents)
+      (with-current-buffer (find-file-noselect
+                            (concat path "archive-contents"))
+        (erase-buffer)
+        (prin1 archive-contents (current-buffer))
+        (save-buffer)))))
 
 (defun configuration-layer//increment-error-count ()
   "Increment the error counter."
