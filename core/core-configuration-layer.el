@@ -113,29 +113,31 @@ ROOT is returned."
                                    "(Takes precedence over `:disabled-for'.)")))
   "A configuration layer.")
 
-(defmethod cfgl-layer-owned-packages ((layer cfgl-layer))
+(defmethod cfgl-layer-owned-packages ((layer cfgl-layer) &optional props)
   "Return the list of owned packages by LAYER.
+If PROPS is non-nil then return packages as lists with their properties.
 LAYER has to be installed for this method to work properly."
   (delq nil (mapcar
              (lambda (x)
-               (let ((pkg (configuration-layer/get-package x)))
-                 (when (and pkg (eq (oref layer :name)
-                                    (car (oref pkg :owners))))
-                   pkg)))
-             (oref layer :packages))))
+               (let* ((pkg-name (if (listp x) (car x) x))
+                      (pkg (configuration-layer/get-package pkg-name)))
+                 (when (eq (oref layer :name) (car (oref pkg :owners))) x)))
+             (cfgl-layer-get-packages layer props))))
 
-(defmethod cfgl-layer-owned-packages ((layer nil))
+(defmethod cfgl-layer-owned-packages ((layer nil) &optional props)
   "Accept nil as argument and return nil."
   nil)
 
-(defmethod cfgl-layer-get-packages ((layer cfgl-layer))
-  "Return the list of packages for LAYER."
-  (if (eq 'all (oref layer :selected-packages))
-      (oref layer :packages)
+(defmethod cfgl-layer-get-packages ((layer cfgl-layer) &optional props)
+  "Return the list of packages for LAYER.
+If PROPS is non-nil then return packages as lists with their properties"
+  (let ((all (eq 'all (oref layer :selected-packages))))
     (delq nil (mapcar
                (lambda (x)
                  (let ((pkg-name (if (listp x) (car x) x)))
-                   (when (memq pkg-name (oref layer :selected-packages)) x)))
+                   (when (or all (memq pkg-name
+                                       (oref layer :selected-packages)))
+                     (if props x pkg-name))))
                (oref layer :packages)))))
 
 (defclass cfgl-package ()
@@ -295,15 +297,28 @@ cache folder.")
     (setq package-enable-at-startup nil)
     (package-initialize 'noactivate)))
 
-(defun configuration-layer//install-quelpa ()
-  "Install `quelpa'."
+(defun configuration-layer//configure-quelpa ()
+  "Configure `quelpa' package."
   (setq quelpa-verbose init-file-debug
         quelpa-dir (concat spacemacs-cache-directory "quelpa/")
         quelpa-build-dir (expand-file-name "build" quelpa-dir)
         quelpa-persistent-cache-file (expand-file-name "cache" quelpa-dir)
         quelpa-update-melpa-p nil)
-  (configuration-layer/load-or-install-protected-package 'package-build)
-  (configuration-layer/load-or-install-protected-package 'quelpa))
+  (require 'quelpa))
+
+(defun configuration-layer//package-archive-absolute-pathp (archive)
+  "Return t if ARCHIVE has an absolute path defined."
+  (let ((path (cdr archive)))
+    (or (string-match-p "http" path)
+        (string-prefix-p "~" path)
+        (string-prefix-p "/" path))))
+
+(defun configuration-layer//package-archive-local-pathp (archive)
+  "Return t if ARCHIVE has a local path."
+  (let ((path (cdr archive)))
+    (or (string-prefix-p "~" path)
+        (string-prefix-p "/" path)
+        (string-prefix-p "\." path))))
 
 (defun configuration-layer//resolve-package-archives (archives)
   "Resolve HTTP handlers for each archive in ARCHIVES and return a list
@@ -313,23 +328,23 @@ left untouched.
 The returned list has a `package-archives' compliant format."
   (mapcar
    (lambda (x)
-     (cons (car x)
-           (if (or (string-match-p "http" (cdr x))
-                   (string-prefix-p "~" (cdr x))
-                   (string-prefix-p "/" (cdr x)))
-               (cdr x)
-             (concat
-              (if (and dotspacemacs-elpa-https
-                       (not spacemacs-insecure)
-                       ;; for now org ELPA repository does
-                       ;; not support HTTPS
-                       ;; TODO when org ELPA repo support
-                       ;; HTTPS remove the check
-                       ;; `(not (equal "org" (car x)))'
-                       (not (equal "org" (car x))))
-                  "https://"
-                "http://")
-              (cdr x)))))
+     (let ((aname (car x))
+           (apath (cdr x)))
+       (cons aname
+             (if (configuration-layer//package-archive-absolute-pathp x)
+                 apath
+               (concat
+                (if (and dotspacemacs-elpa-https
+                         (not spacemacs-insecure)
+                         ;; for now org ELPA repository does
+                         ;; not support HTTPS
+                         ;; TODO when org ELPA repo support
+                         ;; HTTPS remove the check
+                         ;; `(not (equal "org" aname))'
+                         (not (equal "org" aname)))
+                    "https://"
+                  "http://")
+                apath)))))
    archives))
 
 (defun configuration-layer/retrieve-package-archives (&optional quiet force)
@@ -353,32 +368,38 @@ refreshed during the current session."
     (let ((count (length package-archives))
           (i 1))
       (dolist (archive package-archives)
-        (unless quiet
-          (spacemacs-buffer/replace-last-line
-           (format "--> refreshing package archive: %s... [%s/%s]"
-                   (car archive) i count) t))
-        (spacemacs//redisplay)
-        (setq i (1+ i))
-        (unless (eq 'error
-                    (with-timeout
-                        (dotspacemacs-elpa-timeout
-                         (progn
-                           (display-warning
-                            'spacemacs
-                            (format
-                             "\nError connection time out for %s repository!"
-                             (car archive)) :warning)
-                           'error))
-                      (condition-case err
-                          (url-retrieve-synchronously (cdr archive))
-                        ('error
-                         (display-warning 'spacemacs
-                          (format
-                           "\nError while contacting %s repository!"
-                           (car archive)) :warning)
-                         'error))))
-          (let ((package-archives (list archive)))
-            (package-refresh-contents))))
+        (let ((aname (car archive))
+              (apath (cdr archive)))
+          (unless quiet
+            (spacemacs-buffer/replace-last-line
+             (format "--> refreshing package archive: %s... [%s/%s]"
+                     aname i count) t))
+          (spacemacs//redisplay)
+          (setq i (1+ i))
+          (unless
+              (and (not (configuration-layer//package-archive-local-pathp
+                         archive))
+                   (eq 'error
+                       (with-timeout
+                           (dotspacemacs-elpa-timeout
+                            (progn
+                              (display-warning
+                               'spacemacs
+                               (format
+                                "\nError connection time out for %s repository!"
+                                aname) :warning)
+                              'error))
+                         (condition-case err
+                             (url-retrieve-synchronously apath)
+                           ('error
+                            (display-warning
+                             'spacemacs
+                             (format
+                              "\nError while contacting %s repository!"
+                              aname) :warning)
+                            'error)))))
+            (let ((package-archives (list archive)))
+              (package-refresh-contents)))))
       (package-read-all-archive-contents)
       (unless quiet (spacemacs-buffer/append "\n")))))
 
@@ -919,7 +940,7 @@ DOTFILE if non-nil will process the dotfile `dotspacemacs-additional-packages'
 variable as well."
   (dolist (layer-name layer-names)
     (let ((layer (configuration-layer/get-layer layer-name)))
-      (dolist (pkg (cfgl-layer-get-packages layer))
+      (dolist (pkg (cfgl-layer-get-packages layer 'with-props))
         (let* ((pkg-name (if (listp pkg) (car pkg) pkg))
                (obj (configuration-layer/get-package pkg-name)))
           (setq obj (configuration-layer/make-package pkg layer-name obj))
@@ -947,27 +968,30 @@ USEDP if non-nil indicates that made packages are used packages."
   "Configure auto-installation of layer with name LAYER-NAME."
   (declare (indent 1))
   (when (configuration-layer//lazy-install-p layer-name)
-    (let ((extensions (spacemacs/mplist-get props :extensions)))
+    (let ((extensions (spacemacs/mplist-get props :extensions))
+          (interpreter (plist-get props :interpreter)))
       (when (configuration-layer/layer-usedp layer-name)
         (let* ((layer (configuration-layer/get-layer layer-name))
-               (packages (when layer (cfgl-layer-owned-packages layer)))
-               (package-names (mapcar (lambda (x) (oref x :name)) packages)))
+               (package-names (when layer (cfgl-layer-owned-packages layer))))
           ;; set lazy install flag for a layer if and only if its owned
           ;; distant packages are all not already installed
-          (let ((lazy (cl-reduce
-                       (lambda (x y) (and x y))
-                       (mapcar
-                        (lambda (p)
-                          (let ((pkg (configuration-layer/get-package p)))
-                            (or (not (eq layer-name (car (oref pkg :owners))))
-                                (null (package-installed-p
-                                       (oref pkg :name))))))
-                        (configuration-layer//get-distant-packages
-                         package-names t))
-                       :initial-value t)))
+          (let ((lazy
+                 (or (eq 'all dotspacemacs-enable-lazy-installation)
+                     (cl-reduce
+                      (lambda (x y) (and x y))
+                      (mapcar
+                       (lambda (p)
+                         (let ((pkg (configuration-layer/get-package p)))
+                           (or (not (eq layer-name (car (oref pkg :owners))))
+                               (null (package-installed-p
+                                      (oref pkg :name))))))
+                       package-names)
+                      :initial-value t))))
             (oset layer :lazy-install lazy)
-            (dolist (pkg packages)
-              (cfgl-package-set-property pkg :lazy-install lazy)))))
+            (dolist (pkg-name package-names)
+              (let ((pkg (configuration-layer/get-package pkg-name)))
+                (cfgl-package-set-property pkg :lazy-install lazy))))))
+      ;; configure `auto-mode-alist'
       (dolist (x extensions)
         (let ((ext (car x))
               (mode (cadr x)))
@@ -976,7 +1000,16 @@ USEDP if non-nil indicates that made packages are used packages."
            'auto-mode-alist
            `(,ext . (lambda ()
                       (configuration-layer//auto-mode
-                       ',layer-name ',mode)))))))))
+                       ',layer-name ',mode))))
+          ))
+      ;; configure `interpreter-mode-alist'
+      (when interpreter
+        (let ((regex (car interpreter))
+              (mode (cadr interpreter)))
+          (add-to-list
+           'interpreter-mode-alist
+           `(,regex . (lambda () (configuration-layer//auto-mode
+                               ',layer-name ',mode)))))))))
 
 (defun configuration-layer//auto-mode (layer-name mode)
   "Auto mode support of lazily installed layers."
@@ -1363,7 +1396,7 @@ wether the declared layer is an used one or not."
             (side . bottom)
             (window-height . 0.2)))))
     ;; ensure we have quelpa available first
-    (configuration-layer//install-quelpa)
+    (configuration-layer//configure-quelpa)
     (let* ((upkg-names (configuration-layer//get-uninstalled-packages packages))
            (not-inst-count (length upkg-names))
            installed-count)
@@ -1959,13 +1992,12 @@ depends on it."
 (defun configuration-layer//lazy-install-extensions-for-layer (layer-name)
   "Return an alist of owned modes and extensions for the passed layer."
   (let* ((layer (configuration-layer/get-layer layer-name))
-         (packages (cfgl-layer-owned-packages layer))
+         (package-names (cfgl-layer-owned-packages layer))
          result)
-    (dolist (pkg packages)
-      (let ((pkg-sym (oref pkg :name)))
-        (dolist (mode (list pkg-sym (intern (format "%S-mode" pkg-sym))))
-          (let ((ext (configuration-layer//gather-auto-mode-extensions mode)))
-            (when ext (push (cons mode ext) result))))))
+    (dolist (pkg-name package-names)
+      (dolist (mode (list pkg-name (intern (format "%S-mode" pkg-name))))
+        (let ((ext (configuration-layer//gather-auto-mode-extensions mode)))
+          (when ext (push (cons mode ext) result)))))
     result))
 
 (defun configuration-layer//insert-lazy-install-form (layer-name mode ext)
@@ -2158,6 +2190,40 @@ Original code from dochang at https://github.com/dochang/elpa-clone"
         (erase-buffer)
         (prin1 archive-contents (current-buffer))
         (save-buffer)))))
+
+(defun configuration-layer//package-install-org (func &rest args)
+  "Advice around `package-install' to patch package name and dependencies at
+install time in order to replace all `org' package installation by
+`org-plus-contrib'. We avoid installing unecessarily both `org' and
+`org-plus-contrib' at the same time (i.e. we always install `org-plus-contrib')"
+  (let* ((pkg (car args))
+         (patched
+          (cond
+           ;; patch symbol name
+           ((and (symbolp pkg) (eq 'org pkg))
+            (setcar args 'org-plus-contrib)
+            t)
+           ;; patch name in package-desc object
+           ((and (package-desc-p pkg)
+                 (eq 'org (package-desc-name pkg)))
+            (setf (package-desc-name pkg) 'org-plus-contrib)
+            t)
+           ;; patch dependencies in package-desc object
+           ((and (package-desc-p pkg)
+                 (assq 'org (package-desc-reqs pkg)))
+            (setf (car (assq 'org (package-desc-reqs pkg))) 'org-plus-contrib)
+            t))))
+    (let ((name (if (package-desc-p pkg)
+                    (package-desc-name pkg)
+                  pkg)))
+      ;; check manually if `org-plus-contrib' is already installed since
+      ;; package.el may install `org-plus-contrib' more than once.
+      ;; Maybe we could hook somewhere else (at transaction computation time?)
+      (if (or patched (eq 'org-plus-contrib name))
+          (unless (package-installed-p name)
+            (apply func args))
+        (apply func args)))))
+(advice-add 'package-install :around #'configuration-layer//package-install-org)
 
 (defun configuration-layer//increment-error-count ()
   "Increment the error counter."
