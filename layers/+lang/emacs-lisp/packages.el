@@ -68,12 +68,30 @@
     :defer t
     :init
     (progn
+      ;; key bindings
       (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
         (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode
           "df" 'spacemacs/edebug-instrument-defun-on
           "dF" 'spacemacs/edebug-instrument-defun-off))
-      ;; assure that edebug key bindings are effective
-      (add-hook 'edebug-mode-hook 'spacemacs//edebug-hook t))))
+      ;; since we evilify `edebug-mode-map' we don't need to intercept it to
+      ;; make it work with evil
+      (custom-set-variables
+       '(evil-intercept-maps
+         (delq (assq 'edebug-mode-map evil-intercept-maps)
+               evil-intercept-maps)))
+      (evilified-state-evilify-map edebug-mode-map
+        :eval-after-load edebug
+        :bindings
+        "a" 'edebug-stop
+        "s" 'edebug-step-mode
+        "S" 'edebug-next-mode)
+      (evilified-state-evilify-map edebug-eval-mode-map
+        :eval-after-load edebug
+        :bindings
+        "a" 'edebug-stop
+        "s" 'edebug-step-mode
+        "S" 'edebug-next-mode)
+      (advice-add 'edebug-mode :after 'spacemacs//edebug-mode))))
 
 (defun emacs-lisp/post-init-eldoc ()
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
@@ -124,7 +142,6 @@
       "er" 'eval-region
       "ef" 'eval-defun
       "el" 'lisp-state-eval-sexp-end-of-line
-      "gf" 'find-function
       "gG" 'spacemacs/nav-find-elisp-thing-at-point-other-window
       ","  'lisp-state-toggle-lisp-state
       "tb" 'spacemacs/ert-run-tests-buffer
