@@ -306,13 +306,19 @@ buffer."
   "Switch back and forth between current and last buffer in the
 current window."
   (interactive)
-  (let ((current-buffer (window-buffer window)))
-    ;; if no window is found in the windows history, `switch-to-buffer' will
-    ;; default to calling `other-buffer'.
+  (let ((current-buffer (window-buffer window))
+        (buffer-predicate
+         (frame-parameter (window-frame window) 'buffer-predicate)))
+    ;; switch to first buffer previously shown in this window that matches
+    ;; frame-parameter `buffer-predicate'
     (switch-to-buffer
-     (cl-find-if (lambda (buffer)
-                   (not (eq buffer current-buffer)))
-                 (mapcar #'car (window-prev-buffers window))))))
+     (or (cl-find-if (lambda (buffer)
+                       (and (not (eq buffer current-buffer))
+                            (or (null buffer-predicate)
+                                (funcall buffer-predicate buffer))))
+                     (mapcar #'car (window-prev-buffers window)))
+         ;; `other-buffer' honors `buffer-predicate' so no need to filter
+         (other-buffer current-buffer t)))))
 
 (defun spacemacs/alternate-window ()
   "Switch back and forth between current and last window in the
