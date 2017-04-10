@@ -1,21 +1,24 @@
-#+TITLE: Shaders layer
+#+TITLE: GPU layer
 
-[[file:img/shaders.png]]
+[[file:img/opencl.png]] [[file:img/cuda.png]] [[file:img/shaders.png]]
 
 * Table of Contents                                         :TOC_4_gh:noexport:
  - [[#description][Description]]
  - [[#install][Install]]
 
 * Description
-This layer provides syntax highlighting for shader files. By default it will
-provide highlighting for files ending in:
-- =.fsh=
-- =.vsh=
-- =.glsl=
-- =.vert=
-- =.frag=
-- =.geom=
-
+This layer provides support for GPU related languages like shading and computing languages.
+This includes files ending in:
+- =.cl= (OpenCL)
+- =.cu= (CUDA)
+- =.cuh= (CUDA)
+- =.fsh= (Shaders)
+- =.vsh= (Shaders)
+- =.glsl= (Shaders)
+- =.vert= (Shaders)
+- =.frag= (Shaders)
+- =.geom= (Shaders)
+-
 Also this layer provides completion for =.vert=, =.tesc=, =.tese=, =.geom=,
 =.frag= and =.comp= shaders via =company-glsl= when [[https://www.khronos.org/opengles/sdk/tools/Reference-Compiler/][=glslangValidator=]] can be
 found on your system and =auto-completion= layer is enabled. Note that
@@ -23,5 +26,5 @@ completion is [[https://github.com/Kaali/company-glsl][rather simple]].
 
 * Install
 To use this configuration layer, add it to your =~.spacemacs=. You will need to
-add =shaders= to the existing =dotspacemacs-configuration-layers= list in this
+add =gpu= to the existing =dotspacemacs-configuration-layers= list in this
 file.
