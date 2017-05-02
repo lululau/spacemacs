@@ -69,12 +69,17 @@
 (defun spacemacs//copy-fetched-docs-html-to-pub-root (project-plist)
   "Move CONTRIBUTING.html and COMMUNITY.html to `publish-target'.
 See `spacemacs//fetch-docs-from-root'"
-  (f-move  (concat (plist-get project-plist :publishing-directory)
-                   "CONTRIBUTING.html")
-           (concat publish-target "CONTRIBUTING.html"))
-  (f-move (concat (plist-get project-plist :publishing-directory)
-                  "COMMUNITY.html")
-          (concat publish-target "COMMUNITY.html")))
+  (dolist (file-name '("CONTRIBUTING.html" "COMMUNITY.html"))
+    (let ((file-to-move (concat (plist-get project-plist
+                                           :publishing-directory)
+                                file-name)))
+      (with-temp-file file-to-move
+        (insert-file-contents file-to-move)
+        (goto-char (point-min))
+        (while (re-search-forward "^.*href=\"\\(.+\\)css/readtheorg\.css\".*$" nil t)
+          (replace-match "" nil t nil 1)))
+      (f-move file-to-move
+              (concat publish-target file-name)))))
 
 (defun spacemacs/generate-layers-file (project-plist)
   "Generate the layers list file."
@@ -243,8 +248,8 @@ preprocessors for the exported .org files."
                  href=\"http://www.pirilampo.org/styles/readtheorg/css/htmlize.css\"/>
           <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js\"></script>
           <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js\"></script>
-          <script type=\"text/javascript\"
-                  src=\"http://www.pirilampo.org/styles/readtheorg/js/readtheorg.js\"></script>
+          <script src=\"http://www.pirilampo.org/styles/readtheorg/js/readtheorg.js\"></script>
+          <script src=\"http://spacemacs.org/js/permalinks.js\"></script>
           <script>
            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
