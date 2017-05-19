@@ -64,8 +64,8 @@
     :config
     (progn
       (add-hook 'markdown-mode-hook 'orgtbl-mode)
-      (add-hook 'markdown-mode-hook 'spacemacs//cleanup-org-tables nil 'local)
       (define-key markdown-mode-map (kbd "M-<return>") nil)
+      (add-hook 'markdown-mode-hook 'spacemacs//cleanup-org-tables-on-save)
       ;; Declare prefixes and bind keys
       (dolist (prefix '(("mc" . "markdown/command")
                         ("mh" . "markdown/header")
