@@ -14,6 +14,7 @@
         avy
         (bracketed-paste :toggle (version<= emacs-version "25.0.92"))
         clean-aindent-mode
+        editorconfig
         eval-sexp-fu
         expand-region
         (hexl :location built-in)
@@ -22,6 +23,7 @@
         lorem-ipsum
         move-text
         (origami :toggle (eq 'origami dotspacemacs-folding-method))
+        password-generator
         smartparens
         (spacemacs-whitespace-cleanup :location local)
         string-inflection
@@ -88,6 +90,13 @@
 (defun spacemacs-editing/init-clean-aindent-mode ()
   (use-package clean-aindent-mode
     :config (clean-aindent-mode)))
+
+(defun spacemacs-editing/init-editorconfig ()
+  (use-package editorconfig
+    :init
+    (spacemacs|diminish editorconfig-mode)
+    :config
+    (editorconfig-mode t)))
 
 (defun spacemacs-editing/init-eval-sexp-fu ()
   ;; ignore obsolete function warning generated on startup
@@ -251,6 +260,19 @@
       ;; Note: The key binding for the fold transient state is defined in
       ;; evil config
       )))
+
+(defun spacemacs-editing/init-password-generator ()
+  (use-package password-generator
+    :defer t
+    :init
+    (progn
+      (spacemacs/declare-prefix "ip" "passwords")
+      (evil-leader/set-key
+        "ip1" 'password-generator-simple
+        "ip2" 'password-generator-strong
+        "ip3" 'password-generator-paranoid
+        "ipp" 'password-generator-phonetic
+        "ipn" 'password-generator-numeric))))
 
 (defun spacemacs-editing/init-smartparens ()
   (use-package smartparens
