@@ -190,8 +190,8 @@
         "ep" 'cider-eval-print-last-sexp)
 
       (evil-define-key 'normal cider-repl-mode-map
-        "C-j" 'cider-repl-next-input
-        "C-k" 'cider-repl-previous-input)
+        (kbd "C-j") 'cider-repl-next-input
+        (kbd "C-k") 'cider-repl-previous-input)
 
       (when clojure-enable-fancify-symbols
         (clojure/fancify-symbols 'cider-repl-mode)
@@ -279,7 +279,9 @@
   (add-hook 'cider-repl-mode-hook
             (if dotspacemacs-smartparens-strict-mode
                 #'smartparens-strict-mode
-              #'smartparens-mode)))
+              #'smartparens-mode))
+  (with-eval-after-load 'smartparens
+    (sp-local-pair 'clojure-mode "`" nil :actions nil)))
 
 (defun clojure/post-init-subword ()
   (add-hook 'cider-mode-hook 'subword-mode))
