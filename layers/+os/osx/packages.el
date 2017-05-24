@@ -36,7 +36,7 @@
     (let ((gls (executable-find "gls")))
       (when gls
         (setq insert-directory-program gls
-              dired-listing-switches "-aBhl --group-directories-first")))))
+              dired-listing-switches "--quoting-style=literal -aBhl --group-directories-first")))))
 
 (defun osx/pre-init-helm ()
   ;; Use `mdfind' instead of `locate'.
