@@ -42,12 +42,16 @@
     (spacemacs|use-package-add-hook ace-window :post-init BODY)
     :bepo
     (setq aw-keys '(?a ?u ?i ?e ?t ?s ?r ?n))
-    :colemak
-    (setq aw-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
     :dvorak
     (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s))
     :neo
-    (setq aw-keys '(?u ?i ?a ?e ?n ?r ?t ?d))))
+    (setq aw-keys '(?u ?i ?a ?e ?n ?r ?t ?d))
+    :colemak-neio
+    (setq aw-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
+    :colemak-hnei
+    (setq aw-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
+    :colemak-jkhl
+    (setq aw-keys '(?a ?r ?s ?t ?n ?e ?i ?o))))
 
 (defun keyboard-layout/pre-init-avy ()
   (kl|config avy
@@ -57,12 +61,16 @@
     (spacemacs|use-package-add-hook avy :post-init BODY)
     :bepo
     (setq-default avy-keys '(?a ?u ?i ?e ?t ?s ?r ?n))
-    :colemak
-    (setq-default avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
     :dvorak
     (setq-default avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s))
     :neo
-    (setq-default avy-keys '(?u ?i ?a ?e ?n ?r ?t ?d))))
+    (setq-default avy-keys '(?u ?i ?a ?e ?n ?r ?t ?d))
+    :colemak-neio
+    (setq-default avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
+    :colemak-hnei
+    (setq-default avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
+    :colemak-jkhl
+    (setq-default avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))))
 
 (defun keyboard-layout/pre-init-comint ()
   (kl|config comint-mode
@@ -146,7 +154,13 @@
     ;; Invert it twice to reset `k' and `K' for searching
     (dolist (map kl--all-evil-states-but-insert)
       (kl/correct-keys map
-        "K")))
+        "K"))
+    :colemak-jkhl
+    (progn
+      (define-key evil-motion-state-map "J" 'evil-join)
+      (define-key evil-motion-state-map "K" 'evil-window-bottom)
+      (define-key evil-motion-state-map "H" 'evil-window-top)
+      (define-key evil-motion-state-map "L" 'evil-lookup)))
 
   (kl|config evil-window
     :description
@@ -172,6 +186,19 @@
         "wq" 'delete-window)
       (kl/leader-alias-of "é" "w"))))
 
+;; HACK: These are defined by the spacemacs-bootstrap layer, and this is the
+;; only I've found to make them stick.  An unfortunate consequence of using
+;; `kl|config evil' twice is that user hooks for this configuration will be run
+;; twice as well.
+(defun keyboard-layout/post-init-evil ()
+  (kl|config evil
+    :description
+    "Remap `evil' bindings."
+    :colemak-jkhl
+    (progn
+      (define-key evil-normal-state-map "K" nil)
+      (define-key evil-normal-state-map "L" 'spacemacs/evil-smart-doc-lookup))))
+
 (defun keyboard-layout/pre-init-evil-escape ()
   (kl|config evil-escape
     :description
@@ -180,7 +207,7 @@
     (spacemacs|use-package-add-hook evil-escape :post-init BODY)
     :bepo
     (setq-default evil-escape-key-sequence "gq")
-    :colemak
+    :colemak-neio
     (setq-default evil-escape-key-sequence "tn")))
 
 (defun keyboard-layout/pre-init-evil-evilified-state ()
@@ -271,7 +298,12 @@
     :neo
     (progn
       (kl/set-in-state helm-find-files-map "C-r" 'helm-previous-line)
-      (kl/set-in-state helm-find-files-map "C-s" 'helm-next-line)))
+      (kl/set-in-state helm-find-files-map "C-s" 'helm-next-line))
+    :colemak-jkhl
+    (progn
+      ;; HACK: Forced to correct wrong behaviour
+      (kl/set-in-state helm-find-files-map "C-h" 'helm-previous-line)
+      (kl/set-in-state helm-find-files-map "C-j" 'helm-find-files-up-one-level)))
 
   (kl|config helm-locate
     :description
@@ -297,8 +329,8 @@
     (spacemacs|use-package-add-hook imenu-list :post-config BODY)
     :common
     (kl/evil-correct-keys 'evilified imenu-list-major-mode-map
-                          "j"
-                          "k")))
+      "j"
+      "k")))
 
 (defun keyboard-layout/pre-init-ivy ()
   (kl|config ivy
@@ -355,7 +387,12 @@
     (progn
       (magit-change-popup-key 'magit-dispatch-popup :actions ?t ?j)
       (magit-change-popup-key 'magit-dispatch-popup :actions ?s ?k)
-      (magit-change-popup-key 'magit-dispatch-popup :actions ?S ?K))))
+      (magit-change-popup-key 'magit-dispatch-popup :actions ?S ?K))
+    :colemak-jkhl
+    (progn
+      (kl/evil-correct-keys 'visual magit-mode-map
+        "j"
+        "k"))))
 
 (defun keyboard-layout/pre-init-mu4e ()
   (kl|config mu4e
@@ -454,7 +491,7 @@
         ;; additional
         (kbd "«") 'org-metaleft
         (kbd "»") 'org-metaright))
-    :colemak
+    :colemak-neio
     (progn
       (spacemacs|use-package-add-hook evil-org
         :post-config
