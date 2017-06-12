@@ -123,6 +123,10 @@
           "k"   'markdown-kill-thing-at-point
           ;; List editing
           "li"  'markdown-insert-list-item
+          ;; Toggles
+          "ti"  'markdown-toggle-inline-images
+          "tl"  'markdown-toggle-url-hiding
+          "tw"  'markdown-toggle-wiki-links
           ;; region manipulation
           "xb"  'markdown-insert-bold
           "xi"  'markdown-insert-italic
