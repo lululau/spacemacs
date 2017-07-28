@@ -473,6 +473,8 @@
   "xlu" 'spacemacs/uniquify-lines
   "xtc" 'transpose-chars
   "xtl" 'transpose-lines
+  "xtp" 'transpose-paragraphs
+  "xts" 'transpose-sentences
   "xtw" 'transpose-words
   "xU"  'upcase-region
   "xu"  'downcase-region
