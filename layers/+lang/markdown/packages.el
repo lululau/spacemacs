@@ -58,6 +58,7 @@
     (progn
       (add-hook 'markdown-mode-hook 'orgtbl-mode)
       (define-key markdown-mode-map (kbd "M-<return>") nil)
+      (spacemacs|diminish orgtbl-mode)
       (add-hook 'markdown-mode-hook 'spacemacs//cleanup-org-tables-on-save)
       ;; Declare prefixes and bind keys
       (dolist (prefix '(("mc" . "markdown/command")
