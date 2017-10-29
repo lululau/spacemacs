@@ -14,7 +14,7 @@
         thrift
         vala-mode
         (vala-snippets :requires yasnippet)
-        wolfram-mode
+        wolfram
         ))
 
 (defun major-modes/init-arduino-mode ())
@@ -85,8 +85,8 @@
 
 ;; .m files are not associated because conflict with more common Objective-C and
 ;; MATLAB/Octave, manually invoke for .m files.
-(defun major-modes/init-wolfram-mode ()
-  (use-package wolfram-mode
+(defun major-modes/init-wolfram ()
+  (use-package wolfram
     :defer t
     :interpreter "\\(Wolfram\\|Mathematica\\)Script\\( -script\\)?"
     :mode "\\.wl\\'"))
