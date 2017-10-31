@@ -63,6 +63,9 @@ environment, otherwise it is strongly recommended to let it set to t.")
 (defvar dotspacemacs-elpa-timeout 5
   "Maximum allowed time in seconds to contact an ELPA repository.")
 
+(defvar dotspacemacs-verify-spacelpa-archives nil
+  "If non-nil then verify the signature for downloaded Spacelpa archives.")
+
 (defvar dotspacemacs-elpa-subdirectory 'emacs-version
   "If non-nil, a form that evaluates to a package directory. For
 example, to use different package directories for different Emacs
@@ -539,8 +542,7 @@ a display strng and the value is the actual value to return."
 (defun dotspacemacs/maybe-install-dotfile ()
   "Install the dotfile if it does not exist."
   (unless (file-exists-p dotspacemacs-filepath)
-    (spacemacs-buffer/set-mode-line "Dotfile wizard installer")
-    (spacemacs//redisplay)
+    (spacemacs-buffer/set-mode-line "Dotfile wizard installer" t)
     (when (dotspacemacs/install 'with-wizard)
       (configuration-layer/load))))
 
