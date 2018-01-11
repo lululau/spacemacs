@@ -107,3 +107,15 @@ messages in the current thread"
   (with-current-notmuch-show-message
    (spacemacs//notmuch-open-github-patch (current-buffer))))
 
+
+;; persp
+
+(defun spacemacs//notmuch-persp-filter-save-buffers-function (buffer)
+  "Filter for notmuch layout."
+  (with-current-buffer buffer
+    (memq major-mode notmuch-modes)))
+
+(defun spacemacs//notmuch-buffer-to-persp ()
+  "Add buffer to notmuch layout."
+  (persp-add-buffer (current-buffer)
+                    (persp-get-by-name notmuch-spacemacs-layout-name)))

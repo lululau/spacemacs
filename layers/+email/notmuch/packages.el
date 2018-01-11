@@ -16,7 +16,8 @@
                                            :repo "fuxialexander/counsel-notmuch"))
         (helm-notmuch :requires helm)
         notmuch
-        org)
+        org
+        persp-mode)
       )
 
 (defun notmuch/init-counsel-notmuch ()
@@ -39,9 +40,7 @@
         "aNN" 'notmuch
         "aNi" 'spacemacs/notmuch-inbox
         "aNj" 'notmuch-jump-search
-        "aNs" 'notmuch-search)
-      ;; fixes: killing a notmuch buffer does not show the previous buffer
-      (push "\\*notmuch.+\\*" spacemacs-useful-buffers-regexp))
+        "aNs" 'notmuch-search))
     :config
     (progn
       (dolist (prefix '(("ms" . "stash")
@@ -119,3 +118,18 @@
 (defun notmuch/pre-init-org ()
   (spacemacs|use-package-add-hook org
     :post-config (require 'org-notmuch)))
+
+(defun notmuch/pre-init-persp-mode ()
+  (spacemacs|use-package-add-hook persp-mode
+    :post-config
+    (progn
+      (add-to-list 'persp-filter-save-buffers-functions
+                   'spacemacs//notmuch-persp-filter-save-buffers-function)
+      (spacemacs|define-custom-layout notmuch-spacemacs-layout-name
+        :binding notmuch-spacemacs-layout-binding
+        :body
+        (progn
+          (dolist (mode notmuch-modes)
+            (let ((hook (intern (concat (symbol-name mode) "-hook"))))
+              (add-hook hook #'spacemacs//notmuch-buffer-to-persp)))
+          (call-interactively 'notmuch))))))
