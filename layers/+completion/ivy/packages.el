@@ -20,7 +20,7 @@
         helm-make
         ivy
         ivy-hydra
-        ivy-rich
+        (ivy-rich :toggle ivy-enable-advanced-buffer-information)
         (ivy-spacemacs-help :location local)
         org
         persp-mode
@@ -130,32 +130,31 @@
       ;; Set syntax highlighting for counsel search results
       (ivy-set-display-transformer 'spacemacs/counsel-search 'counsel-git-grep-transformer))))
 
+(defun ivy/pre-init-counsel-projectile ()
+  ;; overwrite projectile settings
+  (spacemacs|use-package-add-hook projectile
+    :post-init
+    (progn
+      (setq projectile-switch-project-action 'counsel-projectile-find-file)
+
+      (ivy-set-actions
+       'counsel-projectile-find-file
+       (append spacemacs--ivy-file-actions
+               '(("R" (lambda (arg)
+                        (interactive)
+                        (call-interactively
+                         #'projectile-invalidate-cache)
+                        (ivy-resume)) "refresh list")
+                 )))
+
+      (spacemacs/set-leader-keys
+        "p SPC" 'counsel-projectile
+        "pb"    'counsel-projectile-switch-to-buffer
+        "pd"    'counsel-projectile-find-dir
+        "pp"    'counsel-projectile-switch-project
+        "pf"    'counsel-projectile-find-file))))
 (defun ivy/init-counsel-projectile ()
-  (use-package counsel-projectile
-    :defer t
-    :init
-    ;; overwrite projectile settings
-    (spacemacs|use-package-add-hook projectile
-      :post-init
-      (progn
-        (setq projectile-switch-project-action 'counsel-projectile-find-file)
-
-        (ivy-set-actions
-         'counsel-projectile-find-file
-         (append spacemacs--ivy-file-actions
-                 '(("R" (lambda (arg)
-                          (interactive)
-                          (call-interactively
-                           #'projectile-invalidate-cache)
-                          (ivy-resume)) "refresh list")
-                   )))
-
-        (spacemacs/set-leader-keys
-          "p SPC" 'counsel-projectile
-          "pb"    'counsel-projectile-switch-to-buffer
-          "pd"    'counsel-projectile-find-dir
-          "pp"    'counsel-projectile-switch-project
-          "pf"    'counsel-projectile-find-file)))))
+  (use-package counsel-projectile :defer t))
 
 (defun ivy/post-init-evil ()
   (spacemacs/set-leader-keys
