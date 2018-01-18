@@ -8,7 +8,7 @@ You can only consider reading the sections relevant to what you are going to do:
 - [[#asking-for-help][Asking for help]] if you are about to open an issue to ask a question.
 - [[#reporting-issues][Reporting issues]] if you are about to open a new issue.
 - [[#contributing-code][Contributing code]] if you are about to send a PR.
-- [[https://github.com/syl20bnr/spacemacs/blob/develop/CONTRIBUTING.org#Reviewing-Pull-Requests][Reviewing Pull Requests]] if you are about to review a PR.
+- [[https://github.com/syl20bnr/spacemacs/blob/develop/CONTRIBUTING.org#reviewing-pull-requests][Reviewing Pull Requests]] if you are about to review a PR.
 
 Thanks! :heart: :heart: :heart:
 
@@ -19,6 +19,7 @@ Thanks! :heart: :heart: :heart:
   - [[#general-contribution-guidelines][General contribution guidelines]]
     - [[#license][License]]
     - [[#conventions][Conventions]]
+    - [[#changelog-entry][Changelog entry]]
     - [[#pull-request][Pull Request]]
       - [[#ideally-for-simple-prs-most-of-them][Ideally for /simple/ PRs (most of them):]]
       - [[#for-complex-prs-big-refactoring-etc][For complex PRs (big refactoring, etc):]]
@@ -85,6 +86,14 @@ accept code without a proper header file.
 Spacemacs is based on conventions, mainly for naming functions, keybindings
 definition and writing documentation. Please read the [[https://github.com/syl20bnr/spacemacs/blob/develop/doc/CONVENTIONS.org][CONVENTIONS.org]] file
 before your first contribution to get to know them.
+
+*** Changelog entry
+Add a short entry describing your proposed change under a suitable subheading in
+[[https://github.com/syl20bnr/spacemacs/blob/develop/CHANGELOG.develop][CHANGELOG.develop]]. Use the previous entries and [[https://github.com/syl20bnr/spacemacs/blob/develop/CONTRIBUTING.org#commit-messages][commit messages instructions]] as
+guidelines. You can add your name or github username in parentheses at the end
+of the entry if you want to. If an entry already exists describing your PR
+(small documentation improvements etc.), you can omit the changelog entry or add
+your name at the end of the pre-existing one.
 
 *** Pull Request
 Submit your contribution against the =develop= branch. You should not use

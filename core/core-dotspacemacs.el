@@ -147,12 +147,13 @@ whenever you start Emacs.")
 Press `SPC T n' to cycle to the next theme in the list (works great
 with 2 themes variants, one dark and one light")
 
-(defvar dotspacemacs-mode-line-theme 'spacemacs
+(defvar dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
   "Set the theme for the Spaceline. Supported themes are `spacemacs',
 `all-the-icons', `custom', `vim-powerline' and `vanilla'. The first three
 are spaceline themes. `vanilla' is default Emacs mode-line. `custom' is a
 user defined themes, refer to the DOCUMENTATION.org for more info on how
-to create your own spaceline theme.")
+to create your own spaceline theme. Value can be a symbol or a list with
+additional properties like '(all-the-icons :separator-scale 1.5).")
 
 (defvar dotspacemacs-frame-title-format "%I@%S"
   "Default format string for a frame title bar, using the
@@ -197,13 +198,9 @@ emacs.")
 (defvar dotspacemacs-default-font '("Source Code Pro"
                                     :size 13
                                     :weight normal
-                                    :width normal
-                                    :powerline-scale 1.1)
-  "Default font, or prioritized list of fonts. `powerline-scale'
-allows to quickly tweak the mode-line size to make separators
-look not too crappy.
-
-Has no effect when running Emacs in terminal.")
+                                    :width normal)
+  "Default font, or prioritized list of fonts. This setting has no effect when
+running Emacs in terminal.")
 
 (defvar dotspacemacs-remap-Y-to-y$ nil
   "If non nil `Y' is remapped to `y$' in Evil states.")
@@ -759,13 +756,22 @@ error recovery."
     "is \'vim, \'emacs or \'hybrid or and list with `:variable' keyword")
    (spacemacs//test-var
     (lambda (x)
-      (member x '(spacemacs
-                  all-the-icons
-                  custom
-                  vim-powerline
-                  vanilla)))
+      (let ((themes '(spacemacs
+                      all-the-icons
+                      custom
+                      vim-powerline
+                      vanilla)))
+        (or (member x themes)
+            (and (listp x)
+                 (memq (car x) themes)
+                 ;; TODO define a function to remove several properties at once
+                 (null (spacemacs/mplist-remove (spacemacs/mplist-remove (cdr x) :separator)
+                                         :separator-scale))))))
     'dotspacemacs-mode-line-theme
-    "is \'spacemacs, \'all-the-icons, \'custom, \'vim-powerline or 'vanilla")
+    (concat
+     "is \'spacemacs, \'all-the-icons, \'custom, \'vim-powerline or 'vanilla "
+     "or a list with `car' one of the previous values and properties one of "
+     "the following: `:separator' or `:separator-scale'"))
    (spacemacs//test-var
     (lambda (x) (member x '(original cache nil)))
     'dotspacemacs-auto-save-file-location (concat "is one of \'original, "
