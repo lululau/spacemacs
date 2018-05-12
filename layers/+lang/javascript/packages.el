@@ -26,11 +26,14 @@
         js2-refactor
         json-mode
         json-snatcher
-        (tern :toggle (spacemacs//tern-detect))
+        tern
         web-beautify
         skewer-mode
         livid-mode
-        (lsp-javascript-typescript :requires lsp-mode)
+        (lsp-javascript-typescript
+         :requires lsp-mode
+         :location (recipe :fetcher github
+                           :repo "emacs-lsp/lsp-javascript"))
         ))
 
 (defun javascript/post-init-add-node-modules-path ()

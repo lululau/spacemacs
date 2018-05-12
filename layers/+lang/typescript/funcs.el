@@ -24,6 +24,12 @@
     (`tide (spacemacs//typescript-setup-tide-company))
     (`lsp (spacemacs//typescript-setup-lsp-company))))
 
+(defun spacemacs//typescript-setup-eldoc ()
+  "Conditionally setup eldoc based on backend."
+  (pcase java-backend
+    (`tide (spacemacs//typescript-setup-tide-eldoc))
+    (`lsp (spacemacs//typescript-setup-lsp-eldoc))))
+
 
 ;; tide
 
@@ -34,19 +40,24 @@
       (kbd "C-k") 'tide-find-previous-reference
       (kbd "C-j") 'tide-find-next-reference
       (kbd "C-l") 'tide-goto-reference)
-    (spacemacs/add-to-hooks 'tide-setup '(typescript-mode-hook
-                                          typescript-tsx-mode-hook))
     (add-to-list 'spacemacs-jump-handlers-typescript-tsx-mode
                  '(tide-jump-to-definition :async t))
     (add-to-list 'spacemacs-jump-handlers-typescript-mode
-                 '(tide-jump-to-definition :async t))))
+                 '(tide-jump-to-definition :async t))
+    (tide-setup)))
 
 (defun spacemacs//typescript-setup-tide-company ()
   "Setup tide auto-completion."
   (spacemacs|add-company-backends
     :backends company-tide
-    :modes typescript-mode typescript-tsx-mode)
+    :modes typescript-mode typescript-tsx-mode
+    :variables
+    company-minimum-prefix-length 2)
   (company-mode))
+
+(defun spacemacs//typescript-setup-tide-eldoc ()
+  "Setup eldoc for tide."
+  (eldoc-mode))
 
 
 ;; lsp
@@ -55,11 +66,11 @@
   "Setup lsp backend."
   (if (configuration-layer/layer-used-p 'lsp)
       (progn
-        (add-hook 'typescript-mode-hook #'lsp-javascript-typescript-enable)
-        (add-hook 'typescript-tsx-mode-hook #'lsp-javascript-typescript-enable)
         (spacemacs//setup-lsp-jump-handler 'typescript-mode
-                                    'typescript-tsx-mode))
-    (message "`lsp' layer is not installed, please add `lsp' layer to your dofile.")))
+                                    'typescript-tsx-mode)
+        (lsp-javascript-typescript-enable))
+    (message (concat "`lsp' layer is not installed, "
+                     "please add `lsp' layer to your dofile."))))
 
 (defun spacemacs//typescript-setup-lsp-company ()
   "Setup lsp auto-completion."
@@ -73,14 +84,21 @@
         (defun lsp-prefix-typescript-hook nil
           (make-local-variable 'company-transformers)
           (push 'lsp-prefix-company-transformer company-transformers))
-        (add-hook 'typescript-mode-hook 'lsp-prefix-typescript-hook)
-        (add-hook 'typescript-tsx-mode-hook 'lsp-prefix-typescript-hook)
-
+        (spacemacs/add-to-hooks #'lsp-prefix-typescript-hook
+                         '(typescript-mode-hook typescript-tsx-mode-hook))
         (spacemacs|add-company-backends
           :backends company-lsp
-          :modes typescript-mode typescript-tsx-mode)
+          :modes typescript-mode typescript-tsx-mode
+          :variables company-minimum-prefix-length 2
+          :append-hooks nil
+          :call-hooks t)
         (company-mode))
-    (message "`lsp' layer is not installed, please add `lsp' layer to your dofile.")))
+    (message (concat "`lsp' layer is not installed, "
+                     "please add `lsp' layer to your dofile."))))
+
+(defun spacemacs//typescript-setup-lsp-eldoc ()
+  "Setup eldoc for LSP."
+  (eldoc-mode))
 
 
 ;; Others
@@ -141,3 +159,6 @@
                  (list (point-min) (point-max))))
   (browse-url (concat "http://www.typescriptlang.org/Playground#src="
                       (url-hexify-string (buffer-substring-no-properties start end)))))
+
+(defun spacemacs/typescript-yasnippet-setup ()
+  (yas-activate-extra-mode 'js-mode))
