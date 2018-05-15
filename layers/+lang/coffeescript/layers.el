@@ -1,4 +1,4 @@
-;;; layers.el --- Javascript Layer layers File for Spacemacs
+;;; layers.el --- CoffeeScript Layer layers File for Spacemacs
 ;;
 ;; Copyright (c) 2012-2018 Sylvain Benner & Contributors
 ;;
@@ -9,4 +9,4 @@
 ;;
 ;;; License: GPLv3
 
-(configuration-layer/declare-layers '(node json))
+(configuration-layer/declare-layers '(node))

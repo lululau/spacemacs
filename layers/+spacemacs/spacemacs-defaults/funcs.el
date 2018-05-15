@@ -559,6 +559,13 @@ in a split window to the right."
   (split-window-horizontally)
   (other-window 1))
 
+(defun spacemacs/layout-grid ()
+  " Set the layout to a 2x2 grid. "
+  (interactive)
+  (delete-other-windows)
+  (split-window (split-window-right) nil 'below)
+  (split-window-below))
+
 (defun spacemacs/layout-triple-columns ()
   " Set the layout to triple columns. "
   (interactive)
