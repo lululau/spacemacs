@@ -13,7 +13,6 @@
       '(
         add-node-modules-path
         company
-        (company-tern :requires company)
         counsel-gtags
         evil-matchit
         flycheck
@@ -31,7 +30,9 @@
                            :repo "emacs-lsp/lsp-javascript"))
         skewer-mode
         tern
-        web-beautify))
+        web-beautify
+        yasnippet
+        ))
 
 (defun javascript/post-init-add-node-modules-path ()
   (spacemacs/add-to-hooks #'add-node-modules-path '(css-mode-hook
@@ -45,10 +46,6 @@
 
 (defun javascript/post-init-company ()
   (add-hook 'js2-mode-local-vars-hook #'spacemacs//javascript-setup-company))
-
-(defun javascript/init-company-tern ()
-  (use-package company-tern
-    :defer t))
 
 (defun javascript/post-init-flycheck ()
   (spacemacs/enable-flycheck 'js2-mode))
@@ -200,26 +197,13 @@
         "sR" 'spacemacs/skewer-eval-region-and-focus
         "ss" 'skewer-repl))))
 
-(defun javascript/init-tern ()
-  (use-package tern
-    :defer t
-    :config
-    (progn
-      (spacemacs|hide-lighter tern-mode)
-      (when javascript-disable-tern-port-files
-        (add-to-list 'tern-command "--no-port-file" 'append))
-      (spacemacs//set-tern-key-bindings 'js2-mode))))
+(defun javascript/post-init-tern ()
+  (add-to-list 'tern--key-bindings-modes 'js2-mode))
 
-(defun javascript/init-web-beautify ()
-  (use-package web-beautify
-    :defer t
-    :init
-    (progn
-      (spacemacs/set-leader-keys-for-major-mode 'js2-mode
-        "=" 'web-beautify-js)
-      (spacemacs/set-leader-keys-for-major-mode 'json-mode
-        "=" 'web-beautify-js)
-      (spacemacs/set-leader-keys-for-major-mode 'web-mode
-        "=" 'web-beautify-html)
-      (spacemacs/set-leader-keys-for-major-mode 'css-mode
-        "=" 'web-beautify-css))))
+(defun javascript/post-init-web-beautify ()
+  (add-to-list 'spacemacs-web-beautify--modes (cons 'js2-mode 'web-beautify-js)))
+
+(defun javascript/pre-init-yasnippet ()
+  (spacemacs|use-package-add-hook yasnippet
+    :post-config
+    (yas-activate-extra-mode 'js-mode)))
