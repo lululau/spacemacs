@@ -30,7 +30,7 @@
   (add-hook 'rjsx-mode-local-vars-hook #'spacemacs//react-setup-company))
 
 (defun react/post-init-emmet-mode ()
-  (add-hook 'rjsx-mode-hook 'emmet-mode))
+  (add-hook 'rjsx-mode-hook 'spacemacs/react-emmet-mode))
 
 (defun react/post-init-evil-matchit ()
   (with-eval-after-load 'evil-matchit
@@ -60,7 +60,7 @@
            (re-search-forward "\\(^\\s-*import React\\|\\( from \\|require(\\)[\"']react\\)"
                               magic-mode-regexp-match-limit t)
            (progn (goto-char (match-beginning 1))
-                  (not (inside-string-or-comment-q)))))
+                  (not (spacemacs//react-inside-string-or-comment-q)))))
 
     (push (cons #'+javascript-jsx-file-p 'rjsx-mode) magic-mode-alist)
 
@@ -87,5 +87,5 @@
 (defun react/post-init-tern ()
   (add-to-list 'tern--key-bindings-modes 'rjsx-mode))
 
-(defun react/post-init-web-beautify ()
+(defun react/pre-init-web-beautify ()
   (add-to-list 'spacemacs-web-beautify--modes (cons 'rjsx-mode 'web-beautify-js)))
