@@ -25,6 +25,9 @@
 (defvar configuration-layer--refresh-package-timeout dotspacemacs-elpa-timeout
   "Timeout in seconds to reach a package archive page.")
 
+(defvar configuration-layer--last-dotspacemacs-configuration-layers-file
+  (concat spacemacs-cache-directory "last-configuration-layers"))
+
 (defconst configuration-layer-template-directory
   (expand-file-name (concat spacemacs-core-directory "templates/"))
   "Configuration layer templates directory.")
@@ -179,7 +182,12 @@ subdirectory of ROOT is used."
    (can-shadow :initarg :can-shadow
                :initform 'unspecified
                :type (satisfies (lambda (x) (or (listp x) (eq 'unspecified x))))
-               :documentation "A list of layers this layer can shadow."))
+               :documentation "A list of layers this layer can shadow.")
+   (deps-loaded :initarg :deps-loaded
+                :initform nil
+                :type boolean
+                :documentation
+                "Boolean to track whether layers.el has been loaded."))
   "A configuration layer.")
 
 (defmethod cfgl-layer-owned-packages ((layer cfgl-layer) &optional props)
@@ -410,7 +418,7 @@ cache folder.")
 
 (defun configuration-layer/load-lock-file ()
   "Load the .lock file"
-  (load-file configuration-layer-lock-file))
+  (load configuration-layer-lock-file nil (not init-file-debug)))
 
 (defun configuration-layer/initialize ()
   "Initialize `package.el'."
@@ -439,7 +447,7 @@ cache folder.")
     (package-initialize 'noactivate)
     ;; hack to be sure to enable insalled org from Org ELPA repository
     (when (package-installed-p 'org-plus-contrib)
-      (message "Initializing Org early...")
+      (configuration-layer/message "Initializing Org early...")
       (configuration-layer//activate-package 'org-plus-contrib))))
 
 (defun configuration-layer//configure-quelpa ()
@@ -545,13 +553,70 @@ refreshed during the current session."
       (unless quiet (spacemacs-buffer/append "\n")))))
 
 (defun configuration-layer/load ()
-  "Load layers declared in dotfile and install associated packages.
+  "Load layers declared in dotfile if necessary."
+  (run-hooks 'configuration-layer-pre-load-hook)
+  (setq changed-since-last-dump-p nil)
+  ;; check if layer list has changed since last dump
+  (when (file-exists-p
+         configuration-layer--last-dotspacemacs-configuration-layers-file)
+    (load-file
+     configuration-layer--last-dotspacemacs-configuration-layers-file))
+  (let ((layers dotspacemacs-configuration-layers))
+    (dotspacemacs|call-func dotspacemacs/layers "Calling dotfile layers...")
+    ;; `dotspacemacs--configuration-layers-saved' is used to detect if the layer
+    ;; list has been changed outside of function `dotspacemacs/layers'
+    (setq dotspacemacs--configuration-layers-saved
+          dotspacemacs-configuration-layers)
+    (setq changed-since-last-dump-p
+          (not (equal layers dotspacemacs-configuration-layers)))
+    ;; save layers list to file
+    (spacemacs/dump-vars-to-file
+     '(dotspacemacs-configuration-layers)
+     configuration-layer--last-dotspacemacs-configuration-layers-file))
+  (cond
+   (changed-since-last-dump-p
+    ;; dump
+    (configuration-layer//load)
+    (when (spacemacs/emacs-with-pdumper-set-p)
+      (configuration-layer/message "Layer list has changed since last dump.")
+      (configuration-layer//dump-emacs)))
+   (spacemacs-force-dump
+    ;; force dump
+    (configuration-layer//load)
+    (configuration-layer/message (concat "--force-dump passed on the command line, "
+                       "forcing a redump."))
+    (configuration-layer//dump-emacs))
+   ((spacemacs-is-dumping-p)
+    ;; dumping
+    (configuration-layer//load)
+    (configuration-layer/message "Dumping Emacs..."))
+   ((and (spacemacs/emacs-with-pdumper-set-p)
+         (spacemacs-run-from-dump-p))
+    ;; dumped
+    (configuration-layer/message
+     "Running from a dumped file. Skipping the loading process!"))
+   (t
+    ;; standard loading
+    (configuration-layer//load)
+    (when (spacemacs/emacs-with-pdumper-set-p)
+      (configuration-layer/message
+       (concat "Layer list has not changed since last time. "
+               "Skipping dumping process!")))))
+  (run-hooks 'configuration-layer-post-load-hook))
+
+(defun configuration-layer//dump-emacs ()
+  "Dump emacs."
+  (configuration-layer/message
+   (concat "Dumping Emacs asynchronously, "
+           "you should not quit this Emacs "
+           "session until the dump is finished."))
+  (spacemacs/dump-emacs))
+
+(defun configuration-layer//load ()
+  "Actually load the layers.
+CHANGEDP non-nil means that layers list has changed since last dump
 To prevent package from being installed or uninstalled set the variable
 `spacemacs-sync-packages' to nil."
-  (run-hooks 'configuration-layer-pre-load-hook)
-  (dotspacemacs|call-func dotspacemacs/layers "Calling dotfile layers...")
-  (setq dotspacemacs--configuration-layers-saved
-        dotspacemacs-configuration-layers)
   (when (spacemacs-buffer//choose-banner)
     (spacemacs-buffer//inject-version))
   ;; declare used layers then packages as soon as possible to resolve
@@ -561,7 +626,7 @@ To prevent package from being installed or uninstalled set the variable
   (configuration-layer//declare-used-packages configuration-layer--used-layers)
   ;; then load the functions and finally configure the layers
   (configuration-layer//load-layers-files configuration-layer--used-layers
-                         '("funcs.el"))
+                        '("funcs.el"))
   (configuration-layer//configure-layers configuration-layer--used-layers)
   ;; load layers lazy settings
   (configuration-layer/load-auto-layer-file)
@@ -598,15 +663,16 @@ To prevent package from being installed or uninstalled set the variable
   ;; configure used packages
   (configuration-layer//configure-packages configuration-layer--used-packages)
   (configuration-layer//load-layers-files configuration-layer--used-layers
-                                          '("keybindings.el"))
-  (run-hooks 'configuration-layer-post-load-hook))
+                        '("keybindings.el"))
+  (dotspacemacs|call-func dotspacemacs/user-load
+                          "Calling dotfile user-load..."))
 
 (defun configuration-layer/load-auto-layer-file ()
   "Load `auto-layer.el' file"
   (let ((file (concat configuration-layer-directory "auto-layer.el")))
     (when (file-exists-p file)
       (spacemacs-buffer/message "Loading auto-layer file...")
-      (load-file file))))
+      (load file nil (not init-file-debug)))))
 
 (defun configuration-layer/create-layer ()
   "Ask the user for a configuration layer name and the layer
@@ -641,16 +707,19 @@ layer directory."
          (layer-dir (concat layer-path "/" name)))
     (cond
      ((string-equal "" name)
-      (message "Cannot create a configuration layer without a name."))
+      (configuration-layer/message
+       "Cannot create a configuration layer without a name."))
      ((file-exists-p layer-dir)
-      (message (concat "Cannot create configuration layer \"%s\", "
-                       "this layer already exists.") name))
+      (configuration-layer/message
+       (concat "Cannot create configuration layer \"%s\", "
+               "this layer already exists.") name))
      (t
       (make-directory layer-dir t)
       (configuration-layer//copy-template name "packages.el" layer-dir)
       (when (y-or-n-p "Create readme?")
         (configuration-layer//copy-template name "README.org" layer-dir))
-      (message "Configuration layer \"%s\" successfully created." name)))))
+      (configuration-layer/message
+       "Configuration layer \"%s\" successfully created." name)))))
 
 (defun configuration-layer//select-packages (layer-specs packages)
   "Return the selected packages of LAYER-SPECS from given PACKAGES list."
@@ -687,6 +756,7 @@ If USEDP or `configuration-layer--load-packages-files' is non-nil then the
   (let* ((layer-name (if (listp layer-specs) (car layer-specs) layer-specs))
          (obj (if obj obj (cfgl-layer (symbol-name layer-name)
                                       :name layer-name)))
+         (packages (oref obj :packages))
          (dir (or dir (oref obj :dir))))
     (if (or (null dir)
             (and dir (not (file-exists-p dir))))
@@ -708,13 +778,12 @@ If USEDP or `configuration-layer--load-packages-files' is non-nil then the
                   (spacemacs/mplist-get layer-specs :can-shadow)
                 'unspecified))
              (packages-file (concat dir "packages.el"))
-             (packages
-              (if (and (or usedp configuration-layer--load-packages-files)
-                       (file-exists-p packages-file))
-                  (progn
-                    (load packages-file)
-                    (symbol-value (intern (format "%S-packages" layer-name))))
-                (oref obj :packages)))
+             (packages (when (and (null packages)
+                                  (or usedp configuration-layer--load-packages-files)
+                                  (file-exists-p packages-file))
+                         (load packages-file nil (not init-file-debug))
+                         (symbol-value (intern (format "%S-packages"
+                                                       layer-name)))))
              (selected-packages (if packages
                                     (configuration-layer//select-packages
                                      layer-specs packages)
@@ -855,7 +924,7 @@ a new object."
       (if (re-search-forward (format "^[a-z\s\\(\\-]*%s" variable)
                              nil 'noerror)
           (beginning-of-line)
-        (message "Unable to find location in file"))))
+        (configuration-layer/message "Unable to find location in file"))))
   'help-echo
   (purecopy (concat "mouse-2, RET: "
                     "visit the Spacemacs dotfile where variable is defined.")))
@@ -1395,7 +1464,7 @@ discovery."
 (defun configuration-layer/declare-layer (layer-specs)
   "Declare a single layer with spec LAYER-SPECS.
 Set the variable `configuration-layer--declared-layers-usedp' to control
-wether the declared layer is an used one or not."
+whether the declared layer is an used one or not."
   (let* ((layer-name (if (listp layer-specs) (car layer-specs) layer-specs))
          (layer (configuration-layer/get-layer layer-name))
          (usedp configuration-layer--declared-layers-usedp))
@@ -1406,7 +1475,9 @@ wether the declared layer is an used one or not."
                     usedp)))
           (configuration-layer//add-layer obj usedp)
           (configuration-layer//set-layer-variables obj)
-          (when (or usedp configuration-layer--load-packages-files)
+          (when (and (not (oref layer :deps-loaded))
+                     (or usedp configuration-layer--load-packages-files))
+            (oset layer :deps-loaded t)
             (configuration-layer//load-layer-files layer-name '("layers.el"))))
       (configuration-layer//warning "Unknown declared layer %s." layer-name))))
 
@@ -1570,7 +1641,7 @@ RNAME is the name symbol of another existing layer."
     (when obj
       (dolist (file files)
         (let ((file (concat (oref obj :dir) file)))
-          (if (file-exists-p file) (load file)))))))
+          (if (file-exists-p file) (load file nil (not init-file-debug))))))))
 
 (defun configuration-layer/configured-packages-stats (packages)
   "Return a statistics alist regarding the number of configured PACKAGES."
@@ -2108,7 +2179,7 @@ to select one."
                                candidates))))))
   (spacemacs-buffer/insert-page-break)
   (if (not slot)
-      (message "No rollback slot available.")
+      (configuration-layer/message "No rollback slot available.")
     (string-match "^\\(.+?\\)\s.*$" slot)
     (let* ((slot-dir (match-string 1 slot))
            (rollback-dir (file-name-as-directory
@@ -2119,7 +2190,7 @@ to select one."
                                configuration-layer-rollback-info))))
       (spacemacs-buffer/append
        (format "\nRollbacking ELPA packages from slot %s...\n" slot-dir))
-      (load-file info-file)
+      (load info-file nil (not init-file-debug))
       (let ((rollback-count (length update-packages-alist))
             (rollbacked-count 0))
         (spacemacs-buffer/append
@@ -2435,7 +2506,8 @@ Original code from dochang at https://github.com/dochang/elpa-clone"
 
 (defun configuration-layer//sync-elpa-packages-files (packages output-dir)
   "Synchronize PACKAGES files from remote ELPA directory to OUTPUT-DIR"
-  (message "Synchronizing files in ELPA repository at %s..." output-dir)
+  (configuration-layer/message
+   "Synchronizing files in ELPA repository at %s..." output-dir)
   (let (filenames
         (output-filenames (directory-files
                            output-dir nil "\\.\\(el\\|tar\\)$"))
@@ -2449,14 +2521,16 @@ Original code from dochang at https://github.com/dochang/elpa-clone"
                                      package-archives))))
         (push filename filenames)
         (if (member filename output-filenames)
-            (message "[%s/%s] Skip %s..." i pkg-count filename)
-          (message "[%s/%s] Download %s..." i pkg-count filename)
+            (configuration-layer/message
+             "[%s/%s] Skip %s..." i pkg-count filename)
+          (configuration-layer/message
+           "[%s/%s] Download %s..." i pkg-count filename)
           (configuration-layer//download-elpa-file
            pkg-name filename archive-url output-dir))
         (setq i (1+ i))))
     (dolist (ofilename output-filenames)
       (unless (member ofilename filenames)
-        (message "Remove outdated %s..." ofilename)
+        (configuration-layer/message "Remove outdated %s..." ofilename)
         (delete-file (concat output-dir ofilename))))))
 
 (defun configuration-layer/create-elpa-repository (name output-dir)
@@ -2539,7 +2613,8 @@ ELPA stable repository."
               (epg-import-keys-from-file
                context configuration-layer--stable-elpa-gpg-keyring)
             (error
-             (message "Cannot import keyring: %S" (cdr error))
+             (configuration-layer/message
+              "Cannot import keyring: %S" (cdr error))
              (setq untar nil)))
           (condition-case error
               (setf (epg-context-home-directory context) homedir)
@@ -2659,6 +2734,11 @@ install time in order to replace all `org' package installation by
       (setq configuration-layer-error-count
             (1+ configuration-layer-error-count))
     (setq configuration-layer-error-count 1)))
+
+(defun configuration-layer/message (msg &rest args)
+  "Display MSG in *Messages* prepended with '(Spacemacs)'.
+ARGS: format string arguments."
+  (message "(Spacemacs) %s" (apply 'format msg args)))
 
 (provide 'core-configuration-layer)
 

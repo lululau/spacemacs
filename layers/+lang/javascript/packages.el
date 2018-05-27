@@ -72,7 +72,7 @@
 (defun javascript/init-js2-mode ()
   (use-package js2-mode
     :defer t
-    :mode "\\.js\\'"
+    :mode "\\.m?js\\'"
     :init
     (progn
       (add-hook 'js2-mode-local-vars-hook
@@ -201,7 +201,7 @@
   (add-to-list 'tern--key-bindings-modes 'js2-mode))
 
 (defun javascript/pre-init-web-beautify ()
-  (add-to-list 'spacemacs-web-beautify--modes (cons 'js2-mode 'web-beautify-js)))
+  (add-to-list 'spacemacs--web-beautify-modes (cons 'js2-mode 'web-beautify-js)))
 
 (defun javascript/pre-init-yasnippet ()
   (spacemacs|use-package-add-hook yasnippet

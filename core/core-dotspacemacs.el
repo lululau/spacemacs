@@ -55,6 +55,22 @@ exists. Otherwise, fallback to ~/.spacemacs"))
 `+distributions'. For now available distributions are `spacemacs-base'
 or `spacemacs'.")
 
+(defvar dotspacemacs-enable-emacs-pdumper nil
+  "If non-nil then enable support for the portable dumper. You'll need
+to compile Emacs 27 from source following the instructions in file
+EXPERIMENTAL.org at to root of the git repository.")
+
+(defvar dotspacemacs-emacs-pdumper-executable-file "emacs"
+  "File path pointing to emacs 27.1 executable compiled with support for the
+portable dumper (this is currently the branch pdumper.")
+
+(defvar dotspacemacs-emacs-dumper-dump-file "spacemacs.pdmp"
+  "Name of the Spacemacs dump file. This is the file will be created by the
+portable dumper in the cache directory under dumps sub-directory.
+To load it when starting Emacs add the parameter `--dump-file'
+when invoking Emacs 27.1 executable on the command line, for instance:
+./emacs --dump-file=/Users/sylvain/.emacs.d/.cache/dumps/spacemacs.pdmp")
+
 (defvar dotspacemacs-gc-cons '(100000000 0.1)
   "Set `gc-cons-threshold' and `gc-cons-percentage' when startup finishes.
 This is an advanced option and should not be changed unless you suspect
@@ -337,7 +353,7 @@ This variable can also be set to a property list for finer control:
 The property `:enabled-for-modes' takes priority over `:disabled-for-modes' and
 restricts line-number to the specified list of major-mode.")
 
-(defvar dotspacemacs-enable-server t
+(defvar dotspacemacs-enable-server nil
   "If non-nil, start an Emacs server if one is not already running.")
 
 (defvar dotspacemacs-persistent-server nil
@@ -496,7 +512,9 @@ Called with `C-u C-u' skips `dotspacemacs/user-config' _and_ preleminary tests."
                 (setq dotspacemacs-editing-style
                       (dotspacemacs//read-editing-style-config
                        dotspacemacs-editing-style))
-                (configuration-layer/load)
+                ;; try to force a redump when reloading the configuration
+                (let ((spacemacs-force-dump t))
+                  (configuration-layer/load))
                 (if (member arg '((4) (16)))
                     (message (concat "Done (`dotspacemacs/user-config' "
                                      "function has been skipped)."))

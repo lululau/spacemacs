@@ -52,6 +52,7 @@ python-*-docs-html
 private/
 !private/README.md
 !private/snippets/README.md
+!private/templates/README.md
 !private/local/README.md
 /games/
 /GPATH

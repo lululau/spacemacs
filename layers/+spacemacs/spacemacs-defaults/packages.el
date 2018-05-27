@@ -123,7 +123,8 @@
 
 (defun spacemacs-defaults/init-eldoc ()
   (use-package eldoc
-    :defer t
+    :defer (spacemacs/defer)
+    :init (spacemacs|require 'eldoc)
     :config
     (progn
       ;; enable eldoc in `eval-expression'
@@ -217,13 +218,14 @@
 
 (defun spacemacs-defaults/init-recentf ()
   (use-package recentf
-    :defer t
+    :defer (spacemacs/defer)
     :init
     (progn
-      ;; lazy load recentf
-      (add-hook 'find-file-hook (lambda () (unless recentf-mode
-                                             (recentf-mode)
-                                             (recentf-track-opened-file))))
+      (spacemacs|require 'recentf)
+      (when (spacemacs/defer)
+        (add-hook 'find-file-hook (lambda () (unless recentf-mode
+                                               (recentf-mode)
+                                               (recentf-track-opened-file)))))
       (setq recentf-save-file (concat spacemacs-cache-directory "recentf")
             recentf-max-saved-items 1000
             recentf-auto-cleanup 'never
@@ -362,9 +364,9 @@
 
 (defun spacemacs-defaults/init-winner ()
   (use-package winner
+    :defer t
     :init
-    (progn
-      (winner-mode t)
+    (with-eval-after-load 'winner
       (setq spacemacs/winner-boring-buffers '("*Completions*"
                                               "*Compile-Log*"
                                               "*inferior-lisp*"
@@ -377,8 +379,7 @@
                                               "*esh command on file*"
                                               ))
       (setq winner-boring-buffers
-            (append winner-boring-buffers spacemacs/winner-boring-buffers))
-      (winner-mode t))))
+            (append winner-boring-buffers spacemacs/winner-boring-buffers)))))
 
 (defun spacemacs-defaults/init-zone ()
   (require 'zone)
