@@ -32,6 +32,7 @@
                                        ("g"   "git/versions-control")
                                        ("h"   "help")
                                        ("hd"  "help-describe")
+                                       ("hP"  "profiler")
                                        ("i"   "insertion")
                                        ("j"   "jump/join/split")
                                        ("k"   "lisp")
@@ -241,7 +242,11 @@
   "hdt" 'describe-theme
   "hdv" 'describe-variable
   "hI"  'spacemacs/report-issue
-  "hn"  'view-emacs-news)
+  "hn"  'view-emacs-news
+  "hPs" 'profiler-start
+  "hPk" 'profiler-stop
+  "hPr" 'profiler-report
+  "hPw" 'profiler-report-write-profile)
 ;; insert stuff ---------------------------------------------------------------
 (spacemacs/set-leader-keys
   "iJ" 'spacemacs/insert-line-below-no-indent
@@ -410,10 +415,10 @@
 
 (spacemacs/set-leader-keys
   "w TAB"  'spacemacs/alternate-window
-  "w1"  'spacemacs/layout-single-column
-  "w2"  'spacemacs/layout-double-columns
-  "w3"  'spacemacs/layout-triple-columns
-  "w4"  'spacemacs/layout-grid
+  "w1"  'spacemacs/window-split-single-column
+  "w2"  'spacemacs/window-split-double-columns
+  "w3"  'spacemacs/window-split-triple-columns
+  "w4"  'spacemacs/window-split-grid
   "wb"  'spacemacs/switch-to-minibuffer-window
   "wd"  'spacemacs/delete-window
   "wt"  'spacemacs/toggle-current-window-dedication
