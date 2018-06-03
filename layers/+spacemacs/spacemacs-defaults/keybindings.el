@@ -497,6 +497,7 @@
   "xlS" 'spacemacs/sort-lines-reverse
   "xlu" 'spacemacs/uniquify-lines
   "xtc" 'transpose-chars
+  "xte" 'transpose-sexps
   "xtl" 'transpose-lines
   "xtp" 'transpose-paragraphs
   "xts" 'transpose-sentences

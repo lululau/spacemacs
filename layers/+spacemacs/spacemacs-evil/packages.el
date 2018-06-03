@@ -16,6 +16,7 @@
         evil-ediff
         evil-escape
         evil-exchange
+        evil-goggles
         evil-iedit-state
         evil-indent-plus
         evil-lion
@@ -96,14 +97,24 @@
 
 (defun spacemacs-evil/init-evil-escape ()
   (use-package evil-escape
-    :init (progn
-            (spacemacs|hide-lighter evil-escape-mode)
-            (spacemacs//evil-escape-deactivate-in-holy-mode dotspacemacs-editing-style)
-            (add-hook 'spacemacs-editing-style-hook #'spacemacs//evil-escape-deactivate-in-holy-mode))))
+    :init
+    (progn
+      (add-hook 'spacemacs-editing-style-hook #'spacemacs//evil-escape-deactivate-in-holy-mode)
+      ;; apply once when emacs starts
+      (spacemacs//evil-escape-deactivate-in-holy-mode dotspacemacs-editing-style))
+    :config (spacemacs|hide-lighter evil-escape-mode)))
 
 (defun spacemacs-evil/init-evil-exchange ()
   (use-package evil-exchange
     :init (evil-exchange-install)))
+
+(defun spacemacs-evil/init-evil-goggles ()
+  (use-package evil-goggles
+    :init
+    (progn
+      (setq evil-goggles-async-duration 0.2
+            evil-goggles-blocking-duration 0.12)
+      (evil-goggles-mode))))
 
 (defun spacemacs-evil/init-evil-iedit-state ()
   (use-package evil-iedit-state
