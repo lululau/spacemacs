@@ -67,7 +67,7 @@
   (evil-mode 1)
 
   ;; Use evil as a default jump handler
-  (push 'evil-goto-definition spacemacs-default-jump-handlers)
+  (add-to-list 'spacemacs-default-jump-handlers 'evil-goto-definition)
 
   (require 'cl)
   ;; State cursors
@@ -255,7 +255,7 @@
   (define-key evil-inner-text-objects-map "g" 'evil-inner-buffer)
 
   ;; turn off evil in corelv buffers
-  (push '("\\*LV\\*") evil-buffer-regexps)
+  (add-to-list 'evil-buffer-regexps '("\\*LV\\*"))
 
   ;; replace `dired-goto-file' with `helm-find-files', since `helm-find-files'
   ;; can do the same thing and with fuzzy matching and other features.
@@ -315,6 +315,9 @@
 
   ;; Needed to avoid nil variable error before update to recent which-key
   (defvar which-key-replacement-alist nil)
+  ;; Reset to the default or customized value before adding our values in order
+  ;; to make this initialization code idempotent.
+  (custom-reevaluate-setting 'which-key-replacement-alist)
   ;; Replace rules for better naming of functions
   (let ((new-descriptions
          ;; being higher in this list means the replacement is applied later
@@ -541,7 +544,6 @@
 (defun spacemacs-bootstrap/init-spacemacs-theme ()
   (use-package spacemacs-theme
     :defer t
-    :init
-    (progn
-      (setq spacemacs-theme-comment-bg t)
-      (setq spacemacs-theme-org-height t))))
+    :init (setq spacemacs-theme-keyword-italic t
+                spacemacs-theme-comment-bg t
+                spacemacs-theme-org-height t)))

@@ -47,6 +47,7 @@ python-*-docs-html
 /srecode-map.el
 /recentf
 .mc-lists.el
+nov-places
 
 # Private directory
 private/
