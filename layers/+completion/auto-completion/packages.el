@@ -17,6 +17,7 @@
         company
         (company-quickhelp :toggle auto-completion-enable-help-tooltip)
         company-statistics
+        counsel
         fuzzy
         (helm-company :requires helm)
         (helm-c-yasnippet :requires helm)
@@ -135,6 +136,11 @@
                                             "company-statistics-cache.el"))
       (add-hook 'company-mode-hook 'company-statistics-mode))))
 
+(defun auto-completion/pre-init-counsel ()
+    (spacemacs|use-package-add-hook company
+      :post-config
+      (define-key company-active-map (kbd "C-/") 'counsel-company)))
+
 (defun auto-completion/init-fuzzy ()
   (use-package fuzzy :defer t))
 
@@ -157,13 +163,14 @@
       (spacemacs/set-leader-keys "is" 'spacemacs/helm-yas)
       (setq helm-c-yas-space-match-any-greedy t))))
 
-(defun auto-completion/init-helm-company ()
-  (use-package helm-company
-    :if (configuration-layer/package-used-p 'company)
-    :defer t
-    :init
-    (with-eval-after-load 'company
+(defun auto-completion/pre-init-helm-company ()
+  (spacemacs|use-package-add-hook company
+    :post-config
+    (use-package helm-company
+      :defer t
+      :init
       (define-key company-active-map (kbd "C-/") 'helm-company))))
+(defun auto-completion/init-helm-company ())
 
 (defun auto-completion/init-hippie-exp ()
   ;; replace dabbrev-expand

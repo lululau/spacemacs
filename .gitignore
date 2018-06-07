@@ -8,6 +8,7 @@ eproject.lst
 .smex-items
 \#*
 .places
+.directory
 .cache
 /eww-bookmarks
 eshell/history
