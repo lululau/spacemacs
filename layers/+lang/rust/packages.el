@@ -13,6 +13,7 @@
   '(
     cargo
     company
+    counsel-gtags
     racer
     flycheck
     (flycheck-rust :requires flycheck)
@@ -20,6 +21,7 @@
     exec-path-from-shell
     helm-gtags
     rust-mode
+    smartparens
     toml-mode
     ))
 
