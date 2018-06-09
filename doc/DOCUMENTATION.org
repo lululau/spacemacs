@@ -737,6 +737,10 @@ Three styles are available:
 - Emacs,
 - Hybrid (a mix between Vim and Emacs).
 
+To set the editing style set the variable =dotspacemacs-editing-style= to
+either =vim=, =hybrid=, or =emacs=. It possible to pass a list of variables
+as well with the keyword =:variables=, just like for layer variables.
+
 *** Vim
 Spacemacs behaves like in Vim using the [[https://github.com/emacs-evil/evil/][Evil]] mode package to emulate Vim key
 bindings. This is the default style of Spacemacs; it can be set explicitly by
@@ -746,6 +750,29 @@ To bind keys in Vim editing style (=insert state=):
 
 #+BEGIN_SRC emacs-lisp
 (define-key evil-insert-state-map (kbd "C-]") 'forward-char)
+#+END_SRC
+
+When setting the Vim style you can pass any variable supported by =evil-mode=
+with the keyword =:variables=. Spacemacs also supports the followgin editing
+style variables for Vim:
+
+| Variables                                | Description                                                             |
+|------------------------------------------+-------------------------------------------------------------------------|
+| =vim-style-visual-feedback=              | If non-nil then objects are briefly highlighted                         |
+| =vim-style-remap-Y-to-y$=                | If non-nil ~Y~ is remapped to ~y$~ in Evil states                       |
+| =vim-style-retain-visual-state-on-shift= | If non-nil, the shift mappings ~<~ and ~>~ retain visual state          |
+| =vim-style-visual-line-move-text=        | If non-nil, ~J~ and ~K~ move lines up and down when in visual mode      |
+| =vim-style-ex-substitute-global=         | If non-nil, inverse the meaning of ~g~ in =:substitute= Evil ex-command |
+
+Default configuration is:
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default dotspacemacs-editing-style '(vim :variables
+                                                 vim-style-visual-feedback nil
+                                                 vim-style-remap-Y-to-y$ nil
+                                                 vim-style-retain-visual-state-on-shift t
+                                                 vim-style-visual-line-move-text nil
+                                                 vim-style-ex-substitute-global nil)
 #+END_SRC
 
 *** Emacs
@@ -778,23 +805,23 @@ This style can be tweaked to be more like Emacs or more like Vim depending
 on the user preferences. The following variables are available to change the
 style configuration:
 
-- =hybrid-mode-default-state= The default state when opening a new buffer,
-  default is =normal=. Set it to =emacs= for a more emacsy style.
-- =hybrid-mode-enable-hjkl-bindings= If non-nil then packages will configure
-  =h j k l= key bindings for navigation.
-- =hybrid-mode-enable-evilified-state= If non-nil buffer are =evilified= when
-  supported, if nil then =emacs= state is enabled in those buffers instead.
-- =hybrid-mode-use-evil-search-module= If non-nil then use evil own search
-  module which is closer to Vim search behavior.
+| Variables                             | Description                                                                            |
+|---------------------------------------+----------------------------------------------------------------------------------------|
+| =hybrid-style-visual-feedback=        | If non-nil then objects are briefly highlighted                                        |
+| =hybrid-style-default-state=          | The default state when opening a new buffer. Set it to =emacs= for a more emacsy style |
+| =hybrid-style-enable-hjkl-bindings=   | If non-nil then packages will configure =h j k l= key bindings for navigation          |
+| =hybrid-style-enable-evilified-state= | If non-nil buffer are =evilified= when supported, if nil then =emacs= state is enabled |
+| =hybrid-style-use-evil-search-module= | If non-nil then use evil own search module which is closer to Vim search behavior      |
 
 Default configuration is:
 
 #+BEGIN_SRC emacs-lisp
 (setq-default dotspacemacs-editing-style '(hybrid :variables
-                                                  hybrid-mode-enable-evilified-state t
-                                                  hybrid-mode-enable-hjkl-bindings nil
-                                                  hybrid-mode-use-evil-search-module nil
-                                                  hybrid-mode-default-state 'normal)
+                                                  hybrid-style-visual-feedback nil
+                                                  hybrid-style-enable-evilified-state t
+                                                  hybrid-style-enable-hjkl-bindings nil
+                                                  hybrid-style-use-evil-search-module nil
+                                                  hybrid-style-default-state 'normal)
 #+END_SRC
 
 To toggle the hybrid style on and off use ~SPC t E h~ and ~M-m t E h~. When

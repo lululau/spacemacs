@@ -115,9 +115,12 @@
       ;; disable pulses as it is more distracting than useful and
       ;; less readable.
       (setq evil-goggles-pulse nil
-            evil-goggles-async-duration 0.2
-            evil-goggles-blocking-duration 0.12)
-      (evil-goggles-mode))
+            evil-goggles-async-duration 0.1
+            evil-goggles-blocking-duration 0.05)
+      (if (or vim-style-visual-feedback
+              hybrid-style-visual-feedback)
+          (evil-goggles-mode)
+        (evil-goggles-mode -1)))
     :config
     (spacemacs|hide-lighter evil-goggles-mode)))
 
