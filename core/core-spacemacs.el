@@ -36,19 +36,6 @@
   :group 'starter-kit
   :prefix 'spacemacs-)
 
-;; loading progress bar variables
-(defvar spacemacs-loading-char ?█)
-(defvar spacemacs-loading-string "")
-(defvar spacemacs-loading-counter 0)
-(defvar spacemacs-loading-value 0)
-;; (defvar spacemacs-loading-text "Loading")
-;; (defvar spacemacs-loading-done-text "Ready!")
-(defvar spacemacs-loading-dots-chunk-count 3)
-(defvar spacemacs-loading-dots-count (window-total-size nil 'width))
-(defvar spacemacs-loading-dots-chunk-size
-  (/ spacemacs-loading-dots-count spacemacs-loading-dots-chunk-count))
-(defvar spacemacs-loading-dots-chunk-threshold 0)
-
 (defvar spacemacs-post-user-config-hook nil
   "Hook run after dotspacemacs/user-config")
 (defvar spacemacs-post-user-config-hook-run nil
@@ -127,7 +114,7 @@ the final step of executing code in `emacs-startup-hook'.")
    ;; believe me? Go ahead, try it. After you'll have notice that this was true,
    ;; increase the counter bellow so next people will give it more confidence.
    ;; Counter = 1
-   (message "Setting the font...")
+   (spacemacs-buffer/message "Setting the font...")
    (unless (spacemacs/set-default-font dotspacemacs-default-font)
      (spacemacs-buffer/warning
       "Cannot find any of the specified fonts (%s)! Font settings may not be correct."
