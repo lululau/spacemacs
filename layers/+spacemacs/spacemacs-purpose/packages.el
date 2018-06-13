@@ -100,14 +100,17 @@
         "wpp" #'pupo/close-window
         "wpP" #'pupo/close-all-windows)
       (pupo-mode))))
-
 (defun spacemacs-purpose/init-spacemacs-purpose-popwin ()
   (use-package spacemacs-purpose-popwin :commands pupo-mode))
 
 (defun spacemacs-purpose/init-window-purpose ()
   (use-package window-purpose
+    :defer (spacemacs/defer 1)
     :init
     (progn
+      (spacemacs|add-transient-hook pre-command-hook
+        (lambda () (require 'window-purpose))
+        lazy-load-window-purpose)
       ;; 'r' is for "puRpose" ('w', 'p' are crowded, 'W', 'P' aren't
       ;; comfortable)
       (spacemacs/set-leader-keys
@@ -116,10 +119,10 @@
         "rd" 'purpose-toggle-window-purpose-dedicated
         "rD" 'purpose-delete-non-dedicated-windows
         "rp" 'purpose-switch-buffer-with-some-purpose
-        "rP" 'purpose-set-window-purpose)
-      (purpose-mode))
+        "rP" 'purpose-set-window-purpose))
     :config
     (progn
+      (purpose-mode)
       ;; change `switch-to-buffer' display preferences according to
       ;; `dotspacemacs-switch-to-buffer-prefers-purpose'. This affects actions
       ;; like `spacemacs/alternate-buffer', and opening buffers from Dired

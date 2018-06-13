@@ -67,10 +67,12 @@
 
 (defun crystal/init-flycheck-crystal ()
   (use-package flycheck-crystal
+    :defer t
     :init (add-hook 'crystal-mode-hook 'flycheck-mode)))
 
 (defun crystal/init-inf-crystal()
   (use-package inf-crystal
+    :defer t
     :init
     (progn
       (spacemacs/register-repl 'inf-crystal 'inf-crystal "inf-crystal")
@@ -99,7 +101,7 @@
 (defun crystal/init-play-crystal()
   (use-package play-crystal
     :defer t
-    :config
+    :init
     (progn
       (spacemacs/declare-prefix-for-mode 'crystal-mode "me" "play")
       (spacemacs/set-leader-keys-for-major-mode 'crystal-mode

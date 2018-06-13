@@ -28,7 +28,6 @@
         evil-nerd-commenter
         evil-matchit
         evil-numbers
-        evil-search-highlight-persist
         evil-surround
         ;; Temporarily disabled, pending the resolution of
         ;; https://github.com/7696122/evil-terminal-cursor-changer/issues/8
@@ -164,8 +163,13 @@
 
 (defun spacemacs-evil/init-evil-lisp-state ()
   (use-package evil-lisp-state
-    :init (setq evil-lisp-state-global t)
+    :defer t
+    :init
+    (progn
+      (add-hook 'prog-mode-hook 'spacemacs//load-evil-lisp-state)
+      (setq evil-lisp-state-global t))
     :config (spacemacs/set-leader-keys "k" evil-lisp-state-map)))
+
 
 (defun spacemacs-evil/init-evil-mc ()
   (use-package evil-mc
@@ -263,20 +267,6 @@
         "n+" 'spacemacs/evil-numbers-transient-state/evil-numbers/inc-at-pt
         "n=" 'spacemacs/evil-numbers-transient-state/evil-numbers/inc-at-pt
         "n-" 'spacemacs/evil-numbers-transient-state/evil-numbers/dec-at-pt))))
-
-(defun spacemacs-evil/init-evil-search-highlight-persist ()
-  (use-package evil-search-highlight-persist
-    :init
-    (progn
-      (global-evil-search-highlight-persist)
-      ;; (set-face-attribute )
-      (define-key evil-search-highlight-persist-map
-        (kbd "C-x SPC") 'rectangle-mark-mode)
-      (spacemacs/set-leader-keys "sc" 'spacemacs/evil-search-clear-highlight)
-      (evil-ex-define-cmd "nohlsearch" 'spacemacs/evil-search-clear-highlight)
-      (spacemacs//adaptive-evil-highlight-persist-face)
-      (add-hook 'spacemacs-post-theme-change-hook
-                'spacemacs//adaptive-evil-highlight-persist-face))))
 
 (defun spacemacs-evil/init-evil-surround ()
   (use-package evil-surround
