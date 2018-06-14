@@ -348,6 +348,12 @@ restricts line-number to the specified list of major-mode.")
 (defvar dotspacemacs-persistent-server nil
   "If non nil advises quit functions to keep server open when quitting.")
 
+(defvar dotspacemacs-server-socket-dir nil
+  "Set the emacs server socket location.
+If nil, uses whatever the Emacs default is,
+otherwise a directory path like \"~/.emacs.d/server\".
+Has no effect if `dotspacemacs-enable-server' is nil.")
+
 (defvar dotspacemacs-smartparens-strict-mode nil
   "If non-nil smartparens-strict-mode will be enabled in programming modes.")
 
@@ -445,7 +451,7 @@ the symbol of an editing style and the cdr is a list of keyword arguments like
   (cond
    ((symbolp config) config)
    ((listp config)
-    (let ((variables (spacemacs/mplist-get config :variables)))
+    (let ((variables (spacemacs/mplist-get-values config :variables)))
       (while variables
         (let ((var (pop variables)))
           (if (consp variables)
@@ -515,7 +521,7 @@ Called with `C-u C-u' skips `dotspacemacs/user-config' _and_ preleminary tests."
             (spacemacs-buffer/warning "Some tests failed, check `%s' buffer"
                                       dotspacemacs-test-results-buffer))))))
   (when (configuration-layer/package-used-p 'spaceline)
-    (spacemacs//set-powerline-for-startup-buffers)))
+    (spacemacs//restore-buffers-powerline)))
 
 (defun dotspacemacs/get-variable-string-list ()
   "Return a list of all the dotspacemacs variables as strings."
@@ -764,7 +770,7 @@ error recovery."
                       hybrid))
           (and (listp x)
                (member (car x) '(vim emacs hybrid))
-               (spacemacs/mplist-get x :variables))))
+               (spacemacs/mplist-get-values x :variables))))
     'dotspacemacs-editing-style
     "is \'vim, \'emacs or \'hybrid or and list with `:variables' keyword")
    (spacemacs//test-var
