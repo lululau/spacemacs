@@ -147,6 +147,7 @@
 
 (defun spacemacs-defaults/init-image-mode ()
   (use-package image-mode
+    :defer t
     :init
     (progn
       (setq image-animate-loop t)
@@ -221,7 +222,17 @@
       ;; add this advice before calling `global-display-line-numbers-mode'
       (advice-add #'display-line-numbers--turn-on :around #'spacemacs//linum-on)
       (when dotspacemacs-line-numbers
-        (global-display-line-numbers-mode)))))
+        ;; delay the initialization of number lines when opening Spacemacs
+        ;; normally. If opened via the command line with a file to visit then
+        ;; load it immediatly
+        (add-hook 'emacs-startup-hook
+                  (lambda ()
+                    (if (string-equal "*scratch*" (buffer-name))
+                        (spacemacs|add-transient-hook window-configuration-change-hook
+                          (lambda ()
+                            (global-display-line-numbers-mode))
+                          lazy-loading-line-numbers)
+                      (global-display-line-numbers-mode))))))))
 
 (defun spacemacs-defaults/init-linum ()
   (use-package linum
@@ -426,30 +437,33 @@
             (append winner-boring-buffers spacemacs/winner-boring-buffers)))))
 
 (defun spacemacs-defaults/init-zone ()
-  (require 'zone)
-  (when (and dotspacemacs-zone-out-when-idle
-             (numberp dotspacemacs-zone-out-when-idle))
-    (zone-when-idle dotspacemacs-zone-out-when-idle))
-  ;; remove not interesting programs
-  (setq zone-programs [
-                       ;; zone-pgm-jitter
-                       zone-pgm-putz-with-case
-                       zone-pgm-dissolve
-                       ;; zone-pgm-explode
-                       zone-pgm-whack-chars
-                       zone-pgm-rotate
-                       zone-pgm-rotate-LR-lockstep
-                       zone-pgm-rotate-RL-lockstep
-                       zone-pgm-rotate-LR-variable
-                       zone-pgm-rotate-RL-variable
-                       zone-pgm-drip
-                       ;; zone-pgm-drip-fretfully
-                       ;; zone-pgm-five-oclock-swan-dive
-                       ;; zone-pgm-martini-swan-dive
-                       zone-pgm-rat-race
-                       zone-pgm-paragraph-spaz
-                       ;; zone-pgm-stress
-                       ;; zone-pgm-stress-destress
-                       ;; zone-pgm-random-life
-                       ])
-  (spacemacs/set-leader-keys "TZ" 'zone))
+  (use-package zone
+    :defer t
+    :init
+    (progn
+      (when (and dotspacemacs-zone-out-when-idle
+                 (numberp dotspacemacs-zone-out-when-idle))
+        (zone-when-idle dotspacemacs-zone-out-when-idle))
+      ;; remove not interesting programs
+      (setq zone-programs [
+                           ;; zone-pgm-jitter
+                           zone-pgm-putz-with-case
+                           zone-pgm-dissolve
+                           ;; zone-pgm-explode
+                           zone-pgm-whack-chars
+                           zone-pgm-rotate
+                           zone-pgm-rotate-LR-lockstep
+                           zone-pgm-rotate-RL-lockstep
+                           zone-pgm-rotate-LR-variable
+                           zone-pgm-rotate-RL-variable
+                           zone-pgm-drip
+                           ;; zone-pgm-drip-fretfully
+                           ;; zone-pgm-five-oclock-swan-dive
+                           ;; zone-pgm-martini-swan-dive
+                           zone-pgm-rat-race
+                           zone-pgm-paragraph-spaz
+                           ;; zone-pgm-stress
+                           ;; zone-pgm-stress-destress
+                           ;; zone-pgm-random-life
+                           ])
+      (spacemacs/set-leader-keys "TZ" 'zone))))
