@@ -18,6 +18,7 @@
         evil
         flx
         helm-make
+        imenu
         ivy
         ivy-hydra
         (ivy-rich :toggle ivy-enable-advanced-buffer-information)
@@ -74,7 +75,7 @@
         "ry"  'counsel-yank-pop
         "rm"  'counsel-mark-ring
         ;; jumping
-        "sj"  'counsel-imenu
+        "sj"  'spacemacs/counsel-jump-in-buffer
         ;; themes
         "Ts"  'counsel-load-theme
         ;; search
@@ -174,7 +175,7 @@
         "cm" 'helm-make))))
 
 (defun ivy/post-init-imenu ()
-  (spacemacs/set-leader-keys "ji" 'counsel-imenu))
+  (spacemacs/set-leader-keys "ji" 'spacemacs/counsel-jump-in-buffer))
 
 (defun ivy/init-ivy ()
   (use-package ivy
@@ -193,6 +194,9 @@
       (ivy-set-actions
        'counsel-recentf
        spacemacs--ivy-file-actions)
+
+      ;; add spacemacs/counsel-search command to ivy-highlight-grep-commands
+      (add-to-list 'ivy-highlight-grep-commands 'spacemacs/counsel-search)
 
       ;; mappings to quit minibuffer or enter transient state
       (define-key ivy-minibuffer-map [escape] 'minibuffer-keyboard-quit)
