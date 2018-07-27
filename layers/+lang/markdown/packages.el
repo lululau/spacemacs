@@ -78,7 +78,7 @@
           "]"   'markdown-complete
           ;; Indentation
           ">"   'markdown-indent-region
-          "<"   'markdown-exdent-region
+          "<"   'markdown-outdent-region
           ;; Buffer-wide commands
           "c]"  'markdown-complete-buffer
           "cc"  'markdown-check-refs
@@ -105,9 +105,7 @@
           "if"  'markdown-insert-footnote
           "ii"  'markdown-insert-image
           "ik"  'spacemacs/insert-keybinding-markdown
-          "iI"  'markdown-insert-reference-image
-          "il"  'markdown-insert-inline-link-dwim
-          "iL"  'markdown-insert-reference-link-dwim
+          "il"  'markdown-insert-link
           "iw"  'markdown-insert-wiki-link
           "iu"  'markdown-insert-uri
           ;; Element removal
@@ -116,6 +114,7 @@
           "li"  'markdown-insert-list-item
           ;; Toggles
           "ti"  'markdown-toggle-inline-images
+          "tm"  'markdown-toggle-markup-hiding
           "tl"  'markdown-toggle-url-hiding
           "tt"  'markdown-toggle-gfm-checkbox
           "tw"  'markdown-toggle-wiki-links
@@ -132,7 +131,7 @@
           "N"   'markdown-next-link
           "f"   'markdown-follow-thing-at-point
           "P"   'markdown-previous-link
-          "<RET>" 'markdown-jump)
+          "<RET>" 'markdown-do)
         (when (eq 'eww markdown-live-preview-engine)
           (spacemacs/set-leader-keys-for-major-mode mode
             "cP" 'markdown-live-preview-mode)))
