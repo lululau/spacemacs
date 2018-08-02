@@ -111,7 +111,8 @@
       (add-hook 'go-mode-hook 'spacemacs//go-set-tab-width))
     :config
     (progn
-      (add-hook 'before-save-hook 'gofmt-before-save)
+      (when go-format-before-save
+        (add-hook 'before-save-hook 'gofmt-before-save))
       (spacemacs/declare-prefix-for-mode 'go-mode "me" "playground")
       (spacemacs/declare-prefix-for-mode 'go-mode "mg" "goto")
       (spacemacs/declare-prefix-for-mode 'go-mode "mh" "help")
@@ -120,6 +121,7 @@
       (spacemacs/declare-prefix-for-mode 'go-mode "mt" "test")
       (spacemacs/declare-prefix-for-mode 'go-mode "mx" "execute")
       (spacemacs/set-leader-keys-for-major-mode 'go-mode
+        "="  'gofmt
         "eb" 'go-play-buffer
         "ed" 'go-download-play
         "er" 'go-play-region
