@@ -51,6 +51,7 @@ python-*-docs-html
 nov-places
 workspace
 eclipse.jdt.ls
+.trello
 
 # Private directory
 private/
