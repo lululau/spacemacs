@@ -76,6 +76,9 @@ and then install this layer with:
      (julia :variables julia-mode-enable-lsp t)))
 #+END_SRC
 
+Warning: [[https://github.com/JuliaEditorSupport/LanguageServer.jl][=LanguageServer.jl=]] has not yet been released for Julia 1.0. If you are
+using this layer with Julia 1.0, =julia-mode-enable-lsp= should be set to =nil=.
+
 * Key bindings
 
 | Key Binding | Description                                                |
