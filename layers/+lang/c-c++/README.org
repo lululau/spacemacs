@@ -165,7 +165,7 @@ specifying an explicit =c-c++-lsp-cache-dir=. Setting this value to a relative p
 subdirectory of your project root.
 
 There are other initialization options such as the number of indexer threads, cache serialization format.
-They have good default values. See [[file:./config.el][config.el]] and the backends' respective homepages for more info.
+They have good default values. See [[file:./config.el][config.el]] and the backends’ respective homepages for more info.
 - [[https://github.com/cquery-project/cquery/wiki/Emacs][Emacs section of =cquery= wiki]]
 - [[https://github.com/MaskRay/ccls/wiki/Emacs][Emacs section of =ccls= wiki]]
 
@@ -235,8 +235,7 @@ would look is that in your list of =dostpacemacs-configuration-layers= you have
 an entry like
 
 #+BEGIN_SRC emacs-lisp
-  (c-c++ :variables
-         c-c++-enable-google-style t)
+  (c-c++ :variables c-c++-enable-google-style t)
 #+END_SRC
 
 Additionally, if you have =c-c++-enable-google-newline= variable set then
@@ -244,17 +243,16 @@ Additionally, if you have =c-c++-enable-google-newline= variable set then
 set that up like this:
 
 #+BEGIN_SRC emacs-lisp
-  (c-c++ :variables
-         c-c++-enable-google-style t
-         c-c++-enable-google-newline t)
+  (c-c++ :variables c-c++-enable-google-style t
+                    c-c++-enable-google-newline t)
+#+END_SRC
 
 ** Newlines
 You can enable the =Auto-newline= minor mode that automatically adds newlines
 after certain characters by setting the =c-c++-enable-auto-newline= variable.
 
 #+BEGIN_SRC emacs-lisp
-  (c-c++ :variables
-         c-c++-enable-auto-newline t)
+  (c-c++ :variables c-c++-enable-auto-newline t)
 #+END_SRC
 
 ** Projectile sub-project adoption
@@ -262,9 +260,8 @@ To prevent projectile from using subproject root when visiting files in a subpro
 set =c-c++-adopt-subprojects= to =t=.
 
 #+BEGIN_SRC emacs-lisp
-  (c-c++ :variables
-         c-c++-adopt-subprojects t)
-#+END_SRC emacs-lisp
+  (c-c++ :variables c-c++-adopt-subprojects t)
+#+END_SRC
 
 This is based on a recommendation on the =cquery= and =ccls= wikis, but should be more
 generally applicable.
@@ -324,7 +321,7 @@ generally applicable.
 | ~SPC m g Y~ | cycle overlays on screen        |
 
 ** cquery / ccls
-The keybindings listed below are in addition to the default keybindings defined by the [[file:../../+tools/lsp/README.org][LSP layer]].
+The key bindings listed below are in addition to the default key bindings defined by the [[file:../../+tools/lsp/README.org][LSP layer]].
 
 *** goto
 
@@ -334,7 +331,7 @@ The keybindings listed below are in addition to the default keybindings defined 
 | ~SPC m g R~ | find references (read)    |
 | ~SPC m g W~ | find references (write)   |
 | ~SPC m g c~ | find callers              |
-| ~SPC m g C~ | find callees             |
+| ~SPC m g C~ | find callees              |
 | ~SPC m g v~ | vars                      |
 
 *** help/hierarchy
