@@ -1,16 +1,27 @@
+;;; config.el --- rcirc Layer packages File for Spacemacs
+;;
+;; Copyright (c) 2012-2018 Sylvain Benner & Contributors
+;;
+;; Author: Sylvain Benner <sylvain.benner@gmail.com>
+;; URL: https://github.com/syl20bnr/spacemacs
+;;
+;; This file is not part of GNU Emacs.
+;;
+;;; License: GPLv3
+
 (setq rcirc-packages
-  '(
-    company
-    company-emoji
-    emoji-cheat-sheet-plus
-    flyspell
-    (helm-rcirc :location local
-                :requires helm)
-    persp-mode
-    rcirc
-    rcirc-color
-    rcirc-notify
-    ))
+      '(
+        company
+        company-emoji
+        emoji-cheat-sheet-plus
+        flyspell
+        (helm-rcirc :location local
+                    :requires helm)
+        persp-mode
+        rcirc
+        rcirc-color
+        rcirc-notify
+        ))
 
 (defun rcirc/post-init-company ()
   (spacemacs|add-company-backends :backends company-capf :modes rcirc-mode))
