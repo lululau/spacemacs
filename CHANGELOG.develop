@@ -298,7 +298,7 @@ Benner and Paweł Siudak):
 - bm (thanks to Eugene Yaremenko and Binbin Ye)
 - dap (thanks to Ivan Yonchovski)
 - lsp (thanks to Fangrui Song, 0bl.blwl, Cormac Cannon, Juuso Valkeejärvi, Guan
-  Xipeng, Ivan Yonchovski and Sylvain Benner)
+  Xipeng, Ivan Yonchovski, Justin Martin and Sylvain Benner)
 - node (thanks to jupl)
 - pass (thanks to Andrew Oppenlander, Kepi, Kalle Lindqvist, and Evan Klitzke)
 - sphinx (thanks to Wei-Wei Guo)
@@ -922,7 +922,7 @@ Benner and Paweł Siudak):
 - Fix issue with =c++-enable-clang-format-on-save= not taking effect when set
   (thanks to Silver Chan)
 - Added lsp support using either cquery or ccls backends (thanks to Cormac
-  Cannon and Fangrui Song)
+  Cannon, Sergey Litovchuk and Fangrui Song)
 **** Cfengine
 - Fix publish in README (thanks to Eugene Yaremenko)
 - Add =ob-cfengine3= (thanks to Nick Anderson)
@@ -1141,6 +1141,7 @@ Benner and Paweł Siudak):
   Buliga)
 **** GitHub
 - Packages:
+ - Add new packages =forge= (thanks to Miciah Dashiel Butler Masters)
  - Add package =magithub=, it is enabled by default in offline mode.
  - Remove package =github-browse-file= which has been replaced by
   =browse-at-remote= in =version-control= layer
@@ -1207,6 +1208,8 @@ Benner and Paweł Siudak):
 - Support editorconfig setting of =tab-width= to nil (thanks to lawrsp)
 - Add lsp support (thanks to Lupco Kotev)
 - Add golangci-lint support (thanks to Lupco Kotev)
+**** Graphviz
+- Use graphviz package from melpa (thanks to Matthew Boston)
 **** Groovy
 - Update =indent-variable-alist= to support new groovy-mode (thanks to Sylvain
   Benner)
@@ -1236,6 +1239,7 @@ Benner and Paweł Siudak):
   - ~SPC r i~ runs new =spacemacs/haskell-format-imports= function
   - ~SPC m g b~ returns from definition in =intero-mode=
     (thanks to Magnus Therning)
+- Fix jump handlers conflict for haskell and intero (thanks to CthulhuDen)
 **** Helm
 - Limited =ripgrep= results to 512 columns by default, and added
   =spacemacs-helm-rg-max-column-number= layer variable to configure the above
@@ -1575,6 +1579,10 @@ Benner and Paweł Siudak):
     - ~SPC a o C j~ for =org-clock-jump-to-current-clock=
     - ~SPC a o C o~ for =org-clock-out=
     - ~SPC a o C r~ for =org-resolve-clocks=
+  - Updates org-layer key bindings for Org 9.2 release (thanks to Sam
+    Pillsworth):
+    - ~SPC m i b~ for =org-insert-structure-template=
+    - ~SPC m i t~ for =org-set-tags-command=
 - Key binding changes for archiving (thanks to Ag Ibragimov):
   - Add ~SPC m s a~ to toggle archive tag for subtree
   - Add ~SPC m s A~ to archive subtree (previously ~SPC m s a~)
@@ -1609,6 +1617,8 @@ Benner and Paweł Siudak):
 - Fixed error void: =evil-surround-pairs-alist= (thanks to Sylvain Benner)
 - Add warning against manually loading org (thanks to Maximilian Wolff)
 - Add a toggle for bringing in org-trello (thanks to Magnus Therning)
+- Add the org-mode keybindings to the org-journal major mode (thanks to Marty
+  Buchaus)
 **** Osx
 - Fix OSX mapping issue (thanks to Joey Liu)
 - Added layer variables to customize modifier behaviors on macOS:
@@ -1729,7 +1739,6 @@ Benner and Paweł Siudak):
   (thanks to Sylvain Benner)
 - Open =.jsx= files with =rjsx-mode= (thanks to Thomas de Beauchêne)
 - Fixes React imports when using web beautify. (thanks to Ismael)
-- Prefer eslint_d to eslint (thanks to Seong Yong-ju)
 **** Ruby
 - Add support for =org-babel= (thanks to Muneeb Shaikh)
 - Highlight debugger keywords (thanks to Alexander Berezovsky and Eivind Fonn)
