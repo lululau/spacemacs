@@ -7,28 +7,28 @@ When a release will be drafted, the notes will be copied at the top of
 the [[file:CHANGELOG.org][CHANGELOG.org]] file.
 
 #+BEGIN_EXAMPLE
-* Release 0.400.x
-** 0.400.0
-*** Breaking Changes
-**** Major
-**** Key bindings
-**** Layers
-***** Layer 1
-***** Layer 2
-***** Layer 3
-*** Hot new features
-*** Dotfile changes
-*** Core changes
-*** Distribution changes
-*** Layers
-**** New layers
-**** Layer 1
-**** Layer 2
-**** Layer 3
-*** Various improvements
-**** Code syle and organization
-**** Documentation and website
-**** Testing and CI
+ * Release 0.400.x
+ ** 0.400.0
+ *** Breaking Changes
+ **** Major
+ **** Key bindings
+ **** Layers
+ ***** Layer 1
+ ***** Layer 2
+ ***** Layer 3
+ *** Hot new features
+ *** Dotfile changes
+ *** Core changes
+ *** Distribution changes
+ *** Layers
+ **** New layers
+ **** Layer 1
+ **** Layer 2
+ **** Layer 3
+ *** Various improvements
+ **** Code syle and organization
+ **** Documentation and website
+ **** Testing and CI
 #+END_EXAMPLE
 
 * Release 0.300.x
@@ -279,7 +279,7 @@ Benner and Paweł Siudak):
 - kotlin (thanks to Shanavas M)
 - pact (thanks to Colin Woodbury)
 - perl5 (thanks to Troy Hinckley, Jinseop Kim and Michael Rohleder)
-- perl6 (thanks to Bahtiar Gadimov)
+- perl6 (thanks to Bahtiar Gadimov and yuhan0)
 - protobuf (thanks to Amol Mandhane)
 - restructuredtext (thanks to Wei-Wei Guo and Kalle Lindqvist)
 - semantic-web (thanks to Andreas Textor)
@@ -523,6 +523,8 @@ Benner and Paweł Siudak):
   de Beauchêne)
 - Make query-replace work when frame is split (thanks to Dieter Komendera)
 - Don't skip missing .elc files when recompiling Elpa (thanks to RockyRoad29)
+- Update quelpa.el to fix installing of some recipes on macOS (thanks to Dieter
+  Komendera)
 *** Distribution changes
 - Refactored =spacemacs-bootstrap=, =spacemacs-ui=, and =spacemacs-ui-visual=
   layers:
@@ -743,6 +745,7 @@ Benner and Paweł Siudak):
   - Fix global toggles for aggressive-indent and smartparens (thanks to Matt
     Kramer)
   - Don't load outdated compiled files (thanks to Boris Buliga)
+  - Fix helm loading for layouts transient state (thanks to Thomas de Beauchêne)
 - UX:
   - Fill the current filename as a suggestion of
     =spacemacs/rename-current-buffer-file= (thanks to tddsg)
@@ -983,6 +986,8 @@ Benner and Paweł Siudak):
 - Allow to send input to the repl via RET in normal mode (thanks to Dieter
   Komendera)
 - Enable clojure-mode refactorings without clj-refactor (thanks to yuhan0)
+- Remove =clojure-cheatsheet= as it is part of cider now (thanks to Eugene
+  Yaremenko)
 **** Coffeescript
 - Adds basic autocompletion (thanks to Codruț Constantin Gușoi)
 - Key bindings (thanks to Kalle Lindqvist):
@@ -1126,6 +1131,7 @@ Benner and Paweł Siudak):
 - Reorganize key bindings ( refer to =ESS= section in Breaking Changes above )
 - Add =xref= integraton (thanks to Guido Kraemer)
 - Update ess-disable-underscore-assign for ESS 18.10 (thanks to Leonard Lausen)
+- Update layer with the latest upstream changes (thanks to Guido Kraemer)
 **** Evil snipe
 - Must always explicitly enable =evil-snipe-mode= even when
   =evil-snipe-override-mode= is enabled (thanks to Sylvain Benner)
@@ -1147,13 +1153,13 @@ Benner and Paweł Siudak):
   - Add package =magithub=, it is enabled by default in offline mode.
   - Remove package =github-browse-file= which has been replaced by
    =browse-at-remote= in =version-control= layer
+  - Remove package =magit-gh-pulls= as it was deprecated in favor of =magithub=
+    and =forge= (thanks to Robby O'Connor )
 - Key bindings:
   - For Evil style users, the key-binding to pull commits is now on ~p~ instead
     of ~F~ which is taken by the new package =forge=
   - Add ~g r~ evilified binding to gist-list-mode (thanks to Jean-Sebastien A.
     Beaudry)
-  - Fix ~#~ key binding in =magit-status= for the =magit-gh-pulls= dispatch
-    popup (thanks to Diego Berrocal)
 - Replace =evilified-state-evilify= by =evilified-state-evilify-map= (thanks to
   Sylvain Benner)
 - Make magithub offline by default (thanks to Miciah Masters)
@@ -1412,7 +1418,8 @@ Benner and Paweł Siudak):
 - Add colemak-jkhl layout (thanks to fmdkdd)
 - Disambiguate the colemak-hnei and colemak-neio layouts (thanks to fmdkdd)
 - Improve support for workman keyboard layout (thanks to Benjamin Reynolds)
-- after-config hooks for lazy-loaded packages (thanks to CharlesHD)
+- Add =after-config= hooks for lazy-loaded packages (thanks to CharlesHD)
+- Add undo-tree visualizer mapping (thanks to CharlesHD)
 **** LaTeX
 - New package =magic-latex-buffer= (thanks to benquebec)
 - New layer variable =latex-enable-magic= to enable =magic= symbols in latex
@@ -1486,6 +1493,7 @@ Benner and Paweł Siudak):
 - Disable Spacemacs paste transient state when pasting to avoid pasting issue
   when there are more than one cursor (thanks to braham-snyder)
 **** Neotree
+- Make neotree an optional instead of a default layer
 - Move neotree to its own layer in new +filetree folder (thanks to Sylvain
   Benner)
 - Add screenshot in neotree layer (thanks to duianto)
@@ -1658,6 +1666,7 @@ Benner and Paweł Siudak):
 **** Purescript
 - Enable =purescript-decl-scan-mode= when loading =purescript-mode= (thanks to
   Bjarke Vad Andersen)
+- Allow adding node_modules/.bin path to exec-path (thanks to Anupam Jain)
 **** Python
 - Various fixes in =pylookup.py= (thanks to ishestakov and Shitikanth Kashyap)
 - Hide =yapf-mode= modeline lighter (thanks to Robert ven der Helm)
@@ -1714,6 +1723,8 @@ Benner and Paweł Siudak):
   JimmyG)
 - Highlight python3.7 builtin =breakpoint()= function (thanks to Boris
   Verhovsky)
+- Fix conflict between pipenv directory .venv and pyvenv file .venv (thanks to
+  rgb-24bit)
 **** Racket
 - Restore smart closing paren behavior in racket-mode (thanks to Don March)
 **** Ranger
@@ -1928,6 +1939,8 @@ Benner and Paweł Siudak):
 - Prevent =tmux-command= at GUI mode (thanks to Isaac Zeng)
 - Fix regression in tmux by setting keybindings using =use-package= (thanks to
   Aaron Jensen)
+**** Treemacs
+- =Treemacs= replaces =NeoTree= as the default sidebar
 **** Typescript
 - Call tsfmt with extension of current buffer for TSX formatting (thanks to
   Victor Andrée)
@@ -1958,6 +1971,7 @@ Benner and Paweł Siudak):
 - Add =prettier= to error msg of =spacemacs/typescript-format= (thanks to Matt
   Kramer)
 - Fix jump handling with multiple backends (thanks to Aaron Jensen)
+- Fix =typescript/jump-to-type-def= for npm modules (thanks to Jam Risser)
 **** Vagrant
 - Key bindings:
   - move key bindings prefix to ~SPC a V~ (thanks to Thomas de Beauchêne)
@@ -1987,11 +2001,14 @@ Benner and Paweł Siudak):
     - ~SPC g v v~ to do the next logical VC operation (=vc-next-action=)
     - ~SPC g v I~ to ignore file (=vc-ignore=)
     - ~SPC g v r~ to  resolve conflicts in file
-  - Define key bindings with leader key for vim editing style in =diff-mode= (thanks to miyabinomuratic)
+  - Define key bindings with leader key for vim editing style in =diff-mode=
+    (thanks to miyabinomuratic)
 - New packages:
   - =browse-at-remote= which replaces =github-browse-file=
    (thanks Eugene Yaremenko)
 - Avoid loading all the diff packages (thanks to Sylvain Benner)
+- Fixes error on =diff-hl-margin-mode= function being nil during startup (thanks
+  to Voleking)
 **** Ycmd
 - Search for =compile_commands.json= in build sub-directory
   (thanks to Amos Bird and Eivind Fonn)
@@ -2022,19 +2039,20 @@ Benner and Paweł Siudak):
   Creechley, Jason Axelson, Jesse Cooke, Jethro Shuwen Sun, JI Xiang, Jim
   Deville, Jody Frankowski, Joe Hillenbrand, John Eismeier, John Wood, Jon
   Tippens, Jonas Strømsodd, Jonathan Arnett, Jonathan Gillett, Josh Greenwood,
-  Joshua Santos, Kainalu Hagiwara, Kalle Lindqvist, Kechao Cai, Keith Simmons,
-  Keith Wygant, Kristoffer Haugsbakk, lawrsp, Leo Joseph Buchignani III, Marco
-  Ieni, Max Beutelspacher, Max Nordlund, Maximilian Wolff, Miciah Dashiel Butler
-  Masters, mjkramer, Mikhail Yakutovich, Muneeb Shaikh, Nasser Alshammari,
-  Nasser Alshammari, Niko Felger, Nikolai Myllymäki, nikolaiam, Nicolas
-  Forgerit, Olivier Verdier, Pancho Horrillo, Paul Milla, Paulo Schneider, Pawan
-  Dubey, Paweł Siudak, Phil Pirozhkov, Philippe Bourdages, Piotr Grzesik, Rafi
-  Khan, Rand01ph, rakyi, Raymond Wanyoike, Reverend Homer, Robby O'Connor,
-  Rhommel Lamas, Sam Pablo Kuper, Saulius Menkevičius, sduthil, Sergio Ugalde,
-  Shane Kilkelly, Sid Kapur, Somelauw, Soobin Rho, sorawee, SteveJobzniak,
-  Sunghyun Hwang, Swaroop C H, Sylvain Benner, Szunti, Tim Stewart, timor,
-  TinySong, Titov Andrey, Thomas de Beauchêne, Tomasz Cichocinski, tzhao11, Vlad
-  Bokov, Vladimir Kochnev, Wieland Hoffmann, Xiang Ji, Yi Liu, zer09, Zhige Xin)
+  Joshua Santos, Justin Stone, Kainalu Hagiwara, Kalle Lindqvist, Kechao Cai,
+  Keith Simmons, Keith Wygant, Kristoffer Haugsbakk, lawrsp, Leo Joseph
+  Buchignani III, Marco Ieni, Max Beutelspacher, Max Nordlund, Maximilian Wolff,
+  Miciah Dashiel Butler Masters, mjkramer, Mikhail Yakutovich, Muneeb Shaikh,
+  Nasser Alshammari, Nasser Alshammari, Niko Felger, Nikolai Myllymäki,
+  nikolaiam, Nicolas Forgerit, Olivier Verdier, Pancho Horrillo, Paul Milla,
+  Paulo Schneider, Pawan Dubey, Paweł Siudak, Phil Pirozhkov, Philippe
+  Bourdages, Piotr Grzesik, Rafi Khan, Rand01ph, rakyi, Raymond Wanyoike,
+  Reverend Homer, Robby O'Connor, Rhommel Lamas, Sam Pablo Kuper, Saulius
+  Menkevičius, sduthil, Sergio Ugalde, Shane Kilkelly, Sid Kapur, Somelauw,
+  Soobin Rho, sorawee, SteveJobzniak, Sunghyun Hwang, Swaroop C H, Sylvain
+  Benner, Szunti, Tim Stewart, timor, TinySong, Titov Andrey, Thomas de
+  Beauchêne, Tomasz Cichocinski, tzhao11, Vlad Bokov, Vladimir Kochnev, Wieland
+  Hoffmann, Xiang Ji, Yi Liu, zer09, Zhige Xin)
 *** Release notes summarized
   Thanks to: Grant Shangreaux, Songpeng Zu, Igor Almeida, Miciah Dashiel Butler
   Masters, Abhishek(Compro) Prasad, Deepak Khidia, Ward Harris, Jiahao Jiang
