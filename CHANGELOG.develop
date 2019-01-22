@@ -746,6 +746,8 @@ Benner and Paweł Siudak):
     Kramer)
   - Don't load outdated compiled files (thanks to Boris Buliga)
   - Fix helm loading for layouts transient state (thanks to Thomas de Beauchêne)
+  - Info-find-file from emacs 27 by adding third argument (thanks to Richard
+    Kim)
 - UX:
   - Fill the current filename as a suggestion of
     =spacemacs/rename-current-buffer-file= (thanks to tddsg)
@@ -773,6 +775,7 @@ Benner and Paweł Siudak):
   - Better delete file messages (thanks to duianto)
   - Replace centered-buffer-mode with writeroom-mode (thanks to Eugene
     Yaremenko)
+  - Add ivy option to buffer transient state (thanks to yuhan0)
 - Enable =evil-search= search module in evil state.
 - Improve function =spacemacs/sort-lines-by-column= to work on rectangular/block
   selection and warn the user about its requirements (thanks to duianto)
@@ -2022,7 +2025,7 @@ Benner and Paweł Siudak):
   Yaremenko)
 - Various code and style improvements (thanks to bmag, duianto, Eivind Fonn,
   Eugene Yaremenko, Fabien Dubosson, Kalle Lindqvist, Boris Buliga, yuhan0,
-  Sylvain Benner)
+  thanhvg, Sylvain Benner)
 - Multiple unit test improvements (thanks to Sylvain Benner, et2010 and Codruț
   Constantin Gușoi)
 - Various documentation improvements (thanks Aaron Jensen, Aaron Peckham, Adam
