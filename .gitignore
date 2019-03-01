@@ -68,3 +68,5 @@ private/
 /doc/COMMUNITY.org
 /doc/CONTRIBUTING.org
 /.sx/
+/image-dired/
+/transient/history.el
