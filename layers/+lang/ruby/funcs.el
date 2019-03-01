@@ -67,6 +67,6 @@ Called interactively it prompts for a directory."
   "Highlight break point lines."
   (interactive)
   (when ruby-highlight-debugger-keywords
-    (highlight-lines-matching-regexp "byebug")
-    (highlight-lines-matching-regexp "binding.irb")
-    (highlight-lines-matching-regexp "binding.pry")))
+    ;; (highlight-lines-matching-regexp "byebug")
+    (highlight-lines-matching-regexp ".*binding.irb.*")
+    (highlight-lines-matching-regexp ".*binding.pry.*")))
