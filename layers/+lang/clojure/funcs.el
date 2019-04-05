@@ -113,29 +113,26 @@ the focus."
   (cider-load-buffer)
   (cider-test-run-test))
 
-(defalias 'spacemacs/cider-test-run-all-tests #'spacemacs/cider-test-run-ns-tests
-  "ns tests are not actually *all* tests;
-        cider-test-run-project-tests would be better here, but
-        there currently is a bug with the function. Replace once
-        it gets fixed.")
+(defalias 'spacemacs/cider-test-run-all-tests #'spacemacs/cider-test-run-project-tests
+  "Runs all tests in all project namespaces.")
 
 (defun spacemacs/cider-test-run-ns-tests ()
   "Run namespace test."
   (interactive)
   (cider-load-buffer)
-  (cider-test-run-ns-tests nil))
+  (call-interactively #'cider-test-run-ns-tests))
 
 (defun spacemacs/cider-test-run-loaded-tests ()
   "Run loaded tests."
   (interactive)
   (cider-load-buffer)
-  (cider-test-run-loaded-tests))
+  (call-interactively #'cider-test-run-loaded-tests))
 
 (defun spacemacs/cider-test-run-project-tests ()
   "Run project tests."
   (interactive)
   (cider-load-buffer)
-  (cider-test-run-project-tests))
+  (call-interactively #'cider-test-run-project-tests))
 
 (defun spacemacs/cider-test-rerun-failed-tests ()
   "Rerun failed tests."

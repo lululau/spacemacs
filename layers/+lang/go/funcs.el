@@ -37,7 +37,13 @@
 (defun spacemacs//go-setup-backend-lsp ()
   "Setup lsp backend"
   (if (configuration-layer/layer-used-p 'lsp)
-      (lsp)
+      (progn
+        ;; without setting lsp-prefer-flymake to :none
+        ;; golangci-lint errors won't be reported
+        (when go-use-golangci-lint
+          (message "[go] Setting lsp-prefer-flymake :none to enable golangci-lint support.")
+          (setq-local lsp-prefer-flymake :none))
+        (lsp))
     (message "`lsp' layer is not installed, please add `lsp' layer to your dotfile.")))
 
 (defun spacemacs//go-setup-company-lsp ()
@@ -74,7 +80,7 @@
 
 (defun spacemacs/go-run-tests (args)
   (interactive)
-  (compilation-start (concat "go test " args " " go-use-test-args)
+  (compilation-start (concat "go test " (when go-test-verbose "-v ") args " " go-use-test-args)
                      nil (lambda (n) go-test-buffer-name) nil))
 
 (defun spacemacs/go-run-package-tests ()

@@ -1056,6 +1056,9 @@ Other:
   - Update doc for Cider manual quick start -`cider-connect`. Leiningen
     version 2.9 and Boot versions 2.8.2, ~cider-nrepl~ version 0.21.1
     (thanks to John Stevenson)
+  - Call interactive `cider-test-*` functions interactively (thanks to Timo
+    Freiberg)
+  - Change run-all-tests alias to run-project-tests (thanks to Timo Freiberg)
 **** Coffeescript
 - Improvements:
   - Added basic autocompletion (thanks to Codruț Constantin Gușoi)
@@ -1215,11 +1218,14 @@ Other:
 **** Evil snipe
 - Must always explicitly enable =evil-snipe-mode= even when
   =evil-snipe-override-mode= is enabled (thanks to Sylvain Benner)
+**** Factor
+- Misc fixes for factor version 0.98 (thanks to timor)
 **** Finance
 - Remove key-bindings pointing to removed commands (thanks to Alexander Baier)
 - Added =evil-ledger= package (thanks to Alexander Miller)
   - new key bindings: ~g j~ and ~g k~,
   - ~x~ evil text object
+- Prevent auto-complete from adding a space (thanks to Lareb Syed)
 **** FSharp
 - Added prefixes for key bindings (thanks to David Millar-Durrant)
 **** Geolocation
@@ -1265,6 +1271,7 @@ Other:
 - Added magit buffers to useless buffers (thanks to Thomas de Beauchêne)
 - Fixed magint blame function name (thanks to Bjarke Vad Andersen)
 - Show magit-log-select and diff in two windows (thanks to duianto)
+- Fix magit conflicting with golden-ratio (thanks Eric Zhang)
 **** Go
 - Improved go test output buffer behavior (thanks to Denis Bernard)
 - Configurable extra arguments to go test (thanks to Ian Clark)
@@ -1297,6 +1304,9 @@ Other:
 - Support editorconfig setting of =tab-width= to nil (thanks to lawrsp)
 - Added lsp support (thanks to Lupco Kotev)
 - Added golangci-lint support (thanks to Lupco Kotev)
+- Add toggle control for verbose go test output (thanks to Enze Chi)
+- Set lsp-prefer-flymake to :none when Go layer is using LSP (thanks to Tim
+  Heckman)
 **** Graphviz
 - Use graphviz package from melpa (thanks to Matthew Boston)
 **** Groovy
@@ -1329,6 +1339,7 @@ Other:
   - ~SPC m g b~ returns from definition in =intero-mode=
     (thanks to Magnus Therning)
 - Fixed jump handlers conflict for haskell and intero (thanks to CthulhuDen)
+- Fix haskell jump handler for dante (thanks to cjay)
 **** Helm
 - Limited =ripgrep= results to 512 columns by default, and added
   =spacemacs-helm-rg-max-column-number= layer variable to configure the above
@@ -1351,9 +1362,11 @@ Other:
   candidates by distributing buffers over existing windows until the action has
   either assigned all buffers or run out of windows (thanks to Nir Friedman)
 - Fixed signature of =spacemacs//display-helm-window= (thanks to Jack Kamm)
-- Fixed initialization by calling =helm-mode= when Helm is initialized (thanks to
-  bet4it).
+- Fixed initialization by calling =helm-mode= when Helm is initialized=
+  (thanks to bet4it).
 - Fixed actions in Helm transient state (thanks to Troy Hinckley)
+- Fixed conflict with new Magit transient key bindings
+  (thanks to Sylvain Benner)
 - Added support for editing the =helm-find-files= buffer from the Helm transient
   state (thanks to Troy Hinckley)
 - Fixed smex package integration (thanks to Troy Hinckley)
@@ -1365,8 +1378,8 @@ Other:
 - Fixed error from =spacemacs/helm-files-smart-do-search= on non-file buffers
   (thanks to Miciah Masters)
 - Added guard to check if =winum= is loaded (thanks to Dan Girshovich)
-- Fixed regression: void function =helm-current-directory= on =C-x C-f= (thanks to
-  bmag)
+- Fixed regression: void function =helm-current-directory= on =C-x C-f=
+  (thanks to bmag)
 - Fixed opening files from buffers without winum (thanks to Codruț Constantin
   Gușoi)
 - Removed ~SPC s w w~ key binding for =helm-wikipedia-suggest=, which was
@@ -1717,6 +1730,7 @@ Other:
 - Added a toggle for bringing in org-trello (thanks to Magnus Therning)
 - Added the org-mode keybindings to the org-journal major mode (thanks to Marty
   Buchaus)
+- Replace ox-reveal with org-re-reveal (thanks to Magnus Therning)
 **** Osx
 - Fixed OSX mapping issue (thanks to Joey Liu)
 - Added layer variables to customize modifier behaviors on macOS:
@@ -1813,6 +1827,7 @@ Other:
   Verhovsky)
 - Fixed conflict between pipenv directory .venv and pyvenv file .venv (thanks to
   rgb-24bit)
+- Add diminish for importmagic (thanks to Loys Ollivier)
 **** Racket
 - Restore smart closing paren behavior in racket-mode (thanks to Don March)
 **** Ranger
@@ -1905,6 +1920,7 @@ Other:
 - Added ENSIME jump handlers (thanks to Joao Azevedo)
 **** Scheme
 - Added missing =parinfer= package declaration (thanks to Kalle Lindqvist)
+- Update install docs for Chicken 5 changes (thanks to Grant Shangreaux)
 **** Semantic
 - Made it possible to exclude stickyfunc (thanks to Sylvain Benner)
 **** Shell
@@ -2112,8 +2128,8 @@ Other:
 - Lots of improvement with CI and documentation exporting (thanks to Eugene
   Yaremenko)
 - Various code and style improvements (thanks to bmag, duianto, Eivind Fonn,
-  Eugene Yaremenko, Fabien Dubosson, Kalle Lindqvist, Boris Buliga, yuhan0,
-  thanhvg, Sylvain Benner)
+  Eugene Yaremenko, Fabien Dubosson, Kalle Lindqvist, Boris Buliga, timor,
+  yuhan0, thanhvg, Sylvain Benner)
 - Multiple unit test improvements (thanks to Sylvain Benner, et2010 and Codruț
   Constantin Gușoi)
 - Various documentation improvements (thanks Aaron Jensen, Aaron Peckham, Aaron
