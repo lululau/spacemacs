@@ -293,6 +293,7 @@ Benner and Paweł Siudak):
 - coffeescript (thanks to Sylvain Benner)
 - coq (thanks to Xuan Bi, Jeremy Bi and Langston Barret)
 - crystal (thanks to Sylvain Benner)
+- dhall (thanks to Colin Woodbury)
 - factor (thanks to timor)
 - forth (thanks to Tim Jaeger)
 - gpu (thanks to Evan Klitzke)
@@ -804,6 +805,7 @@ Other:
     (thanks to Boris Buliga)
   - Cleanup =which-key= by removing obsolete entries and adding some missing
     ones (thans to duianto)
+  - Add =go-run-args= to pass command line arguments to `go run`
 - Fixed:
   - Fixed ~h~ key binding in compilation and grep buffers (thanks to Sylvain
     Benner)
@@ -1452,6 +1454,8 @@ Other:
 - Update =ivy-rich= config for upstream changes (thanks to bmag)
 - Added ~C-r~ keybinding for counsel-minibuffer-history (thanks to James Wang)
 - Fixed counsel search errors due to function rename (thanks to Aaron Jensen)
+- Display results count properly in prompt (thanks to yuhan0)
+- Fix typos in spacemacs/search-dir* bindings (thanks to yuhan0)
 **** Imenu-list
 - Fixed key bindings (thanks to bet4it):
   - ~r~ inside imenu-list buffer to refresh
@@ -1528,6 +1532,7 @@ Other:
 **** Language Server Protocol (LSP)
 - Replace lsp-capabilities keybinding with lsp-describe-session
   (thanks to Bryan Tan)
+- Add lsp-prefer-flymake variable (thanks to Juuso Valkeejärvi)
 **** Markdown
 - New layer variable =markdown-mmm-auto-modes= which is a list of language names
   or lists of language and mode names that are supported in source blocks, you
@@ -2166,4 +2171,5 @@ Other:
   Hoffmann, Xiang Ji, Yi Liu, zer09, Zhige Xin)
 *** Release notes summarized
   Thanks to: Grant Shangreaux, Songpeng Zu, Igor Almeida, Miciah Dashiel Butler
-  Masters, Abhishek(Compro) Prasad, Deepak Khidia, Ward Harris, Jiahao Jiang
+  Masters, Abhishek(Compro) Prasad, Deepak Khidia, Ward Harris, Jiahao Jiang,
+  Enze Chi
