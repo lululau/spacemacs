@@ -779,7 +779,7 @@ Other:
     Siegel and Eivind Fonn)
   - Set =case-fold-search= to =nil= in =compilation-finish-function= (thanks to
     Wieland Hoffmann)
-  - Hide multiple cursor text when there's only one cursor (thanks to duianto)
+  - Hide =evil-mc= single cursor mode-line lighter "emc" (thanks to duianto)
   - Rewrite function =spacemacs/sudo-edit=. Old version worked only for method
     =ssh= and did not work at all if user was not specified (e.g.
     /ssh:hostname:/path). Since the symbol '@' was required in a filename.
@@ -1509,6 +1509,7 @@ Other:
 - Added ES6 module extension to =init-js2-mode= (thanks to Nathan Lloyd)
 - Added =org-babel= support (thanks to Michael Rohleder)
 - Check if =tern= exists before using it (thanks to Codruț Constantin Gușoi)
+- Fix hook value to enable evil-matchit (thanks to Thanh Vuong)
 **** Keyboard layout
 - Added support for Colemak layout (thanks to Daniel Mijares, Lyall Cooper and
   Eivind Fonn)
@@ -1756,6 +1757,7 @@ Other:
   - Added key bindings to use ~command-1..9~ for selecting window
     (thanks to Liu Joey)
   - Added ~M-s-h~ to hide other windows (thanks to Bas Veeling)
+- Replace pbcopy by osx-clipboard (thanks to Minh Nguyen-Hue)
 **** Pandoc
 - Fixed =spacemacs/run-pandoc= not to reset =pandoc--local-settings= (thanks to
   martian-f)
