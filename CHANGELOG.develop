@@ -465,6 +465,7 @@ Other:
   - Optimized =spacemacs/title-prepare= (thanks to Andriy Kmit')
   - Cached expensive computations in =spacemacs/title-prepare= (thanks to Dieter
     Komendera)
+  - Add line text object using =evil-textobj-line= (thanks to Uroš Perišić)
 - Fixed:
   - Avoid non-idempotent use of push in init code (thanks to Miciah Masters)
   - Moved Spacemacs startup progress bar to =core-progress-bar.el=, removed
@@ -1489,6 +1490,8 @@ Other:
 - Fixed yanking types (thanks to Bjarke Vad Andersen)
 - Fixed gtags related initialization (thanks to Guido Kraemer)
 - Added LSP Java backend (thanks to Ivan Yonchovski)
+- Add =.dap-breakpoints= and =.lsp-session-*= (java lsp tempfiles) to .gitignore
+  (thanks to Uroš Perišić)
 **** Javascript
 - Leverage js-doc Yasnippet integration if available (thanks to Andriy Kmit')
 - Added LSP support, which can be used by enabling the =lsp= layer and setting
@@ -1743,6 +1746,7 @@ Other:
 - Added the org-mode keybindings to the org-journal major mode (thanks to Marty
   Buchaus)
 - Replace ox-reveal with org-re-reveal (thanks to Magnus Therning)
+- Add epub support (thanks to vishvanath45)
 **** Osx
 - Fixed OSX mapping issue (thanks to Joey Liu)
 - Added layer variables to customize modifier behaviors on macOS:
