@@ -735,6 +735,7 @@ Other:
   - Added evil key bindings for visualizer and window mode of =undo-tree=
     (thanks to Rich Alesi)
   - Improved =which-key= replacement regular expressions (thanks to duianto)
+  - Added ~SPC o~ which-key prefix name: =user bindings= (thanks to duianto)
 - Improvements:
   - Rewrote window layout functions for ~SPC w 1~, ~SPC w 2~, ~SPC w 3~, and
     ~SPC w 4~ (thanks to Codruț Constantin Gușoi):
@@ -806,6 +807,8 @@ Other:
   - Cleanup =which-key= by removing obsolete entries and adding some missing
     ones (thans to duianto)
   - Add =go-run-args= to pass command line arguments to `go run`
+  - Editing: Enable smartparens in eldoc-eval-expression
+    (thanks to Aaron Jensen)
 - Fixed:
   - Fixed ~h~ key binding in compilation and grep buffers (thanks to Sylvain
     Benner)
@@ -2003,6 +2006,7 @@ Other:
   Christianson)
 - Added layer variable =sql-auto-indent= to toggle the use of =sql-indent= package
   (thanks to David Chen)
+- Add a code formatter for sql-mode (thanks to Seong Yong-ju)
 **** Spell-checking
 - Added spell checking transient state (thanks to Francesc Elies Henar)
 - Update to flyspell-correct v0.5 (thanks to Boris Buliga)
