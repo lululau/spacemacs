@@ -16,6 +16,7 @@
     emmet-mode
     evil-matchit
     flycheck
+    import-js
     js-doc
     prettier-js
     rjsx-mode
@@ -46,6 +47,10 @@
     (dolist (checker '(javascript-eslint javascript-standard))
       (flycheck-add-mode checker 'rjsx-mode)))
   (spacemacs/enable-flycheck 'rjsx-mode))
+
+(defun react/post-init-import-js ()
+  (add-hook 'rjsx-mode-hook #'run-import-js)
+  (spacemacs/import-js-set-key-bindings 'rjsx-mode))
 
 (defun react/post-init-js-doc ()
   (add-hook 'rjsx-mode-hook 'spacemacs/js-doc-require)
