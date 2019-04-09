@@ -538,7 +538,7 @@ Returns:
 Returns:
   - A string containing the file path in case of success.
   - `nil' in case the current buffer does not have a directory."
-  (when-let (file-path (buffer-file-name))
+  (when-let (file-path (if (eq major-mode 'dired-mode) (car (dired-get-marked-files)) (buffer-file-name)))
     (file-truename file-path)))
 
 (defun spacemacs--file-path-with-line ()
