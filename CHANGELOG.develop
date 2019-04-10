@@ -1084,6 +1084,8 @@ Other:
     - Added ~SPC m T c~ for =coffee-cos-mode=
       (thanks to Kalle Lindqvist)
 **** Common Lisp
+- Improvements:
+  - Add eval-thing-at-point functions to Common Lisp Layer (thanks to Lukas Woell)
 - New packages:
   - Added =slime-asdf= to =slime-contribs= to enabled some slime commands like
     =,load-system= (thanks to Daniel Schoepe)
@@ -1642,6 +1644,8 @@ Other:
   Liepiņš)
 - Replace =company-capf= with =company-nimsuggest= in
   =company-backends-nim-mode= to improve responsiveness (thanks to Uroš Perišić)
+- Declare all prefix names (='(compile goto help)=) for =nim-mode= (thanks to
+  Uroš Perišić)
 **** Node
 - Use add-node-modules-path to automatically find local executables (thanks to
   jupl)
@@ -1781,6 +1785,7 @@ Other:
     (thanks to Liu Joey)
   - Added ~M-s-h~ to hide other windows (thanks to Bas Veeling)
 - Replace pbcopy by osx-clipboard (thanks to Minh Nguyen-Hue)
+- Fix key binding issue when Emacs is launched in daemon mode.
 **** Pandoc
 - Fixed =spacemacs/run-pandoc= not to reset =pandoc--local-settings= (thanks to
   martian-f)
