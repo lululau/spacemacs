@@ -294,6 +294,7 @@ Benner and Paweł Siudak):
 - coq (thanks to Xuan Bi, Jeremy Bi and Langston Barret)
 - crystal (thanks to Sylvain Benner)
 - dhall (thanks to Colin Woodbury)
+- ietf (thanks to Christian Hopps)
 - factor (thanks to timor)
 - forth (thanks to Tim Jaeger)
 - gpu (thanks to Evan Klitzke)
@@ -310,6 +311,7 @@ Benner and Paweł Siudak):
 - protobuf (thanks to Amol Mandhane)
 - restructuredtext (thanks to Wei-Wei Guo and Kalle Lindqvist)
 - semantic-web (thanks to Andreas Textor)
+- yang (thanks to Christian Hopps)
 **** Misc
 - multiple-cursors (thanks to Codruț Constantin Gușoi and Thomas de Beauchêne)
 **** WEB services
@@ -912,6 +914,8 @@ Other:
   - Stopped configuring =fci-rule-color=, which was overriding themes that
     configured it (thanks to Victor Cuadrado Juan)
   - Added ranger-mode to golden-ratio-exclude-modes (thanks to Langston Barrett)
+  - Fixed evil surround bindings (thanks to Hoyon Mak)
+  - Improved Window Manipulation Transient state (thanks to yuhan0)
 *** Layer changes and fixes
 **** Ansible
 - Improvements:
@@ -1499,6 +1503,7 @@ Other:
 - Added LSP Java backend (thanks to Ivan Yonchovski)
 - Added =.dap-breakpoints= and =.lsp-session-*= (java lsp tempfiles) to .gitignore
   (thanks to Uroš Perišić)
+- Fixed prefixes for =java-mode= and =gradle-mode=
 **** Javascript
 - Improvements:
   - Leverage js-doc Yasnippet integration if available (thanks to Andriy Kmit')
@@ -1941,6 +1946,7 @@ Other:
 - Changed leader keys to be configured for the =projectile-rails-mode= minor
   mode instead of =ruby-mode= and =enh-ruby-mode= so that the key bindings will
   work in view file windows (thanks to Adam Sokolnicki)
+- Added missing prefixes for =ruby-mode= and =enh-ruby-mode=
 - Added key bindings: (thanks to Adam Sokolnicki)
   - ~SPC m f f b~ to find job
   - ~SPC m f f w~ to find webpack config
@@ -2040,6 +2046,7 @@ Other:
 - Added layer variable =sql-auto-indent= to toggle the use of =sql-indent= package
   (thanks to David Chen)
 - Added a code formatter for sql-mode (thanks to Seong Yong-ju)
+- Added connection between =org-mode= and =SQL layer= (thanks to Magnus Therning)
 **** Spell-checking
 - Added spell checking transient state (thanks to Francesc Elies Henar)
 - Update to flyspell-correct v0.5 (thanks to Boris Buliga)
