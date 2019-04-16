@@ -295,7 +295,7 @@ Benner and Paweł Siudak):
 - crystal (thanks to Sylvain Benner)
 - dart (thanks to Bruno Tavares)
 - dhall (thanks to Colin Woodbury)
-- ietf (thanks to Christian Hopps)
+- ietf (thanks to Christian Hopps and Robby O'Connor)
 - factor (thanks to timor)
 - forth (thanks to Tim Jaeger)
 - gpu (thanks to Evan Klitzke)
@@ -917,6 +917,7 @@ Other:
   - Added ranger-mode to golden-ratio-exclude-modes (thanks to Langston Barrett)
   - Fixed evil surround bindings (thanks to Hoyon Mak)
   - Improved Window Manipulation Transient state (thanks to yuhan0)
+  - Exclude which-key from layer sync powerline restore (thanks to Doug Wilson)
 *** Layer changes and fixes
 **** Ansible
 - Improvements:
@@ -977,6 +978,7 @@ Other:
   - Control auto-newline using the =c-c++-enable-auto-newline= variable
     (thanks to Fangrui Song and Codruț Constantin Gușoi)
   - Added =org-babel= support (thanks to Michael Rohleder)
+  - Added debugger integration via =dap= layer
 - Key bindings:
   - ~SPC m = =~ clang-format current region or buffer (thanks to Dela Anthonio)
   - ~SPC m = f~ clang-format current function (thanks to Dela Anthonio)
@@ -1120,6 +1122,9 @@ Other:
 - Fixes:
   - Disabled functions not present in the latest =omnisharp= package
     (thanks to Saulius Menkevičius)
+**** CSV
+- Key bindings:
+  - ~SPC m h~ to =csv-header-line= (thanks to Francesc Elies Henar)
 **** D
 - Fixes:
   - Fixed =d-mode= flycheck imports on dub projects (thanks to Dietrich Daroch)
@@ -1484,7 +1489,7 @@ Other:
   =wrong-number-of-arguments= error when jabber receives a new notification
   (thanks to Aleksei Fedotov)
 **** Java
-- Added support for multiple backends. Supported backends are: =megahnada=,
+- Added support for multiple backends. Supported backends are: =meghanada=,
   =eclim= and =ensime=. The default backend is =meghanada=.
 - Key bindings:
   - ~SPC m e e~ is now to fix error around point. Use ~SPC e~ prefix to navigate
@@ -1564,6 +1569,18 @@ Other:
 - Replace lsp-capabilities keybinding with lsp-describe-session
   (thanks to Bryan Tan)
 - Added lsp-prefer-flymake variable (thanks to Juuso Valkeejärvi)
+- Added =lsp-treemacs=
+  - ~SPC m t g e~ to show error list
+- Fixed missing shorcuts for =lsp-mode=
+  - ~SPC m F r~  to remove workspace folder
+  - ~SPC m F a~  to add workspace folder
+  - ~SPC m F r~  to switch workspace folder
+  - ~SPC m b s~ to shutdown current workspace
+  - ~SPC m T l~ to toggle lenses
+  - ~SPC m = r~ to format region
+- Added package =helm-lsp=
+  - ~SPC m g s~ to find symbol in current project
+  - ~SPC m g S~ to find symbol in all projects
 **** Markdown
 - New layer variable =markdown-mmm-auto-modes= which is a list of language names
   or lists of language and mode names that are supported in source blocks, you
@@ -1757,6 +1774,7 @@ Other:
 - Load org-projectile lazily, after org-capture (thanks to Aaron Jensen)
 - Use org-verbatim, not org-verbose (thanks to Swaroop C H)
 - Fixed =org-projectile/goto-todos= (thanks to Aaron Jensen)
+- Fixed =org-clock-resolve-clock= keybinding (thanks to Francesc Elies Henar)
 - Enabled =org-src-tab-acts-natively= (thanks to Sylvain Benner)
 - Fixed =org-default-notes-file= precedence (thanks to Troy Hinckley and bmag)
 - Added =ox-hugo= (thanks to Kaushal Modi)
@@ -1876,6 +1894,7 @@ Other:
 - Fixed conflict between pipenv directory .venv and pyvenv file .venv (thanks to
   rgb-24bit)
 - Added diminish for importmagic (thanks to Loys Ollivier)
+- Added debugger integration via =dap= layer
 **** Racket
 - Restore smart closing paren behavior in racket-mode (thanks to Don March)
 **** Ranger
@@ -2005,6 +2024,10 @@ Other:
 - Wrap 'shell' command to start in current buffer (thanks to Valts Liepiņš)
 - Fixed shell popup broken on macOS (thanks to Daniel Rivas Perez)
 - Fixed broken leader key binding for inferior shell (thanks to Valts Liepiņš)
+- Added =term-mode= bindings (Thanks to Emil Petersen):
+  - ~SPC m C~ switch multi-term to char mode
+  - ~SPC m l~ switch multi-term to line mode
+  - ~SPC m N~ go to previous multi-term
 **** Shell Scripts
 - Added new company-shell environment variable backend (thanks to
   Alexander-Miller)
