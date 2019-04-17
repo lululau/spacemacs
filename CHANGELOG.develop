@@ -1520,6 +1520,7 @@ Other:
     (thanks to Ting Zhou and Sylvain Benner)
   - Added ES6 module extension to =init-js2-mode= (thanks to Nathan Lloyd)
   - Added =org-babel= support (thanks to Michael Rohleder)
+  - Added debug support via =dap= layer (Firefox and Google Chrome)
 - Key bindings
   - Improved coffeescript support:
     - ~SPC m '~ to create or go to REPL
@@ -1581,6 +1582,9 @@ Other:
 - Added package =helm-lsp=
   - ~SPC m g s~ to find symbol in current project
   - ~SPC m g S~ to find symbol in all projects
+**** Debug Adapter Protocol (DAP)
+- Key bindings
+  - ~SPC m d d e~ to edit debug template
 **** Markdown
 - New layer variable =markdown-mmm-auto-modes= which is a list of language names
   or lists of language and mode names that are supported in source blocks, you
@@ -1795,6 +1799,7 @@ Other:
   Buchaus)
 - Replace ox-reveal with org-re-reveal (thanks to Magnus Therning)
 - Added epub support (thanks to vishvanath45)
+- Added support for CUSTOM_ID in latex exports (thanks to Compro-Prasad)
 **** Osx
 - Fixed OSX mapping issue (thanks to Joey Liu)
 - Added layer variables to customize modifier behaviors on macOS:
@@ -2162,6 +2167,7 @@ Other:
   Kramer)
 - Fixed jump handling with multiple backends (thanks to Aaron Jensen)
 - Fixed =typescript/jump-to-type-def= for npm modules (thanks to Jam Risser)
+- Added the same setup to tsx files as to ts files (thanks to Trapez Breen) 
 **** Vagrant
 - Key bindings:
   - move key bindings prefix to ~SPC a V~ (thanks to Thomas de Beauchêne)
