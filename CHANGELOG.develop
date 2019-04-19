@@ -310,6 +310,7 @@ Benner and Paweł Siudak):
 - pact (thanks to Colin Woodbury)
 - perl5 (thanks to Troy Hinckley, Jinseop Kim and Michael Rohleder)
 - perl6 (thanks to Bahtiar Gadimov and yuhan0)
+- prolog (thanks to Newres Al Haider)
 - protobuf (thanks to Amol Mandhane)
 - restructuredtext (thanks to Wei-Wei Guo and Kalle Lindqvist)
 - semantic-web (thanks to Andreas Textor)
@@ -333,6 +334,7 @@ Benner and Paweł Siudak):
 - dap (thanks to Ivan Yonchovski)
 - debug (thanks to Hodge Shen, Troy Hinckley, and Sylvain Benner)
 - emberjs (thanks to Robert O'Connor)
+- import-js (thanks to Thanh Vuong and Seong Yong-ju)
 - lsp (thanks to Fangrui Song, 0bl.blwl, Cormac Cannon, Juuso Valkeejärvi, Guan
   Xipeng, Ivan Yonchovski, Justin Martin, dscole and Sylvain Benner)
 - node (thanks to jupl)
@@ -1768,6 +1770,7 @@ Other:
 - Remove =mu4e= and =notmuch= from =org= (thanks to Sylvain Benner)
 - Use evil-org from MELPA (thanks to Eivind Fonn)
 - Added =org-brain= (thanks to Matthías Páll Gissurarson and Eivind Fonn)
+- Added detailed =org-brain= bindings (thanks to Langston Barret)
 - Added layer variable for todo bindings (thanks to Eivind Fonn)
 - Made =org-projectile= integration compatible with its new version (thanks to
   Ivan Malison)
@@ -1902,6 +1905,8 @@ Other:
 - Added diminish for importmagic (thanks to Loys Ollivier)
 - Added debugger integration via =dap= layer
 - Added documentation on installing importmagic and epc (thanks to Trapez Breen)
+- Made python-send-shell-* functions faster (thanks to Trapez Breen)
+- Added support for 'black' formatter (thanks to Mike Macpherson)
 **** Racket
 - Restore smart closing paren behavior in racket-mode (thanks to Don March)
 **** Ranger
@@ -1996,6 +2001,7 @@ Other:
     for ~SPC m c f~ to format project files (thanks to Luke Alexander Stein)
   - Added ~SPC m c v~ to run "cargo check" command (thanks to Victor Polevoy)
 - Added rust lsp completion with company and bindings (thanks to Justin)
+- Added debugger integration via =dap= layer
 **** Scala
 - Move =ensime= to the =java= layer (Tor Hedin Bronner)
 - Key bindings:
@@ -2169,7 +2175,7 @@ Other:
   Kramer)
 - Fixed jump handling with multiple backends (thanks to Aaron Jensen)
 - Fixed =typescript/jump-to-type-def= for npm modules (thanks to Jam Risser)
-- Added the same setup to tsx files as to ts files (thanks to Trapez Breen) 
+- Added the same setup to tsx files as to ts files (thanks to Trapez Breen)
 **** Vagrant
 - Key bindings:
   - move key bindings prefix to ~SPC a V~ (thanks to Thomas de Beauchêne)
