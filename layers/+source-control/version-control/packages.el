@@ -268,16 +268,16 @@
     :config
     (progn
       (spacemacs|define-transient-state smerge
-        :title "smerge transient state"
+        :title "Smerge Transient State"
         :doc "
- movement^^^^               merge action^^           other
- ---------------------^^^^  -------------------^^    -----------
- [_n_]^^    next hunk       [_b_] keep base          [_u_] undo
- [_N_/_p_]  prev hunk       [_m_] keep mine          [_r_] refine
- [_j_/_k_]  move up/down    [_a_] keep all           [_q_] quit
- ^^^^                       [_o_] keep other
- ^^^^                       [_c_] keep current
- ^^^^                       [_C_] combine with next"
+ Movement^^^^         Merge Action^^             Diff^^             Other
+ ---------------^^^^  -----------------------^^  ---------------^^  --------^^
+ [_n_]^^   next hunk  [_b_] keep base            [_=<_] base/mine   [_u_] undo
+ [_N_/_p_] prev hunk  [_m_] keep mine            [_==_] mine/other  [_q_] quit
+ [_j_]^^   next line  [_a_] keep all             [_=>_] base/other
+ [_k_]^^   prev line  [_o_] keep other           [_r_]  refine
+ ^^^^                 [_c_] keep current
+ ^^^^                 [_C_] join curr/next hunk"
         :bindings
         ("n" smerge-next)
         ("p" smerge-prev)
@@ -292,7 +292,10 @@
         ("C" smerge-combine-with-next)
         ("r" smerge-refine)
         ("u" undo-tree-undo)
-        ("q" nil :exit t)))))
+        ("q" nil :exit t)
+        ("=<" smerge-diff-base-mine)
+        ("==" smerge-diff-mine-other)
+        ("=>" smerge-diff-base-other)))))
 
 (defun version-control/init-browse-at-remote ()
   (use-package browse-at-remote
