@@ -529,6 +529,7 @@ Other:
   - Don't skip missing .elc files when recompiling Elpa (thanks to RockyRoad29)
   - Updated =quelpa= to fix installing of some recipes on macOS (thanks to Dieter
     Komendera)
+  - Added startup support for doom-sourcerer theme (thanks to Parker Johnson)
 - Other:
   - New function =configuration-layer/message= to display message in
     =*Messages*= buffer (thanks to Sylvain Benner)
@@ -921,6 +922,7 @@ Other:
   - Fixed evil surround bindings (thanks to Hoyon Mak)
   - Improved Window Manipulation Transient state (thanks to yuhan0)
   - Exclude which-key from layer sync powerline restore (thanks to Doug Wilson)
+  - Fix doom-modeline in the messages buffer (thanks to duianto)
 *** Layer changes and fixes
 **** Ansible
 - Improvements:
@@ -2238,6 +2240,8 @@ Other:
 - Avoid loading all the diff packages (thanks to Sylvain Benner)
 - Fixed error on =diff-hl-margin-mode= function being nil during startup (thanks
   to Voleking)
+**** Xclipboard
+- Added Requirements documentation (thanks to Chris Glass)
 **** Ycmd
 - Search for =compile_commands.json= in build sub-directory
   (thanks to Amos Bird and Eivind Fonn)
@@ -2266,24 +2270,25 @@ Other:
   Doug Beardsley, dubnde, duianto, eldios, EMayej, Eugene Yaremenko, Evan
   Klitzke, Evan Niessen-Derry, firemiles, Fuqiao Xue, Garrett Johnson, Grant
   Shangreaux, Henrique Jung, Henry Hirsch, Henry Marshall, hornuda, Ivan
-  Kryvoruchko, J. Patrick Lanigan, Jaremy Creechley, Jason Axelson, Jesse Cooke,
-  Jethro Shuwen Sun, JI Xiang, Jim Deville, Jody Frankowski, Joe Hillenbrand,
-  John Eismeier, John Wood, Jon Tippens, Jonas Strømsodd, Jonathan Arnett,
-  Jonathan Gillett, Josh Greenwood, Joshua Santos, Justin Stone, Kainalu
-  Hagiwara, Kalle Lindqvist, Kechao Cai, Keith Simmons, Keith Wygant, Kevin Ji,
-  Kristoffer Haugsbakk, lawrsp, Leo Joseph Buchignani III, Luke Worth, Marco
-  Ieni, Marco Zucconelli, Max Beutelspacher, Max Nordlund, Maximilian Wolff,
-  Miciah Dashiel Butler Masters, mjkramer, Mikhail Yakutovich, Muneeb Shaikh,
-  Nasser Alshammari, Nasser Alshammari, Niko Felger, Nikolai Myllymäki,
-  nikolaiam, Nicolas Forgerit, Olivier Verdier, Pancho Horrillo, Paul Milla,
-  Paulo Schneider, Pawan Dubey, Paweł Siudak, Phil Pirozhkov, Philippe
-  Bourdages, Piotr Grzesik, Rafi Khan, Rand01ph, rakyi, Raymond Wanyoike,
-  Reverend Homer, Robby O'Connor, Rhommel Lamas, Sam Pablo Kuper, Saulius
-  Menkevičius, sduthil, Sergio Ugalde, Shane Kilkelly, Sid Kapur, Somelauw,
-  Soobin Rho, sorawee, SteveJobzniak, Sunghyun Hwang, Swaroop C H, Sylvain
-  Benner, Szunti, Tim Stewart, timor, TinySong, Titov Andrey, Thomas de
-  Beauchêne, Tomasz Cichocinski, tzhao11, Vlad Bokov, Vladimir Kochnev, Wieland
-  Hoffmann, Xiang Ji, Yi Liu, zer09, Zhige Xin, Serghei Iakovlev)
+  Fedorov, Ivan Kryvoruchko, J. Patrick Lanigan, Jaremy Creechley, Jason
+  Axelson, Jesse Cooke, Jethro Shuwen Sun, JI Xiang, Jim Deville, Jody
+  Frankowski, Joe Hillenbrand, John Eismeier, John Wood, Jon Tippens, Jonas
+  Strømsodd, Jonathan Arnett, Jonathan Gillett, Josh Greenwood, Joshua Santos,
+  Justin Stone, Kainalu Hagiwara, Kalle Lindqvist, Kechao Cai, Keith Simmons,
+  Keith Wygant, Kevin Ji, Kristoffer Haugsbakk, lawrsp, Leo Joseph Buchignani
+  III, Luke Worth, Marco Ieni, Marco Zucconelli, Max Beutelspacher, Max
+  Nordlund, Maximilian Wolff, Miciah Dashiel Butler Masters, mjkramer, Mikhail
+  Yakutovich, Muneeb Shaikh, Nasser Alshammari, Nasser Alshammari, Niko Felger,
+  Nikolai Myllymäki, nikolaiam, Nicolas Forgerit, Olivier Verdier, Pancho
+  Horrillo, Paul Milla, Paulo Schneider, Pawan Dubey, Paweł Siudak, Phil
+  Pirozhkov, Philippe Bourdages, Piotr Grzesik, Rafi Khan, Rand01ph, rakyi,
+  Raymond Wanyoike, Reverend Homer, Robby O'Connor, Rhommel Lamas, Sam Pablo
+  Kuper, Saulius Menkevičius, sduthil, Sergio Ugalde, Shane Kilkelly, Sid Kapur,
+  Somelauw, Soobin Rho, sorawee, SteveJobzniak, Sunghyun Hwang, Swaroop C H,
+  Sylvain Benner, Szunti, Tim Stewart, timor, TinySong, Titov Andrey, Thomas de
+  Beauchêne, Tomasz Cichocinski, tzhao11, Vincent Taing, Vlad Bokov, Vladimir
+  Kochnev, Wieland Hoffmann, Xiang Ji, Yi Liu, zer09, Zhige Xin, Serghei
+  Iakovlev)
 *** Release notes summarized
   Thanks to: Grant Shangreaux, Songpeng Zu, Igor Almeida, Miciah Dashiel Butler
   Masters, Abhishek(Compro) Prasad, Deepak Khidia, Ward Harris, Jiahao Jiang,
