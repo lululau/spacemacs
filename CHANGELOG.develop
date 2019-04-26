@@ -508,6 +508,7 @@ Other:
   - Fixed bug that could overwrites customize variables (thanks to bmag)
   - Don't suggest ~SPC q r~ if =restart-emacs= package is missing after an
     update (thanks to Keshav Kini)
+  - spacemacs-layouts: Add Projectile project buffers to new perspectives.
   - Resolve symlinks in warning message about duplicate layers
     (thanks to Ben Gamari)
   - Check toggle condition in status function (thanks to Eivind Fonn)
@@ -554,6 +555,7 @@ Other:
     refactored the latter function (thanks to Benjamin Reynolds)
   - Added =pupo-split-active-window= variable to split the active window or the
     entire frame (thanks to tddsg)
+  - New emacs banner: "100-banner.txt" (thanks to Robert Zaremba)
 *** Distribution changes
 - Refactored =spacemacs-bootstrap=, =spacemacs-ui=, and =spacemacs-ui-visual=
   layers:
@@ -817,6 +819,7 @@ Other:
   - Added =go-run-args= to pass command line arguments to `go run`
   - Editing: Enable smartparens in eldoc-eval-expression
     (thanks to Aaron Jensen)
+  - Check for universal argument before paste (thanks to Bet4)
 - Fixed:
   - Fixed ~h~ key binding in compilation and grep buffers (thanks to Sylvain
     Benner)
@@ -1433,7 +1436,6 @@ Other:
   removed upstream.
 - Load helm before read-file-name and completing-read (thanks duianto and thanks
   Miciah for a more elegant solution)
-- Bind ~SPC f F~ to =helm-find= for recursive directory search.
 **** HTML
 - Added impatient-mode under ~SPC m i~ (thanks to geo7)
 - Added =counsel-css= as an =ivy= alternative to =helm-css-scss= (thanks to Robbert
@@ -1544,6 +1546,7 @@ Other:
   - Added ES6 module extension to =init-js2-mode= (thanks to Nathan Lloyd)
   - Added =org-babel= support (thanks to Michael Rohleder)
   - Added debug support via =dap= layer (Firefox and Google Chrome)
+  - Added format on save option. (thanks to Trapez Breen)
 - Key bindings
   - Improved coffeescript support:
     - ~SPC m '~ to create or go to REPL
@@ -2262,33 +2265,33 @@ Other:
   Renner, Adam Frey, Adam Kruszewski, Alexander Dalshov, Alexander Eberspächer,
   Alexander Iljin, Alexander Kjeldaas, Alexandros Kotzias, Andriy Senyshyn,
   Anton Latukha, Antonio Miranda, Anurag Sharma, Archenoth, Ather Sharif, Artur
-  Juraszek, Benjamin Reynolds, Billy Wade, bmag, Boris Buliga, Boris Wong, Carl
-  Lange, Chase Adams, Cibin Mathew, CL123123, Codruț Constantin Gușoi,
-  Compro-Prasad, Daniel Hodson, Daniel Le, Daniel Molina, Darkhan, David
-  Florness, David Vo, davidpham87, Deepu Mohan Puthrote, Dela Anthonio, Diego
-  Alvarez, Diego Berrocal, Dietrich Daroch, Dinesh Bhosale, Dominik Schrempf,
-  Doug Beardsley, dubnde, duianto, eldios, EMayej, Eugene Yaremenko, Evan
-  Klitzke, Evan Niessen-Derry, firemiles, Fuqiao Xue, Garrett Johnson, Grant
-  Shangreaux, Henrique Jung, Henry Hirsch, Henry Marshall, hornuda, Ivan
-  Fedorov, Ivan Kryvoruchko, J. Patrick Lanigan, Jaremy Creechley, Jason
-  Axelson, Jesse Cooke, Jethro Shuwen Sun, JI Xiang, Jim Deville, Jody
-  Frankowski, Joe Hillenbrand, John Eismeier, John Wood, Jon Tippens, Jonas
-  Strømsodd, Jonathan Arnett, Jonathan Gillett, Josh Greenwood, Joshua Santos,
-  Justin Stone, Kainalu Hagiwara, Kalle Lindqvist, Kechao Cai, Keith Simmons,
-  Keith Wygant, Kevin Ji, Kristoffer Haugsbakk, lawrsp, Leo Joseph Buchignani
-  III, Luke Worth, Marco Ieni, Marco Zucconelli, Max Beutelspacher, Max
-  Nordlund, Maximilian Wolff, Miciah Dashiel Butler Masters, mjkramer, Mikhail
-  Yakutovich, Muneeb Shaikh, Nasser Alshammari, Nasser Alshammari, Niko Felger,
-  Nikolai Myllymäki, nikolaiam, Nicolas Forgerit, Olivier Verdier, Pancho
-  Horrillo, Paul Milla, Paulo Schneider, Pawan Dubey, Paweł Siudak, Phil
-  Pirozhkov, Philippe Bourdages, Piotr Grzesik, Rafi Khan, Rand01ph, rakyi,
-  Raymond Wanyoike, Reverend Homer, Robby O'Connor, Rhommel Lamas, Sam Pablo
-  Kuper, Saulius Menkevičius, sduthil, Sergio Ugalde, Shane Kilkelly, Sid Kapur,
-  Somelauw, Soobin Rho, sorawee, SteveJobzniak, Sunghyun Hwang, Swaroop C H,
-  Sylvain Benner, Szunti, Tim Stewart, timor, TinySong, Titov Andrey, Thomas de
-  Beauchêne, Tomasz Cichocinski, tzhao11, Vincent Taing, Vlad Bokov, Vladimir
-  Kochnev, Wieland Hoffmann, Xiang Ji, Yi Liu, zer09, Zhige Xin, Serghei
-  Iakovlev)
+  Juraszek, Benjamin Reynolds, Bernhard Schommer, Billy Wade, bmag, Boris
+  Buliga, Boris Wong, Carl Lange, Chase Adams, Cibin Mathew, CL123123, Codruț
+  Constantin Gușoi, Compro-Prasad, Daniel Hodson, Daniel Le, Daniel Molina,
+  Darkhan, David Florness, David Vo, davidpham87, Deepu Mohan Puthrote, Dela
+  Anthonio, Diego Alvarez, Diego Berrocal, Dietrich Daroch, Dinesh Bhosale,
+  Dominik Schrempf, Doug Beardsley, dubnde, duianto, eldios, EMayej, Eugene
+  Yaremenko, Evan Klitzke, Evan Niessen-Derry, firemiles, Florian Bruhin, Fuqiao
+  Xue, Garrett Johnson, Grant Shangreaux, Henrique Jung, Henry Hirsch, Henry
+  Marshall, hornuda, Ivan Fedorov, Ivan Kryvoruchko, J. Patrick Lanigan, Jaremy
+  Creechley, Jason Axelson, Jesse Cooke, Jethro Shuwen Sun, JI Xiang, Jim
+  Deville, Jody Frankowski, Joe Hillenbrand, John Eismeier, John Wood, Jon
+  Tippens, Jonas Strømsodd, Jonathan Arnett, Jonathan Gillett, Josh Greenwood,
+  Joshua Santos, Justin Stone, Kainalu Hagiwara, Kalle Lindqvist, Kechao Cai,
+  Keith Simmons, Keith Wygant, Kevin Ji, Kristoffer Haugsbakk, lawrsp, Leo
+  Joseph Buchignani III, Luke Worth, Marco Ieni, Marco Zucconelli, Max
+  Beutelspacher, Max Nordlund, Maximilian Wolff, Miciah Dashiel Butler Masters,
+  mjkramer, Mikhail Yakutovich, Muneeb Shaikh, Nasser Alshammari, Nasser
+  Alshammari, Niko Felger, Nikolai Myllymäki, nikolaiam, Nicolas Forgerit,
+  Olivier Verdier, Pancho Horrillo, Paul Milla, Paulo Schneider, Pawan Dubey,
+  Paweł Siudak, Phil Pirozhkov, Philippe Bourdages, Piotr Grzesik, Rafi Khan,
+  Rand01ph, rakyi, Raymond Wanyoike, Reverend Homer, Robby O'Connor, Rhommel
+  Lamas, Sam Pablo Kuper, Saulius Menkevičius, sduthil, Sergio Ugalde, Shane
+  Kilkelly, Sid Kapur, Somelauw, Soobin Rho, sorawee, SteveJobzniak, Sunghyun
+  Hwang, Swaroop C H, Sylvain Benner, Szunti, Tim Stewart, timor, TinySong,
+  Titov Andrey, Thomas de Beauchêne, Tomasz Cichocinski, tzhao11, Vincent Taing,
+  Vlad Bokov, Vladimir Kochnev, Wieland Hoffmann, Xiang Ji, Yi Liu, zer09, Zhige
+  Xin, Serghei Iakovlev)
 *** Release notes summarized
   Thanks to: Grant Shangreaux, Songpeng Zu, Igor Almeida, Miciah Dashiel Butler
   Masters, Abhishek(Compro) Prasad, Deepak Khidia, Ward Harris, Jiahao Jiang,
