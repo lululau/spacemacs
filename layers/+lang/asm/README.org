@@ -1,5 +1,7 @@
 #+TITLE: asm layer
 
+#+TAGS: general|imperative|lang|layer
+
 [[file:img/asm.png]]
 
 * Table of Contents                     :TOC_4_gh:noexport:
