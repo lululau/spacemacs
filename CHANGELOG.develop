@@ -951,6 +951,8 @@ Other:
   - Improved Window Manipulation Transient state (thanks to yuhan0)
   - Exclude which-key from layer sync powerline restore (thanks to Doug Wilson)
   - Fix doom-modeline in the messages buffer (thanks to duianto)
+  - Fix void function error when recentf-save-list is undefined
+    (thanks to Compro-Prasad)
 *** Layer changes and fixes
 **** Ansible
 - Improvements:
@@ -1743,6 +1745,8 @@ Other:
 - Use add-node-modules-path to automatically find local executables
   (thanks to jupl)
 - Disabled add-node-modules-path by default (thanks to Eivind Fonn)
+**** Notmuch
+- Try harder to find GitHub patch URL (thanks to Miciah Masters)
 **** OCaml
 - Allow initialization without requiring =opam= (thanks to Bernhard Schommer)
 - Fixed misused functions, =merlin= is a package not a layer
@@ -1979,6 +1983,17 @@ Other:
 **** Rcirc
 - New variable =rcirc-enable-late-fix= to enable or disable the included
   =rcirc-late-fix= package (disabled by default).
+- New variable =rcirc-enable-emojify= to enable or disable emojify-mode
+  in rcirc buffers (disabled by default).
+- New variable =rcirc-enable-styles= to enable or disable the =rcirc-styles=
+  package for displaying and inserting color and text attribute codes (disabled
+  by default).
+- New variable =rcirc-enable-erc-image= to enable or disable the =erc-image=
+  package in rcirc for showing linked images in chat (disabled by default).
+- New variable =rcirc-enable-erc-tweet= to enable or disable the =erc-tweet=
+  package in rcirc for showing linked tweets in chat (disabled by default).
+- New variable =rcirc-enable-erc-yt= to enable or disable the =erc-yt= package
+  in rcirc for showing previews for YouTube links (disabled by default).
 - Fixed using multiple lines in =.authinfo= (thanks to Jelle Licht)
 - Fixed logging where the channel name has =/= in it
   (thanks to Abdo Roig-Maranges)
@@ -2157,6 +2172,7 @@ Other:
   package (thanks to David Chen)
 - Added a code formatter for sql-mode (thanks to Seong Yong-ju)
 - Added connection between =org-mode= and =SQL layer= (thanks to Magnus Therning)
+- Added default jump handlers for SQL layer (thanks to Alex Palaistras)
 **** Spell-checking
 - Added spell checking transient state (thanks to Francesc Elies Henar)
 - Update to flyspell-correct v0.5 (thanks to Boris Buliga)
