@@ -1083,6 +1083,7 @@ Other:
 **** Clojure
 - New packages:
   - Added =sayid= debugger (thanks to Daniel Manila and Arne Brasseur)
+  - Added =flycheck-clojure= linters (thanks to Eugene Yaremenko)
 - Improvements:
   - Store cider REPL history in spacemacs cache (thanks to Ryan Fowler)
   - Remove backtick from smartparens pairs for Clojure
@@ -1863,6 +1864,7 @@ Other:
     - ~SPC m i t~ for =org-set-tags-command=
   - Added key binding for org-insert-item (thanks to Emil Petersen)
     - ~SPC m i i~ for =org-insert-item=
+  - Added ~SPC m s d~ for =org-cut-subtree= (thanks to clwgg)
 - Key binding changes for archiving (thanks to Ag Ibragimov):
   - Added ~SPC m s a~ to toggle archive tag for subtree
   - Added ~SPC m s A~ to archive subtree (previously ~SPC m s a~)
@@ -2370,11 +2372,11 @@ Other:
   Codruț Constantin Gușoi)
 - Various documentation improvements (thanks Aaron Jensen, Aaron Peckham, Aaron
   Renner, Adam Frey, Adam Kruszewski, Alexander Dalshov, Alexander Eberspächer,
-  Alexander Iljin, Alexander Kjeldaas, Alexandros Kotzias, Andriy Senyshyn,
-  Anton Latukha, Antonio Miranda, Anurag Sharma, Archenoth, Ather Sharif, Artur
-  Juraszek, Benjamin Reynolds, Bernhard Schommer, Billy Wade, bmag, Boris
-  Buliga, Boris Wong, Carl Lange, Chase Adams, Christian Bäuerlein, Cibin
-  Mathew, CL123123, Codruț Constantin Gușoi, Compro-Prasad, Daniel Hodson,
+  Alexander Iljin, Alexander Kjeldaas, Alexandros Kotzias, Andrew Vit, Andriy
+  Senyshyn, Anton Latukha, Antonio Miranda, Anurag Sharma, Archenoth, Ather
+  Sharif, Artur Juraszek, Benjamin Reynolds, Bernhard Schommer, Billy Wade,
+  bmag, Boris Buliga, Boris Wong, Carl Lange, Chase Adams, Christian Bäuerlein,
+  Cibin Mathew, CL123123, Codruț Constantin Gușoi, Compro-Prasad, Daniel Hodson,
   Daniel Le, Daniel Molina, Darkhan, David Florness, David Vo, davidpham87,
   Deepu Mohan Puthrote, Dela Anthonio, Diego Alvarez, Diego Berrocal, Dietrich
   Daroch, Dinesh Bhosale, Dominik Schrempf, Doug Beardsley, dubnde, duianto,
