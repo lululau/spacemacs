@@ -392,6 +392,7 @@ sane way, here is the complete list of changed key bindings
   - New variable =dotspacemacs-zone-out-when-idle= to zone when idle. Zoning
     will obfuscate the current buffer acting like a screen saver.
     (thanks to Eugene Yaremenko and Sylvain Benner)
+  - New variable =dotspacemacs-undecorated-at-startup= (thanks to bb2020)
 Other:
   - Added =vim-style-visual-feedback= and =hybrid-style-visual-feedback= style
     variables to enable =evil-goggles= pulse in the Vim and Hybrid editing
@@ -546,6 +547,8 @@ Other:
   - Added startup support for doom-sourcerer theme (thanks to Parker Johnson)
   - Fixed modeline when started in deamon mode (thanks to Benno Fünfstück)
   - Fixed search for "find" executable in windows (thanks to Charlie Barto)
+  - Found workaround for =buffer-list-update-hook= performance issue.
+    (thanks to Alexander Miller)
 - Other:
   - New function =configuration-layer/message= to display message in
     =*Messages*= buffer (thanks to Sylvain Benner)
@@ -1036,6 +1039,10 @@ Other:
 - Breaking changes:
   - Moved =cmake-ide= and cmake script support to separate =cmake= layer
     (thanks to Alexander Dalshov)
+- New packages:
+  - =cpp-auto-include= Insert and delete C++ header files automatically:
+    - Added variable: =++-enable-organize-includes-on-save=
+    - Added key binding: ~SPC m r i~ organize includes
 - Improvements:
   - Added =lsp= support using either =cquery= or =ccls= backends
     (thanks to Cormac Cannon, Sergey Litovchuk and Fangrui Song)
@@ -1661,6 +1668,7 @@ Other:
     - ~SPC m s r~ to send current region to the REPL and stay in buffer
     - ~SPC m T c~ to toggle compile on save
   - Move REPL live eval toggle to ~SPC m T l~ (thanks to Sylvain Benner)
+  - Updated readme key from: ~SPC m s a~ to: ~SPC m T l~ (thanks to duianto)
   - Added =import-js= support with key bindings:
     - ~SPC m i i~ to mport the module for the variable under the cursor
     - ~SPC m i f~ to import any missing modules and remove any modules that ar
@@ -1996,6 +2004,8 @@ Other:
 **** PHP
 - Added company-php (thanks to jim and Eivind Fonn)
 - Fixed php-company autocompletion (thanks to Dela Anthonio)
+**** PlantUML
+- Added a missing prefix: =compile=
 **** Platinum
 - Added the =.plum= extension to the platinum modes (thanks to Sylvain Benner)
 - Remove automatic indentation on paste (thanks to Sylvain Benner)
@@ -2167,6 +2177,7 @@ Other:
   - ~SPC m f f b~ to find job
   - ~SPC m f f w~ to find webpack config
   - ~SPC m f c d~ to run rails destroy
+- Added =rubocopfmt= with the key binding ~SPC m = r~
 **** Rust
 - Added missing =counsel-gtags= and =smartparens= package declarations
   (thanks to Kalle Lindqvist)
@@ -2386,6 +2397,7 @@ Other:
 - Fixed jump handling with multiple backends (thanks to Aaron Jensen)
 - Fixed =typescript/jump-to-type-def= for npm modules (thanks to Jam Risser)
 - Added the same setup to tsx files as to ts files (thanks to Trapez Breen)
+- Configured =emmet-mode= for =typescript-tsx-mode=
 **** Vagrant
 - Key bindings:
   - move key bindings prefix to ~SPC a V~ (thanks to Thomas de Beauchêne)
