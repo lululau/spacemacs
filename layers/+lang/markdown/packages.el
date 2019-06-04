@@ -18,6 +18,7 @@
         markdown-mode
         markdown-toc
         mmm-mode
+        org
         smartparens
         (vmd-mode :toggle (eq 'vmd markdown-live-preview-engine))
         ))
@@ -177,3 +178,9 @@
     (dolist (mode markdown--key-bindings-modes)
       (spacemacs/set-leader-keys-for-major-mode mode
         "cP" 'vmd-mode))))
+
+(defun markdown/post-init-org ()
+  (when (configuration-layer/layer-used-p 'org)
+    (add-hook 'markdown-mode-hook 'orgtbl-mode)
+    (spacemacs|diminish orgtbl-mode)
+    (add-hook 'markdown-mode-hook 'spacemacs//cleanup-org-tables-on-save)))

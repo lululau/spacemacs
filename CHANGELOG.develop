@@ -574,6 +574,8 @@ Other:
   - Added =pupo-split-active-window= variable to split the active window or the
     entire frame (thanks to tddsg)
   - New emacs banner: "100-banner.txt" (thanks to Robert Zaremba)
+  - Add Dogemacs inverted banner for dark themes: "997-banner.txt"
+    (thanks to Vitor Finotti and Robby O'Connor)
 *** Distribution changes
 - Refactored =spacemacs-bootstrap=, =spacemacs-ui=, and =spacemacs-ui-visual=
   layers:
@@ -1528,6 +1530,7 @@ Other:
 - Added key binding `sC` for `helm-swoop-clear-cache` (thanks to Yang Qian)
 - Fixed =spacemacs//helm-open-buffers-in-windows= when opening more files than
   available windows (thanks to Juha Jeronen)
+- Load helm before =completion-at-point= (thanks to duianto)
 **** HTML
 - Added impatient-mode under ~SPC m i~ (thanks to geo7)
 - Added =counsel-css= as an =ivy= alternative to =helm-css-scss=
@@ -1756,6 +1759,7 @@ Other:
   - Added ~SPC m t m~ for =markdown-toggle-markup-hiding=
   - Rename =markdown-jump= to =markdown-do=
 - Hide MMM mode-line indicator (thanks to duianto)
+- Use =orgtbl-mode= only when the =org= layer is used (thanks to Boris Buliga)
 **** Major modes
 - Added SPARQL-mode (thanks to Dietrich Daroch)
 - Move =extra-langs= to =major-modes= (thanks to Eivind Fonn)
@@ -2044,7 +2048,11 @@ Other:
 - Use =python-mode= for SCons script files (thanks to shanemikel)
 - Added LSP support, which can be used by enabling the =lsp= layer and setting
   the =python= layer's =python-backend= variable to =lsp=
-  (thanks to Yuan Fu and Sylvain Benner)
+  (thanks to Yuan Fu and Sylvain Benner).
+- The LSP backend can use either the =pyls= (default) server or the =mspyls=
+  (Microsoft) implementation, which may be selected by setting the
+  =python-lsp-server= layer variable to =mspyls=
+  (thanks to Cormac Cannon).
 - Added ~SPC m t l~ key binding to re-run the last test command
   (thanks to Benoit Coste).
 - Added support for breakpoints for the =trepan3k= python debugger
