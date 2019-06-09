@@ -790,6 +790,10 @@ Other:
   - Added =link-hint-copy-link= to ~SPC x y~ (thanks to William Casarin)
   - Added =evil-unimpaired= navigation keys prefixed by ~[~ and ~]~ to the
     Spacemacs home buffer (thanks to Sorawee Porncharoenwase)
+  - Added key bindings for indirect buffer functions under ~SPC b c~:
+    - ~n~ calls =make-indirect-buffer=
+    - ~c~ calls =clone-indirect-buffer=
+    - ~w~ calls =clone-indirect-buffer-other-window=
 - Improvements:
   - Rewrote window layout functions for ~SPC w 1~, ~SPC w 2~, ~SPC w 3~, and
     ~SPC w 4~ (thanks to Codruț Constantin Gușoi):
@@ -2510,17 +2514,17 @@ Other:
   Strømsodd, Jonathan Arnett, Jonathan Chen, Jonathan Gillett, Josh Greenwood,
   Joshua Santos, Justin Stone, Kainalu Hagiwara, Kalle Lindqvist, Kechao Cai,
   Keith Simmons, Keith Wygant, Kevin Ji, Kristoffer Haugsbakk, lawrsp, Leo
-  Joseph Buchignani III, Luke Winship, Luke Worth, Marco Ieni, Marco Zucconelli,
-  Max Beutelspacher, Max Deineko, Max Nordlund, Maximilian Wolff, Miciah Dashiel
-  Butler Masters, mjkramer, Mikhail Yakutovich, Muneeb Shaikh, Nasser
-  Alshammari, Nasser Alshammari, Niko Felger, Nikolai Myllymäki, nikolaiam,
-  Nicolas Forgerit, Oguz Serbetci, Olivier Verdier, Pancho Horrillo, Paul Milla,
-  Paulo Schneider, Pawan Dubey, Paweł Siudak, Phil Pirozhkov, Philippe
-  Bourdages, Piotr Grzesik, Rafi Khan, Rand01ph, rakyi, Raymond Wanyoike,
-  Reverend Homer, Robby O'Connor, Rhommel Lamas, Sam Pablo Kuper, Saulius
-  Menkevičius, sduthil, Sergio Ugalde, Shane Kilkelly, Sid Kapur, Somelauw,
-  Soobin Rho, sorawee, SteveJobzniak, Sunghyun Hwang, Swaroop C H, Sylvain
-  Benner, Szunti, Tim Stewart, timor, TinySong, Titov Andrey, Thomas de
+  Joseph Buchignani III, liuchong, Luke Winship, Luke Worth, Marco Ieni, Marco
+  Zucconelli, Max Beutelspacher, Max Deineko, Max Nordlund, Maximilian Wolff,
+  Miciah Dashiel Butler Masters, mjkramer, Mikhail Yakutovich, Muneeb Shaikh,
+  Nasser Alshammari, Nasser Alshammari, Niko Felger, Nikolai Myllymäki,
+  nikolaiam, Nicolas Forgerit, Oguz Serbetci, Olivier Verdier, Pancho Horrillo,
+  Paul Milla, Paulo Schneider, Pawan Dubey, Paweł Siudak, Phil Pirozhkov,
+  Philippe Bourdages, Piotr Grzesik, Rafi Khan, Rand01ph, rakyi, Raymond
+  Wanyoike, Reverend Homer, Robby O'Connor, Rhommel Lamas, Sam Pablo Kuper,
+  Saulius Menkevičius, sduthil, Sergio Ugalde, Shane Kilkelly, Sid Kapur,
+  Somelauw, Soobin Rho, sorawee, SteveJobzniak, Sunghyun Hwang, Swaroop C H,
+  Sylvain Benner, Szunti, Tim Stewart, timor, TinySong, Titov Andrey, Thomas de
   Beauchêne, Tomasz Cichocinski, tzhao11, Vincent Taing, Vlad Bokov, Vladimir
   Kochnev, Wieland Hoffmann, Witoslaw Koczewski, Xiang Ji, Yi Liu, zer09, Zhige
   Xin, Serghei Iakovlev)
