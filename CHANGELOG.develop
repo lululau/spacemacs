@@ -333,6 +333,7 @@ sane way, here is the complete list of changed key bindings
 - cmake (thanks to Alexander Dalshov, Sylvain Benner and Jonas Jelten)
 - dap (thanks to Ivan Yonchovski)
 - debug (thanks to Hodge Shen, Troy Hinckley, and Sylvain Benner)
+- dotnet (thanks to Jordan Kaye)
 - emberjs (thanks to Robert O'Connor)
 - import-js (thanks to Thanh Vuong and Seong Yong-ju)
 - lsp (thanks to Fangrui Song, 0bl.blwl, Cormac Cannon, Juuso Valkeejärvi,
@@ -341,6 +342,7 @@ sane way, here is the complete list of changed key bindings
 - pass (thanks to Andrew Oppenlander, Kepi, Kalle Lindqvist, and Evan Klitzke)
 - phoenix (thanks to Lyuben Petrov)
 - prettier (thanks to Seong Yong-ju)
+- sailfish-developer (thanks to Victor Polevoy)
 - sphinx (thanks to Wei-Wei Guo)
 - tern (thanks to Sylvain Benner and Juuso Valkeejärvi)
 - transmission (thanks to Eugene Yaremenko)
@@ -474,6 +476,7 @@ Other:
     (thanks to Dieter Komendera)
   - Added line text object using =evil-textobj-line= (thanks to Uroš Perišić)
   - Added more =kaolin-themes= (thanks to ogdenwebb)
+  - Calling ~spacemacs/recompile-elpa~ with an argument nukes all *.elc files (thanks to Ag Ibragimov)
 - Fixed:
   - Avoid non-idempotent use of push in init code (thanks to Miciah Masters)
   - Moved Spacemacs startup progress bar to =core-progress-bar.el=, removed
@@ -878,6 +881,7 @@ Other:
     - ~m~ for toggle maximize
     - ~f~ for toggle fullscreen
     (thanks to Ag Ibragimov)
+  - Updated Scrolling Transient State (thanks to duianto)
 - Fixed:
   - Fixed ~h~ key binding in compilation and grep buffers
     (thanks to Sylvain Benner)
@@ -1155,6 +1159,7 @@ Other:
   - ~SPC m e u~ undefine symbol in the current namespace
     (thanks to John Stevenson)
 - Fixes:
+  - Remove `cider.nrepl/cider-middleware` in lein quick start setting
   - Fixed =cider-inspector-prev-page= binding, also add ~p~ as another key
     binding (thanks to Brian Fay)
   - Fixed Clojure layer cider-repl-mode keybindings (thanks to Corey Ling)
@@ -1256,6 +1261,22 @@ Other:
   - Added ~SPC a D C~ for =docker-compose= (thanks to Daniel Caixinha)
 - Fix: broken package declaration for dockerfile-mode
   (thanks to Maximilian Wolff)
+**** Dotnet
+- Key bindings:
+  - Added key bindings for =dotnet= (thanks to Jordan Kaye):
+    - ~SPC m d a p~ Add package to the current dotnet project
+    - ~SPC m d a r~ Add reference to the current dotnet project
+    - ~SPC m d b~   Build the current dotnet project
+    - ~SPC m d c~   Clean the current dotnet project
+    - ~SPC m d n~   Create a new dotnet project
+    - ~SPC m d p~   Publish the current dotnet project
+    - ~SPC m d r a~ Run the current dotnet project with arguments
+    - ~SPC m d r r~ Restore the current dotnet project
+    - ~SPC m d s a~ Add to the current dotnet solution
+    - ~SPC m d s l~ List the current dotnet solution
+    - ~SPC m d s n~ Create a new dotnet solution
+    - ~SPC m d s r~ Remove from the current dotnet solution
+    - ~SPC m d t~   Run tests for the current dotnet project
 **** Elfeed
 - Fixed selection bindings in visual state (thanks to Jeremy Symon)
 - Fixed not saving on quit (thanks to Andrew Stevanus)
@@ -2014,6 +2035,7 @@ Other:
 - Added epub support (thanks to vishvanath45)
 - Added support for CUSTOM_ID in latex exports (thanks to Compro-Prasad)
 - Added ~SPC m i L~ as =org-cliplink= into =org= layer (thanks to bb2020)
+- Added =ox-jira= as org export backend (thanks to Sebastian Nagel)
 **** Osx
 - Fixed OSX mapping issue (thanks to Joey Liu)
 - Added layer variables to customize modifier behaviors on macOS:
@@ -2208,6 +2230,7 @@ Other:
 - Added the =seeing-is-believing= package (thanks to Brandon Conway)
 - Added prefixes for ruby major mode keybindings (thanks to Seong Yong-ju)
 - Added =lsp= and =dap= support (thanks to Billy Kaplan)
+- Fixed lazy loading of =ruby-test-mode= (thanks to Michael Franz Aigner)
 **** Ruby on Rails
 - Changed leader keys to be configured for the =projectile-rails-mode= minor
   mode instead of =ruby-mode= and =enh-ruby-mode= so that the key bindings will
@@ -2232,6 +2255,13 @@ Other:
   - Added ~SPC m c v~ to run "cargo check" command (thanks to Victor Polevoy)
 - Added rust lsp completion with company and bindings (thanks to Justin)
 - Added debugger integration via =dap= layer
+**** Sailfish-Developer
+- Key bindings:
+  - Added =sailfish-scratchbox= key bindings (thanks to Victor Polevoy):
+    - ~SPC c s~   Show menu
+    - ~SPC c s b~ Invoke mb2 build
+    - ~SPC c s d~ Copy rpms to the phone
+    - ~SPC c s i~ Install rpms into target
 **** Scala
 - Move =ensime= to the =java= layer (Tor Hedin Bronner)
 - Key bindings:
@@ -2348,6 +2378,9 @@ Other:
   - ~SPC S . B~ Add word to dict (buffer)
   - ~SPC S . G~ Add word to dict (global)
   - ~SPC S . S~ Add word to dict (session)
+- Added key bindings (thanks to John Stevenson):
+  - ~SPC S s~ Correct word at point
+  - Transient State: ~SPC S . s~ Correct word at point
 **** Syntax-checking
 - Key bindings:
   - ~SPC e e~ is now for triggering a syntax check, the old action
