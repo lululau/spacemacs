@@ -887,6 +887,11 @@ Other:
     (thanks to Ag Ibragimov)
   - Updated Scrolling Transient State (thanks to duianto)
   - Removed new layout confirmation question (thanks to duianto)
+  - Revealed already bound Helm Transient State navigation keys:
+    - ~g~ go to first candidate
+    - ~G~ go to last candidate
+    (thanks to duianto)
+  - Added support for visual line numbers (thanks to jcaw)
 - Fixed:
   - Fixed ~h~ key binding in compilation and grep buffers
     (thanks to Sylvain Benner)
@@ -1010,6 +1015,9 @@ Other:
   - Fixed copied dir/path not shown in minibuffer when =select-enable-clipboard=
     is =nil= (thanks to duianto)
 *** Layer changes and fixes
+**** Agda
+- Fixes
+  - Fix auto bind breaking after Agda 2.6.0 api changes
 **** Alda
 - Key bindings:
   - ~SPC m r~ Play region (selected text)
@@ -2074,6 +2082,10 @@ Other:
 - Fixed =spacemacs/run-pandoc= not to reset =pandoc--local-settings=
   (thanks to martian-f)
 - Added declaration for the ~SPC P~ prefix (thanks to Codruț Constantin Gușoi)
+**** Perl5
+- Fixed =spacemacs/perltidy-format-buffer= and
+  =spacemacs/perltidy-format-function= to move the point and window to their
+  original locations.
 **** PHP
 - Added company-php (thanks to jim and Eivind Fonn)
 - Fixed php-company autocompletion (thanks to Dela Anthonio)
@@ -2327,6 +2339,7 @@ Other:
 - Added =eshell= =Ivy= completion bindings (thanks to bb2020):
   - ~M-l~ =spacemacs/ivy-eshell-history=
   - ~TAB~ =spacemacs/pcomplete-std-complete=
+- Enabled mouse based pasting into term shells (thanks to Sheng Yang)
 **** Shell Scripts
 - Added new company-shell environment variable backend
   (thanks to Alexander-Miller)
@@ -2452,6 +2465,8 @@ Other:
 - Add missing ~SPC p t~ to =readme.org= (thanks to oo6)
 - Remapped =winum-select-window-0-or-10= to =treemacs-select-window= so that
   ~C-x w 0~, ~SPC 0~ and ~M-0~ call the same command (thanks to duianto, Miciah)
+- Loaded =treemacs-projectile= key binding ~C-c C-p p~ with Treemacs
+  (thanks to duianto)
 **** Typescript
 - Call tsfmt with extension of current buffer for TSX formatting
   (thanks to Victor Andrée)
