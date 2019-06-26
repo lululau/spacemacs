@@ -101,6 +101,8 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
   - Changed ~SPC b B~ to ~SPC b I~ for =ibuffer= (thanks to Thomas de Beauchêne)
   - Changed ~SPC B b~ to ~SPC b B~ for non restricted buffer list
     (thanks to Thomas de Beauchêne)
+  - Changed ~SPC b i~ to ~SPC b t~ for =imenu= tree view
+    (thansk to Sylvain Benner)
   - ~SPC b m~ now opens the =*Messages*= buffer. The old ~SPC b m~ to kill other
     buffers has been moved to ~SPC b C-d~. Killing other buffers using a regular
     expression is now under ~SPC b C-D~.
@@ -797,10 +799,10 @@ Other:
   - Added =link-hint-copy-link= to ~SPC x y~ (thanks to William Casarin)
   - Added =evil-unimpaired= navigation keys prefixed by ~[~ and ~]~ to the
     Spacemacs home buffer (thanks to Sorawee Porncharoenwase)
-  - Added key bindings for indirect buffer functions under ~SPC b c~:
-    - ~n~ calls =make-indirect-buffer=
-    - ~c~ calls =clone-indirect-buffer=
-    - ~w~ calls =clone-indirect-buffer-other-window=
+  - Added key bindings for indirect buffer functions under ~SPC b N~:
+    - ~C-i~ calls =make-indirect-buffer=
+    - ~i~ calls =clone-indirect-buffer=
+    - ~I~ calls =clone-indirect-buffer-other-window=
 - Improvements:
   - Rewrote window layout functions for ~SPC w 1~, ~SPC w 2~, ~SPC w 3~, and
     ~SPC w 4~ (thanks to Codruț Constantin Gușoi):
@@ -1009,8 +1011,8 @@ Other:
     - =spacemacs-theme-org-height=
       (thanks to Dominik Schrempf)
   - Key bindings (thanks to bb2020)
-    - ~SPC-j-C~ to =check-parens=
-    - ~SPC-,~ to =goto-last-change=
+    - ~SPC j (~ to =check-parens=
+    - ~SPC j c~ to =goto-last-change=
   - Excluded =fundamental-mode= from =spacemacs/check-large-file=
     (thanks to Alexander Miller)
   - Fixed copied dir/path not shown in minibuffer when =select-enable-clipboard=
@@ -1659,9 +1661,11 @@ Other:
 - Fixed typos in spacemacs/search-dir* bindings (thanks to yuhan0)
 - Added =ivy-ret-visits-directory= variable (thanks to bb2020)
 **** Imenu-list
+- Changed ~SPC b i~ to ~SPC b t~ for =imenu= tree view
+  (thansk to Sylvain Benner)
 - Fixed key bindings (thanks to bet4it):
   - ~r~ inside imenu-list buffer to refresh
-  - ~SPC b i~ calls =imenu-list-smart-toggle= rather than
+  - ~SPC b t~ calls =imenu-list-smart-toggle= rather than
     =imenu-list-minor-mode=
 **** Jabber
 - Added missing optional argument for the =jabber-alert-echo= function to fix
