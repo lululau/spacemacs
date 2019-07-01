@@ -74,3 +74,21 @@ private/
 /image-dired/
 /transient/history.el
 /emms
+
+# Ignore tags created by etags, ctags, gtags (GNU global) and cscope
+# source: https://github.com/github/gitignore/blob/master/Global/Tags.gitignore
+TAGS
+.TAGS
+!TAGS/
+tags
+.tags
+!tags/
+gtags.files
+GTAGS
+GRTAGS
+GPATH
+GSYMS
+cscope.files
+cscope.out
+cscope.in.out
+cscope.po.out

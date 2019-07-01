@@ -398,6 +398,7 @@ sane way, here is the complete list of changed key bindings
     (thanks to Eugene Yaremenko and Sylvain Benner)
   - New variable =dotspacemacs-undecorated-at-startup= (thanks to bb2020)
 Other:
+  - =.gitignore= now ignores tag files.
   - Added =vim-style-visual-feedback= and =hybrid-style-visual-feedback= style
     variables to enable =evil-goggles= pulse in the Vim and Hybrid editing
     styles, respectively; disabled by default (thanks to Sylvain Benner)
@@ -1017,6 +1018,8 @@ Other:
     (thanks to Alexander Miller)
   - Fixed copied dir/path not shown in minibuffer when =select-enable-clipboard=
     is =nil= (thanks to duianto)
+  - Used return value from advised function in =spacemacs//yank-indent-region=
+    (thanks to Brandon T. Willard)
 *** Layer changes and fixes
 **** Agda
 - Fixes
@@ -1363,6 +1366,8 @@ Other:
 - Added support for Emoji fonts on macOS and Linux (thanks to CodeFalling)
 - Setup =emojify= cache directory (thanks to Boris Buliga)
 - Hide mode-line indicator: =emoji= (thanks to duianto)
+- Prevented =set-fontset-font= from being set in Emacs without a window system
+  (thanks to NicholasTD07k)
 **** ERC
 - Key bindings:
   - ~SPC m b~ to switch between ERC buffers (thanks to Evan Klitzke)
@@ -1763,6 +1768,10 @@ Other:
 - Enable auto indent when paste. Remove =latex-mode= from
   =spacemacs-yank-indent-modes= to disable it (thanks to bet4it)
 - Added support for =company-reftex= (thanks to et2010)
+- Added bindings to navigate between errors in tex mode:
+  - ~SPC m n~ goto next error
+  - ~SPC m N~ goto previous error
+    (thanks to Olivier Verdier)
 **** Lua
 - Added support for auto-completion with =company= (thanks to halfcrazy)
 **** Language Server Protocol (LSP)
