@@ -559,6 +559,7 @@ Other:
     (thanks to Alexander Miller)
   - Added missing force argument to the =spacemacs//init-spacemacs-env= call in
     the function =spacemacs/load-spacemacs-env= (thanks to sergeiz2)
+  - Fixed =spacemacs/alternate-buffer= to restore point.
 - Other:
   - New function =configuration-layer/message= to display message in
     =*Messages*= buffer (thanks to Sylvain Benner)
@@ -1264,6 +1265,7 @@ Other:
 **** Dash
 - Improvements:
   - Use default docsets path in =helm-dash= on macos (thanks to ColorFuzzy)
+  - Added config option =dash-autoload-common-docsets= to toggle init behavior
 - Fixes:
   - Fix startup error when using counsel-dash with custom path in
     helm-dash-docset-newpath (thanks to madand)
@@ -1790,6 +1792,7 @@ Other:
 - Added package =helm-lsp=
   - ~SPC m g s~ to find symbol in current project
   - ~SPC m g S~ to find symbol in all projects
+- Deleted =fix-lsp-company-prefix= since =company-lsp= is doing that handling.
 **** Debug Adapter Protocol (DAP)
 - Key bindings
   - ~SPC m d d e~ to edit debug template
