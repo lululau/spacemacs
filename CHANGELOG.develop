@@ -897,6 +897,10 @@ Other:
     - ~G~ go to last candidate
     (thanks to duianto)
   - Added support for visual line numbers (thanks to jcaw)
+  - Updated evil-numbers transient state to run foreign keys (thanks to Jake Romer)
+  - Added a =tutorials= section to ~SPC h T~ (thanks to duianto):
+    - ~SPC h T e~ for =emacs-tutorial= (aliased from =help-with-tutorial=)
+    - ~SPC h T v~ for =evil-tutor-start=
 - Fixed:
   - Fixed ~h~ key binding in compilation and grep buffers
     (thanks to Sylvain Benner)
@@ -1184,6 +1188,7 @@ Other:
     (thanks to John Stevenson)
   - ~SPC m e i~ interrupt the current evaluation (stop long running process)
     (thanks to John Stevenson)
+  - ~SPC m e v~ to evaluate s-expression at point (=cider-eval-sexp-at-point=)
 - Fixes:
   - Remove `cider.nrepl/cider-middleware` in lein quick start setting
   - Fixed =cider-inspector-prev-page= binding, also add ~p~ as another key
@@ -1286,6 +1291,9 @@ Other:
   - Added ~SPC m c B~ to build image without cache (thanks to Maximilian Wolff)
   Henar)
   - Added ~SPC a D C~ for =docker-compose= (thanks to Daniel Caixinha)
+  - Added ~SPC a D n~ for =docker-networks= (thanks to Ramz)
+  - Added ~SPC a D v~ for =docker-volumes= (thanks to Ramz)
+  - Added ~SPC a D m~ for =docker-machines= (thanks to Ramz)
 - Fix: broken package declaration for dockerfile-mode
   (thanks to Maximilian Wolff)
 **** Dotnet
@@ -1678,6 +1686,8 @@ Other:
 - Added missing optional argument for the =jabber-alert-echo= function to fix
   =wrong-number-of-arguments= error when jabber receives a new notification
   (thanks to Aleksei Fedotov)
+**** Jsonnet
+- Fixed flycheck support in jsonnet files (thanks to Vikash Balasubramanian)
 **** Java
 - Added support for multiple backends. Supported backends are: =meghanada=,
   =eclim= and =ensime=. The default backend is =meghanada=.
@@ -2191,6 +2201,8 @@ Other:
 - Added documentation on installing importmagic and epc (thanks to Trapez Breen)
 - Made python-send-shell-* functions faster (thanks to Trapez Breen)
 - Added support for 'black' formatter (thanks to Mike Macpherson)
+- Enabled =eldoc= for =anaconda-mode= (thanks to Vikash Balasubramanian)
+- Various fixes for =lsp-python-ms= setup (thanks to Trapez Breen)
 **** Racket
 - Restore smart closing paren behavior in racket-mode (thanks to Don March)
 **** Ranger
@@ -2611,11 +2623,11 @@ Other:
   Schrempf, Doug Beardsley, dubnde, duianto, eldios, EMayej, Eugene Yaremenko,
   Evan Klitzke, Evan Niessen-Derry, firemiles, Florian Bruhin, Fuqiao Xue,
   Garrett Johnson, Grant Shangreaux, Henrique Jung, Henry Hirsch, Henry
-  Marshall, hornuda, Ivan Fedorov, Ivan Kryvoruchko, J. Patrick Lanigan, Jaremy
-  Creechley, Jason Axelson, Jesse Cooke, Jethro Shuwen Sun, JI Xiang, Jim
-  Deville, Jody Frankowski, Joe Hillenbrand, John Eismeier, John Wood, Jon
-  Tippens, Jonas Strømsodd, Jonathan Arnett, Jonathan Chen, Jonathan Gillett,
-  Josh Greenwood, Joshua Santos, Justin Stone, Kainalu Hagiwara, Kalle
+  Marshall, hornuda, Hong Xu, Ivan Fedorov, Ivan Kryvoruchko, J. Patrick
+  Lanigan, Jaremy Creechley, Jason Axelson, Jesse Cooke, Jethro Shuwen Sun, JI
+  Xiang, Jim Deville, Jody Frankowski, Joe Hillenbrand, John Eismeier, John
+  Wood, Jon Tippens, Jonas Strømsodd, Jonathan Arnett, Jonathan Chen, Jonathan
+  Gillett, Josh Greenwood, Joshua Santos, Justin Stone, Kainalu Hagiwara, Kalle
   Lindqvist, Kechao Cai, Keith Simmons, Keith Wygant, Kevin Ji, Kristoffer
   Haugsbakk, lawrsp, Leo Joseph Buchignani III, liuchong, Luke Winship, Luke
   Worth, Marco Ieni, Marco Zucconelli, Max Beutelspacher, Max Deineko, Max
