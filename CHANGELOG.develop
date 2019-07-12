@@ -1428,11 +1428,8 @@ Other:
 **** GitHub
 - Packages:
   - Added new packages =forge= (thanks to Miciah Dashiel Butler Masters)
-  - Added package =magithub=, it is enabled by default in offline mode.
   - Remove package =github-browse-file= which has been replaced by
    =browse-at-remote= in =version-control= layer
-  - Remove package =magit-gh-pulls= as it was deprecated in favor of =magithub=
-    and =forge= (thanks to Robby O'Connor)
 - Key bindings:
   - Added ~g r~ evilified binding to gist-list-mode
     (thanks to Jean-Sebastien A. Beaudry)
@@ -1444,8 +1441,13 @@ Other:
     - ~SPC m k~ or ~SPC m k~ cancel post
 - Replace =evilified-state-evilify= by =evilified-state-evilify-map=
   (thanks to Sylvain Benner)
-- Made magithub offline by default (thanks to Miciah Masters)
 - Disabled status, issues, and PRs by default (thanks to Miciah Masters)
+- Removed mentions of the removed package =magithub= (thanks to Hong Xu)
+  Obsolete:
+  - Added package =magithub=, it is enabled by default in offline mode.
+  - Remove package =magit-gh-pulls= as it was deprecated in favor of =magithub=
+    and =forge= (thanks to Robby O'Connor)
+  - Made magithub offline by default (thanks to Miciah Masters)
 **** Git
 - Install magit-svn by default and activate with git-enable-magit-svn-plugin
 - Key bindings:
@@ -1515,6 +1517,8 @@ Other:
 - Added toggle control for verbose go test output (thanks to Enze Chi)
 - Set lsp-prefer-flymake to :none when Go layer is using LSP
   (thanks to Tim Heckman)
+- Refactored two variables =go-use-gometalinter= and =go-use-golangci-lint= to
+  one =go-linter= (thanks to Robert Zaremba)
 **** Graphviz
 - Use graphviz package from melpa (thanks to Matthew Boston)
 **** Groovy
@@ -1804,6 +1808,7 @@ Other:
   - ~SPC m g s~ to find symbol in current project
   - ~SPC m g S~ to find symbol in all projects
 - Deleted =fix-lsp-company-prefix= since =company-lsp= is doing that handling.
+- Fixed a delay when declaring prefixes for mode (thanks to Thanh Vuong)
 **** Debug Adapter Protocol (DAP)
 - Key bindings
   - ~SPC m d d e~ to edit debug template
@@ -2593,6 +2598,10 @@ Other:
   (thanks to Voleking)
 **** Xclipboard
 - Added Requirements documentation (thanks to Chris Glass)
+- Added =cliphist= with the following bindings: (thanks to Hong Xu)
+  - ~SPC x P~ paste item from history (cliphist must be enabled)
+  - ~SPC x R~ rectangly paste item from history (cliphist must be enabled)
+  - ~SPC x s~ select item from history (cliphist must be enabled)
 **** Ycmd
 - Search for =compile_commands.json= in build sub-directory
   (thanks to Amos Bird and Eivind Fonn)
