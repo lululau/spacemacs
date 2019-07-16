@@ -483,6 +483,8 @@ Other:
   - Calling ~spacemacs/recompile-elpa~ with an argument nukes all *.elc files (thanks to Ag Ibragimov)
   - Allow customizing default major mode for new empty buffers in ~SPC b N n~,
     see =dotspacemacs-new-empty-buffer-major-mode= (thanks to Juha Jeronen)
+  - Changed =dotspacemacs-default-font= =:size= from =13= (pixel size) to =10.0=
+    (point size) (thanks to duianto)
 - Fixed:
   - Avoid non-idempotent use of push in init code (thanks to Miciah Masters)
   - Moved Spacemacs startup progress bar to =core-progress-bar.el=, removed
@@ -587,6 +589,7 @@ Other:
   - New emacs banner: "100-banner.txt" (thanks to Robert Zaremba)
   - Add Dogemacs inverted banner for dark themes: "997-banner.txt"
     (thanks to Vitor Finotti and Robby O'Connor)
+  - Added reference handler as per jump handler (thanks to Fangrui Song)
 *** Distribution changes
 - Refactored =spacemacs-bootstrap=, =spacemacs-ui=, and =spacemacs-ui-visual=
   layers:
@@ -805,6 +808,12 @@ Other:
     - ~C-i~ calls =make-indirect-buffer=
     - ~i~ calls =clone-indirect-buffer=
     - ~I~ calls =clone-indirect-buffer-other-window=
+  - Added key bindings (thanks to duianto):
+    - Evil numbers ~SPC n _~ decrease number at point
+      and in the transient state ~j~ and ~k~
+    - Font scaling ~SPC z x _~ scale down
+    - Frame transparency ~SPC T T _~ decrease transparency
+    - Zoom frame ~SPC z f _~ zoom frame out
 - Improvements:
   - Rewrote window layout functions for ~SPC w 1~, ~SPC w 2~, ~SPC w 3~, and
     ~SPC w 4~ (thanks to Codruț Constantin Gușoi):
@@ -1025,6 +1034,7 @@ Other:
     is =nil= (thanks to duianto)
   - Used return value from advised function in =spacemacs//yank-indent-region=
     (thanks to Brandon T. Willard)
+  - Fixed canceling =spacemacs/ace-buffer-links= (thanks to duianto)
 *** Layer changes and fixes
 **** Agda
 - Fixes
@@ -1190,6 +1200,17 @@ Other:
   - ~SPC m e i~ interrupt the current evaluation (stop long running process)
     (thanks to John Stevenson)
   - ~SPC m e v~ to evaluate s-expression at point (=cider-eval-sexp-at-point=)
+  - ~SPC m s u~  require Clojure utils into current namespace
+    i.e. functions =doc= =source= (thanks to John Stevenson)
+  - ~SPC m s j c~ updated to call =cider-jack-in-clj= rather than old alias
+    =cider-jack-in= (thanks to John Stevenson)
+  - ~SPC m s j f~ new keybinding to call =cider-jack-in-clj&cjls=
+    (thanks to John Stevenson)
+  - ~SPC m s j s~ updated to call =cider-jack-in-cljs= rather than old alias
+    =cider-jack-in-clojurescript= which is deprecated
+  - ~SPC m g g~ changed to =spacemacs/clj-find-var=, a wrapper for
+    =cider-find-var= if REPL running, otherwise =dumb-jump-go=
+    (thanks to John Stevenson)
 - Fixes:
   - Remove `cider.nrepl/cider-middleware` in lein quick start setting
   - Fixed =cider-inspector-prev-page= binding, also add ~p~ as another key
@@ -1865,6 +1886,7 @@ Other:
     - ~SPC m t d~ convert region to table
 - Bound major mode leader key and ~M-RET~ to =markdown-insert-list-item= for
   terminal users (thanks to AmaiKinono)
+- Made =*lsp-help*= buffer shown in a popup window using popwin
 **** Major modes
 - Added SPARQL-mode (thanks to Dietrich Daroch)
 - Move =extra-langs= to =major-modes= (thanks to Eivind Fonn)
@@ -2054,7 +2076,7 @@ Other:
 - Remove =mu4e= and =notmuch= from =org= (thanks to Sylvain Benner)
 - Use evil-org from MELPA (thanks to Eivind Fonn)
 - Added =org-brain= (thanks to Matthías Páll Gissurarson and Eivind Fonn)
-- Added detailed =org-brain= bindings (thanks to Langston Barret)
+- Added detailed =org-brain= bindings (thanks to Langston Barret and Oguz Serbetci)
 - Added layer variable for todo bindings (thanks to Eivind Fonn)
 - Made =org-projectile= integration compatible with its new version
   (thanks to Ivan Malison)
@@ -2444,6 +2466,9 @@ Other:
     line =insert state=
   - ~SPC m s L~ Send the current line to the SQLi buffer and move to the next
     line and switch to it in =insert state=
+- Added key binding (thanks to Michael Hauser-Raspe):
+  ~SPC m b c~ connect to a SQLi buffer from your saved buffer list
+- Added ~SPC m g~ prefix: =goto= (thanks to duianto)
 **** Spell-checking
 - Added spell checking transient state (thanks to Francesc Elies Henar)
 - Update to flyspell-correct v0.5 (thanks to Boris Buliga)
@@ -2632,8 +2657,8 @@ Other:
   Diego Alvarez, Diego Berrocal, Dietrich Daroch, Dinesh Bhosale, Dominik
   Schrempf, Doug Beardsley, dubnde, duianto, eldios, EMayej, Eugene Yaremenko,
   Evan Klitzke, Evan Niessen-Derry, firemiles, Florian Bruhin, Fuqiao Xue,
-  Garrett Johnson, Grant Shangreaux, Henrique Jung, Henry Hirsch, Henry
-  Marshall, hornuda, Hong Xu, Ivan Fedorov, Ivan Kryvoruchko, J. Patrick
+  Garrett Johnson, Grant Shangreaux, Guido Kraemer, Henrique Jung, Henry Hirsch,
+  Henry Marshall, hornuda, Hong Xu, Ivan Fedorov, Ivan Kryvoruchko, J. Patrick
   Lanigan, Jaremy Creechley, Jason Axelson, Jesse Cooke, Jethro Shuwen Sun, JI
   Xiang, Jim Deville, Jody Frankowski, Joe Hillenbrand, John Eismeier, John
   Wood, Jon Tippens, Jonas Strømsodd, Jonathan Arnett, Jonathan Chen, Jonathan
