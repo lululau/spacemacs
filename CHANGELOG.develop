@@ -308,6 +308,7 @@ sane way, here is the complete list of changed key bindings
 - json (thanks to Sylvain Benner, Boris Buliga and Tommi Komulainen)
 - jsonnet (thanks to liztio and Robby O'Connor)
 - julia (thanks to Adam Beckmeyer and Guido Kraemer)
+- kivy (thanks to Ryota Kayanuma)
 - kotlin (thanks to Shanavas M)
 - pact (thanks to Colin Woodbury)
 - perl5 (thanks to Troy Hinckley, Jinseop Kim and Michael Rohleder)
@@ -1584,6 +1585,7 @@ Other:
 - Refactored two variables =go-use-gometalinter= and =go-use-golangci-lint= to
   one =go-linter= (thanks to Robert Zaremba)
 - Added Testify support (thanks to Mathieu Post)
+- Added setup instructions for =gopls= (thanks to pancho horrillo)
 **** Graphviz
 - Use graphviz package from melpa (thanks to Matthew Boston)
 **** Groovy
@@ -1849,6 +1851,8 @@ Other:
 - Improved support for workman keyboard layout (thanks to Benjamin Reynolds)
 - Added =after-config= hooks for lazy-loaded packages (thanks to CharlesHD)
 - Added undo-tree visualizer mapping (thanks to CharlesHD)
+**** Kivy
+- Added the =kivy= package (thanks to Nasser Alshammari and Ryota Kayanuma)
 **** LaTeX
 - New package =magic-latex-buffer= (thanks to benquebec)
 - New layer variable =latex-enable-magic= to enable =magic= symbols in latex
@@ -1949,7 +1953,6 @@ Other:
 - Added ebuild-mode (thanks to Kai Wohlfahrt)
 - Added the vala programming language (thanks to Steven Allen)
 - Added hoon (thanks to Hunter Haugen)
-- Added kivy (thanks to Nasser Alshammari)
 **** Mu4e
 - Added custom Spacemacs layout for =mu4e= buffers (thanks to Benjamin Reynolds)
 - Key bindings:
@@ -2428,6 +2431,8 @@ Other:
   - Evilify =ensime= search in insert/normal mode (thanks to Diego Alvarez)
 - Remove duplicated code (thanks to Tetsuro Takemoto)
 - Added ENSIME jump handlers (thanks to Joao Azevedo)
+- Added scala-lsp and metals as an additional backend for scala
+  (thanks to Rodolfo Hansen)
 **** Scheme
 - Added missing =parinfer= package declaration (thanks to Kalle Lindqvist)
 - Update install docs for Chicken 5 changes (thanks to Grant Shangreaux)
