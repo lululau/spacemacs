@@ -1081,6 +1081,7 @@ Other:
 - Improvements:
   - Added support for multiple vault password files, see the layer =README.org=
     (thanks to Sylvain Benner)
+  - Simplified filename matching re (thanks to Anatoli Babenia)
 - Fixes:
   - Fixed ansible-doc-mode error on ~SPC h d k~
     (thanks to Codruț Constantin Gușoi)
@@ -1548,6 +1549,9 @@ Other:
 - Show magit-log-select and diff in two windows (thanks to duianto)
 - Fixed magit conflicting with golden-ratio (thanks Eric Zhang)
 - Hide with-editor mode-line indicator: =WE= (thanks to duianto)
+**** Gnus
+- Key bindings:
+  - Added ~g r~ for =gnus-group-get-new-news= (thanks to Matthew Leach)
 **** Go
 - Improved go test output buffer behavior (thanks to Denis Bernard)
 - Configurable extra arguments to go run (thanks to Enze Chi)
