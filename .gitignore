@@ -56,6 +56,7 @@ eclipse.jdt.ls
 .lsp-session-*
 .trello
 .extension
+mspyls/
 
 # Private directory
 private/
