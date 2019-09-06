@@ -1598,6 +1598,7 @@ Other:
   one =go-linter= (thanks to Robert Zaremba)
 - Added Testify support (thanks to Mathieu Post)
 - Added setup instructions for =gopls= (thanks to pancho horrillo)
+- Dropped support for deprecated =gometalinter= (thanks to pancho horrillo)
 **** Graphviz
 - Use graphviz package from melpa (thanks to Matthew Boston)
 **** Groovy
@@ -1773,6 +1774,8 @@ Other:
 - Added missing optional argument for the =jabber-alert-echo= function to fix
   =wrong-number-of-arguments= error when jabber receives a new notification
   (thanks to Aleksei Fedotov)
+**** Json
+- Added variable =json-fmt-on-save= to run the selected formatter on save.
 **** Jsonnet
 - Fixed flycheck support in jsonnet files (thanks to Vikash Balasubramanian)
 **** Java
@@ -2255,8 +2258,8 @@ Other:
 - Added key binding ~SPC m r f~ to fix missing import statements
   (thanks to Volodymyr Vitvitskyi)
 - Use =python-mode= for SCons script files (thanks to shanemikel)
-- Added LSP support, which can be used by enabling the =lsp= layer and setting
-  the =python= layer's =python-backend= variable to =lsp=
+- Added LSP support, which can be enabled by setting the =python= layer's
+  =python-backend= variable to =lsp=
   (thanks to Yuan Fu and Sylvain Benner).
 - The LSP backend can use either the =pyls= (default) server or the =mspyls=
   (Microsoft) implementation, which may be selected by setting the
@@ -2746,10 +2749,10 @@ Other:
   Diego Alvarez, Diego Berrocal, Dietrich Daroch, Dinesh Bhosale, Dominik
   Schrempf, Doug Beardsley, dubnde, duianto, eldios, EMayej, Eugene Yaremenko,
   Evan Klitzke, Evan Niessen-Derry, firemiles, Florian Bruhin, Fuqiao Xue,
-  Garrett Johnson, Grant Shangreaux, Guido Kraemer, Henrique Jung, Henry Hirsch,
-  Henry Marshall, hornuda, Hong Xu, Ivan Fedorov, Ivan Kryvoruchko, J. Patrick
-  Lanigan, Jaremy Creechley, Jason Axelson, Jesse Cooke, Jethro Shuwen Sun, JI
-  Xiang, Jim Deville, Jody Frankowski, Joe Hillenbrand, John Eismeier, John
+  Gabriel Arrillaga, Garrett Johnson, Grant Shangreaux, Guido Kraemer, Henrique Jung,
+  Henry Hirsch, Henry Marshall, hornuda, Hong Xu, Ivan Fedorov, Ivan Kryvoruchko,
+  J. Patrick Lanigan, Jaremy Creechley, Jason Axelson, Jesse Cooke, Jethro Shuwen Sun,
+  JI Xiang, Jim Deville, Jody Frankowski, Joe Hillenbrand, John Eismeier, John
   Wood, Jon Tippens, Jonas Strømsodd, Jonathan Arnett, Jonathan Chen, Jonathan
   Gillett, Josh Greenwood, Joshua Santos, Justin Stone, Kainalu Hagiwara, Kalle
   Lindqvist, Kechao Cai, Keith Simmons, Keith Wygant, Kevin Ji, Kristoffer
