@@ -830,6 +830,9 @@ Other:
     - Frame transparency ~SPC T T _~ decrease transparency
     - Zoom frame ~SPC z f _~ zoom frame out
   - Added ~SPC j U~ for =spacemacs/avy-open-url= (thanks to Dominik Schrempf)
+  - Added workspaces transient state key bindings (thanks to duianto):
+    - ~SPC l w s~ =spacemacs/single-win-workspace= (exits the TS)
+    - ~SPC l w S~ =spacemacs/single-win-workspace=
 - Improvements:
   - Rewrote window layout functions for ~SPC w 1~, ~SPC w 2~, ~SPC w 3~, and
     ~SPC w 4~ (thanks to Codruț Constantin Gușoi):
@@ -1471,6 +1474,7 @@ Other:
 - Refactor keybindings for =ess-mode= and =ess-julia-mode=
   (thanks to Guido Kraemer and bmag)
 - Added Julia repl to =spacemacs/ess-start-repl= (thanks to Guido Kraemer)
+- Optimize Julia layer to provide better dev experience (thanks to Guido Kraemer)
 - Reorganize key bindings (refer to =ESS= section in Breaking Changes above)
 - Added =xref= integration (thanks to Guido Kraemer)
 - Update ess-disable-underscore-assign for ESS 18.10 (thanks to Leonard Lausen)
@@ -1770,6 +1774,7 @@ Other:
 - Display results count properly in prompt (thanks to yuhan0)
 - Fixed typos in spacemacs/search-dir* bindings (thanks to yuhan0)
 - Added =ivy-ret-visits-directory= variable (thanks to bb2020)
+- Fixed definitions of extra actions R and D for recentf (thanks to madand)
 **** Imenu-list
 - Changed ~SPC b i~ to ~SPC b t~ for =imenu= tree view
   (thansk to Sylvain Benner)
@@ -2314,6 +2319,7 @@ Other:
 - Added support for 'black' formatter (thanks to Mike Macpherson)
 - Enabled =eldoc= for =anaconda-mode= (thanks to Vikash Balasubramanian)
 - Various fixes for =lsp-python-ms= setup (thanks to Trapez Breen)
+- Added lazy loading of =lsp-python-ms= (thanks to Ying Qu)
 **** Racket
 - Restore smart closing paren behavior in racket-mode (thanks to Don March)
 - Updated racket logo (thanks to Vityou)
@@ -2322,6 +2328,7 @@ Other:
 - Key bindings:
   - Added ~j D~ to jump other window (thanks to Rich Alesi)
   - Added ~-~ to enter (thanks to Rich Alesi)
+- Load =helm= before =ranger= (thanks to duianto)
 **** Rcirc
 - New variable =rcirc-enable-late-fix= to enable or disable the included
   =rcirc-late-fix= package (disabled by default).
