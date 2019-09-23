@@ -1,6 +1,6 @@
 #+COMMENT -*- mode: org -*-
 
-This file containes the change log for the next major version of Spacemacs.
+This file contains the change log for the next major version of Spacemacs.
 
 Use the following template structure and fill it in with your changes.
 When a release will be drafted, the notes will be copied at the top of
@@ -1095,6 +1095,8 @@ Other:
   - Added support for multiple vault password files, see the layer =README.org=
     (thanks to Sylvain Benner)
   - Simplified filename matching re (thanks to Anatoli Babenia)
+  - Added additional YAML paths and refactored =spacemacs--ansible-filename-re=
+    (thanks to Brett Campbell)
 - Fixes:
   - Fixed ansible-doc-mode error on ~SPC h d k~
     (thanks to Codruț Constantin Gușoi)
@@ -1227,6 +1229,7 @@ Other:
   - Allow to send input to the REPL via RET in normal mode
     (thanks to Dieter Komendera)
   - Improved spacemacs-jump-handlers (thanks to Ag Ibragimov)
+  - Autoscroll to end of repl when sending buffer content (thanks to Vitaly Banchenko)
 - Key bindings:
   - ~SPC m e ;~ to eval sexp and show result as comment
     (thanks to John Stevenson)
@@ -1349,6 +1352,10 @@ Other:
 **** D
 - Fixes:
   - Fixed =d-mode= flycheck imports on dub projects (thanks to Dietrich Daroch)
+**** Dart
+- Improvements:
+  - Added =LSP= support (thanks to Mathieu Post)
+  - Added =Flutter= support (thanks to Mathieu Post)
 **** Dash
 - Improvements:
   - Use default docsets path in =helm-dash= on macos (thanks to ColorFuzzy)
@@ -1574,6 +1581,7 @@ Other:
 - Show magit-log-select and diff in two windows (thanks to duianto)
 - Fixed magit conflicting with golden-ratio (thanks Eric Zhang)
 - Hide with-editor mode-line indicator: =WE= (thanks to duianto)
+- Fixed magit blame in org buffers (thanks to Compro Prasad)
 **** Gnus
 - Key bindings:
   - Added ~g r~ for =gnus-group-get-new-news= (thanks to Matthew Leach)
@@ -2264,10 +2272,16 @@ Other:
   =spacemacs/perltidy-format-function= to move the point and window to their
   original locations.
 **** PHP
-- Added company-php (thanks to jim and Eivind Fonn)
-- Fixed php-company autocompletion (thanks to Dela Anthonio)
-- Added LSP support, which can be used by enabling the =lsp= layer and setting
-  the =php= layer's =php-backend= variable to =lsp=
+- Key bindings:
+  - Added =phpunit= test key bindings (thanks to duianto):
+    - ~SPC m t t~ =phpunit-current-test=
+    - ~SPC m t c~ =phpunit-current-class=
+    - ~SPC m t p~ =phpunit-current-project=
+- Fixes:
+  - Added company-php (thanks to jim and Eivind Fonn)
+  - Fixed php-company autocompletion (thanks to Dela Anthonio)
+  - Added LSP support, which can be used by enabling the =lsp= layer and setting
+    the =php= layer's =php-backend= variable to =lsp=
 **** PlantUML
 - Added a missing prefix: =compile=
 **** Platinum
@@ -2356,6 +2370,8 @@ Other:
 - Added lazy loading of =lsp-python-ms= (thanks to Ying Qu)
 - Make pylookup makefile use correct shell (thanks to Koray Al)
 - Fix lazy loading of =lsp-python-ms= (thanks to lsp-ableton)
+- Fix =Ipython= path on windows (thanks to Daniel K)
+- Make =inferior-python-mode= do not use tabs (thanks to tsoernes)
 **** Racket
 - Restore smart closing paren behavior in racket-mode (thanks to Don March)
 - Updated racket logo (thanks to Vityou)
@@ -2556,6 +2572,8 @@ Other:
 - Added insert commands from sh-script package to major mode menu
   (thanks to Maximilian Wolff)
 - Added org-mode support (thanks to Josh Santos)
+- Added LSP support, which can be used by enabling the =lsp= layer and setting
+  the =shell-scripts= layer's =shell-scripts-backend= variable to =lsp=
 **** Slack
 - New layer variable =slack-spacemacs-layout-name= to customize the name of
   the custom layer for Slack buffers (thanks to Benjamin Reynolds)
@@ -2824,9 +2842,11 @@ Other:
   Sergio Ugalde, Shane Kilkelly, Sid Kapur, Somelauw, Soobin Rho, sorawee,
   SteveJobzniak, Sunghyun Hwang, Swaroop C H, Sylvain Benner, Szunti, Tim
   Stewart, timor, TinySong, Titov Andrey, Thomas de Beauchêne, Tomasz
-  Cichocinski, tzhao11, Vincent Taing, Vlad Bokov, Vladimir Kochnev, Wieland
+  Cichocinski, Trey Merkley, tzhao11, Vincent Taing, Vlad Bokov, Vladimir Kochnev, Wieland
   Hoffmann, Witoslaw Koczewski, Xiang Ji, Yi Liu, Zane Sterling, zer09, Zhige
   Xin, Serghei Iakovlev)
+**** Documentation and website
+  - Updated DOCUMENTATION.org to fix the example for how to change the separator style
 *** Release notes summarized
   Thanks to: Grant Shangreaux, Songpeng Zu, Igor Almeida, Miciah Dashiel Butler
   Masters, Abhishek(Compro) Prasad, Deepak Khidia, Ward Harris, Jiahao Jiang,
