@@ -46,12 +46,15 @@
         ;; There's an upstream issue with this command:
         ;; dart-server-find-refs on int opens a dart buffer that keeps growing in size #11
         ;; https://github.com/bradyt/dart-server/issues/11
+        ;; When/if it's fixed, add back the key binding:
+        ;; ~SPC m f f~ Find reference at point.
+        ;; to the readme.org key binding table.
         ;; "ff" 'dart-server-find-refs
         "fe" 'dart-server-find-member-decls
         "fr" 'dart-server-find-member-refs
         "fd" 'dart-server-find-top-level-decls)
 
-      (add-to-list 'spacemacs-jump-handlers-dart-server
+      (add-to-list 'spacemacs-jump-handlers-dart-mode
                    '(dart-server-goto :async t))
 
       (evil-define-key 'insert dart-server-map
