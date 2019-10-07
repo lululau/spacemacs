@@ -1599,6 +1599,9 @@ Other:
   - Added ~g r~ for =gnus-group-get-new-news= (thanks to Matthew Leach)
   - Added ~O~ prefix in evil state for =gnus-group-group-map=
     (thanks to Matthew Leach)
+- Improvements:
+  - Added a =@gnus= perspective (~SPC l o g~) to the layouts transient state
+    (thanks to Matthew Leach)
 **** Go
 - Deprecated:
   - Dropped support for deprecated =gometalinter= (thanks to pancho horrillo)
@@ -2302,6 +2305,8 @@ Other:
     the =php= layer's =php-backend= variable to =lsp=
 **** PlantUML
 - Added a missing prefix: =compile=
+- Added instructions for compiling the image locally by setting
+  =plantuml-default-exec-mode= to =jar= (thanks to Daniel Caixinha)
 **** Platinum
 - Added the =.plum= extension to the platinum modes (thanks to Sylvain Benner)
 - Remove automatic indentation on paste (thanks to Sylvain Benner)
