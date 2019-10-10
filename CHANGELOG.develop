@@ -1765,8 +1765,11 @@ Other:
 - Added missing prefixes for =web-mode= and =css-mode= (thanks to Uroš Perišić)
 - Fixed ~TAB~ indenting in =web-mode= (thanks to Christopher Eames)
 - Added =lsp= support for =css-mode=, =less-css-mode=, and =scss-mode=
+  (thanks to Seong Yong-ju)
 - Added support for =prettier= formatter in HTML buffers
-- Added support for .svelte files
+  (thanks to Anton Alekseev)
+- Added support for =.svelte= files (thanks to Javier Candeira)
+- Added =lsp= support for =html= buffers (thanks to Thanh Vuong)
 **** Hy
 - Added support for virtual envs (thanks to Danny Freeman)
 - Key bindings:
@@ -2438,6 +2441,8 @@ Other:
   - Configure =emmet-mode= to expand classes using =className= instead of =class=
     (thanks to Sylvain Benner)
   - Open =.jsx= files with =rjsx-mode= (thanks to Thomas de Beauchêne)
+  - Made =react= layer respect =javascript= layers variable
+    =javascript-fmt-on-save= (thanks to Tommy Groshong)
 - Key bindings:
   - Added =import-js= support with key bindings:
     - ~SPC m i i~ to mport the module for the variable under the cursor
