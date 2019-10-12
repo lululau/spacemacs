@@ -2401,6 +2401,8 @@ Other:
 - Fix lazy loading of =lsp-python-ms= (thanks to lsp-ableton)
 - Fix =Ipython= path on windows (thanks to Daniel K)
 - Make =inferior-python-mode= do not use tabs (thanks to tsoernes)
+- Added =anaconda-mode-find-definition= for ~SPC m g g~
+  (thanks to Rakan Alhneiti)
 **** Racket
 - Restore smart closing paren behavior in racket-mode (thanks to Don March)
 - Updated racket logo (thanks to Vityou)
@@ -2870,14 +2872,16 @@ Other:
   Schneider, Pawan Dubey, Paweł Siudak, Phil Pirozhkov, Philippe Bourdages,
   Piotr Grzesik, Rafi Khan, Rand01ph, rakyi, Raymond Wanyoike, Reverend Homer,
   Robby O'Connor, Rhommel Lamas, Sam Pablo Kuper, Saulius Menkevičius, sduthil,
-  Sergio Ugalde, Shane Kilkelly, Sid Kapur, Somelauw, Soobin Rho, sorawee,
-  SteveJobzniak, Sunghyun Hwang, Swaroop C H, Sylvain Benner, Szunti, Tim
-  Stewart, timor, TinySong, Titov Andrey, Thomas de Beauchêne, Tomasz
+  Sergio Ugalde, Shane Kilkelly, Sid Kapur, Som Poddar, Somelauw, Soobin Rho,
+  sorawee, SteveJobzniak, Sunghyun Hwang, Swaroop C H, Sylvain Benner, Szunti,
+  Tim Stewart, timor, TinySong, Titov Andrey, Thomas de Beauchêne, Tomasz
   Cichocinski, Trey Merkley, tzhao11, Vincent Taing, Vlad Bokov, Vladimir
   Kochnev, Wieland Hoffmann, Witoslaw Koczewski, Xiang Ji, Yi Liu, Zane
   Sterling, zer09, Zhige Xin, Serghei Iakovlev)
 **** Documentation and website
   - Updated DOCUMENTATION.org to fix the example for how to change the separator style
+  - README.md:
+    - Fixed macOS documentation to install fonts (thanks to Sergio Morales)
 *** Release notes summarized
   Thanks to: Grant Shangreaux, Songpeng Zu, Igor Almeida, Miciah Dashiel Butler
   Masters, Abhishek(Compro) Prasad, Deepak Khidia, Ward Harris, Jiahao Jiang,
