@@ -1580,6 +1580,7 @@ Other:
   - Get git permalink for a region (thanks to Roman Gonzalez):
     - ~SPC g l p~ opens browser with region permalink URL
     - ~SPC g l P~ adds region permalink URL to clipboard
+  - Moved =magit-find-file= from ~SPC g f f~ to ~SPC g f F~ (thanks to Hong Xu)
 - Added feature to toggle =evil-magit= based on editing style
   (thanks to Muneeb Shaikh)
 - Added =use-package= for deferred loading of evil-magit
@@ -1802,6 +1803,7 @@ Other:
   - Added ~SPC h d F~ to list faces (thanks to Muneeb Shaikh)
   - Bind =find-file-other-window= to ~j~ (thanks to James Wang)
   - Added =counsel-mark-ring= to ~rm~ (thanks to bmag)
+  - Added =counsel-git= to ~SPC g f f~ (thanks to Hong Xu)
 - Limit =ripgrep= results to 150 columns (thanks to Aaron Jensen)
 - Use new API to register additional transient state bindings
   (thanks to Andriy Kmit')
@@ -2883,8 +2885,8 @@ Other:
   sorawee, SteveJobzniak, Sunghyun Hwang, Swaroop C H, Sylvain Benner, Szunti,
   Thijs Vermeir, Tim Stewart, timor, TinySong, Titov Andrey, Thomas de
   Beauchêne, Tomasz Cichocinski, Trey Merkley, tzhao11, Vincent Taing, Vlad
-  Bokov, Vladimir Kochnev, Wieland Hoffmann, Witoslaw Koczewski, Xiang Ji, Yi
-  Liu, Zane Sterling, zer09, Zhige Xin, Serghei Iakovlev)
+  Bokov, Vladimir Kochnev, wenpin, Wieland Hoffmann, Witoslaw Koczewski, Xiang
+  Ji, Yi Liu, Zane Sterling, zer09, Zhige Xin, Serghei Iakovlev)
 **** Documentation and website
   - Updated DOCUMENTATION.org to fix the example for how to change the separator style
   - README.md:
