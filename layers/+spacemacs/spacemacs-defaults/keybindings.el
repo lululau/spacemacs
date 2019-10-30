@@ -361,6 +361,19 @@
     (evil-normalize-keymaps))
   :documentation "Move point according to visual lines."
   :evil-leader "tL")
+(spacemacs|add-toggle visual-line-navigation-globally
+  :status global-visual-line-mode
+  :on
+  (progn
+    (global-visual-line-mode)
+    (spacemacs//init-visual-line-keys)
+    (evil-normalize-keymaps))
+  :off
+  (progn
+    (global-visual-line-mode -1)
+    (evil-normalize-keymaps))
+  :documentation "Move point according to visual lines globally."
+  :evil-leader "t C-S-l")
 (spacemacs|add-toggle auto-fill-mode
   :status auto-fill-function
   :on (auto-fill-mode)
