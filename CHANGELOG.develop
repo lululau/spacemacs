@@ -168,6 +168,10 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
   - Swapped key bindings for better usability (thanks to Tony Lotts):
     - ~SPC m s s~ for =haskell-interactive-switch=
     - ~SPC m s S~ for =spacemacs/haskell-interactive-bring=
+***** LSP
+- Key bindings;
+  - Change jump back to last mark from ~SPC m g p~ to ~SPC m g b~
+    to follow the keybindings convention (thanks to Magnus Therning)
 ***** IPython notebook
 - Key bindings;
   - Change prefix from ~SPC a i~ to ~SPC a y~ (thanks to Swaroop C H)
@@ -177,6 +181,7 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
 - CoffeeScript support has been extracted from the =javascript= layer into the
   new =coffeescript= layer.
 - Added missing prefix for =js2-mode=
+- Added =eslint_d= support (thanks to Seong Yong-ju)
 ***** Markdown
 - Key bindings:
   - Removed ~SPC m i I~ for =markdown-insert-reference-image=
@@ -325,6 +330,7 @@ sane way, here is the complete list of changed key bindings
 - perl6 (thanks to Bahtiar Gadimov and yuhan0)
 - prolog (thanks to Newres Al Haider)
 - reasonml (thanks to fredyr and Dave Aitken)
+- solidity (thanks to Brooklyn Zelenka and Seong Yong-ju)
 - protobuf (thanks to Amol Mandhane)
 - restructuredtext (thanks to Wei-Wei Guo and Kalle Lindqvist)
 - semantic-web (thanks to Andreas Textor)
@@ -375,6 +381,7 @@ sane way, here is the complete list of changed key bindings
 *** Renamed layers
 - =extra-langs= renamed to =major-modes= (thanks to Eivind Fonn)
 - =pdf-tools= renamed to =pdf=
+- =mercury-layer= renamed to =mercury=
 *** Removed layers
 - evil-cleverparens (moved to =spacemacs-evil=)
 - extra-langs (replaced by =ad-hoc= layers)
@@ -416,6 +423,7 @@ sane way, here is the complete list of changed key bindings
     =.spacemacs.template= (thanks to Ying Qu)
 Other:
   - =.gitignore= now ignores tag files and the bbdb database.
+  - =.gitignore= now ignores org-journal-cache-file (thanks to Benjamin Hipple)
   - Added =vim-style-visual-feedback= and =hybrid-style-visual-feedback= style
     variables to enable =evil-goggles= pulse in the Vim and Hybrid editing
     styles, respectively; disabled by default (thanks to Sylvain Benner)
@@ -556,6 +564,7 @@ Other:
     =spacemacs/ivy-persp-switch-project=):
     - Fixed the default action to display the home buffer in the new layout.
     - Added actions to copy the current layout or create a new project layout.
+    - Added action for opening project in dired. (thanks to Magnus Therning)
   - Resolve symlinks in warning message about duplicate layers
     (thanks to Ben Gamari)
   - Check toggle condition in status function (thanks to Eivind Fonn)
@@ -849,6 +858,15 @@ Other:
   - Added visual-line-navigation keys (thanks to duianto)
     - ~up~ =evil-previous-visual-line=
     - ~down~ =evil-next-visual-line=
+  - Added ~a~ for =ace-window= to window manipulation transient state
+    (thanks to fleimgruber)
+  - Added =dired= evil search next/prev key bindings (thanks to duianto):
+    - With the =vim= editing style in =normal= state:
+      - ~n~ =evil-ex-search-next=
+      - ~N~ =evil-ex-search-previous=
+    - With the =hybrid= editing style in =normal= state:
+      - ~n~ =evil-search-next=
+      - ~N~ =evil-search-previous=
 - Improvements:
   - Rewrote window layout functions for ~SPC w 1~, ~SPC w 2~, ~SPC w 3~, and
     ~SPC w 4~ (thanks to Codruț Constantin Gușoi):
@@ -960,8 +978,11 @@ Other:
     - Switch to Project Perspective and Show Recent Files
     - Switch to Project Perspective and Search
     (thanks to Gia Thanh Vuong)
+  - Added persistant =helm= actions for ~SPC h p~ to recompile emacs package
+    (thanks to thanhvg)
   - Enabled =doom= mode-line theme to respect
     =dotspacemacs-display-default-layout= (thanks to Jake Romer)
+  - Hide =spacemacs//= command prefixes in which-key (thanks to duianto)
 - Fixed:
   - Fixed ~h~ key binding in compilation and grep buffers
     (thanks to Sylvain Benner)
@@ -1488,6 +1509,7 @@ Other:
 **** Emacs Lisp
 - Key bindings:
   - Added ~c~ to continue in edebug mode (thanks to hodge)
+  - Added ~SPC m g b~ to jump back to previous point (thanks to Magnus Therning)
 - Identify Cask files as emacs lisp ones (thanks to Adrien Becchis)
 - Added =overseer= ert test runner (thanks to Adrien Becchis)
   - Key bindings:
@@ -1636,6 +1658,15 @@ Other:
   - Added ~g r~ for =gnus-group-get-new-news= (thanks to Matthew Leach)
   - Added ~O~ prefix in evil state for =gnus-group-group-map=
     (thanks to Matthew Leach)
+  - Added *unplugged* and *slave* variants. These are for offline usage and
+    having multiple gnus running, respectively.
+    - ~SPC a g g~ gnus (normal). Not slave, plugged.
+    - ~SPC a g o~ slave & unplugged.
+    - ~SPC a g u~ unplugged (but not slave).
+    - ~SPC a g s~ gnus slave (but plugged).
+      (thanks to Spenser Truex)
+  - Added message mode insert binding: ~SPC m i F~ for FLAME ON, following
+    [[https://tools.ietf.org/html/rfc1855#page-4][RFC 1855]] (thanks to Spenser Truex)
 - Improvements:
   - Added a =@gnus= perspective (~SPC l o g~) to the layouts transient state
     (thanks to Matthew Leach)
@@ -1815,8 +1846,12 @@ Other:
 - Added support for =.svelte= files (thanks to Javier Candeira)
 - Added =lsp= support for =html= buffers (thanks to Thanh Vuong)
 **** Hy
+- Added support for pipenv (thanks to Cazim Hysi)
+- Updated Hy layer to current Hy mode (thanks to Cazim Hysi)
 - Added support for virtual envs (thanks to Danny Freeman)
 - Key bindings:
+  - Added ~SPC m v~ prefix for virtualenvs
+  - Added ~SPC m v p~ prefix for pipenv
   - Added ~SPC m h~ prefix for =help=
   - Added ~SPC m e~ prefix to mirror the eval bindings of other Lisps
   - Changed ~SPC m s s~ (i.e. =start-or-switch-to-shell=) to ~SPC m '~
@@ -1848,6 +1883,10 @@ Other:
     - ~SPC C e~ =counsel-colors-emacs=
     - ~SPC C f~ =counsel-faces=
     - ~SPC C w~ =counsel-colors-web=
+  - Restored bindings in =spacemacs/counsel-search= with =ag= or =rg=:
+    - ~f3~ =spacemacs//counsel-save-in-buffer=
+    - ~C-c C-e~ =spacemacs//counsel-edit=
+    (thanks to madand)
 - Limit =ripgrep= results to 150 columns (thanks to Aaron Jensen)
 - Use new API to register additional transient state bindings
   (thanks to Andriy Kmit')
@@ -2155,6 +2194,10 @@ Other:
   - ~SPC s m s t~ =mc/reverse-regions=
 - Fixed initialization (thanks to Seong Yong-ju)
 - Moved =evil-mc= key bindings to =evil-mc-key-map= (thanks to Seong Yong-ju)
+- Added =evil-mc= make cursors from selection key bindings:
+  - ~grI~ =evil-mc-make-cursor-in-visual-selection-beg=
+  - ~grA~ =evil-mc-make-cursor-in-visual-selection-end=
+  (thanks to duianto)
 **** Neotree
 - Made neotree an optional instead of a default layer
 - Move neotree to its own layer in new +filetree folder
@@ -2191,6 +2234,9 @@ Other:
 - Disabled add-node-modules-path by default (thanks to Eivind Fonn)
 **** Notmuch
 - Try harder to find GitHub patch URL (thanks to Miciah Masters)
+- Open GitHub patches fullscreen
+- Add next and previous message bindings to notmuch-tree mode
+- Change the C-n and C-p message bindings to their original N and P bindings
 **** OCaml
 - Allow initialization without requiring =opam= (thanks to Bernhard Schommer)
 - Fixed misused functions, =merlin= is a package not a layer
@@ -2525,6 +2571,7 @@ Other:
   - Open =.jsx= files with =rjsx-mode= (thanks to Thomas de Beauchêne)
   - Made =react= layer respect =javascript= layers variable
     =javascript-fmt-on-save= (thanks to Tommy Groshong)
+  - Added =eslint_d= support (thanks to Seong Yong-ju)
 - Key bindings:
   - Added =import-js= support with key bindings:
     - ~SPC m i i~ to mport the module for the variable under the cursor
@@ -2611,6 +2658,7 @@ Other:
   - Added ~SPC m c v~ to run "cargo check" command (thanks to Victor Polevoy)
 - Added rust lsp completion with company and bindings (thanks to Justin)
 - Added debugger integration via =dap= layer
+- Fixed rust dap integration (thanks to Tommi Komulainen)
 **** Sailfish-Developer
 - Key bindings:
   - Added =sailfish-scratchbox= key bindings (thanks to Victor Polevoy):
@@ -2714,8 +2762,13 @@ Other:
 - Fixed documentation issues with slack and emoji layers
   (thanks to Benjamin Reynolds)
 - Fixed =helm= menu display (thanks to Leslie Shawn Russell)
+- Fixed function name bug in react layer fmt-on-save (thanks to Tommy Groshong)
 **** Smex
 - Fixed ~SPC m :~ for current major mode commands (thanks to tinysong)
+**** Solidity
+- Key bindings:
+  - Added ~SPC m g~ Estimate gas at point
+    (thanks to Brooklyn Zelenka and Seong Yong-ju)
 **** Source control
 - Install orgit only when org package is used (thanks to Boris Buliga)
 - Defer git-gutter loading (thanks to Aaron Jensen)
@@ -2829,6 +2882,9 @@ Other:
 - Made sure treemacs' minor modes will be disabled when they are configured
   to be off.
 - Add =tag= as an accepted value for option =treemacs-use-follow-mode=.
+- Deprecated =treemacs-use-collapsed-directories=. Flattening directories should
+  be controlled by directly setting =treemacs-collapse-dirs=.
+- Fixed "width (un)locked" message appearing when treemacs is loaded.
 **** Typescript
 - Call tsfmt with extension of current buffer for TSX formatting
   (thanks to Victor Andrée)
@@ -2867,6 +2923,7 @@ Other:
 - Added a =typescript-lsp-linter= variable to allow for disabling =lsp= as a
   linter, when =lsp= is set as the backend (thanks to Thanh Vuong)
 - Fix =tide= with =tsx= files (thanks to Aaron Jensen)
+- Added =eslint_d= support (thanks to Seong Yong-ju)
 **** Vagrant
 - Key bindings:
   - move key bindings prefix to ~SPC a V~ (thanks to Thomas de Beauchêne)
@@ -2949,8 +3006,8 @@ Other:
   Alexandros Kotzias, Andrew Grangaard, Andrew Vit, Andriy Senyshyn, Anton
   Latukha, Antonio Miranda, Anurag Sharma, Archenoth, Ather Sharif, Artur
   Juraszek, Benjamin Reynolds, Bernhard Schommer, Billy Wade, bmag, Boris
-  Buliga, Boris Wong, Carl Lange, Chase Adams, Christian Bäuerlein, Cibin
-  Mathew, CL123123, Codruț Constantin Gușoi, Compro-Prasad, cormacc, Daniel
+  Buliga, Boris Wong, Carl Lange, Cazim Hysi, Chase Adams, Christian Bäuerlein,
+  Cibin Mathew, CL123123, Codruț Constantin Gușoi, Compro-Prasad, cormacc, Daniel
   Hodson, Daniel Le, Daniel Molina, Darkhan, David Florness, David Parrish,
   David Vo, davidpham87, Deepu Mohan Puthrote, Dela Anthonio, Diego Alvarez,
   Diego Berrocal, Dietrich Daroch, Dinesh Bhosale, Dominik Schrempf, Doug
