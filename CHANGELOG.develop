@@ -1539,6 +1539,7 @@ Other:
   - Added ~SPC a D m~ for =docker-machines= (thanks to Ramz)
 - Fixed: broken package declaration for dockerfile-mode
   (thanks to Maximilian Wolff)
+- Added LSP support
 **** Dotnet
 - Key bindings:
   - Added key bindings for =dotnet= (thanks to Jordan Kaye):
@@ -2157,6 +2158,7 @@ Other:
     (thanks to Olivier Verdier)
 **** Lua
 - Added support for auto-completion with =company= (thanks to halfcrazy)
+- Added support for =LSP= (EmmyLua-LS-all) (thanks to Lin.Sun)
 **** Language Server Protocol (LSP)
 - Added core keybindings and prefix declarations for all LSP-based language
   layers, and helper functions to bind server-specific extensions
