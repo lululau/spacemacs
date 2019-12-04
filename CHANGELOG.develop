@@ -597,6 +597,7 @@ Other:
   - Fixed =spacemacs/alternate-buffer= to restore point.
   - Removed Unicode triple dot in both =dotspacemacs-smart-closing-parenthesis=
     variable comments in favor of the ASCII one (thanks to nshadov)
+  - Fixed home buffer version insertion removing first line (thanks to duianto)
 - Other:
   - New function =configuration-layer/message= to display message in
     =*Messages*= buffer (thanks to Sylvain Benner)
@@ -1215,6 +1216,8 @@ Other:
   - Fixed =spacemacs/rename-current-buffer-file= handle same new and old name
     (thanks to duianto)
   - Fixed sudo-edit on TRAMP (thanks to Carlos Ibáñez)
+  - Replaced obsolete function =doom-modeline-init= with =doom-modeline-mode=
+    (thanks to duianto)
 *** Layer changes and fixes
 **** Agda
 - Fixes
@@ -2130,6 +2133,8 @@ Other:
 - Fixes:
   - Loaded =lsp-julia= from melpa (thanks to Guido Kraemer)
   - Fixed =julia-mode-local-vars-hook= (thanks to Guido Kraemer)
+  - Limited =evil-surround-pairs-alist= redefinitions to julia mode
+    (thanks to duianto)
 **** Keyboard layout
 - Added support for Colemak layout (thanks to Daniel Mijares, Lyall Cooper and
   Eivind Fonn)
@@ -2555,6 +2560,7 @@ Other:
 - Made =python-execute-file= use =python-shell-interpreter=
   (thanks to Swaroop C H)
 - Trim output from pyenv command (thanks to Eivind Fonn)
+- Set VIRTUAL_ENV environment variable when switching to new pyenv (thanks to James Gough)
 - Use Python executable from active virtual env to compile files
   (thanks to Swaroop C H)
 - Fixed arguments to =python-setup-hy= (thanks to Eivind Fonn)
@@ -2780,6 +2786,7 @@ Other:
   system databases to speed up semantic (thanks to bet4it)
 - Disabled =semantic-idle-summary-mode= when =gtags= or =lsp= layer is enabled
   (thanks to bet4it)
+- Moved the toggle key bindings to the semantic layer (thanks to duianto)
 **** Shell
 - Key bindings:
   - Added =vterm= bindings:
