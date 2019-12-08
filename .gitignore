@@ -8,6 +8,7 @@ eproject.lst
 .smex-items
 \#*
 .places
+.ac-php-conf.json
 .directory
 .cache
 /eww-bookmarks
