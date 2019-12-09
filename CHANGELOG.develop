@@ -523,7 +523,7 @@ Other:
   - Use a unique variable for each transient state's full-hint toggle function
     so that toggling the full hint in one transient state does not affect other
     transient states (thanks to Miciah Dashiel Butler Masters)
-- Fixed:
+- Fixes:
   - Avoid non-idempotent use of push in init code (thanks to Miciah Masters)
   - Moved Spacemacs startup progress bar to =core-progress-bar.el=, removed
     counter from progress bar, fixed updating, and fixed size when Emacs is
@@ -604,6 +604,7 @@ Other:
   - Removed Unicode triple dot in both =dotspacemacs-smart-closing-parenthesis=
     variable comments in favor of the ASCII one (thanks to nshadov)
   - Fixed home buffer version insertion removing first line (thanks to duianto)
+  - Fixed ~SPC TAB~ in =spacemacs-base= distribution (thanks to duianto)
 - Other:
   - New function =configuration-layer/message= to display message in
     =*Messages*= buffer (thanks to Sylvain Benner)
@@ -1949,6 +1950,7 @@ Other:
   (thanks to Anton Alekseev)
 - Added support for =.svelte= files (thanks to Javier Candeira)
 - Added =lsp= support for =html= buffers (thanks to Thanh Vuong)
+- Added a toggle state minified/full to the transient state (thanks to duianto)
 **** Hy
 - Added support for pipenv (thanks to Cazim Hysi)
 - Updated Hy layer to current Hy mode (thanks to Cazim Hysi)
@@ -3082,6 +3084,8 @@ Other:
 - Avoid loading all the diff packages (thanks to Sylvain Benner)
 - Fixed error on =diff-hl-margin-mode= function being nil during startup
   (thanks to Voleking)
+**** Vue
+- Added a toggle state minified/full to the transient state (thanks to duianto)
 **** Xclipboard
 - Added Requirements documentation (thanks to Chris Glass)
 - Added =cliphist= with the following bindings: (thanks to Hong Xu)
