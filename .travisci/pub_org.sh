@@ -28,10 +28,7 @@ else
     exit 0
 fi
 
-if [ `git rev-list HEAD...origin/$TRAVIS_BRANCH --count` != 0 ]; then
-    echo "We are outdated. Won't publish."
-    exit 0
-fi
+export GITHUB_TOKEN=$BOT_TK
 
 fold_start "CLONING_TARGET_REPOSITORY"
 target_URL="https://github.com/${SPACEMACS_REPO_SLUG}.git"
@@ -44,6 +41,10 @@ fold_end "CLONING_TARGET_REPOSITORY"
 
 fold_start "APPLYING DOCUMENTATION PATCH"
 cd "/tmp/${PUBLISH}"
+if [ ! -f /tmp/docfmt.patch ]; then
+    echo "Documentation doesn't need fixes. Aborting."
+    exit 0
+fi
 git am < /tmp/docfmt.patch
 if [ $? -ne 0 ]; then
     echo "Failed to apply documentation fixes patch"
@@ -51,7 +52,22 @@ if [ $? -ne 0 ]; then
 fi
 fold_end "APPLYING DOCUMENTATION PATCH"
 
+fold_start "CHECKING_IF_SPACEMACS_HEAD_IS_THE_SAME"
+cd ~/.emacs.d
+git remote update
+base_revision=$(cat /tmp/base_revision)
+rem_rev=$(git rev-parse '@{u}')
+echo "Base revision: $base_revision"
+echo "Remote revision: $rem_rev"
+if [ "$base_revision" != "$rem_rev" ]; then
+    echo "Looks like Spacemacs head has changed while we generated files."
+    echo "Aborting."
+    exit 0
+fi
+fold_end "CHECKING_IF_SPACEMACS_HEAD_IS_THE_SAME"
+
 fold_start "PUSHING_CHANGES_TO_${BOT_NAME}/${PUBLISH}"
+cd "/tmp/${PUBLISH}"
 /tmp/hub fork
 if [ $? -ne 0 ]; then
     echo "hub fork failed"
