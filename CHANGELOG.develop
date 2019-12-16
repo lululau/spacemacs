@@ -71,6 +71,8 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
   =EXPERIMENTAL.org=. This allows for instant Spacemacs startup time with
   pre-loaded heavy packages like =Org= and =Helm=
   (thanks to Sylvain Benner, Compro Prasad and Keith Simmons)
+- Added support for native fill column indicator in Emacs 27+ (thanks to
+  Andriy Kmit)
 *** Breaking Changes
 **** Major
 - Support for Emacs 24 has been dropped, the minimal Emacs version is now
@@ -297,6 +299,8 @@ sane way, here is the complete list of changed key bindings
 ***** Vagrant
 - Key bindings:
   - Vagrant key bindings prefix is now ~SPC a V~.
+***** YAML
+- Added LSP support (thanks to Seong Yong-ju)
 ***** ycmd
 - The =ycmd= layer has been deleted and moved to the =c-c++= layer.
 *** New layers
@@ -376,6 +380,7 @@ sane way, here is the complete list of changed key bindings
 - node (thanks to jupl)
 - pass (thanks to Andrew Oppenlander, Kepi, Kalle Lindqvist, and Evan Klitzke)
 - prettier (thanks to Seong Yong-ju)
+- quickurl (thanks to Spenser "equwal" Truex)
 - sailfish-developer (thanks to Victor Polevoy)
 - sphinx (thanks to Wei-Wei Guo)
 - tern (thanks to Sylvain Benner and Juuso Valkeejärvi)
@@ -523,6 +528,9 @@ Other:
   - Use a unique variable for each transient state's full-hint toggle function
     so that toggling the full hint in one transient state does not affect other
     transient states (thanks to Miciah Dashiel Butler Masters)
+  - Converted obsolete =cl= to =cl-lib= (thanks to kimr)
+  - Removed uses of =lexical-let=, part of the deprecated =cl= package
+    (thanks to Spenser Truex)
 - Fixes:
   - Avoid non-idempotent use of push in init code (thanks to Miciah Masters)
   - Moved Spacemacs startup progress bar to =core-progress-bar.el=, removed
@@ -668,6 +676,13 @@ Other:
   - Added =symbol-overlay= to the =spacemacs-navigation= layer
     (thanks to kenkangxgwe)
 - Key bindings:
+  - New ~SPC a Q~ prefix for dispatching quickurl
+    (thanks to Spenser "equwal" Truex:)
+    - ~SPC a Q l~ List quickurls
+    - ~SPC a Q Q~ Expand quickurl abbrev at point
+    - ~SPC a Q i~ Ask for which quickurl to insert
+    - ~SPC a Q e~ Edit quickurls
+    - ~SPC a Q b~ Ask to browse some url from those stored (with completion).
   - New evil text objects =«=, =｢=, =‘= and =“=.
   - Improved buffer transient state with extra bindings and new commands:
     - Added ~<right>~ for next-buffer
@@ -1211,6 +1226,7 @@ Other:
     (thanks to Brandon T. Willard)
   - Fixed canceling =spacemacs/ace-buffer-links= (thanks to duianto)
   - Required =ivy= to load =counsel-projectile= (thanks to Thanh Vuong)
+  - Remove obsolete custom location for =counsel-css= (thanks to Richard Kim)
   - Make =search-engine= layer support custom keywords for =engine-mode=
     (thanks to Maximilian Wolff)
   - Fixed =search-engine= layer customization issue (thanks to Haisheng Wu)
@@ -1300,6 +1316,8 @@ Other:
   - Fixed =lsp= support for =ccls= server (thanks to Alexander Dalshov)
   - Added automatic formatting on save using ClangFormat with the variables
     =c-c++-enable-clang-format-on-save= (thanks to Robbert van der Helm)
+  - Made =c-c++-enable-clang-format-on-save= work the first time a c++ file
+    is opened (thanks to AJ Bond)
   - Added possible value =no-completion= to =c-c++-enable-rtags-support= flag.
     This adds the option to opt-out of =company-rtags= while enabling Rtags.
   - Added option to use =google-c-style= with the variable
@@ -1487,6 +1505,7 @@ Other:
   - Enabled =flycheck= by default (thanks to Saulius Menkevičius)
   - No need to unset =omnisharp-auto-complete-want-documentation= anymore
    (thanks to Saulius Menkevičius)
+  - Add support for lsp server (thanks to Saulius Menkevičius)
   - Added ~SPC m t~ which key prefix: =csharp/tests= (thanks to duianto)
   - Hide mode-line indicator: =omnisharp= (thanks to duianto)
 - Key bindings:
@@ -1806,6 +1825,7 @@ Other:
     faster (thanks to Cosmin Cojocar)
   - Support editorconfig setting of =tab-width= to nil (thanks to lawrsp)
   - Added setup instructions for =gopls= (thanks to pancho horrillo)
+  - Make flycheck disable checkers covered by golangci (thanks to zhuoyikang)
 - Key bindings
   - =godoctor= key bindings (thanks to TinySong and Eivind Fonn):
     - ~SPC m r n~ to rename
@@ -1983,7 +2003,7 @@ Other:
     - ~SPC f e l~ =counsel-find-library=
     - ~SPC h i~   =counsel-info-lookup-symbol=
       (thanks to Andriy Kmit')
-    - ~SPC h m~ =man= (thanks to madand)
+    - ~SPC h m~ =man=, fallback to =woman= on Widows (thanks to madand)
   - Added ~SPC h d F~ to list faces (thanks to Muneeb Shaikh)
   - Bind =find-file-other-window= to ~j~ (thanks to James Wang)
   - Added =counsel-mark-ring= to ~rm~ (thanks to bmag)
@@ -2042,6 +2062,8 @@ Other:
 - Fixed void variable =counsel-find-file-map= (thanks to duianto)
 - Fixed wrong initial directory in =spacemacs/counsel-search=
   (thanks to Carlos Ibáñez and Juuso Valkeejärvi)
+- Fix visual selection expansion across the buffer on `SPC s S` and `SPC s B`
+  (thanks to Andriy Kmit)
 **** Imenu-list
 - Changed ~SPC b i~ to ~SPC b t~ for =imenu= tree view
   (thansk to Sylvain Benner)
@@ -2174,6 +2196,7 @@ Other:
   - ~SPC m n~ goto next error
   - ~SPC m N~ goto previous error
     (thanks to Olivier Verdier)
+- Fixed README to say auto-fill on by default. (thanks to Max Willsey)
 **** Lua
 - Added support for auto-completion with =company= (thanks to halfcrazy)
 - Added support for =LSP= (EmmyLua-LS-all) (thanks to Lin.Sun)
@@ -2291,6 +2314,7 @@ Other:
 - Refactor major-mode leader key bindings (thanks to Miciah Masters)
 - Enabled scrolling in =mu4e= (thanks to Simon Altschuler)
 - Kill mu4e layout on app exit (thanks to Ag Ibragimov)
+- Restore ~gu~ binding for ~mu4e-view-go-to-url~ (thanks to Dominik Schrempf)
 **** Multiple Cursors
 - Disabled Spacemacs paste transient state when pasting to avoid pasting issue
   when there are more than one cursor (thanks to braham-snyder)
@@ -2456,6 +2480,7 @@ Other:
     - Added ~SPC m s a~ to toggle archive tag for subtree
     - Added ~SPC m s A~ to archive subtree (previously ~SPC m s a~)
   - Added ~SPC m i L~ as =org-cliplink= into =org= layer (thanks to bb2020)
+  - Added ~SPC m e s~ =org-mime-org-subtree-htmlize= (thanks to Nick Anderson)
   - Documented more insertion bindings (thanks to Lorenzo Manacorda):
     - ~C-RET~   Insert heading at end of current subtree
     - ~C-S-RET~ Insert TODO heading at end of current subtree
@@ -2523,6 +2548,7 @@ Other:
   =hyper=, =super= or =alt= (thanks to Binbin Ye)
 - Added a layer variable =osx-swap-option-and-command= defaults to =nil=
   (thanks to Binbin Ye)
+- Use standard init function for ~exec-path-from-shell~ (thanks to Christopher Eames)
 **** Pandoc
 - Fixed =spacemacs/run-pandoc= not to reset =pandoc--local-settings=
   (thanks to martian-f)
@@ -2641,6 +2667,7 @@ Other:
 - Fix lazy loading of =lsp-python-ms= (thanks to lsp-ableton)
 - Fix =Ipython= path on windows (thanks to Daniel K)
 - Make =inferior-python-mode= do not use tabs (thanks to tsoernes)
+- Automatic use the =lsp= as =python-formater= when =lsp= is enabled (thanks sunlin7)
 **** Racket
 - Restore smart closing paren behavior in racket-mode (thanks to Don March)
 - Updated racket logo (thanks to Vityou)
@@ -2774,6 +2801,7 @@ Other:
 - Added rust lsp completion with company and bindings (thanks to Justin)
 - Added debugger integration via =dap= layer
 - Fixed rust dap integration (thanks to Tommi Komulainen)
+- Make ~rustup~ call shell agnostic (thanks to Dietrich Daroch)
 **** Sailfish-Developer
 - Key bindings:
   - Added =sailfish-scratchbox= key bindings (thanks to Victor Polevoy):
@@ -2824,6 +2852,7 @@ Other:
   - Prevent ~C-l~ clearing cycle
   - Prevent ~clear RET~ inserting a page of white-space
   - Prevent duplicate insert lines from ~clear RET~
+- Make =eshell auto jump= more intelligent (thanks to Kalle Lindqvist)
 - Require company in =eshell-switch-company-frontend=
   (thanks to Benjamin Reynolds)
 - Fixed docs for "Fish shell and ansi-term" and explicitly enable
@@ -3099,6 +3128,7 @@ Other:
 - Improvements:
   - Updated docs to include the =yaml-yamllint= flycheck checker
     (thanks to Nam Nguyen)
+  - Add support for lsp server (thanks to Seong Yong-ju)
 **** Ycmd
 - Search for =compile_commands.json= in build sub-directory
   (thanks to Amos Bird and Eivind Fonn)
