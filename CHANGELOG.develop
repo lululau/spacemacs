@@ -616,6 +616,8 @@ Other:
     variable comments in favor of the ASCII one (thanks to nshadov)
   - Fixed home buffer version insertion removing first line (thanks to duianto)
   - Fixed ~SPC TAB~ in =spacemacs-base= distribution (thanks to duianto)
+  - Frame title setting doesn't need to depend on environment (gui/cli)
+    (thanks to Mpho Jele)
 - Other:
   - New function =configuration-layer/message= to display message in
     =*Messages*= buffer (thanks to Sylvain Benner)
@@ -1244,6 +1246,7 @@ Other:
   - Fixed sudo-edit on TRAMP (thanks to Carlos Ibáñez)
   - Replaced obsolete function =doom-modeline-init= with =doom-modeline-mode=
     (thanks to duianto)
+  - Fixed searching in the =helm-find-file= actions (thanks to duianto)
 *** Layer changes and fixes
 **** Agda
 - Fixes
@@ -1532,7 +1535,7 @@ Other:
   - Fixed =d-mode= flycheck imports on dub projects (thanks to Dietrich Daroch)
 **** Dart
 - Improvements:
-  - Added =LSP= support (thanks to Mathieu Post)
+  - Added =LSP= support (thanks to Mathieu Post and Takeshi Tsukamoto)
   - Added =Flutter= support (thanks to Mathieu Post)
 - Fixes:
   - Added =dart-server= package (thanks to duianto)
@@ -1952,6 +1955,7 @@ Other:
   - Unfolded org headings to a target line when a .org file is opened from
     Helm-ag (thanks to duianto and Miciah Masters)
   - Fixed searching in a project with ~C-s~ from ~SPC p p~ (thanks to duianto)
+  - Fixed ~C-c C-e~ =helm-find-files-edit= action (thanks to duianto)
 **** HTML
 - Added impatient-mode under ~SPC m i~ (thanks to geo7)
 - Added =counsel-css= as an =ivy= alternative to =helm-css-scss=
@@ -2529,6 +2533,8 @@ Other:
 - Added support for CUSTOM_ID in latex exports (thanks to Compro-Prasad)
 - Added =ox-jira= as org export backend (thanks to Sebastian Nagel)
 - Added =helm-org= package (thanks to Simon Pintarelli)
+- Fixed evil-normal-state ~ESC~ after exiting =org-present-mode=
+  (thanks to duianto)
 **** Osx
 - Fixed OSX mapping issue (thanks to Joey Liu)
 - Added layer variables to customize modifier behaviors on macOS:
@@ -2750,10 +2756,10 @@ Other:
 - Highlight debugger keywords (thanks to Alexander Berezovsky and Eivind Fonn)
 - Adding ruby-refactor package (thanks to Daniel Luna)
   - Key bindings:
-    - Added ~SPC m r R m~ for extract to method.
-    - Added ~SPC m r R v~ to extract local variable.
-    - Added ~SPC m r R c~ to extract constant.
-    - Added ~SPC m r R l~ to extract to =let=.
+    - Added ~SPC m r e m~ for extract to method.
+    - Added ~SPC m r e v~ to extract local variable.
+    - Added ~SPC m r e c~ to extract constant.
+    - Added ~SPC m r e l~ to extract to =let=.
 - Added ~SPC m x h~ to toggle between old and new hash syntax in the active
   region (thanks to Paweł Siudak)
 - Added gtags to =enh-ruby-mode= as well as =ruby-mode=
@@ -2780,6 +2786,9 @@ Other:
 - Added =lsp= and =dap= support (thanks to Billy Kaplan)
 - Fixed lazy loading of =ruby-test-mode= (thanks to Michael Franz Aigner)
 - Removed stray =test.rb= file (thanks to Michael Hauser-Raspe)
+- Added missing key bindings for =counsel-gtags= in =enh=ruby-mode= (thanks to Seong Yong-ju)
+- Added =dap= support for =enh-ruby-mode= (thanks to Seong Yong-ju)
+- Added missing prefix =seeing-is-believing= for ~SPC m @~ (thanks to Seong Yong-ju)
 **** Ruby on Rails
 - Changed leader keys to be configured for the =projectile-rails-mode= minor
   mode instead of =ruby-mode= and =enh-ruby-mode= so that the key bindings will
