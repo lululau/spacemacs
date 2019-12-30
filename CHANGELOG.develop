@@ -1838,6 +1838,7 @@ Other:
   - Support editorconfig setting of =tab-width= to nil (thanks to lawrsp)
   - Added setup instructions for =gopls= (thanks to pancho horrillo)
   - Make flycheck disable checkers covered by golangci (thanks to zhuoyikang)
+  - Updated build instructions for =golangci-lint= (thanks to pancho horrillo)
 - Key bindings
   - =godoctor= key bindings (thanks to TinySong and Eivind Fonn):
     - ~SPC m r n~ to rename
@@ -2821,6 +2822,8 @@ Other:
 - Fixed rust dap integration (thanks to Tommi Komulainen)
 - Make ~rustup~ call shell agnostic (thanks to Dietrich Daroch)
 - Fixed ~rust-quick-run~ command (thanks to Grant Shangreaux)
+- Removed compilation buffer string match on =rust-quick-run=
+  (thanks to Grant Shangreaux)
 **** Sailfish-Developer
 - Key bindings:
   - Added =sailfish-scratchbox= key bindings (thanks to Victor Polevoy):
@@ -3133,6 +3136,7 @@ Other:
   - =browse-at-remote= which replaces =github-browse-file=
   (thanks Eugene Yaremenko)
 - Avoid loading all the diff packages (thanks to Sylvain Benner)
+- Avoided installing unused diff packages (thanks to Andriy Kmit)
 - Fixed error on =diff-hl-margin-mode= function being nil during startup
   (thanks to Voleking)
 **** Vue
