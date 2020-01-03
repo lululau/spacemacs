@@ -64,6 +64,7 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
 - Added support for =ripgrep=. To enable it add =rg= to
   =dotspacemacs-search-tools=. =ripgrep= key bindings are under ~SPC s r~
   prefix. (thanks to Aron Griffis)
+- Make =ripgrep= work properly with =ripgrep config files= (thanks to Jacek Swierk)
 - Simplify declaration of company backends, see the section
   =Add auto-completion in a layer= of the =README.org= file of the
   =auto-completion= layer.
@@ -1679,6 +1680,9 @@ Other:
 - Conditionally enable ERC notifications via =erc-enable-notifications=
   (thanks to Evan Klitzke)
 - Added spell checking and mIRC colors (thanks to Benjamin Levy)
+- erc-view-log related changes (thanks to Mpho Jele)
+  - Modified erc-log transient state to open in erc-view-log-mode
+  - Added utility to open log buffer/file from erc channel
 **** ESS
 - Key bindings:
   - Change ~SPC m s t~ to ~SPC m s f~ to respect convention (thanks to Yi Liu)
