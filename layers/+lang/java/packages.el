@@ -102,13 +102,13 @@
     (progn
       (spacemacs|hide-lighter maven-test-mode)
       (spacemacs/set-leader-keys-for-minor-mode 'maven-test-mode
-        "mga"  'maven-test-toggle-between-test-and-class
-        "mgA"  'maven-test-toggle-between-test-and-class-other-window
-        "mta"   'maven-test-all
-        "mtC-a" 'maven-test-clean-test-all
-        "mtb"   'maven-test-file
-        "mti"   'maven-test-install
-        "mtt"   'maven-test-method))))
+        "mga"    'maven-test-toggle-between-test-and-class
+        "mgA"    'maven-test-toggle-between-test-and-class-other-window
+        "mta"    'maven-test-all
+        "mt C-a" 'maven-test-clean-test-all
+        "mtb"    'maven-test-file
+        "mti"    'maven-test-install
+        "mtt"    'maven-test-method))))
 
 (defun java/init-meghanada ()
   (use-package meghanada
@@ -171,7 +171,8 @@
     :config
     (progn
       ;; key bindings
-      (dolist (prefix '(("mc" . "compile/create")
+      (dolist (prefix '(("ma" . "actionable")
+                        ("mc" . "compile/create")
                         ("mg" . "goto")
                         ("mr" . "refactor")
                         ("mra" . "add/assign")
@@ -213,22 +214,7 @@
         "cc"  'lsp-java-build-project
         "cp"  'lsp-java-spring-initializr
 
-        "an"  'lsp-java-actionable-notifications
-
-        ;; dap-mode
-
-        ;; debug
-        "ddj" 'dap-java-debug
-        "dtt" 'dap-java-debug-test-method
-        "dtc" 'dap-java-debug-test-class
-        ;; run
-        "tt" 'dap-java-run-test-method
-        "tc" 'dap-java-run-test-class)
-
-      (setq lsp-highlight-symbol-at-point nil
-            lsp-ui-sideline-update-mode 'point
-            lsp-eldoc-render-all nil
-            lsp-java-completion-guess-arguments t))))
+        "an"  'lsp-java-actionable-notifications))))
 
 (defun java/init-mvn ()
   (use-package mvn
