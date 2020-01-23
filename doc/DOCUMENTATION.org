@@ -2072,7 +2072,7 @@ page instead.
 
 Spacemacs uses [[https://github.com/Bruce-Connor/paradox][Paradox]] instead of =package-list-packages= to list available
 ELPA packages. Paradox enhances the package list buffer with better feedbacks,
-new filters and Github information like the number of stars. Optionally you can
+new filters and GitHub information like the number of stars. Optionally you can
 also star packages directly in the buffer.
 
 *Important Note 1*: Installing a new package from =Paradox= won't make it
@@ -2102,7 +2102,7 @@ Spacemacs.
 | ~r~         | refresh                                               |
 | ~S P~       | sort by package name                                  |
 | ~S S~       | sort by status (installed, available, etc...)         |
-| ~S *~       | sort by Github stars                                  |
+| ~S *~       | sort by GitHub stars                                  |
 | ~v~         | =visual state=                                        |
 | ~V~         | =visual-line state=                                   |
 | ~x~         | execute (action flags)                                |
@@ -2978,6 +2978,7 @@ Text related commands (start with ~x~):
 | ~SPC x J~     | move down a line of text (enter transient state)              |
 | ~SPC x K~     | move up a line of text (enter transient state)                |
 | ~SPC x l d~   | duplicate line or region                                      |
+| ~SPC x l r~   | randomize lines in region                                     |
 | ~SPC x l s~   | sort lines                                                    |
 | ~SPC x l u~   | uniquify lines                                                |
 | ~SPC x o~     | use avy to select a link in the frame and open it             |
@@ -2992,6 +2993,7 @@ Text related commands (start with ~x~):
 | ~SPC x U~     | set the selected text to upper case                           |
 | ~SPC x w c~   | count the number of occurrences per word in the select region |
 | ~SPC x w d~   | show dictionary entry of word from wordnik.com                |
+| ~SPC x w r~   | randomize words in region                                     |
 | ~SPC x y~     | use avy to copy a link in the frame                           |
 
 *** Text insertion commands
@@ -3013,7 +3015,7 @@ Text insertion commands (start with ~i~):
 | ~SPC i U U~ | insert UUIDv4 (use universal argument to insert with CID format)      |
 
 *Hint:* You can change the length of the inserted password with a numerical
-prefix argument, for instance ~SPC U 24 SPC i p p~ will insert a password
+prefix argument, for instance ~24 SPC i p p~ will insert a password
 with 24 characters.
 
 *** Smartparens Strict mode
@@ -3583,7 +3585,7 @@ You can disable the built-in server by setting the variable
 If any errors happen during the loading the mode-line will turn red and the
 errors should appear inline in the startup buffer. Spacemacs should still be
 usable; if it is not then restart Emacs with =emacs --debug-init= and open a
-[[https://github.com/syl20bnr/spacemacs/issues][Github issue]] with the backtrace.
+[[https://github.com/syl20bnr/spacemacs/issues][GitHub issue]] with the backtrace.
 
 ** Upgrading/Downgrading Emacs version
 To ensure that packages are correctly compiled for the new Emacs version you
@@ -3593,7 +3595,7 @@ with ~SPC u SPC SPC spacemacs/recompile-elpa~.
 ** General layer errors
 It happens from time to time that some of the layers go stale and stop
 working properly for some commands. If this happens stay calm and try
-to produce a minimal bug report on the [[https://github.com/syl20bnr/spacemacs/issues][Github issue page]].
+to produce a minimal bug report on the [[https://github.com/syl20bnr/spacemacs/issues][GitHub issue page]].
 
 *** Step by step instructions for minimal layer bug reports
 - Load the standard dotfile. You can get it with ~SPC f e D~.
