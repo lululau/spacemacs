@@ -2584,10 +2584,9 @@ Other:
 - Added support for CUSTOM_ID in latex exports (thanks to Compro-Prasad)
 - Added =ox-jira= as org export backend (thanks to Sebastian Nagel)
 - Added =helm-org= package (thanks to Simon Pintarelli)
-- Fixed evil-normal-state ~ESC~ after exiting =org-present-mode=
-  (thanks to duianto)
-- Fixed =org-present=: exiting presentation always removes inline images
-  (thanks to Keith Pinson)
+- Fixed evil-normal-state ~ESC~ after exiting =org-present-mode= (thanks to duianto)
+- Fixed =org-present=: exiting presentation always removes inline images (thanks to Keith Pinson)
+- Replace =org-toggle-latex-fragment= with =org-latex-preview= (thanks to Tianshu Wang)
 **** Osx
 - Fixed OSX mapping issue (thanks to Joey Liu)
 - Added layer variables to customize modifier behaviors on macOS:
@@ -3104,6 +3103,10 @@ Other:
   be controlled by directly setting =treemacs-collapse-dirs=.
 - Fixed "width (un)locked" message appearing when treemacs is loaded.
 - Add =persp-mode= integration (thanks to Seong Yong-ju)
+- Fixed default sort order (thanks to Michael Peyton Jones)
+- Deleted default values to track upstream behavior
+  (thanks to Michael Peyton Jones)
+- Removed obsolete options (thanks to Michael Peyton Jones)
 **** Typescript
 - Call tsfmt with extension of current buffer for TSX formatting
   (thanks to Victor Andrée)
@@ -3228,9 +3231,9 @@ Other:
   Renner, Adam Frey, Adam Kruszewski, ahanwadi, Aleksandr Argunov, Alexander
   Dalshov, Alexander Eberspächer, Alexander Iljin, Alexander Kjeldaas,
   Alexandros Kotzias, Andrew Grangaard, Andrew Vit, Andriy Senyshyn, Anton
-  Latukha, Antonio Miranda, Anurag Sharma, Archenoth, Arjan Singh, Ather Sharif,
-  Artur Juraszek, Benjamin Reynolds, Bernhard Schommer, Billy Wade, Brian
-  Wignall, bmag, Boris Buliga, Boris Wong, Carl Lange, Cazim Hysi, Chase Adams,
+  Latukha, Antonio Miranda, Anurag Sharma, Apromixately, Archenoth, Arjan Singh,
+  Ather Sharif, Artur Juraszek, Benjamin Reynolds, Bernhard Schommer, Billy Wade,
+  Brian Wignall, bmag, Boris Buliga, Boris Wong, Carl Lange, Cazim Hysi, Chase Adams,
   Christian Bäuerlein, Cibin Mathew, CL123123, Codruț Constantin Gușoi,
   Compro-Prasad, cormacc, Daniel Hodson, Daniel Le, Daniel Molina, Darkhan,
   David Florness, David Parrish, David Vo, davidpham87, Deepu Mohan Puthrote,
