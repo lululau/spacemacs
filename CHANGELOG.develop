@@ -536,6 +536,8 @@ Other:
     (thanks to Spenser Truex)
   - Converted =case= to =cl-case= to fix =cl-lib= related errors
     (thanks to Nikita Leshenko)
+  - Open Spacemacs home buffer in other/new window with prefix argument
+    (thanks to duianto)
 - Fixes:
   - Avoid non-idempotent use of push in init code (thanks to Miciah Masters)
   - Moved Spacemacs startup progress bar to =core-progress-bar.el=, removed
@@ -620,6 +622,8 @@ Other:
   - Fixed ~SPC TAB~ in =spacemacs-base= distribution (thanks to duianto)
   - Frame title setting doesn't need to depend on environment (gui/cli)
     (thanks to Mpho Jele)
+  - Replaced =destructuring-bind= with =cl-destructuring-bind=
+    (thanks to duianto)
 - Other:
   - New function =configuration-layer/message= to display message in
     =*Messages*= buffer (thanks to Sylvain Benner)
@@ -990,6 +994,7 @@ Other:
     - With the =hybrid= editing style in =normal= state:
       - ~n~ =evil-search-next=
       - ~N~ =evil-search-previous=
+  - Added ~SPC x d l~ =delete-blank-lines= (thanks to duianto)
 - Improvements:
   - Rewrote window layout functions for ~SPC w 1~, ~SPC w 2~, ~SPC w 3~, and
     ~SPC w 4~ (thanks to Codruț Constantin Gușoi):
@@ -1918,6 +1923,8 @@ Other:
   - ~C-k~ switch to previous history item
   - ~C-l~ clear the REPL
   (thanks to Joscha)
+- Reverted the REPL stuck snippets from checking if the =haskell= package is
+  used, to checking if the =haskell= layer is used (thanks to duianto)
 **** Helm
 - New packages:
   - =helm-ls-git= (thanks to duianto)
