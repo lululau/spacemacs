@@ -1267,6 +1267,7 @@ Other:
   - Fixed =evilified-state=, mapped ~C-w~ to =evil-window-map=
     (thanks to Muneeb Shaikh)
   - Fixed ~SPC h f~ =helm-spacemacs-help-faq= (thanks to duianto)
+  - Fixed =cl= package deprecated =letf= (thanks to duianto)
 *** Layer changes and fixes
 **** Agda
 - Fixes
@@ -1750,6 +1751,11 @@ Other:
     - ~SPC m r~ for predefined keymap =ess-extra-map=
     - ~SPC m w~ for predefined keymap =ess-r-package-dev-map=
     - ~SPC m d~ for predefined keymap =ess-dev-map=
+  - Change some leader keys (thanks to Seong Yong-ju)
+    - ~SPC m E~ for predefined keymap =ess-extra-map=
+    - ~SPC m D~ for predefined keymap =ess-r-package-dev-map=
+    - ~SPC m d~ for predefined keymap =ess-dev-map=
+  - Removed noweb bindings since it no longer works (thanks to Seong Yong-ju)
 - Fixed issue with read-only REPL buffer (thanks to Jack Kamm)
 - Added ess layer variable =ess-disable-underscore-assign= (thanks to Jack Kamm)
 - Remove =ess-R-object-popup= from ess layer (thanks to Naylyn Gaffney)
@@ -1762,6 +1768,7 @@ Other:
 - Update ess-disable-underscore-assign for ESS 18.10 (thanks to Leonard Lausen)
 - Update layer with the latest upstream changes (thanks to Guido Kraemer)
 - Evilified states for ess help buffer (thanks to ft)
+- Added LSP support for R (thanks to Seong Yong-ju)
 **** Evil snipe
 - Must always explicitly enable =evil-snipe-mode= even when
   =evil-snipe-override-mode= is enabled (thanks to Sylvain Benner)
@@ -2156,6 +2163,7 @@ Other:
   (thanks to Carlos Ibáñez and Juuso Valkeejärvi)
 - Fix visual selection expansion across the buffer on `SPC s S` and `SPC s B`
   (thanks to Andriy Kmit)
+- Fixed =cl= package deprecated =letf*= (thanks to duianto)
 **** Imenu-list
 - Changed ~SPC b i~ to ~SPC b t~ for =imenu= tree view
   (thansk to Sylvain Benner)
@@ -2459,8 +2467,6 @@ Other:
   function (thanks to Profpatsch)
 - Associate nix-mode with .nix files (thanks to jpathy)
 - Updated layer banner (thanks to kalium)
-- Added option =nixos-enable-company= to toggle company auto-completion
-  (thanks to bhipple)
 **** Nim
 - Added key binding ~SPC m h h~ to show symbol documentation
   (thanks to Valts Liepiņš)
