@@ -626,6 +626,7 @@ Other:
   - Replaced =destructuring-bind= with =cl-destructuring-bind=
     (thanks to duianto)
   - Ignore nils in dotspacemacs-configuration-layers (thanks to Ag)
+  - Fixed redundant package version checking during update (thanks to aaronjensen)
 - Other:
   - New function =configuration-layer/message= to display message in
     =*Messages*= buffer (thanks to Sylvain Benner)
@@ -3135,7 +3136,7 @@ Other:
 - Added =eziam-theme= and =kaolin-themes= (thanks to Sylvain Benner)
 - Added =doom-themes= (thanks to Codruț Constantin Gușoi)
 - Added =chocolate-theme= (thanks to Henrique Jung)
-- Updated =doom-themes= list to reflect upstream (thanks to Dominic Pearson)
+- Updated =doom-themes= list to reflect upstream (thanks to Dominic Pearson, Muneeb Shaikh)
 **** Tmux
 - Prevent =tmux-command= at GUI mode (thanks to Isaac Zeng)
 - Fixed regression in tmux by setting keybindings using =use-package=
