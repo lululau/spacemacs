@@ -191,6 +191,7 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
     (folded into ~SPC m i i~)
   - Removed ~SPC m i L~ for =markdown-insert-reference-link-dwim=
     (folded into ~SPC m i l~)
+  - Added ~SPC m x k~ for =markdown-insert-kbd= (thanks to Ben Swift)
 ***** nlinum
 - The =nlinum= layer is deprecated on Emacs 26.1 and newer in favor of native
   line number support (thanks to bmag)
@@ -1623,6 +1624,8 @@ Other:
   - ~SPC m o~ deft open file in other window (thanks to Bahtiar Gadimov)
   - ~SPC m q~ for quitting the deft window (thanks to tinysong)
   - ~SPC m r~ rename selected note (thanks to Bahtiar Gadimov)
+  - When zetteldeft is enabled, ~SPC a n~ is moved to ~SPC a n n~
+- Added zetteldeft support
 **** Django
 - Key bindings:
   - Added names to django mode prefixes (thanks to Boris Verhovsky)
