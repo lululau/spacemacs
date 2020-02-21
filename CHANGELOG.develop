@@ -2684,6 +2684,8 @@ Other:
 - Fixed =spacemacs/run-pandoc= not to reset =pandoc--local-settings=
   (thanks to martian-f)
 - Added declaration for the ~SPC P~ prefix (thanks to Codruț Constantin Gușoi)
+**** Pdf
+- Fixed ~'~ =pdf-view-jump-to-register= (thanks to duianto)
 **** Perl5
 - Fixed =spacemacs/perltidy-format-buffer= and
   =spacemacs/perltidy-format-function= to move the point and window to their
@@ -3095,6 +3097,8 @@ Other:
 - Added key binding (thanks to Michael Hauser-Raspe):
   ~SPC m b c~ connect to a SQLi buffer from your saved buffer list
 - Added ~SPC m g~ prefix: =goto= (thanks to duianto)
+- Added regional ~sqlfmt~ invocation, error handling, and formatting bindings
+  (thanks to 0x6362)
 **** Spell-checking
 - Added spell checking transient state (thanks to Francesc Elies Henar)
 - Update to flyspell-correct v0.5 (thanks to Boris Buliga)
@@ -3309,8 +3313,8 @@ Other:
 - Various documentation improvements (thanks Aaron Jensen, Aaron Peckham, Aaron
   Renner, Adam Frey, Adam Kruszewski, ahanwadi, Aleksandr Argunov, Alexander
   Dalshov, Alexander Eberspächer, Alexander Iljin, Alexander Kjeldaas,
-  Alexandros Kotzias, Andrew Grangaard, Andrew Vit, Andriy Senyshyn, Anton
-  Latukha, Antonio Miranda, Anurag Sharma, Apromixately, Archenoth, Arjan Singh,
+  Alexandros Kotzias, Andrew Grangaard, Andrew Vit, Andriy Senyshyn, Anton Chevychalov,
+  Anton Latukha, Antonio Miranda, Anurag Sharma, Apromixately, Archenoth, Arjan Singh,
   Ather Sharif, Artur Juraszek, Benjamin Reynolds, Bernhard Schommer, Billy
   Wade, Brian Wignall, bmag, Boris Buliga, Boris Wong, Carl Lange, Cazim Hysi,
   Chase Adams, Christian Bäuerlein, Cibin Mathew, CL123123, Codruț Constantin
