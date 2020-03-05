@@ -364,6 +364,9 @@ sane way, here is the complete list of changed key bindings
 - ietf (thanks to Christian Hopps and Robby O'Connor)
 - multiple-cursors (thanks to Codruț Constantin Gușoi and Thomas de Beauchêne)
 - parinfer (thanks to Tianshu Shi)
+**** Music
+- pianobar (thanks to Leo Littlebook)
+- tidalcycles (thanks to rbino)
 **** Readers
 - epub (thanks to Jeremy Dormitzer and André Peric Tavares)
 **** Spacemacs
@@ -1429,6 +1432,8 @@ Other:
   - Autoscroll to end of REPL when sending buffer content
     (thanks to Vitaly Banchenko)
   - Added ability to use multiple linters together (thanks to didibus)
+  - Added `spacemacs/cider-eval-sexp-end-of-line` to match lisp functionality
+    (thanks to John Stevenson)
 - Key bindings:
   - ~SPC m e ;~ to eval sexp and show result as comment
     (thanks to John Stevenson)
@@ -1511,6 +1516,9 @@ Other:
   - added evaluation keybinding - evaluate up to point
     ~SPC m e V~ 'cider-eval-sexp-up-to-point
     (thanks to John Stevenson)
+  - added evaluation keybinding - go to end of line and evaluate sexp
+    ~SPC m e $~ 'spacemacs/cider-eval-sexp-end-of-line
+    ~SPC m e l~ 'spacemacs/cider-eval-sexp-end-of-line
 - Fixes:
   - Removed =cider.nrepl/cider-middleware= in lein quick start setting
   - Fixed =cider-inspector-prev-page= binding, also add ~p~ as another key
@@ -1878,6 +1886,8 @@ Other:
 - Improvements:
   - Added a =@gnus= perspective (~SPC l o g~) to the layouts transient state
     (thanks to Matthew Leach)
+- Fixed:
+  - Made the gnus variables user configurable (thanks to duianto)
 **** Go
 - Deprecated:
   - Dropped support for deprecated =gometalinter= (thanks to pancho horrillo)
@@ -2088,6 +2098,7 @@ Other:
 **** IPython Notebook
 - Added support for auto-completion with =company= (thanks to tutysara)
 - Added =ob-ipython= (thanks to Alejandro Catalina)
+- DRY and tidiness update (thanks to dickmao)
 - Key bindings:
   - ~SPC a i l~ to login (thanks to Ben Mabey)
   - ~SPC m s~ to split cell at point (thanks to Jaakko Luttinen)
@@ -2282,6 +2293,8 @@ Other:
   - Fixed =julia-mode-local-vars-hook= (thanks to Guido Kraemer)
   - Limited =evil-surround-pairs-alist= redefinitions to julia mode
     (thanks to duianto)
+  - Remove warning about LanguageServer.jl not working in 1.0
+    (thanks to Daniel Molina)
 **** Keyboard layout
 - Added support for Colemak layout (thanks to Daniel Mijares, Lyall Cooper and
   Eivind Fonn)
@@ -2435,6 +2448,7 @@ Other:
 - Enabled scrolling in =mu4e= (thanks to Simon Altschuler)
 - Kill mu4e layout on app exit (thanks to Ag Ibragimov)
 - Restore ~gu~ binding for ~mu4e-view-go-to-url~ (thanks to Dominik Schrempf)
+- Updated assigned purpose names
 **** Multiple Cursors
 - Disabled Spacemacs paste transient state when pasting to avoid pasting issue
   when there are more than one cursor (thanks to braham-snyder)
@@ -2953,6 +2967,8 @@ Other:
 - Fixed ~rust-quick-run~ command (thanks to Grant Shangreaux)
 - Removed compilation buffer string match on =rust-quick-run=
   (thanks to Grant Shangreaux)
+- Added/Updated instructions on external dependencies, =cargo-edit=, =cargo-audit=,
+  =rustfmt=, and =clippy= (thanks to Lucius Hu)
 **** Sailfish-Developer
 - Key bindings:
   - Added =sailfish-scratchbox= key bindings (thanks to Victor Polevoy):
