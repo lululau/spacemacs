@@ -316,15 +316,19 @@
 (defun spacemacs-bootstrap/init-which-key ()
   (require 'which-key)
 
-  (setq which-key-special-keys nil
-        which-key-use-C-h-for-paging t
-        which-key-prevent-C-h-from-cycling t
-        which-key-echo-keystrokes 0.02
-        which-key-max-description-length 32
+  (setq which-key-add-column-padding 1
         which-key-allow-multiple-replacements t
-        which-key-sort-order 'which-key-key-order-alpha
+        which-key-echo-keystrokes 0.02
         which-key-idle-delay dotspacemacs-which-key-delay
         which-key-idle-secondary-delay 0.01
+        which-key-max-description-length 32
+        which-key-max-display-columns nil
+        which-key-min-display-lines 6
+        which-key-prevent-C-h-from-cycling t
+        which-key-sort-order 'which-key-prefix-then-key-order
+        which-key-sort-uppercase-first nil
+        which-key-special-keys nil
+        which-key-use-C-h-for-paging t
         which-key-allow-evil-operators t)
 
   (spacemacs|add-toggle which-key
@@ -493,34 +497,6 @@
   ;; hide the "C-d -> elisp-slime-nav-describe-elisp-thing-at-point" entry
   (push '(("\\(.*\\)C-c C-d C-d" . "elisp-slime-nav-describe-elisp-thing-at-point") . t)
           which-key-replacement-alist)
-
-  ;; macros
-  (let ((kmacro-descriptions
-         '(
-           ("kmacro-start-macro-or-insert-counter" . "run")
-           ("kmacro-end-or-call-macro" . "stop or run")
-           ("kmacro-add-counter" . "increment counter")
-           ("kmacro-insert-counter" . "insert counter")
-           ("kmacro-set-counter" . "set counter")
-           ("kmacro-set-format" . "format counter")
-           ("kmacro-bind-to-key" . "assign key")
-           ("kmacro-edit-macro-repeat" . "edit")
-           ("kmacro-edit-lossage" . "edit from lossage")
-           ("kmacro-name-last-macro" . "name last macro")
-           ("kmacro-to-register" . "write to register")
-           ("kmacro-step-edit-macro" . "step by step edit")
-           ("kmacro-view-ring-2nd" . "display head")
-           ("kmacro-delete-ring-head" . "delete head")
-           ("kmacro-call-ring-2nd-repeat" . "run 2nd in ring")
-           ("kmacro-cycle-ring-next" . "next")
-           ("kmacro-cycle-ring-previous" . "previous")
-           ("kmacro-swap-ring" . "swap first two")
-           ("kmacro-view-macro-repeat" . "view last macro"))))
-    (dolist (d kmacro-descriptions)
-      ;; ensure the target matches the whole string
-      (push (cons (cons "\\(.*\\)K" (concat "\\`" (car d) "\\'"))
-                  (cons nil (cdr d)))
-            which-key-replacement-alist)))
 
   (which-key-add-key-based-replacements
     dotspacemacs-leader-key '("root" . "Spacemacs root")

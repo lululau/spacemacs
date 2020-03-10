@@ -393,6 +393,7 @@ sane way, here is the complete list of changed key bindings
 - sailfish-developer (thanks to Victor Polevoy)
 - sphinx (thanks to Wei-Wei Guo)
 - tern (thanks to Sylvain Benner and Juuso Valkeejärvi)
+- tide (thanks to Thanh Vuong)
 - transmission (thanks to Eugene Yaremenko)
 - web-beautify (thanks to Sylvain Benner and Juuso Valkeejärvi)
 - xclipboard (thanks to Charles Weill, Sylvain Benner, and Alex Palaistras)
@@ -726,32 +727,32 @@ Other:
   - New key binding ~SPC b H~ to open or select the =*Help*= buffer
     (thanks to duianto)
   - New ~SPC D~ prefix for diff commands using =ediff=:
-    - ~SPC D b 3~   ediff-buffers3
-    - ~SPC D b b~   ediff-buffers
-    - ~SPC D b p~   ediff-patch-buffer
-    - ~SPC D B~     ediff-backup
-    - ~SPC D d 3~   ediff-directories3
-    - ~SPC D d d~   ediff-directories
-    - ~SPC D d r~   ediff-directory-revisions
-    - ~SPC D f .~   spacemacs/ediff-dotfile-and-template
-    - ~SPC D f 3~   ediff-files3
-    - ~SPC D f f~   ediff-files
-    - ~SPC D f p~   ediff-patch-file
-    - ~SPC D h~     ediff-documentation
-    - ~SPC D m b 3~ ediff-merge-buffers-with-ancestor
-    - ~SPC D m b b~ ediff-merge-buffers
-    - ~SPC D m d 3~ ediff-merge-directories-with-ancestor
-    - ~SPC D m d d~ ediff-merge-directories
-    - ~SPC D m f 3~ ediff-merge-files-with-ancestor
-    - ~SPC D m f f~ ediff-merge-files
-    - ~SPC D m r 3~ ediff-merge-revisions-with-ancestor
-    - ~SPC D m r r~ ediff-merge-revisions
-    - ~SPC D r l~   ediff-regions-linewise
-    - ~SPC D r w~   ediff-regions-wordwise
-    - ~SPC D s~     ediff-show-registry
-    - ~SPC D v~     ediff-revision
-    - ~SPC D w l~   ediff-windows-linewise
-    - ~SPC D w w~   ediff-windows-wordwise
+    - ~SPC D b 3~ Between 3 buffers
+    - ~SPC D b b~ Between 2 buffers
+    - ~SPC D b p~ With backup file
+    - ~SPC D B~   With a patch
+    - ~SPC D d 3~ Between 3 directories
+    - ~SPC D d d~ Between 2 directories
+    - ~SPC D d r~ Using SCM revisions
+    - ~SPC D f .~ With Spacemacs dotfile
+    - ~SPC D f 3~ Between 3 files
+    - ~SPC D f f~ Between 2 files
+    - ~SPC D f p~ With a patch
+    - ~SPC D f v~ Between file revisions
+    - ~SPC D h~ Documentation
+    - ~SPC D m b 3~ Buffer 3-way merge
+    - ~SPC D m b b~ Buffer 2-way merge
+    - ~SPC D m d 3~ Directorie 3-way merge
+    - ~SPC D m d d~ Directorie 2-way merge
+    - ~SPC D m f 3~ File 3-way merge
+    - ~SPC D m f f~ File 2-way merge
+    - ~SPC D m r 3~ Revision 3-way merge
+    - ~SPC D m r r~ Revision 2-way merge
+    - ~SPC D r l~ Between 2 large regions
+    - ~SPC D r w~ Between 2 small regions
+    - ~SPC D s~ Show registries
+    - ~SPC D w l~ Linewise between visible text
+    - ~SPC D w w~ Wordwise between visible text
     (thanks to Spenser Truex)
   - New ~SPC K~ prefix and subprefixes to use keyboard macros built-ins:
     - ~SPC K c a~  increment macro counter
@@ -774,23 +775,23 @@ Other:
     - ~SPC K r s~  swap the first two macros in ring
     - ~SPC K v~    view last macro string in minibuffer
     (thanks to Spenser Truex)
-  - New ~SPC R~ prefix to use rectangle manipulation built-ins:
-    - ~SPC R !~ clear-rectangle
-    - ~SPC R c~ close-rectangle
-    - ~SPC R d~ delete-rectangle
-    - ~SPC R e~ rectangle-exchange-point-and-mark
-    - ~SPC R i~ copy-rectangle-to-register
-    - ~SPC R k~ kill-rectangle
-    - ~SPC R l~ rectangle-left-char
-    - ~SPC R m~ rectangle-mark-mode
-    - ~SPC R n~ rectangle-next-line
-    - ~SPC R N~ rectangle-number-lines
-    - ~SPC R o~ open-rectangle
-    - ~SPC R p~ rectangle-previous-line
-    - ~SPC R r~ rectangle-right-char
-    - ~SPC R s~ string-rectangle
-    - ~SPC R t~ transpose-regions
-    - ~SPC R y~ yank-rectangle
+  - New ~SPC C-v~ prefix to use rectangle manipulation built-ins:
+    - ~SPC C-v !~ clear-rectangle
+    - ~SPC C-v c~ close-rectangle
+    - ~SPC C-v d~ delete-rectangle
+    - ~SPC C-v e~ rectangle-exchange-point-and-mark
+    - ~SPC C-v i~ copy-rectangle-to-register
+    - ~SPC C-v k~ kill-rectangle
+    - ~SPC C-v l~ rectangle-left-char
+    - ~SPC C-v m~ rectangle-mark-mode
+    - ~SPC C-v n~ rectangle-next-line
+    - ~SPC C-v N~ rectangle-number-lines
+    - ~SPC C-v o~ open-rectangle
+    - ~SPC C-v p~ rectangle-previous-line
+    - ~SPC C-v r~ rectangle-right-char
+    - ~SPC C-v s~ string-rectangle
+    - ~SPC C-v t~ transpose-regions
+    - ~SPC C-v y~ yank-rectangle
     (thanks to Spenser Truex)
   - New ~SPC t t~ prefix for timeclock clock-in clock-out management:
     - ~SPC t t c~ timeclock-change
@@ -944,6 +945,8 @@ Other:
     (thanks to Rich Alesi)
   - New key bindings ~SPC x l r~ and ~SPC x w r~ to randomize lines and words
     in region (thanks to Sylvain Benner)
+  - Improved =which-key= readibility by grouping prefixes together and display
+    at least 6 lines (thanks to Sylvain Benner)
   - Improved =which-key= replacement regular expressions (thanks to duianto)
   - Added ~SPC o~ which-key prefix name: =user bindings= (thanks to duianto)
   - Added =symbol-overlay= key bindings (thanks to kenkangxgwe):
@@ -2109,6 +2112,8 @@ Other:
   - Added ~SPC a y s~ =ein:stop= (thanks to Zach Pearson)
   - Added package dependencies for =ein= (thanks to ft)
   - Fixed keybindings per removal of =ein:notebook-multilang-mode=
+  - DRY and tidiness update by primary EIN developer
+  - Dynamically generate transient-state docstring.  Remove ob-ipython (Ibid.)
 **** Ivy
 - Added =recentf= alt actions to refresh and delete items (thanks to Rich Alesi)
 - Added =projectile= alternate actions to invalidate cache (thanks to Rich Alesi)
