@@ -195,49 +195,59 @@ NOTE: This function strips all newline characters, replaces successive spaces
 with a singular in string elements of FORM and trims tails of function labels
 delimited by \"|\" character."
   (list
-   (cl-destructuring-bind
-       (key-or-prefix-form
-        leader-label-or-fn-symbol
-        leader-label-or-next-form)
-       (mapcar (lambda (el)
-                 ;; Convert new lines and multiply spaces into singular.
-                 ;; This is done to enable better binding form formatting.
-                 (if (stringp el)
-                     (replace-regexp-in-string "[\n[:space:]]+" " " el)
-                   el))
-               (seq-take form 3))
-     (let ((full-key-or-prefix (append
-                                path
-                                ;; ("key" :label "label") or "key".
-                                `(,(or (car-safe key-or-prefix-form)
-                                       key-or-prefix-form))))
-           (key-or-prefix-label (thread-first key-or-prefix-form
-                                  (cdr-safe)
-                                  (plist-get :label))))
-       (if (symbolp leader-label-or-fn-symbol)
-           (funcall k-fn
-                    full-key-or-prefix
-                    key-or-prefix-label
-                    leader-label-or-fn-symbol
-                    ;; Discard everything after | symbol in labels.
-                    ;; This way we can add extra text into the documentation
-                    ;; while omitting it in labels.
-                    (replace-regexp-in-string
-                     "[[:punct:][:space:]]*|.*"
-                     ""
-                     ;; Either "label" or ("doc label" :label "label").
-                     (or (thread-first leader-label-or-next-form
-                           (cdr-safe)
-                           (plist-get :label))
-                         leader-label-or-next-form)))
-         (funcall p-fn full-key-or-prefix leader-label-or-fn-symbol))))))
+   (cl-labels ((apply-str-fmt
+                (el)
+                (thread-last el
+                  ;; Convert new lines and multiply spaces into singular.
+                  ;; This is done to enable better binding forms.
+                  (replace-regexp-in-string "[\n[:space:]]+" " ")
+                  ;; Discard everything after | symbol in labels.
+                  ;; This way we can add extra text into the README.org
+                  ;; files while omitting it in labels.
+                  (replace-regexp-in-string "[[:punct:][:space:]]*|.+" "")))
+               (str-fmt-rec
+                (depth el)
+                (cond
+                 ((stringp el) (apply-str-fmt el))
+                 ((and (= depth 0)
+                       (listp el))
+                  ;; We don't want to go deeper than a single level.
+                  (mapcar (apply-partially #'str-fmt-rec (1+ depth)) el))
+                 (t el)))
+               (str-fmt
+                (el)
+                (str-fmt-rec 0 el)))
+     (cl-destructuring-bind
+         (key-or-prefix-form
+          leader-label-or-fn-symbol
+          leader-label-or-next-form)
+         (mapcar #'str-fmt (seq-take form 3))
+       (let ((full-key-or-prefix (append
+                                  path
+                                  ;; ("key" :label "label") or "key".
+                                  `(,(or (car-safe key-or-prefix-form)
+                                         key-or-prefix-form))))
+             (key-or-prefix-label (thread-first key-or-prefix-form
+                                    (cdr-safe)
+                                    (plist-get :label))))
+         (if (symbolp leader-label-or-fn-symbol)
+             (funcall k-fn
+                      full-key-or-prefix
+                      key-or-prefix-label
+                      leader-label-or-fn-symbol
+                      ;; Either "label" or ("doc label" :label "label").
+                      (or (thread-first leader-label-or-next-form
+                            (cdr-safe)
+                            (plist-get :label))
+                          leader-label-or-next-form))
+           (funcall p-fn full-key-or-prefix leader-label-or-fn-symbol)))))))
 
 (defun spacemacs//spacebind-form-walker-rec (path k-fn p-fn form)
   "Recursive body of `spacemacs//spacebind-form-walker'."
   (let* ((fn-sym-or-label (car-safe (cdr-safe form)))
          (prefix-form? (stringp fn-sym-or-label))
          (binding-form? (and fn-sym-or-label (symbolp fn-sym-or-label)))
-         (list-of-forms? (and form (every #'consp form)))
+         (list-of-forms? (and form (cl-every #'consp form)))
          (binding-or-prefix-form? (or binding-form?
                                       prefix-form?))
          (head (car form))
@@ -399,6 +409,11 @@ NOTE: <TEXT> strings support formatting:
       - Everything after and including | symbol is ignored and punctuation
         before the character trimmed. This is done so you can provide additional
         information for the binding documentation while keeping labels brief.
+
+NOTE: You can override key labels and displayed sequences :label <value>
+      Example: ((\"k\" :label \"press k\")
+                foo-fn
+                (\"for docs\" :label \"displayed\"))
 
 \(fn <<DELIMITER_KEYWORD> <BINDING_FORMS>...>...)"
   (append
