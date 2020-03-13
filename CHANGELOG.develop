@@ -1126,6 +1126,8 @@ Other:
     (thanks to Ivan Yonchovski)
   - Added a toggleable hint for the Scrolling Transient State (~SPC N~)
     (thanks to Andriy Kmit)
+  - Improved google-translate for set source language to "auto" and
+    select target language interactively (thanks to Lin Sun)
 - Fixed:
   - Fixed ~h~ key binding in compilation and grep buffers
     (thanks to Sylvain Benner)
@@ -1522,6 +1524,9 @@ Other:
   - added evaluation keybinding - go to end of line and evaluate sexp
     ~SPC m e $~ 'spacemacs/cider-eval-sexp-end-of-line
     ~SPC m e l~ 'spacemacs/cider-eval-sexp-end-of-line
+  - added browse-spec keybindings
+    ~SPC m h s~ 'cider-browse-spec
+    ~SPC m h S~ 'cider-browse-spec-all
 - Fixes:
   - Removed =cider.nrepl/cider-middleware= in lein quick start setting
   - Fixed =cider-inspector-prev-page= binding, also add ~p~ as another key
@@ -3190,6 +3195,7 @@ Other:
 - Added =chocolate-theme= (thanks to Henrique Jung)
 - Updated =doom-themes= list to reflect upstream
   (thanks to Dominic Pearson, Muneeb Shaikh)
+- Added highly accessible =modus-themes= (thanks to Muneeb Shaikh)
 **** Tmux
 - Prevent =tmux-command= at GUI mode (thanks to Isaac Zeng)
 - Fixed regression in tmux by setting keybindings using =use-package=
