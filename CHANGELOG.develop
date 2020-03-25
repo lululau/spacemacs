@@ -312,7 +312,8 @@ sane way, here is the complete list of changed key bindings
 **** Completion
 - templates (thanks to YasuharuIida and Eivind Fonn)
 **** Emacs
-- helpful (thanks to Johnson Denen)
+- helpful (thanks to Johnson Denen, Andriy Kmit)
+- verb (thanks to Federico Tedin)
 **** Email
 - notmuch (thanks to Francesc Elies Henar, Leonard Lausen, Willian Casarin,
   Kalle Lindqvist)
@@ -3366,7 +3367,7 @@ Other:
   Creechley, Jason Axelson, Jesse Cooke, Jethro Shuwen Sun, JI Xiang, Jim
   Deville, Jody Frankowski, Joe Hillenbrand, John Eismeier, John Wood, Jon
   Tippens, Jonas Strømsodd, Jonathan Arnett, Jonathan Chen, Jonathan Gillett,
-  Josh Greenwood, Joshua Santos, Justin Stone, Kainalu Hagiwara, Kalle
+  Jonta, Josh Greenwood, Joshua Santos, Justin Stone, Kainalu Hagiwara, Kalle
   Lindqvist, Kechao Cai, Keith Simmons, Keith Wygant, Kenji Miyazaki ,Kevin Ji,
   Kristoffer Haugsbakk, lawrsp, Leo Joseph Buchignani III, liuchong, Lucius Hu,
   Luke Winship, Luke Worth, Marco Ieni, Marco Zucconelli, Max Beutelspacher, Max
