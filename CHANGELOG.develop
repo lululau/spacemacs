@@ -129,8 +129,9 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
 ***** C-C++
 - CMake support has been extracted from the =c-c++= layer into the new =cmake=
   layer.
-- LSP code navigation / completion added via clangd, ccls or cquery
+- LSP code navigation / completion added via clangd or ccls
   (thanks to Cormac Cannon)
+- Removed cquery.
 ***** ESS
 - ESS key bindings were re-organised in the following list
   (thanks to Guido Kraemer, Yi Liu, and Jack Kamm):
@@ -1008,6 +1009,8 @@ Other:
       - ~n~ =evil-search-next=
       - ~N~ =evil-search-previous=
   - Added ~SPC x d l~ =delete-blank-lines= (thanks to duianto)
+  - Added keybindings for Easy PG built in Emacs application
+   (thanks to John Stevenson)
 - Improvements:
   - Rewrote window layout functions for ~SPC w 1~, ~SPC w 2~, ~SPC w 3~, and
     ~SPC w 4~ (thanks to Codruț Constantin Gușoi):
@@ -1115,6 +1118,9 @@ Other:
   - Updated the =spacemacs-layouts= layers readme to describe the variables:
     - =spacemacs-layouts-restricted-functions=
     - =spacemacs-layouts-restrict-spc-tab=
+    - =persp-autokill-buffer-on-remove=
+    (thanks to John Stevenson)
+  - Updated =spacemacs-layouts= layers readme to include keybinding
     (thanks to John Stevenson)
   - Added a link to =spacemacs|create-align-repeat-x= in the docstring for
      =align-repeat-= commands (thanks to Troy Pracy)
@@ -1356,7 +1362,7 @@ Other:
     - Added variable: =++-enable-organize-includes-on-save=
     - Added key binding: ~SPC m r i~ organize includes
 - Improvements:
-  - Added =lsp= support using either =clangd=, =ccls= or =cquery= backends
+  - Added =lsp= support using either =clangd= or =ccls= backends
     (thanks to Cormac Cannon, Sergey Litovchuk, Fangrui Song and David Vo)
   - Fixed =lsp= support for =ccls= server (thanks to Alexander Dalshov)
   - Added automatic formatting on save using ClangFormat with the variables
@@ -2386,6 +2392,8 @@ Other:
 - Removed the now obsolete variable =lsp-prefer-flymake= (originally added by
   Juuso Valkeejärvi), the new variable =lsp-diagnostic-package= is handled
   upstream (thanks to duianto)
+- Removed =company-lsp=. Now =lsp-mode= is responsible for configuring
+  =company-backends= and it will use =company-capf=.
 **** Debug Adapter Protocol (DAP)
 - Layer variables:
   - Added variable =dap-enable-mouse-support=
@@ -2552,6 +2560,7 @@ Other:
   (thanks to Steven Allen)
 - Packages:
   - Added package =org-journal= (thanks to Nick Anderson)
+    - Added shortcuts for handling scheduled entries (thanks to Daniel Nicolai)
   - Added package for =org-sticky-header-mode= (thanks to Langston Barret)
   - Added package =org-jira= (thanks to Kirill A. Korinsky)
 - Key bindings:
@@ -3013,6 +3022,7 @@ Other:
 - Added scala-lsp and metals as an additional backend for scala
   (thanks to Rodolfo Hansen)
 - Disabled =sbt-supershell= in =sbt-mode= (thanks to Rodolfo Hansen)
+- Enable new DAP and lsp-treemacs integration via metals (thanks to Rodolfo Hansen)
 **** Scheme
 - Added missing =parinfer= package declaration (thanks to Kalle Lindqvist)
 - Update install docs for Chicken 5 changes (thanks to Grant Shangreaux)
