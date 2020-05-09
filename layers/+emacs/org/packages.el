@@ -132,6 +132,9 @@
             ;; `helm-org-headings-max-depth'.
             org-imenu-depth 8)
 
+      (with-eval-after-load 'org-agenda
+      (add-to-list 'org-modules 'org-habit))
+
       (with-eval-after-load 'org-indent
         (spacemacs|hide-lighter org-indent-mode))
 
@@ -819,7 +822,6 @@ Headline^^            Visit entry^^               Filter^^                    Da
   (use-package verb
     :defer t
     :init
-    (progn
       (spacemacs/set-leader-keys-for-major-mode
         'org-mode
         "rf" #'verb-send-request-on-point
@@ -831,12 +833,14 @@ Headline^^            Visit entry^^               Filter^^                    Da
         "ru" #'verb-export-request-on-point-curl
         "rb" #'verb-export-request-on-point-verb
         "rv" #'verb-set-var)
+    :config
+    (progn
       (spacemacs/set-leader-keys-for-minor-mode
         'verb-response-body-mode
         "rr" #'verb-toggle-show-headers
         "rk" #'verb-kill-response-buffer-and-window
         "rf" #'verb-re-send-request)
-      (spacemacs/set-leader-keys-for-minor-mode
+      (spacemacs/set-leader-keys-for-major-mode
         'verb-response-headers-mode
         "rq" #'verb-kill-buffer-and-window))))
 

@@ -173,6 +173,12 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
   - Swapped key bindings for better usability (thanks to Tony Lotts):
     - ~SPC m s s~ for =haskell-interactive-switch=
     - ~SPC m s S~ for =spacemacs/haskell-interactive-bring=
+***** imenu-list
+- Improvements:
+  - Added function/binding to focus the imenu sidebar, creating it if none found.
+- Key bindings:
+  - Bound new focus function under ~SPC b i~
+  - Moved existing toggle binding to ~SPC T i~ (from ~SPC b t~)
 ***** LSP
 - Key bindings;
   - Change jump back to last mark from ~SPC m g p~ to ~SPC m g b~
@@ -2491,6 +2497,7 @@ Other:
 - Added SPARQL-mode (thanks to Dietrich Daroch)
 - Added android logcat (thanks to jiejingzhang)
 - Added pkgbuild (thanks to Sven Fischer)
+- Added keybinding for pkgbuild-update-srcinfo (thanks to pancho horrillo)
 - Added ebuild-mode (thanks to Kai Wohlfahrt)
 - Added the vala programming language (thanks to Steven Allen)
 - Added hoon (thanks to Hunter Haugen)
@@ -2737,6 +2744,8 @@ Other:
   (thanks to Keith Pinson)
 - Replace =org-toggle-latex-fragment= with =org-latex-preview=
   (thanks to Tianshu Wang)
+- Enabled =org-habit= module
+  (thanks to Mariusz Klochowicz)
 **** Osx
 - Key bindings:
   - Added key bindings to use ~command-1..9~ for selecting window
@@ -3376,6 +3385,7 @@ Other:
     ~SPC g r K >~ kill current
   - Added current and total conflicts to smerge transient state's hint
     (thanks to Miciah Dashiel Butler Masters)
+  - Loaded ~SPC g v~ key bindings on Spacemacs startup (thanks to duianto)
 - New packages:
   - =browse-at-remote= which replaces =github-browse-file=
   (thanks Eugene Yaremenko)
