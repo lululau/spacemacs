@@ -63,6 +63,7 @@ projectile-bookmarks.eld
 projectile.cache
 python-*-docs-html
 quickurls
+racket-mode/
 semanticdb/
 server/
 tmp/
