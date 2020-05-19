@@ -345,6 +345,7 @@ sane way, here is the complete list of changed key bindings
 - dart (thanks to Bruno Tavares)
 - dhall (thanks to Colin Woodbury)
 - elasticsearch (thanks to Jean Rigotti)
+- extempore (thanks to Ben Swift)
 - factor (thanks to timor)
 - forth (thanks to Tim Jaeger)
 - gpu (thanks to Evan Klitzke)
@@ -564,6 +565,8 @@ Other:
     (thanks to Nikita Leshenko)
   - Open Spacemacs home buffer in other/new window with prefix argument
     (thanks to duianto)
+  - Add =emacs-version= to the default value for
+    =dotspacemacs-emacs-dumper-dump-file= (thanks to Evan Klitzke)
 - Fixes:
   - Avoid non-idempotent use of push in init code (thanks to Miciah Masters)
   - Moved Spacemacs startup progress bar to =core-progress-bar.el=, removed
