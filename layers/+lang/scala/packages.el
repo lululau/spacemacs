@@ -12,11 +12,11 @@
 (defconst scala-packages
   '(
     lsp-mode
+    (lsp-metals :toggle (spacemacs//scala-backend-metals-p))
     dap-mode
     eldoc
     flycheck
     flyspell
-    lsp-treemacs
     counsel-gtags
     ggtags
     helm-gtags
@@ -220,46 +220,6 @@
       (evil-define-key 'insert scala-mode-map
         (kbd "RET") 'scala/newline-and-indent-with-asterisk)
 
-      ;; Automatically replace arrows with unicode ones when enabled
-      (defconst scala-unicode-arrows-alist
-        '(("=>" . "⇒")
-          ("->" . "→")
-          ("<-" . "←")))
-
-      (defun scala/replace-arrow-at-point ()
-        "Replace the arrow before the point (if any) with unicode ones.
-An undo boundary is inserted before doing the replacement so that
-it can be undone."
-        (let* ((end (point))
-               (start (max (- end 2) (point-min)))
-               (x (buffer-substring start end))
-               (arrow (assoc x scala-unicode-arrows-alist)))
-          (when arrow
-            (undo-boundary)
-            (backward-delete-char 2)
-            (insert (cdr arrow)))))
-
-      (defun scala/gt ()
-        "Insert a `>' to the buffer.
-If it's part of a right arrow (`->' or `=>'),replace it with the corresponding
-unicode arrow."
-        (interactive)
-        (insert ">")
-        (scala/replace-arrow-at-point))
-
-      (defun scala/hyphen ()
-        "Insert a `-' to the buffer.
-If it's part of a left arrow (`<-'),replace it with the unicode arrow."
-        (interactive)
-        (insert "-")
-        (scala/replace-arrow-at-point))
-
-      (when scala-use-unicode-arrows
-        (define-key scala-mode-map
-          (kbd ">") 'scala/gt)
-        (define-key scala-mode-map
-          (kbd "-") 'scala/hyphen))
-
       (evil-define-key 'normal scala-mode-map "J" 'spacemacs/scala-join-line)
 
       ;; Compatibility with `aggressive-indent'
@@ -277,8 +237,10 @@ If it's part of a left arrow (`<-'),replace it with the unicode arrow."
   (when (spacemacs//scala-backend-metals-p)
     (spacemacs//scala-setup-metals)))
 
-(defun scala/post-init-lsp-treemacs ()
-  (when (spacemacs//scala-backend-metals-p)
+(defun scala/init-lsp-metals ()
+  (use-package lsp-metals
+    :defer t
+    :init
     (spacemacs//scala-setup-treeview)))
 
 (defun scala/post-init-ggtags ()

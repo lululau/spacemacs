@@ -17,8 +17,10 @@
     company
     elfeed
     evil
+    evil-cleverparens
     evil-escape
     evil-evilified-state
+    evil-lisp-state
     evil-magit
     evil-surround
     eyebrowse
@@ -205,6 +207,20 @@
       (define-key evil-normal-state-map "K" nil)
       (define-key evil-normal-state-map "L" 'spacemacs/evil-smart-doc-lookup))))
 
+(defun keyboard-layout/pre-init-evil-cleverparens ()
+  (kl|config evil-cleverparens
+    :description
+    "Remap `evil-cleverparens' bindings."
+    :loader
+    ;; (spacemacs|use-package-add-hook evil-cleverparens :post-init BODY)
+    (with-eval-after-load 'evil-cleverparens BODY)
+    :common
+    (kl/evil-correct-keys 'normal evil-cleverparens-mode-map
+      "h"
+      "j"
+      "k"
+      "l")))
+
 (defun keyboard-layout/pre-init-evil-escape ()
   (kl|config evil-escape
     :description
@@ -228,6 +244,24 @@
       "j"
       "k"
       "l")))
+
+(defun keyboard-layout/pre-init-evil-lisp-state ()
+  (kl|config evil-lisp-state
+    :description
+    "Remap `evil-lisp-state' bindings."
+    :loader
+    (with-eval-after-load 'evil-lisp-state BODY)
+    :common
+    (kl/correct-keys evil-lisp-state-map
+      "h"
+      "j"
+      "k"
+      "l"
+      ;;
+      "H"
+      "J"
+      "K"
+      "L")))
 
 (defun keyboard-layout/pre-init-evil-magit ()
   (kl|config evil-magit

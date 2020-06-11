@@ -159,6 +159,7 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
 - Key bindings;
   - Changed ~SPC m p t~ to ~SPC m t F~ for =alchemist-project-find-test=
     (thanks to Lyuben Petrov)
+- Remove flycheck-mix-compile in favour of alchemist and lsp syntax checking
 ***** Git
 - Improvements:
   - Adapted configuration to new transient commands of Magit (thanks to bmag)
@@ -661,6 +662,7 @@ Other:
   - Replace =spacemacs/close-compilation-window= with
     =spacemacs/show-hide-compilation-window= (thanks to Hans Jang)
   - Avoid unnecessary packages installation of tern layer
+  - Fixed terminal mode line indicator overlapping (thanks to duianto)
 - Other:
   - New function =configuration-layer/message= to display message in
     =*Messages*= buffer (thanks to Sylvain Benner)
@@ -1433,6 +1435,7 @@ Other:
 **** Cfengine
 - New packages:
   - Added =ob-cfengine3= (thanks to Nick Anderson)
+  - Added =mustache-mode=
 - Improvements:
   - Configure =org-babel= for =cfengine= source blocks
    (thanks to Sylvain Benner)
@@ -1997,6 +2000,8 @@ Other:
   - Make flycheck disable checkers covered by golangci (thanks to zhuoyikang)
   - Updated build instructions for =golangci-lint= (thanks to pancho horrillo)
   - Added =dap-go= integration (ljupchokotev)
+  - Added =go-run-command= variable (thanks to Jay Z)
+  - Added =go-test-command= variable (thanks to Jay Z)
 - Key bindings
   - =godoctor= key bindings (thanks to TinySong and Eivind Fonn):
     - ~SPC m r n~ to rename
@@ -2389,6 +2394,7 @@ Other:
 - Fixed key remapping after =cl= package deprecation (thanks to Damien Picard)
 - Fixed =bepo= layout, commented out broken evil-window :common bindings
   (thanks to CharlesHD)
+- Added evil-lisp-state mapping (thanks to Damien Picard)
 **** Kivy
 - Added the =kivy= package (thanks to Nasser Alshammari and Ryota Kayanuma)
 **** LaTeX
@@ -2407,6 +2413,7 @@ Other:
 - Fixed README to say auto-fill on by default. (thanks to Max Willsey)
 - Added ConTeXt mode to the key bindings (thanks to ft)
 - Fixed ~SPC m ;~ binding (thanks to Tianshu Wang)
+- Fix jump handlers setup and use dumb-jump as default (thanks to Matt Kramer)
 **** Lua
 - Added support for auto-completion with =company= (thanks to halfcrazy)
 - Added support for =LSP= (EmmyLua-LS-all) (thanks to Lin.Sun)
@@ -2916,6 +2923,7 @@ Other:
 - Restore smart closing paren behavior in racket-mode (thanks to Don March)
 - Updated racket logo (thanks to Vityou)
 - Add racket-xp-mode to Racket layer (thanks to Shrutarshi Basu)
+- Correctly switch to insert state in REPL
 **** Ranger
 - Key bindings:
   - Added ~j D~ to jump other window (thanks to Rich Alesi)
@@ -3084,6 +3092,9 @@ Other:
 - Disabled =sbt-supershell= in =sbt-mode= (thanks to Rodolfo Hansen)
 - Enable new DAP and lsp-treemacs integration via metals
   (thanks to Rodolfo Hansen)
+- Turned off ability to convert to Unicode arrows deprecated in Scala (and remove
+  =scala-use-unicode-arrows= variable) (thanks to Keith Pinson)
+- Added =lsp-metals= and remove broken =lsp-treemacs= initialization (Bjarke Vad Andersen)
 **** Scheme
 - Added missing =parinfer= package declaration (thanks to Kalle Lindqvist)
 - Update install docs for Chicken 5 changes (thanks to Grant Shangreaux)
@@ -3196,6 +3207,7 @@ Other:
 - Install orgit only when org package is used (thanks to Boris Buliga)
 - Defer git-gutter loading (thanks to Aaron Jensen)
 - Remove redundant arg from git-gutter timer (thanks to bmag)
+- Added Git Blame Transient State (thanks to duianto)
 **** Spotify
 - Replaced helm-spotify package with helm-spotify-plus
   (thanks to Leonard Lausen)
@@ -3296,6 +3308,7 @@ Other:
 - Updated =doom-themes= list to reflect upstream
   (thanks to Dominic Pearson, Muneeb Shaikh)
 - Added highly accessible =modus-themes= (thanks to Muneeb Shaikh)
+- Added =doom-gruvbox-light= theme (thanks to John Stevenson)
 **** Tmux
 - Prevent =tmux-command= at GUI mode (thanks to Isaac Zeng)
 - Fixed regression in tmux by setting keybindings using =use-package=
