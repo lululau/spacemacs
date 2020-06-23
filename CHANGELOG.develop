@@ -663,6 +663,7 @@ Other:
     =spacemacs/show-hide-compilation-window= (thanks to Hans Jang)
   - Avoid unnecessary packages installation of tern layer
   - Fixed terminal mode line indicator overlapping (thanks to duianto)
+  - Fixed broken --timed-requires and --adv-timers under Emacs 27 and above (thanks to Ying Qu)
 - Other:
   - New function =configuration-layer/message= to display message in
     =*Messages*= buffer (thanks to Sylvain Benner)
@@ -1312,6 +1313,7 @@ Other:
     (thanks to Muneeb Shaikh)
   - Fixed ~SPC h f~ =helm-spacemacs-help-faq= (thanks to duianto)
   - Fixed =cl= package deprecated =letf= (thanks to duianto)
+  - Fixed origami bindings in normal mode (thanks to Tomasz Kowal)
 *** Layer changes and fixes
 **** Agda
 - Fixes
@@ -1864,6 +1866,9 @@ Other:
   =evil-snipe-override-mode= is enabled (thanks to Sylvain Benner)
 **** Factor
 - Misc fixes for factor version 0.98 (thanks to timor)
+- Support running graphical Factor listener instances from Spacemacs
+- Support reloading factor-mode/fuel-mode code when connecting to different
+  Factor versions
 **** Finance
 - Remove key-bindings pointing to removed commands (thanks to Alexander Baier)
 - Added =evil-ledger= package (thanks to Alexander Miller)
@@ -2786,6 +2791,8 @@ Other:
   =hyper=, =super= or =alt= (thanks to Binbin Ye)
 - Added a layer variable =osx-swap-option-and-command= defaults to =nil=
   (thanks to Binbin Ye)
+- Enabled GNU =gls= support in dired without requiring
+  =exec-path-from-shell= (thanks to Aaron Zeng)
 **** Pandoc
 - Fixed =spacemacs/run-pandoc= not to reset =pandoc--local-settings=
   (thanks to martian-f)
@@ -3273,6 +3280,7 @@ Other:
 - Added opt-in layer variable =terraform-fmt-on-save= to format buffers on save
   with =terraform fmt= (thanks to Harry Hull)
 - Added support for =terraform-company= (thanks to Sylvain Benner)
+- Added LSP support for terraform-lsp
 **** Templates
 - Fixed issue with templates layer ignoring =templates-private-directory=
   (thanks to Seong Yong-ju)

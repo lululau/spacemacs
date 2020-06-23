@@ -136,7 +136,7 @@ current perspective."
           (concat " "
                   (mapconcat (lambda (persp)
                                (spacemacs//layout-format-name
-                                persp (position persp persp-list)))
+                                persp (cl-position persp persp-list)))
                              persp-list " | "))))
     (concat
      formatted-persp-list
