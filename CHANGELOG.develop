@@ -313,6 +313,7 @@ sane way, here is the complete list of changed key bindings
 ***** Vagrant
 - Key bindings:
   - Vagrant key bindings prefix is now ~SPC a V~.
+  - Actually use ~SPC a t v t~ for =vagrant-tramp-term=
 ***** YAML
 - Added LSP support (thanks to Seong Yong-ju)
 ***** ycmd
@@ -1170,6 +1171,9 @@ Other:
   - Allowed users to specify layout local variables (thanks to CeleritasCelery, fauxsoup)
   - Refactor +layers/+tools packages to use prefix ~at~
     migrating most key bindings to lower cases and
+    expanding room for further aliases (thanks to John Stevenson)
+  - Refactor layers/+chat|email|fun|readers|web-services packages to use
+    relative key binding, migrating most key bindings to lower cases and
     expanding room for further aliases (thanks to John Stevenson)
 - Fixed:
   - Fixed ~h~ key binding in compilation and grep buffers
@@ -2032,6 +2036,7 @@ Other:
     environment variables (thanks to Joshua Santos)
   - Fixed =go-run-test-current-function= for vanilla tests and gocheck suite
     tests (thanks to Mathieu Post)
+  - Fixed search for current test function to run (thanks to joelpet)
   - Disabled =go-eldoc-setup= for LSP backend (thanks to Seong Yong-ju)
 **** Graphviz
 - Use graphviz package from melpa (thanks to Matthew Boston)
@@ -3276,6 +3281,8 @@ Other:
 - Use correct error list faces when defining error levels with custom bitmaps
   (thanks to Alexander Miller)
 - Fixed =goto-flycheck-error-list= (thanks to Thanh Vuong)
+- Added lsp support for sqls
+  - Added layer variable =sql-lsp-sqls-workspace-config-path= to setting workspace configuration
 **** Swift
 - Update Swift REPL key bindings (thanks to Elliot Bulmer)
 **** Systemd
