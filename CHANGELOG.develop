@@ -259,7 +259,7 @@ sane way, here is the complete list of changed key bindings
   - ~SPC m i t~ org-agenda-set-tags
   - ~SPC m i t~ org-set-tags
   - ~SPC m p~ org-priority
-  - ~SPC m s A~ org-archive-subtree
+  - ~SPC m s A~ org-archive-subtree-default
   - ~SPC m s N~ widen
   - ~SPC m s S~ org-sort
   - ~SPC m s b~ org-tree-to-indirect-buffer
@@ -295,6 +295,18 @@ sane way, here is the complete list of changed key bindings
 ***** Ruby
 - Key bindings:
   - Changed ~SPC m h d~ to ~SPC m h h~ for =robe-doc= (thanks to Paweł Siudak)
+  - Changed ~SPC m T {~ to ~SPC m r {~ for =ruby-toggle-block= (thanks to Codruț
+    Constantin Gușoi)
+  - Changed ~SPC m T '~ to ~SPC m r '~ for =ruby-toggle-string-quotes= (thanks
+    to Codruț Constantin Gușoi)
+  - Added ~SPC m i f~ for =spacemacs/ruby-insert-frozen-string-literal-comment=
+    (thanks to Codruț Constantin Gușoi)
+  - Added ~SPC m i s~ for =spacemacs/ruby-insert-shebang= (thanks to Codruț
+    Constantin Gușoi)
+  - Added ~SPC m r }~ for =ruby-toggle-block= (thanks to Codruț Constantin
+    Gușoi)
+  - Added ~SPC m r "~ for =ruby-toggle-string-quotes= (thanks to Codruț
+    Constantin Gușoi)
 ***** Ruby on Rails
 - Key bindings:
   - New ~SPC m r f S~ to find serializer (thanks to Boris Buliga)
@@ -314,6 +326,10 @@ sane way, here is the complete list of changed key bindings
 - Key bindings:
   - Vagrant key bindings prefix is now ~SPC a V~.
   - Actually use ~SPC a t v t~ for =vagrant-tramp-term=
+***** Version Control
+- Key bindings:
+  - Changed ~SPC g h o~ to ~SPC g o~ for =browse-at-remote= (thanks to Codruț
+    Constantin Gușoi)
 ***** YAML
 - Added LSP support (thanks to Seong Yong-ju)
 ***** ycmd
@@ -731,6 +747,7 @@ Other:
   - Added =symbol-overlay= to the =spacemacs-navigation= layer
     (thanks to kenkangxgwe)
 - Key bindings:
+  - Fixed ~M-x~ prefix visualization for ~dotspacemacs-emacs-command-key~
   - New ~SPC a Q~ prefix for dispatching quickurl
     (thanks to Spenser "equwal" Truex:)
     - ~SPC a Q l~ List quickurls
@@ -2116,6 +2133,7 @@ Other:
   - Added guard to check if =winum= is loaded (thanks to Dan Girshovich)
   - Updated =helm-xref= to set the correct =xref-show-xrefs-function= for
     Emacs 27 (thanks to Junxuan)
+  - Hide =helm-ff-cache-mode= mode-line indicator (thanks to duianto)
 - Key bindings:
   - Added Key bindings for directory search:
     - ~SPC s d for =spacemacs/helm-dir-smart-do-search=
@@ -2324,7 +2342,7 @@ Other:
   - Added support for multiple backends. Supported backends are: =meghanada=,
     =eclim=. The default backend is =meghanada=. (thanks to Ivan Yonchovski)
   - Added =ENSIME= jump handlers (thanks to Joao Azevedo)
-  - Improved =maven= and =gradle= support (thanks to Sylvain Benner)
+  - Improved =maven= (thanks to Sylvain Benner)
   - Made =java= layer depend on =groovy= layer (thanks to Sylvain Benner)
   - Added =org-babel= support (thanks to Michael Rohleder)
   - Remove broken =ENSIME= key bindings (thanks to Bjarke Vad Andersen)
@@ -2336,6 +2354,7 @@ Other:
   - Added /** */ smartparens pair (thanks to Ivan Yonchovski)
   - Added the prefix name "actionable" to ~SPC m a~ (thanks to duianto)
 - Fixes:
+  - Removed =gradle-mode= which is unsupported and was breaking other major modes
   - Replace usage of =ensime-print-type-at-point= by =ensime-type-at-point=
     (thanks to Joao Azevedo)
   - Added defalias for =ensime-type-at-point= for compatibility
@@ -2343,7 +2362,7 @@ Other:
   - Fixed syntax typo in configuration (thanks to EMayej)
   - Fixed yanking types (thanks to Bjarke Vad Andersen)
   - Fixed gtags related initialization (thanks to Guido Kraemer)
-  - Fixed prefixes for =java-mode= and =gradle-mode= (thanks to Seong Yong-ju)
+  - Fixed prefixes for =java-mode= (thanks to Seong Yong-ju)
   - Enabled =lsp-java= when the =java-backend= is =nil= and the =lsp= layer is
     enabled (thanks to Ivan Yonchovski)
   - Fixed =dap-java= shortcuts (thanks to Ivan Yonchovski)
