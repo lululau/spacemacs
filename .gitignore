@@ -59,7 +59,7 @@ my-org/
 nov-places
 org-files/
 org-journal.cache
-projectile-bookmarks.eld
+projectile-bookmarks*.eld
 projectile.cache
 python-*-docs-html
 quickurls
