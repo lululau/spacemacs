@@ -435,8 +435,20 @@ visiting README.org files of Spacemacs.")
 If non nil activate `clean-aindent-mode' which tries to correct
 virtual indentation of simple modes. This can interfer with mode specific
 indent handling like has been reported for `go-mode'.
-If it does deactivate it here.
-(default t)")
+If it does deactivate it here. (default t)")
+
+(defvar dotspacemacs-use-snoopy-mode nil
+  "Shift number row for easier access.
+
+If non-nil activate `snoopy-mode' which shifts your number row
+to match the set of signs given in `dotspacemacs-snoopy-keyrow'
+in programming modes (insert-mode only). (default nil)")
+
+(defvar dotspacemacs-snoopy-keyrow "!@#$%^&*()"
+  "Keyboard layout to be used by snoopy mode.
+
+Text of shifted values from your
+keyboard's number row. (default '!@#$%^&*()')")
 
 (defvar dotspacemacs-home-shorten-agenda-source nil
   "If nil the home buffer shows the full path of agenda items
@@ -445,7 +457,7 @@ and todos. If non nil only the file name is shown.")
 (defvar dotspacemacs--pretty-ignore-subdirs
   '(".cache/junk")
   "Subdirectories of `spacemacs-start-directory' to ignore when
-  prettifying Org files.")
+prettifying Org files.")
 
 (defun dotspacemacs//prettify-spacemacs-docs ()
   "Run `spacemacs/prettify-org-buffer' if `buffer-file-name'
@@ -509,7 +521,7 @@ changed, and issue a warning if it did."
   "Read editing style CONFIG: apply variables and return the editing style.
 CONFIG can be the symbol of an editing style or a list where the car is
 the symbol of an editing style and the cdr is a list of keyword arguments like
-`:variables'."
+  `:variables'."
   (cond
    ((symbolp config) config)
    ((listp config)
