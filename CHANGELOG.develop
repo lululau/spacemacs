@@ -2499,6 +2499,7 @@ Other:
   upstream (thanks to duianto)
 - Removed =company-lsp=. Now =lsp-mode= is responsible for configuring
   =company-backends= and it will use =company-capf=.
+- Fixed upstream removal of =lsp-clients= (thanks to Colin Woodbury)
 **** Debug Adapter Protocol (DAP)
 - Layer variables:
   - Added variable =dap-enable-mouse-support=
@@ -2815,6 +2816,7 @@ Other:
   (thanks to Tianshu Wang)
 - Enabled =org-habit= module
   (thanks to Mariusz Klochowicz)
+- Fixed evil paste in a =org-src-mode= table (thanks to duianto)
 **** Osx
 - Key bindings:
   - Added key bindings to use ~command-1..9~ for selecting window
