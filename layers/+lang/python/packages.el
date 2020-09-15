@@ -267,6 +267,7 @@
     :defer t
     :init
     (progn
+      (add-hook 'python-mode-hook #'pyvenv-tracking-mode)
       (pcase python-auto-set-local-pyvenv-virtualenv
         (`on-visit
          (dolist (m spacemacs--python-pyvenv-modes)
@@ -354,7 +355,8 @@
         "sf" 'spacemacs/python-shell-send-defun
         "si" 'spacemacs/python-start-or-switch-repl
         "sR" 'spacemacs/python-shell-send-region-switch
-        "sr" 'spacemacs/python-shell-send-region)
+        "sr" 'spacemacs/python-shell-send-region
+        "sl" 'spacemacs/python-shell-send-line)
 
       ;; Set `python-indent-guess-indent-offset' to `nil' to prevent guessing `python-indent-offset
       ;; (we call python-indent-guess-indent-offset manually so python-mode does not need to do it)
