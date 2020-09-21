@@ -518,6 +518,8 @@ Other:
     terminal mode, but no longer in GUI mode. (emacs18)
 *** Core changes
 - Improvements:
+  - Make =describe-text-properties= available in the help -> describe menu via
+    ~SPC h d T~ (thanks to Keith Pinson)
   - Bind ~SPC c n~ to ~:cn~ / ~next-error~ and ~SPC c N~ to ~:cN~ / ~previous-error~
     (thanks to Keith Pinson)
   - Display time spent in =user-config= in home buffer (thanks to Sylvain Benner)
@@ -2683,6 +2685,7 @@ Other:
     - Added shortcuts for handling scheduled entries (thanks to Daniel Nicolai)
   - Added package for =org-sticky-header-mode= (thanks to Langston Barret)
   - Added package =org-jira= (thanks to Kirill A. Korinsky)
+  - Added package =org-rich-yank= (thanks to Keith Pinson)
 - Key bindings:
   - ~SPC m T i~ to toggle inline images
   - Move clock related key bindings to ~SPC a o C~
@@ -2987,6 +2990,7 @@ Other:
 - Fixed directory selection for self compiled mspyls (thanks Jee Lee)
 - Add python-test-last support for pytest runner
 - Added --last-failed support for pytest (thanks to Jaakko Luttinen)
+- Added =spacemacs/python-shell-send-statement= support (thanks to Lin Sun)
 **** Racket
 - Restore smart closing paren behavior in racket-mode (thanks to Don March)
 - Updated racket logo (thanks to Vityou)
@@ -3506,6 +3510,7 @@ Other:
 - Avoided installing unused diff packages (thanks to Andriy Kmit)
 - Fixed error on =diff-hl-margin-mode= function being nil during startup
   (thanks to Voleking)
+- Fixed =git-gutter+= refresh when a buffer is staged or unstaged in Magit
 **** Vue
 - Added a toggle state minified/full to the transient state (thanks to duianto)
 **** Xclipboard
