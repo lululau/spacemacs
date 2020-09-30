@@ -343,6 +343,7 @@ sane way, here is the complete list of changed key bindings
 - templates (thanks to YasuharuIida and Eivind Fonn)
 **** Emacs
 - helpful (thanks to Johnson Denen, Andriy Kmit)
+- tabs (thanks to Deepu Mohan Puthrote)
 - verb (thanks to Federico Tedin)
 **** Email
 - notmuch (thanks to Francesc Elies Henar, Leonard Lausen, Willian Casarin,
@@ -2903,6 +2904,9 @@ Other:
   - bind ~q~ to quit-window in view mode (thanks to Saulius Menkevičius)
 **** Prolog
 - Fixed autoloading error (thanks to jpathy)
+**** Protobuf
+- Prompt user to install the =protobuf= layer if a =.proto= file is opened
+  (thanks to duianto)
 **** Purescript
 - Enabled =purescript-decl-scan-mode= when loading =purescript-mode=
   (thanks to Bjarke Vad Andersen)
@@ -3005,6 +3009,7 @@ Other:
   - Added ~-~ to enter (thanks to Rich Alesi)
 - Fixed conflict with =golden-ratio= (thanks to Thomas de Beauchêne)
 - Load =helm= before =ranger= (thanks to duianto)
+- Add instruction to use ranger by default (thanks to Daniel Nicolai)
 **** Rcirc
 - New variable =rcirc-enable-late-fix= to enable or disable the included
   =rcirc-late-fix= package (disabled by default).
@@ -3581,11 +3586,11 @@ Other:
   Lamas, Sam Pablo Kuper, Saulius Menkevičius, sduthil, Serghei Iakovlev, Sergio
   Ugalde, Shane Kilkelly, Sid Kapur, Som Poddar, Somelauw, Soobin Rho, sorawee,
   SteveJobzniak, Sunghyun Hwang, Sunlin7, Swaroop C H, Sylvain Benner, Szunti,
-  Thijs Vermeir, Tianyi Wang, Tim Stewart, timor, TinySong, Titov Andrey, Thomas
-  de Beauchêne, Tomasz Cichocinski, Trey Merkley, tzhao11, Vincent Taing, Ullas
-  Holla, Vlad Bokov, Vladimir Kochnev, weihua-lu, wenpin, Wieland Hoffmann,
-  Witoslaw Koczewski, Xiang Ji, Yi Liu, Zach Latta, Zane Sterling, zer09, Zhige
-  Xin)
+  Thijs Vermeir, Tianyi Wang, Tim Ruffing, Tim Stewart, timor, TinySong, Titov
+  Andrey, Thomas de Beauchêne, Tomasz Cichocinski, Trey Merkley, tzhao11,
+  Vincent Taing, Ullas Holla, Vlad Bokov, Vladimir Kochnev, weihua-lu, wenpin,
+  Wieland Hoffmann, Witoslaw Koczewski, Xiang Ji, Yi Liu, Zach Latta, Zane
+  Sterling, zer09, Zhige Xin)
 **** Documentation and website
   - DOCUMENTATION.org:
     - Fixed the example for how to change the separator style
