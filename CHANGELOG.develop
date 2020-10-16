@@ -2294,6 +2294,8 @@ Other:
     =swiper-all-thing-at-point=
     (last two points thanks to Daniel Nicolai)
   - Bound =SPC s l= to =ivy-resume= (thanks to Wieland Hoffmann)
+  - Rebind =C-k= to =C-M-k= in =ivy-reverse-i-search= (=C-r= at a prompt)
+    (thanks to duianto)
 - Removed definitions for =spacemacs/swiper-region-or-symbol= and
   =spacemacs/swiper-all-region-or-symbol= and updated keybindings, because Ivy has
   more advanced implementation via =swiper-thing-at-point= and
@@ -2350,6 +2352,8 @@ Other:
 - Fix visual selection expansion across the buffer on `SPC s S` and `SPC s B`
   (thanks to Andriy Kmit)
 - Fixed =cl= package deprecated =letf*= (thanks to duianto)
+- Fixed counsel find-file functions to use Spacemacs check for opening large
+files (thanks to Daniel Nicolai)
 **** Imenu-list
 - Changed ~SPC b i~ to ~SPC b t~ for =imenu= tree view
   (thansk to Sylvain Benner)
@@ -2536,6 +2540,9 @@ Other:
 - Removed =company-lsp=. Now =lsp-mode= is responsible for configuring
   =company-backends= and it will use =company-capf=.
 - Fixed upstream removal of =lsp-clients= (thanks to Colin Woodbury)
+- Added documentation for =lsp-headerline-breadcrumb-mode=, =lsp-lens-mode=,
+  =lsp-modeline-diagnostics-mode=, and =lsp-modeline-code-actions-mode=
+  (thanks to Lucius Hu)
 **** Debug Adapter Protocol (DAP)
 - Layer variables:
   - Added variable =dap-enable-mouse-support=

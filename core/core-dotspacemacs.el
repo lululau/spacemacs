@@ -243,7 +243,7 @@ pressing `<leader> m`. Set it to `nil` to disable it.")
 running Emacs in terminal.")
 
 (defvar dotspacemacs-folding-method 'evil
-  "Code folding method. Possible values are `evil' and `origami'.")
+  "Code folding method. Possible values are `evil', `origami' and `vimish'.")
 
 (defvar dotspacemacs-default-layout-name "Default"
   "Name of the default layout.")
@@ -543,7 +543,7 @@ the symbol of an editing style and the cdr is a list of keyword arguments like
 Returns non nil if the layer has been effectively inserted."
   (unless (configuration-layer/layer-used-p layer-name)
     (with-current-buffer (find-file-noselect (dotspacemacs/location))
-      (beginning-of-buffer)
+      (goto-char (point-min))
       (let ((insert-point
              (re-search-forward
               "[^`]dotspacemacs-configuration-layers\\s-*\n?[^(]*\\((\\)")))
@@ -758,7 +758,7 @@ If ARG is non nil then ask questions to the user before installing the dotfile."
            (fs (format-spec-make
                 ?a abbreviated-file-name
                 ?t project-name
-                ?S system-name
+                ?S (system-name)
                 ?I invocation-name
                 ?U (or (getenv "USER") "")
                 ?b "%b"
