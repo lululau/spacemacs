@@ -112,3 +112,6 @@ tags
 .tags
 !tags/
 gtags.files
+eln-cache/
+meghanada/
+vimish-fold/
