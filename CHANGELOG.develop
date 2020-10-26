@@ -597,6 +597,8 @@ Other:
     (thanks to duianto)
   - Add =emacs-version= to the default value for
     =dotspacemacs-emacs-dumper-dump-file= (thanks to Evan Klitzke)
+  - Add =spacemacs-scratch-mode-hook= to run functions
+    after =spacemacs-scratch-mode= is applied to =*scratch*= buffer (thanks to rayw000)
 - Fixes:
   - Avoid non-idempotent use of push in init code (thanks to Miciah Masters)
   - Moved Spacemacs startup progress bar to =core-progress-bar.el=, removed
@@ -1992,6 +1994,8 @@ Other:
   - Moved =magit-find-file= to view a file at a specific branch or commit
     from ~SPC g f f~ to ~SPC g f F~ (thanks to duianto and Hong Xu)
   - Unbind ~C-f~ from =magit-gitflow-popup= (thanks to rayw000)
+  - Implement performance hack for MacOS mentioned in Magit manual (thanks to
+    Keith Pinson)
 - Fixes:
   - Install magit-svn by default and activate with git-enable-magit-svn-plugin
   - Added feature to toggle =evil-magit= based on editing style
