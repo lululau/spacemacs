@@ -521,6 +521,12 @@ Other:
     terminal mode, but no longer in GUI mode. (emacs18)
 *** Core changes
 - Improvements:
+  - Provide keybindings for using narrow with an indirect buffer for when you
+    want narrowing multiple times in the same base buffer:
+    - ~SPC n F~ for narrow to function
+    - ~SPC n P~ for narrow to page
+    - ~SPC n R~ for narrow to region
+    (thanks to Keith Pinson and duianto)
   - Make =describe-text-properties= available in the help -> describe menu via
     ~SPC h d t~ (thanks to Keith Pinson)
   - Bind ~SPC c n~ to ~:cn~ / ~next-error~ and ~SPC c N~ to ~:cN~ / ~previous-error~
@@ -2889,6 +2895,9 @@ files (thanks to Daniel Nicolai)
 - Enabled =org-habit= module
   (thanks to Mariusz Klochowicz)
 - Fixed evil paste in a =org-src-mode= table (thanks to duianto)
+- Implemented automatic activation of evil insert state after
+  =org-insert-drawer=, =org-insert-heading=, =org-insert-item= and
+  =org-insert-structure-template= commands (thanks to Andriy Kmit')
 **** Osx
 - Key bindings:
   - Added key bindings to use ~command-1..9~ for selecting window
@@ -3066,6 +3075,8 @@ files (thanks to Daniel Nicolai)
 - Fixed conflict with =golden-ratio= (thanks to Thomas de Beauchêne)
 - Load =helm= before =ranger= (thanks to duianto)
 - Add instruction to use ranger by default (thanks to Daniel Nicolai)
+- Added ='ranger= as an option to the variable: =ranger-enter-with-minus=
+  (thanks to duianto)
 **** Rcirc
 - New variable =rcirc-enable-late-fix= to enable or disable the included
   =rcirc-late-fix= package (disabled by default).
