@@ -521,6 +521,10 @@ Other:
     terminal mode, but no longer in GUI mode. (emacs18)
 *** Core changes
 - Improvements:
+  - Make =set-selective-display=, which is a kind of built-in Emacs quick-n-dirty
+    whole-file folding mechanism for indentation-based syntaxes, more
+    discoverable for Evil users by placing it (with a small DWIM wrapper) in the
+    folding menu as ~z $~ (thanks to Keith Pinson)
   - Provide keybindings for using narrow with an indirect buffer for when you
     want narrowing multiple times in the same base buffer:
     - ~SPC n F~ for narrow to function
@@ -1656,6 +1660,13 @@ Other:
   - Add key binding for new function cider-eval-list-around-point
     added in CIDER 0.26
     ~SPC m e (~ 'cider-eval-list-at-point
+    (thanks to John Stevenson)
+  - Add key binding for existing cider-inspect functions
+    ~SPC m v e~ 'cider-inspect-last-sexp
+    ~SPC m v f~ 'cider-inspect-defun-at-point
+    ~SPC m v i~ 'cider-inspect
+    ~SPC m v l~ 'cider-inspect-last-result
+    ~SPC m v v~ 'cider-inspect-expr
     (thanks to John Stevenson)
 - Fixes:
   - Removed =cider.nrepl/cider-middleware= in lein quick start setting
