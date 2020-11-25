@@ -1668,6 +1668,12 @@ Other:
     ~SPC m v l~ 'cider-inspect-last-result
     ~SPC m v v~ 'cider-inspect-expr
     (thanks to John Stevenson)
+  - Add key bindings for existing cider namespace functions
+    ~SPC m e n a~ 'cider-ns-reload-all
+    ~SPC m e n n~ 'cider-eval-ns-form
+    ~SPC m e n r~ 'cider-ns-refresh
+    ~SPC m e n l~ 'cider-ns-reload
+    (thanks to John Stevenson)
 - Fixes:
   - Removed =cider.nrepl/cider-middleware= in lein quick start setting
   - Fixed =cider-inspector-prev-page= binding, also add ~p~ as another key
@@ -3141,6 +3147,8 @@ files (thanks to Daniel Nicolai)
     - ~SPC m g i~ to go to the module of the variable under cursor
     (thanks to Seong Yong-ju)
   - Added ~SPC m r l t~ for =js2r-log-this= (thanks to Mike Holm)
+  - Set the =javascript= layers keymap as parent to the =react= layers keymap
+    (thanks to duianto)
 - Fixes:
   - Use JSX header without breaking React (thanks to Jam Risser)
   - Fixed React imports when using web beautify. (thanks to Ismael)
