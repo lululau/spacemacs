@@ -49,7 +49,14 @@
     (when (spacemacs//support-evilified-buffer-p dotspacemacs-editing-style)
       (evil-magit-init))
     (evil-define-key 'motion magit-mode-map
-      (kbd dotspacemacs-leader-key) spacemacs-default-map)))
+      (kbd dotspacemacs-leader-key) spacemacs-default-map)
+    ;; Remove inherited bindings from evil-mc and evil-easymotion
+    ;; do this after the config to make sure the keymap is available
+    (which-key-add-keymap-based-replacements magit-mode-map
+      "<normal-state> g r" nil
+      "<visual-state> g r" nil
+      "<normal-state> g s" nil
+      "<visual-state> g s" nil)))
 
 (defun git/init-evil-magit ()
   (use-package evil-magit
@@ -237,6 +244,10 @@
       ;; whitespace
       (define-key magit-status-mode-map (kbd "C-S-w")
         'spacemacs/magit-toggle-whitespace)
+      ;; Add missing which-key prefixes using the new keymap api
+      (which-key-add-keymap-based-replacements magit-status-mode-map
+        "gf"  "jump-to-unpulled"
+        "gp"  "jump-to-unpushed")
       ;; https://magit.vc/manual/magit/MacOS-Performance.html
       ;; But modified according Tommi Komulainen's advice: "...going through
       ;; shell raises an eyebrow, and in the odd edge case of not having git
