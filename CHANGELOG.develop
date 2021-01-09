@@ -134,7 +134,7 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
   (thanks to Cormac Cannon)
 - Removed cquery.
 ***** EPUB
-- Add ~J/K~ for scrolling down/up (thanks to Daniel Nicolai) 
+- Add ~J/K~ for scrolling down/up (thanks to Daniel Nicolai)
 ***** ESS
 - ESS key bindings were re-organised in the following list
   (thanks to Guido Kraemer, Yi Liu, and Jack Kamm):
@@ -529,6 +529,9 @@ Other:
     terminal mode, but no longer in GUI mode. (emacs18)
 *** Core changes
 - Improvements:
+  - Support =recents-by-project= in =dotspacemacs-startup-lists=, which allows
+    combining the existing =recents= and =projects= into one coherent view (thanks
+    to Keith Pinson)
   - Make =set-selective-display=, which is a kind of built-in Emacs quick-n-dirty
     whole-file folding mechanism for indentation-based syntaxes, more
     discoverable for Evil users by placing it (with a small DWIM wrapper) in the
@@ -1880,6 +1883,7 @@ Other:
 - Added =elm-test-runner= (thanks to Juan Edi)
 **** Emacs Lisp
 - Key bindings:
+  - Make ~SPC m h h~ and jump handlers work in =ielm= (thanks to Keith Pinson)
   - Added ~c~ to continue in edebug mode (thanks to hodge)
   - Added ~SPC m g b~ to jump back to previous point (thanks to Magnus Therning)
 - Identify Cask files as emacs lisp ones (thanks to Adrien Becchis)
@@ -2773,7 +2777,8 @@ files (thanks to Daniel Nicolai)
   (thanks to Steven Allen)
 - Packages:
   - Added package =org-journal= (thanks to Nick Anderson)
-    - Added shortcuts for handling scheduled entries (thanks to Daniel Nicolai)
+    - Added shortcuts for handling scheduled entries and find journal file
+      (thanks to Daniel Nicolai)
   - Added package for =org-sticky-header-mode= (thanks to Langston Barret)
   - Added package =org-jira= (thanks to Kirill A. Korinsky)
   - Added package =org-rich-yank= (thanks to Keith Pinson)
@@ -3231,6 +3236,8 @@ files (thanks to Daniel Nicolai)
 - Added =dap= support for =enh-ruby-mode= (thanks to Seong Yong-ju)
 - Added missing prefix =seeing-is-believing= for ~SPC m @~
   (thanks to Seong Yong-ju)
+- Added support for prettier formatting (thanks to sidraval)
+  - Added ~SPC m = =~ to format buffer via prettier (thanks to sidraval)
 **** Ruby on Rails
 - Changed leader keys to be configured for the =projectile-rails-mode= minor
   mode instead of =ruby-mode= and =enh-ruby-mode= so that the key bindings will
