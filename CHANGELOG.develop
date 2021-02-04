@@ -158,6 +158,7 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
   - ~SPC m s r~ for =ess-eval-region=
   - ~SPC m s s~ for =ess-switch-to-inferior-or-script-buffer=
   - ~SPC m w~ for =ess-r-package-dev-map=
+- Fixed a bug that R scripts cannot plot graphs (thanks to Lucius Hu)
 ***** Elixir
 - Key bindings;
   - Changed ~SPC m p t~ to ~SPC m t F~ for =alchemist-project-find-test=
@@ -2246,6 +2247,7 @@ Other:
   - Add ~C-d~ to create a project perspective and open a project root dired
     buffer, from the ~SPC p l~ persp switch project prompt
     (thanks to Magnus Therning)
+  - Add =C(-S)-tab= keybindings for buffer switching (thanks to Daniel Nicolai)
 - Fixes:
   - Fixed signature of =spacemacs//display-helm-window= (thanks to Jack Kamm)
   - Fixed initialization by calling =helm-mode= when Helm is initialized=
@@ -2898,6 +2900,8 @@ files (thanks to Daniel Nicolai)
     - ~SPC a o r d t~ (~SPC m r d t~) Open today's daily note
     - ~SPC a o r d T~ (~SPC m r d T~) Open tomorrow's daily note
     (thanks to Mariusz Klochowicz)
+    - ~SPC a o r d d~ (~SPC m r d d~) Open daily note via calendar view
+    (thanks to Ben Swift)
   - Added additional prefix (~SPC m m j~) for org-jira bindings
     (thanks to Mariusz Klochowicz)
 - Made =org= layer depend on =spacemacs-org= (thanks to Eivind Fonn)
