@@ -345,6 +345,7 @@ In org-agenda-mode
 - Key bindings:
   - Changed ~SPC g h o~ to ~SPC g o~ for =browse-at-remote= (thanks to Codruț
     Constantin Gușoi)
+  - Changed ~SPC g f d~ to bind to ~magit-file-dispatch~ (thanks to Ag Ibragimov)
 ***** YAML
 - Added LSP support (thanks to Seong Yong-ju)
 ***** ycmd
@@ -1121,6 +1122,7 @@ Other:
     (thanks to Ivan Yonchovski)
   - Added ~SPC x n~ for multi-line transient state
     (thanks to Tristan Harmer)
+  - Added ~s~ =hydra-dired-quick-sort/body= (thanks to duianto)
 - Improvements:
   - Rewrote window layout functions for ~SPC w 1~, ~SPC w 2~, ~SPC w 3~, and
     ~SPC w 4~ (thanks to Codruț Constantin Gușoi):
