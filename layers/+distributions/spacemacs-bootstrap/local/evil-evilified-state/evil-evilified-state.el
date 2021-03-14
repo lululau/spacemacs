@@ -45,10 +45,6 @@
 (require 'evil)
 (require 'bind-map)
 
-(defvar evilified-state--evil-surround nil
-  "Evil surround mode variable backup.")
-(make-variable-buffer-local 'evilified-state--evil-surround)
-
 (defvar evilified-state--normal-state-map nil
   "Local backup of normal state keymap.")
 (make-variable-buffer-local 'evilified-state--normal-state-map)
@@ -56,6 +52,10 @@
 (defvar evilified-state--visual-state-map nil
   "Local backup of visual state keymap.")
 (make-variable-buffer-local 'evilified-state--visual-state-map)
+
+(defvar evilified-state--evil-surround-was-enabled nil
+  "Used to restore evil-surround-mode when exiting evilified state.")
+(make-variable-buffer-local 'evilified-state--evil-surround-was-enabled)
 
 (evil-define-state evilified
   "Evilified state.
@@ -120,8 +120,10 @@ Needed to bypass keymaps set as text properties."
     (setq-local evilified-state--visual-state-map
                 (copy-keymap evil-visual-state-map)))
   (setq-local evil-visual-state-map
-              (cons 'keymap (list (cons ?y 'evil-yank)
-                                  (cons 'escape 'evil-exit-visual-state)))))
+              (cons 'keymap (list (cons 'escape 'evil-exit-visual-state)
+                                  (cons ?i evil-inner-text-objects-map)
+                                  (cons ?a evil-outer-text-objects-map)
+                                  (cons ?y 'evil-yank)))))
 
 (defun evilified-state--restore-visual-state-keymap ()
   "Restore the visual state keymap."
@@ -135,6 +137,7 @@ Needed to bypass keymaps set as text properties."
     ;; annoying ;; and introduces possible bugs
     (remove-hook 'activate-mark-hook 'evil-visual-activate-hook t))
   (when (bound-and-true-p evil-surround-mode)
+    (setq evilified-state--evil-surround-was-enabled t)
     (make-local-variable 'evil-surround-mode)
     (evil-surround-mode -1))
   (evilified-state--setup-normal-state-keymap)
@@ -147,6 +150,9 @@ Needed to bypass keymaps set as text properties."
 
 (defun evilified-state--evilified-state-on-exit ()
   "Restore evil normal and visual states."
+  (when evilified-state--evil-surround-was-enabled
+    (evil-surround-mode 1)
+    (setq evilified-state--evil-surround-was-enabled nil))
   (evilified-state--restore-normal-state-keymap)
   (evilified-state--restore-visual-state-keymap)
   (remove-hook 'pre-command-hook 'evilified-state--pre-command-hook 'local)
@@ -172,18 +178,30 @@ Needed to bypass keymaps set as text properties."
           'evilified-state--evilified-state-on-entry)
 
 ;; default key bindings for all evilified buffers
+(define-key evil-evilified-state-map "$" 'evil-end-of-line)
+(define-key evil-evilified-state-map "^" 'evil-first-non-blank)
 (define-key evil-evilified-state-map "/" 'evil-search-forward)
 (define-key evil-evilified-state-map ":" 'evil-ex)
+(define-key evil-evilified-state-map "b" 'evil-backward-word-begin)
+(define-key evil-evilified-state-map "B" 'evil-backward-WORD-begin)
+(define-key evil-evilified-state-map "f" 'evil-find-char)
+(define-key evil-evilified-state-map "F" 'evil-find-char-backward)
+(define-key evil-evilified-state-map "gg" 'evil-goto-first-line)
+(define-key evil-evilified-state-map "G" 'evil-goto-line)
 (define-key evil-evilified-state-map "h" 'evil-backward-char)
 (define-key evil-evilified-state-map "j" 'evil-next-visual-line)
 (define-key evil-evilified-state-map "k" 'evil-previous-visual-line)
 (define-key evil-evilified-state-map "l" 'evil-forward-char)
 (define-key evil-evilified-state-map "n" 'evil-search-next)
 (define-key evil-evilified-state-map "N" 'evil-search-previous)
+(define-key evil-evilified-state-map "t" 'evil-find-char-to)
+(define-key evil-evilified-state-map "T" 'evil-find-char-to-backward)
 (define-key evil-evilified-state-map "v" 'evil-visual-char)
 (define-key evil-evilified-state-map "V" 'evil-visual-line)
-(define-key evil-evilified-state-map "gg" 'evil-goto-first-line)
-(define-key evil-evilified-state-map "G" 'evil-goto-line)
+(define-key evil-evilified-state-map "w" 'evil-forward-word-begin)
+(define-key evil-evilified-state-map "W" 'evil-forward-WORD-begin)
+(define-key evil-evilified-state-map "y" 'evil-yank)
+(define-key evil-evilified-state-map "Y" 'evil-yank-line)
 (define-key evil-evilified-state-map (kbd "C-f") 'evil-scroll-page-down)
 (define-key evil-evilified-state-map (kbd "C-b") 'evil-scroll-page-up)
 (define-key evil-evilified-state-map (kbd "C-e") 'evil-scroll-line-down)
