@@ -395,7 +395,7 @@
 (defun spacemacs-editing/init-smartparens ()
   (use-package smartparens
     :defer t
-    :commands (sp-split-sexp sp-newline sp-up-sexp)
+    :commands (sp-point-in-string-or-comment sp-forward-symbol sp-split-sexp sp-newline sp-up-sexp)
     :init
     (progn
       ;; settings
@@ -409,19 +409,21 @@
             sp-highlight-pair-overlay nil
             sp-highlight-wrap-overlay nil
             sp-highlight-wrap-tag-overlay nil)
-      (spacemacs/add-to-hooks (if dotspacemacs-smartparens-strict-mode
-                                  'smartparens-strict-mode
-                                'smartparens-mode)
+      (spacemacs/add-to-hooks #'spacemacs//activate-smartparens
                               '(prog-mode-hook comint-mode-hook))
       ;; enable smartparens-mode in `eval-expression'
       (add-hook 'minibuffer-setup-hook 'spacemacs//conditionally-enable-smartparens-mode)
       ;; toggles
       (spacemacs|add-toggle smartparens
-        :mode smartparens-mode
+        :status (or smartparens-mode smartparens-strict-mode)
+        :on (spacemacs//activate-smartparens)
+        :off (spacemacs//deactivate-smartparens)
         :documentation "Enable smartparens."
         :evil-leader "tp")
       (spacemacs|add-toggle smartparens-globally
-        :mode smartparens-global-mode
+        :status (or smartparens-global-mode smartparens-global-strict-mode)
+        :on (spacemacs//activate-smartparens t)
+        :off (spacemacs//deactivate-smartparens t)
         :documentation "Enable smartparens globally."
         :evil-leader "t C-p")
       ;; key bindings
