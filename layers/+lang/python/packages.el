@@ -25,7 +25,7 @@
     (helm-pydoc :requires helm)
     importmagic
     live-py-mode
-    (nose :location local)
+    (nose :location (recipe :fetcher github :repo "syl20bnr/nose.el"))
     org
     pip-requirements
     pipenv
@@ -33,7 +33,7 @@
     pippel
     py-isort
     pyenv-mode
-    (pylookup :location local)
+    (pylookup :location (recipe :fetcher github :repo "tsgates/pylookup"))
     pytest
     (python :location built-in)
     pyvenv

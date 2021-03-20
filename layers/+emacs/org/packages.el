@@ -53,8 +53,7 @@
     (verb :toggle org-enable-verb-support)
     (org-roam :toggle org-enable-roam-support)
     (valign :toggle org-enable-valign)
-    (org-appear :location (recipe :fetcher github :repo "awth13/org-appear")
-                :toggle org-enable-appear-support)))
+    (org-appear :toggle org-enable-appear-support)))
 
 (defun org/post-init-company ()
   (spacemacs|add-company-backends :backends company-capf :modes org-mode))
@@ -263,6 +262,7 @@ Will work on both org-mode and any mode that accepts plain html."
         "sA" 'org-archive-subtree-default
         "sb" 'org-tree-to-indirect-buffer
         "sd" 'org-cut-subtree
+        "sy" 'org-copy-subtree
         "sh" 'org-promote-subtree
         "sj" 'org-move-subtree-down
         "sk" 'org-move-subtree-up

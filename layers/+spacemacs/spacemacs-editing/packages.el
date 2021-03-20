@@ -118,30 +118,32 @@
   (use-package drag-stuff
     :defer t
     :init
-    (drag-stuff-mode t)
-    (spacemacs|define-transient-state drag-stuff
-      :title "Drag Stuff Transient State"
-      :doc "
+    (progn
+      (spacemacs|diminish drag-stuff-mode)
+      (drag-stuff-mode t)
+      (spacemacs|define-transient-state drag-stuff
+        :title "Drag Stuff Transient State"
+        :doc "
 [_k_/_K_] up    [_h_/_H_] left   [_q_] quit
 [_j_/_J_] down  [_l_/_L_] right"
-      :bindings
-      ("j" drag-stuff-down)
-      ("J" drag-stuff-down)
-      ("<down>" drag-stuff-down)
-      ("k" drag-stuff-up)
-      ("K" drag-stuff-up)
-      ("<up>" drag-stuff-up)
-      ("h" drag-stuff-left)
-      ("H" drag-stuff-left)
-      ("<left>" drag-stuff-left)
-      ("l" drag-stuff-right)
-      ("L" drag-stuff-right)
-      ("<right>" drag-stuff-right)
-      ("q" nil :exit t))
-    (spacemacs/set-leader-keys
-      "x." 'spacemacs/drag-stuff-transient-state/body
-      "xK" 'spacemacs/drag-stuff-transient-state/drag-stuff-up
-      "xJ" 'spacemacs/drag-stuff-transient-state/drag-stuff-down)))
+        :bindings
+        ("j" drag-stuff-down)
+        ("J" drag-stuff-down)
+        ("<down>" drag-stuff-down)
+        ("k" drag-stuff-up)
+        ("K" drag-stuff-up)
+        ("<up>" drag-stuff-up)
+        ("h" drag-stuff-left)
+        ("H" drag-stuff-left)
+        ("<left>" drag-stuff-left)
+        ("l" drag-stuff-right)
+        ("L" drag-stuff-right)
+        ("<right>" drag-stuff-right)
+        ("q" nil :exit t))
+      (spacemacs/set-leader-keys
+        "x." 'spacemacs/drag-stuff-transient-state/body
+        "xK" 'spacemacs/drag-stuff-transient-state/drag-stuff-up
+        "xJ" 'spacemacs/drag-stuff-transient-state/drag-stuff-down))))
 
 (defun spacemacs-editing/init-editorconfig ()
   (use-package editorconfig
@@ -415,7 +417,8 @@
       (add-hook 'minibuffer-setup-hook 'spacemacs//conditionally-enable-smartparens-mode)
       ;; toggles
       (spacemacs|add-toggle smartparens
-        :status (or smartparens-mode smartparens-strict-mode)
+        :status (or (bound-and-true-p smartparens-mode)
+                    (bound-and-true-p smartparens-strict-mode))
         :on (spacemacs//activate-smartparens)
         :off (spacemacs//deactivate-smartparens)
         :documentation "Enable smartparens."
