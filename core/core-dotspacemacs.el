@@ -171,7 +171,7 @@ a layer lazily."
 wrapped in a layer. If you need some configuration for these
 packages then consider to create a layer, you can also put the
 configuration in `dotspacemacs/user-config'."
-  '(repeat symbol)
+  '(repeat (choice symbol (cons symbol sexp)))
   'spacemacs-dotspacemacs-layers)
 
 (defvar dotspacemacs--additional-theme-packages '()
@@ -184,7 +184,9 @@ in `dotspacemacs-themes'.")
 `hybrid state' with `emacs' key bindings. The value can also be a list
  with `:variables' keyword (similar to layers). Check the editing styles
  section of the documentation for details on available variables."
-  '(choice (const vim) (const emacs) (const hybrid))
+  '(choice (const vim) (cons symbol sexp)
+           (const emacs) (cons symbol sexp)
+           (const hybrid) (cons symbol sexp))
   'spacemacs-dotspacemacs-init)
 
 (spacemacs|defc dotspacemacs-startup-banner 'official
@@ -233,7 +235,7 @@ whenever you start Emacs."
   "List of themes, the first of the list is loaded when spacemacs starts.
 Press `SPC T n' to cycle to the next theme in the list (works great
 with 2 themes variants, one dark and one light"
-  '(repeat symbol)
+  '(repeat (choice symbol (cons symbol sexp)))
   'spacemacs-dotspacemacs-init)
 
 (spacemacs|defc dotspacemacs-mode-line-theme '(spacemacs
@@ -634,7 +636,7 @@ visiting README.org files of Spacemacs."
   "Correct indentation for simple modes.
 
 If non nil activate `clean-aindent-mode' which tries to correct
-virtual indentation of simple modes. This can interfer with mode specific
+virtual indentation of simple modes. This can interfere with mode specific
 indent handling like has been reported for `go-mode'.
 If it does deactivate it here. (default t)"
   'boolean
