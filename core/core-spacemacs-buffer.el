@@ -1,13 +1,25 @@
 ;;; core-spacemacs-buffer.el --- Spacemacs Core File
 ;;
-;; Copyright (c) 2012-2020 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
-;;; License: GPLv3
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 ;;
 ;;; Commentary:
 ;;
@@ -262,8 +274,15 @@ Right justified, based on the Spacemacs buffers window width."
            (heart-size (when heart (car (image-size heart))))
            (build-lhs "Made with ")
            (build-rhs " by the community")
+           (proudly-free "Proudly free software")
+           (gplv3-path spacemacs-gplv3-official-png)
+           (gplv3 (when (and (display-graphic-p)
+                             (image-type-available-p
+                              (intern (file-name-extension gplv3-path))))
+                    (create-image gplv3-path)))
+           (gplv3-size (when gplv3 (car (image-size gplv3))))
            (buffer-read-only nil))
-      (when (or badge heart)
+      (when (or badge heart gplv3)
         (goto-char (point-max))
         (spacemacs-buffer/insert-page-break)
         (insert "\n")
@@ -278,6 +297,19 @@ Right justified, based on the Spacemacs buffers window width."
           (spacemacs-buffer//center-line (+ (length build-lhs)
                                             heart-size
                                             (length build-rhs)))
+          (insert "\n"))
+        (when gplv3
+          (insert "\n")
+          (widget-create 'url-link
+                         :tag proudly-free
+                         :help-echo "What is free software?"
+                         :mouse-face 'highlight
+                         :follow-link "\C-m"
+                         "https://www.gnu.org/philosophy/free-sw.en.html")
+          (spacemacs-buffer//center-line (+ 2 (length proudly-free)))
+          (insert "\n\n")
+          (insert-image gplv3)
+          (spacemacs-buffer//center-line gplv3-size)
           (insert "\n"))))))
 
 (defmacro spacemacs-buffer||notes-adapt-caption-to-width (caption
@@ -679,18 +711,27 @@ REAL-WIDTH: the real width of the line.  If the line contains an image, the size
                  "https://gitter.im/syl20bnr/spacemacs")
   (insert " ")
   (widget-create 'push-button
+                 :help-echo "GPLv3 copying conditions."
+                 :action (lambda (&rest ignore)
+                           (find-file (concat spacemacs-start-directory "LICENSE"))
+                           (read-only-mode))
+                 :mouse-face 'highlight
+                 :follow-link "\C-m"
+                 (propertize "Licensing" 'face 'font-lock-keyword-face))
+  (let ((len (- (line-end-position)
+                (line-beginning-position))))
+    (spacemacs-buffer//center-line)
+    (setq spacemacs-buffer--buttons-position (- (line-end-position)
+                                  (line-beginning-position)
+                                  len)))
+  (insert "\n")
+  (widget-create 'push-button
                  :help-echo "Update Spacemacs core and layers."
                  :action (lambda (&rest ignore) (spacemacs/switch-to-version))
                  :mouse-face 'highlight
                  :follow-link "\C-m"
                  (propertize "Update Spacemacs" 'face 'font-lock-keyword-face))
-  (let ((len (- (line-end-position)
-                (line-beginning-position))))
-    (spacemacs-buffer//center-line)
-    (setq spacemacs-buffer--buttons-position (- (line-end-position)
-                                                (line-beginning-position)
-                                                len)))
-  (insert "\n")
+  (insert " ")
   (widget-create 'push-button
                  :help-echo "Update all ELPA packages to the latest versions."
                  :action (lambda (&rest ignore)
