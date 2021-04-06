@@ -253,6 +253,7 @@
   - [[#confluence][Confluence]]
   - [[#eaf][Eaf]]
   - [[#evernote][Evernote]]
+  - [[#pocket][Pocket]]
   - [[#search-engine][Search Engine]]
   - [[#twitter][Twitter]]
   - [[#wakatime][Wakatime]]
@@ -3213,6 +3214,19 @@ Features:
 - Create notes in markdown and sync with [[https://evernote.com/][Evernote]] via [[http://www.geeknote.me][geeknote]].
 - Search for notes using keywords
 - Move notes between notebooks
+
+** Pocket
+[[file:+web-services/pocket/README.org][+web-services/pocket/README.org]]
+
+This layer adds [[https://getpocket.com/][Pocket]] support to Spacemacs via the package
+[[https://github.com/alphapapa/pocket-reader.el][pocket-reader]].
+
+Features:
+- Manage reading list: add, remove, delete, tag, view, favorite, etc.
+- Open links in Emacs or external browser
+- Sort views by date, title, domain, tags, favorite, etc.
+- Search items by keywords, tags, favorite status, unread/archived
+  status, etc.
 
 ** Search Engine
 [[file:+web-services/search-engine/README.org][+web-services/search-engine/README.org]]

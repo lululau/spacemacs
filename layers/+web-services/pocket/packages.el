@@ -1,8 +1,8 @@
-;;; funcs.el --- CMake Layer functions File for Spacemacs
+;;; packages.el --- pocket Layer packages File for Spacemacs
 ;;
 ;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
 ;;
-;; Author: Maximilian Wolff <smile13241324@gmail.com>
+;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
 ;;
 ;; This file is not part of GNU Emacs.
@@ -20,20 +20,17 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+(defconst pocket-packages
+  '(pocket-reader))
 
-(defun spacemacs//cmake-setup-company ()
-  "Conditionally setup company based on backend."
-  (pcase cmake-backend
-    ('lsp
-     (spacemacs|add-company-backends ;; Activate lsp company explicitly to activate
-       :backends company-capf        ;; standard backends as well
-       :modes cmake-mode))
-    ('company-cmake
-     (spacemacs|add-company-backends
-       :backends company-cmake
-       :modes cmake-mode))))
-
-(defun spacemacs//cmake-setup-backend ()
-  "Conditionally setup cmake backend."
-  (when (eq cmake-backend 'lsp)
-    (lsp)))
+(defun pocket/init-pocket-reader ()
+  (use-package pocket-reader
+    :defer t
+    :init (spacemacs/set-leader-keys "awp" 'pocket-reader)
+    :config
+    (progn
+      (evilified-state-evilify-map pocket-reader-mode-map
+        :mode pocket-reader-mode
+        :bindings
+        "gr" 'pocket-reader-resort
+        "gR" 'pocket-reader-refresh))))
