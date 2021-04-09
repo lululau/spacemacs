@@ -1,4 +1,6 @@
-;;; config.el --- Git Layer configuration File for Spacemacs
+;;; core-early-funcs.el --- Spacemacs Core File
+;;
+;; This file is sourced by emacs early-init.el file.
 ;;
 ;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
 ;;
@@ -20,23 +22,18 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+(defun spacemacs/removes-gui-elements ()
+  "Remove the menu bar, tool bar and scroll bars."
+  ;; removes the GUI elements
+  (when (and (fboundp 'scroll-bar-mode) (not (eq scroll-bar-mode -1)))
+    (scroll-bar-mode -1))
+  (when (and (fboundp 'tool-bar-mode) (not (eq tool-bar-mode -1)))
+    (tool-bar-mode -1))
+  (unless (memq (window-system) '(mac ns))
+    (when (and (fboundp 'menu-bar-mode) (not (eq menu-bar-mode -1)))
+      (menu-bar-mode -1)))
+  ;; tooltips in echo-aera
+  (when (and (fboundp 'tooltip-mode) (not (eq tooltip-mode -1)))
+    (tooltip-mode -1)))
 
-;; Variables
-
-(defvar git-enable-magit-delta-plugin nil
-  "If non nil, enable `magit-delta' plugin.")
-
-(defvar git-enable-magit-gitflow-plugin nil
-  "If non nil, enable `magit-gitflow' plugin.")
-
-(defvar git-enable-magit-svn-plugin nil
-  "If non nil, enable `magit-svn' plugin.")
-
-(defvar git-enable-magit-todos-plugin nil
-  "If non nil, enable `magit-todos' plugin.")
-
-(defvar git-magit-status-fullscreen nil
-  "If non nil magit-status buffer is displayed in fullscreen.")
-
-(defvar spacemacs--git-blame-ts-full-hint-toggle nil
-  "Display git blame transient state documentation.")
+(provide 'core-early-funcs)

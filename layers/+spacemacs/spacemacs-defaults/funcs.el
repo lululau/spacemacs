@@ -825,6 +825,11 @@ variable."
   (interactive)
   (find-file-existing user-init-file))
 
+(defun spacemacs/find-user-early-init-file ()
+  "Edit the `early-init-file', in the current window."
+  (interactive)
+  (find-file-existing early-init-file))
+
 (defun spacemacs/find-dotfile ()
   "Edit the `dotfile', in the current window."
   (interactive)
@@ -1432,6 +1437,30 @@ A non-nil argument sorts in REVERSE order."
 using a visual block/rectangle selection."
   (interactive)
   (spacemacs/sort-lines-by-column -1))
+
+;; Show scroll bar when using the mouse wheel
+(defun spacemacs//scroll-bar-hide ()
+  " Hide the scroll bar."
+  (scroll-bar-mode -1))
+
+(defun spacemacs//scroll-bar-show-delayed-hide (&rest _ignore)
+  "Show the scroll bar for a couple of seconds, before hiding it.
+
+This can be used to temporarily show the scroll bar when mouse wheel scrolling.
+(advice-add 'mwheel-scroll :after #'spacemacs//scroll-bar-show-delayed-hide)
+
+The advice can be removed with:
+(advice-remove 'mwheel-scroll #'spacemacs//scroll-bar-show-delayed-hide)"
+  (scroll-bar-mode 1)
+  (run-with-idle-timer
+   (if (numberp dotspacemacs-scroll-bar-while-scrolling)
+       dotspacemacs-scroll-bar-while-scrolling
+     3)
+   nil
+   #'spacemacs//scroll-bar-hide))
+(when (and (fboundp 'scroll-bar-mode)
+           dotspacemacs-scroll-bar-while-scrolling)
+  (advice-add 'mwheel-scroll :after #'spacemacs//scroll-bar-show-delayed-hide))
 
 ;; BEGIN linum mouse helpers
 
