@@ -1,8 +1,8 @@
-;;; config.el --- Spacemacs-evil Layer Configuration File for Spacemacs
+;; config.el --- Nav-flash Layer Configuration File for Spacemacs.
 ;;
 ;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
 ;;
-;; Author: Sylvain Benner <sylvain.benner@gmail.com>
+;; Author: Thanh Vuong <thanhvg@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
 ;;
 ;; This file is not part of GNU Emacs.
@@ -20,16 +20,10 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+(defvar nav-flash-exclude-commands
+  '(mouse-set-point mouse-drag-region evil-mouse-drag-region +org/dwim-at-point
+                    org-find-file org-find-file-at-mouse)
+  "A list of commands that should not trigger nav-flash.")
 
-
-(defvar vim-style-visual-feedback nil
-  "If non-nil objects are briefly highlighted performing an action.")
-
-(defvar hybrid-style-visual-feedback nil
-  "If non-nil objects are briefly highlighted performing an action.")
-
-(defvar evil-lisp-safe-structural-editing-modes '()
-  "A list of major mode symbols where safe structural editing is supported.")
-
-(defvar spacemacs-evil-collection-allowed-list '(eww dired quickrun)
-  "List of modes Spacemacs will allow to be evilified by ‘evil-collection-init’.")
+(defvar nav-flash--last-point nil
+  "internal variable for nav-flash.")

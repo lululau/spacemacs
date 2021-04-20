@@ -96,11 +96,13 @@
       (popwin-mode 1)
       (spacemacs/set-leader-keys "wpm" 'popwin:messages)
       (spacemacs/set-leader-keys "wpp" 'popwin:close-popup-window)
+      (spacemacs/set-leader-keys "rw" 'spacemacs/last-popwin)
 
       ;; don't use default value but manage it ourselves
       (setq popwin:special-display-config nil)
 
       ;; buffers that we manage
+      (push '("*quickrun*"             :dedicated t :position bottom :stick t :noselect t   :height 0.3) popwin:special-display-config)
       (push '("*Help*"                 :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
       (push '("*Process List*"         :dedicated t :position bottom :stick t :noselect nil :height 0.4) popwin:special-display-config)
       (push '(compilation-mode         :dedicated nil :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
@@ -113,7 +115,9 @@
       (push '("*grep*"                 :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
       (push '("*nosetests*"            :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
       (push '("^\*WoMan.+\*$" :regexp t             :position bottom                                   ) popwin:special-display-config)
-      (push '("*Google Translate*"     :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config))))
+      (push '("*Google Translate*"     :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+
+      (advice-add 'popwin:match-config :around #'spacemacs/advice-popwin))))
 
 (defun spacemacs-visual/init-zoom-frm ()
   (use-package zoom-frm
