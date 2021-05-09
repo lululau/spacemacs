@@ -71,18 +71,22 @@ Allows to keep track of widgets to delete when removing them.")
   "Horizontal position of the home buffer buttons.
 Internal use, do not set this variable.")
 
-(defvar spacemacs-buffer-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "0") 'spacemacs-buffer/jump-to-number-startup-list-line)
-    (define-key map (kbd "1") 'spacemacs-buffer/jump-to-number-startup-list-line)
-    (define-key map (kbd "2") 'spacemacs-buffer/jump-to-number-startup-list-line)
-    (define-key map (kbd "3") 'spacemacs-buffer/jump-to-number-startup-list-line)
-    (define-key map (kbd "4") 'spacemacs-buffer/jump-to-number-startup-list-line)
-    (define-key map (kbd "5") 'spacemacs-buffer/jump-to-number-startup-list-line)
-    (define-key map (kbd "6") 'spacemacs-buffer/jump-to-number-startup-list-line)
-    (define-key map (kbd "7") 'spacemacs-buffer/jump-to-number-startup-list-line)
-    (define-key map (kbd "8") 'spacemacs-buffer/jump-to-number-startup-list-line)
-    (define-key map (kbd "9") 'spacemacs-buffer/jump-to-number-startup-list-line)
+(defvar spacemacs-buffer-mode-map (make-sparse-keymap)
+  "Keymap for spacemacs buffer mode.")
+
+(defun spacemacs-buffer/key-bindings ()
+  (let ((map spacemacs-buffer-mode-map))
+    (when dotspacemacs-show-startup-list-numbers
+      (define-key map (kbd "0") 'spacemacs-buffer/jump-to-number-startup-list-line)
+      (define-key map (kbd "1") 'spacemacs-buffer/jump-to-number-startup-list-line)
+      (define-key map (kbd "2") 'spacemacs-buffer/jump-to-number-startup-list-line)
+      (define-key map (kbd "3") 'spacemacs-buffer/jump-to-number-startup-list-line)
+      (define-key map (kbd "4") 'spacemacs-buffer/jump-to-number-startup-list-line)
+      (define-key map (kbd "5") 'spacemacs-buffer/jump-to-number-startup-list-line)
+      (define-key map (kbd "6") 'spacemacs-buffer/jump-to-number-startup-list-line)
+      (define-key map (kbd "7") 'spacemacs-buffer/jump-to-number-startup-list-line)
+      (define-key map (kbd "8") 'spacemacs-buffer/jump-to-number-startup-list-line)
+      (define-key map (kbd "9") 'spacemacs-buffer/jump-to-number-startup-list-line))
 
     (define-key map [down-mouse-1] 'widget-button-click)
     (define-key map (kbd "RET") 'widget-button-press)
@@ -95,9 +99,9 @@ Internal use, do not set this variable.")
     (define-key map (kbd "K") 'widget-backward)
 
     (define-key map (kbd "C-r") 'spacemacs-buffer/refresh)
-    (define-key map "q" 'quit-window)
-    map)
-  "Keymap for spacemacs buffer mode.")
+    (define-key map "q" 'quit-window)))
+
+(add-hook 'emacs-startup-hook 'spacemacs-buffer/key-bindings)
 
 (with-eval-after-load 'evil
   (evil-make-overriding-map spacemacs-buffer-mode-map 'motion))
@@ -485,6 +489,19 @@ ADDITIONAL-WIDGETS: a function for inserting a widget under the frame."
                                       (concat spacemacs-docs-directory
                                               "VIMUSERS.org") "^" 'all))
                            :mouse-face 'highlight
+                           :follow-link "\C-m"))
+           (widget-insert " ")
+           (add-to-list
+            'spacemacs-buffer--note-widgets
+            (widget-create 'push-button
+                           :tag (propertize "Close note"
+                                            'face '(:foreground "orangeRed"))
+                           :help-echo "Close note"
+                           :action
+                           (lambda (&rest ignore)
+                             (spacemacs-buffer/toggle-note 'quickhelp)
+                             (search-backward "[?"))
+                           :mouse-face 'highlight
                            :follow-link "\C-m")))))
     (spacemacs-buffer//notes-insert-note (concat spacemacs-info-directory
                                                  "quickhelp.txt")
@@ -510,6 +527,19 @@ ADDITIONAL-WIDGETS: a function for inserting a widget under the frame."
                                       (format "Release %s.x"
                                               spacemacs-buffer-version-info)
                                       'subtree))
+                           :mouse-face 'highlight
+                           :follow-link "\C-m"))
+           (widget-insert " ")
+           (add-to-list
+            'spacemacs-buffer--note-widgets
+            (widget-create 'push-button
+                           :tag (propertize "Close note"
+                                            'face '(:foreground "orangeRed"))
+                           :help-echo "Close note"
+                           :action
+                           (lambda (&rest ignore)
+                             (spacemacs-buffer/toggle-note 'release-note)
+                             (search-backward "[Release"))
                            :mouse-face 'highlight
                            :follow-link "\C-m")))))
     (spacemacs-buffer//notes-insert-note (concat spacemacs-release-notes-directory
@@ -811,10 +841,14 @@ by pressing its number key."
     (mapc (lambda (el)
             (insert "\n    ")
             (let* ((button-text-prefix
-                    (format "%2s" (number-to-string
-                                   spacemacs-buffer--startup-list-nr)))
+                    (when dotspacemacs-show-startup-list-numbers
+                      (format "%2s" (number-to-string
+                                     spacemacs-buffer--startup-list-nr))))
                    (button-text
-                    (concat button-text-prefix " " (abbreviate-file-name el))))
+                    (concat
+                     (when dotspacemacs-show-startup-list-numbers
+                       (concat button-text-prefix " "))
+                     (abbreviate-file-name el))))
               (widget-create 'push-button
                              :action `(lambda (&rest ignore)
                                         (find-file-existing ,el))
@@ -837,11 +871,14 @@ GROUPED-LIST: a list of string pathnames made interactive in this function."
     (mapc (lambda (group)
             (insert "\n    ")
             (let* ((button-text-prefix
-                    (format "%2s" (number-to-string
-                                   spacemacs-buffer--startup-list-nr)))
+                    (when dotspacemacs-show-startup-list-numbers
+                      (format "%2s" (number-to-string
+                                     spacemacs-buffer--startup-list-nr))))
                    (button-text-project
-                    (concat button-text-prefix " "
-                            (abbreviate-file-name (car group)))))
+                    (concat
+                     (when dotspacemacs-show-startup-list-numbers
+                       (concat button-text-prefix " "))
+                     (abbreviate-file-name (car group)))))
               (widget-create 'push-button
                              :action `(lambda (&rest ignore)
                                         (find-file-existing ,(car group)))
@@ -854,11 +891,14 @@ GROUPED-LIST: a list of string pathnames made interactive in this function."
                     (1+ spacemacs-buffer--startup-list-nr))
               (mapc (lambda (el)
                       (let* ((button-text-prefix
-                              (format "%2s" (number-to-string
-                                             spacemacs-buffer--startup-list-nr)))
+                              (when dotspacemacs-show-startup-list-numbers
+                                (format "%2s" (number-to-string
+                                               spacemacs-buffer--startup-list-nr))))
                              (button-text-filename
-                              (concat button-text-prefix " "
-                                      (abbreviate-file-name el))))
+                              (concat
+                               (when dotspacemacs-show-startup-list-numbers
+                                 (concat button-text-prefix " "))
+                               (abbreviate-file-name el))))
                         (insert "\n        ")
                         (widget-create 'push-button
                                        :action `(lambda (&rest ignore)
@@ -884,14 +924,17 @@ LIST: a list of string bookmark names made interactive in this function."
             (insert "\n    ")
             (let* ((filename (bookmark-get-filename el))
                    (button-text-prefix
-                    (format "%2s" (number-to-string
-                                   spacemacs-buffer--startup-list-nr)))
+                    (when dotspacemacs-show-startup-list-numbers
+                      (format "%2s" (number-to-string
+                                     spacemacs-buffer--startup-list-nr))))
                    (button-text
-                    (concat button-text-prefix " "
-                            (if filename
-                                (format "%s - %s"
-                                        el (abbreviate-file-name filename))
-                              (format "%s" el)))))
+                    (concat
+                     (when dotspacemacs-show-startup-list-numbers
+                       (concat button-text-prefix " "))
+                     (if filename
+                         (format "%s - %s"
+                                 el (abbreviate-file-name filename))
+                       (format "%s" el)))))
               (widget-create 'push-button
                              :action `(lambda (&rest ignore) (bookmark-jump ,el))
                              :mouse-face 'highlight
@@ -987,20 +1030,23 @@ LIST: list of `org-agenda' entries in the todo list."
     (mapc (lambda (el)
             (insert "\n    ")
             (let* ((button-text-prefix
-                    (format "%2s" (number-to-string
-                                   spacemacs-buffer--startup-list-nr)))
+                    (when dotspacemacs-show-startup-list-numbers
+                      (format "%2s" (number-to-string
+                                     spacemacs-buffer--startup-list-nr))))
                    (button-text
-                    (concat button-text-prefix " "
-                            (format "%s %s %s"
-                                    (let ((filename (cdr (assoc "file" el))))
-                                      (if dotspacemacs-home-shorten-agenda-source
-                                          (file-name-nondirectory filename)
-                                        (abbreviate-file-name filename)))
-                                    (if (not (eq "" (cdr (assoc "time" el))))
-                                        (format "- %s -"
-                                                (cdr (assoc "time" el)))
-                                      "-")
-                                    (cdr (assoc "text" el))))))
+                    (concat
+                     (when dotspacemacs-show-startup-list-numbers
+                       (concat button-text-prefix " "))
+                     (format "%s %s %s"
+                             (let ((filename (cdr (assoc "file" el))))
+                               (if dotspacemacs-home-shorten-agenda-source
+                                   (file-name-nondirectory filename)
+                                 (abbreviate-file-name filename)))
+                             (if (not (eq "" (cdr (assoc "time" el))))
+                                 (format "- %s -"
+                                         (cdr (assoc "time" el)))
+                               "-")
+                             (cdr (assoc "text" el))))))
               (widget-create 'push-button
                              :action `(lambda (&rest ignore)
                                         (spacemacs-buffer//org-jump ',el))
@@ -1213,10 +1259,15 @@ can be adjusted with the variable:
 (defun spacemacs-buffer/jump-to-line-starting-with-nr-space (nr-string)
   "Jump to the line number that starts with NR."
   (let ((prev-point (point)))
-    (goto-char (point-min))
+    (goto-char (window-start))
     (if (not (re-search-forward
               (spacemacs-buffer//re-line-starts-with-nr-space nr-string)
-              nil 'noerror))
+              ;; don't search past two lines above the window-end,
+              ;; because they bottom two lines are hidden by the mode line
+              (save-excursion (goto-char (window-end))
+                              (forward-line -1)
+                              (point))
+              'noerror))
         (progn (goto-char prev-point)
                (let (message-log-max) ; only show in minibuffer
                  (message "Couldn't find startup list number: %s"

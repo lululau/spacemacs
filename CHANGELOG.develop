@@ -506,12 +506,14 @@ In org-agenda-mode
   - New variable =dotspacemacs-show-trailing-whitespace= (thanks to duianto)
   - New var =dotspacemacs-startup-buffer-multi-digit-delay= (thanks to duianto)
   - New variable =dotspacemacs-scroll-bar-while-scrolling= (thanks to duianto)
+  - New variable =dotspacemacs-show-startup-list-numbers= (thanks to duianto)
 - Removed Variables:
   - Removed unused variable =dotspacemacs-verbose-loading= from
     =.spacemacs.template= (thanks to Ying Qu)
 Other:
   - =.gitignore= now ignores tag files and the bbdb database.
   - =.gitignore= now ignores org-journal-cache-file (thanks to Benjamin Hipple)
+  - =.gitignore= now ignores image-dired-dir (thanks to Alfonso Montero)
   - Added =vim-style-visual-feedback= and =hybrid-style-visual-feedback= style
     variables to enable =evil-goggles= pulse in the Vim and Hybrid editing
     styles, respectively; disabled by default (thanks to Sylvain Benner)
