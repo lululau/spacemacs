@@ -1485,6 +1485,9 @@ Other:
     (thanks to Sylvain Benner)
   - Removed the assumption that ~C-k~ was bound to =evil-insert-digraph= after
     closing/finishing a company completion (thanks to lovrolu)
+  - Make ~C-j~ and ~C-k~ work when searching/filtering =company= results if in
+    `vim` mode or `hybrid` mode with `hybrid-style-enable-hjkl-bindings` set to
+    `t` (thanks to dankessler)
 - Key bindings:
   - Removed ~C-f~ because it interfered with the default key binding for
     =forward-char= (thanks to scturtle and duianto)
@@ -3136,7 +3139,7 @@ files (thanks to Daniel Nicolai)
 - Added LSP support, which can be enabled by setting the =python= layer's
   =python-backend= variable to =lsp=
   (thanks to Yuan Fu and Sylvain Benner).
-- The LSP backend can use either the =pyls= (default) server or the =mspyls=
+- The LSP backend can use either the =pylsp= (default) server or the =mspyls=
   (Microsoft) implementation, which may be selected by setting the
   =python-lsp-server= layer variable to =mspyls=
   (thanks to Cormac Cannon).
