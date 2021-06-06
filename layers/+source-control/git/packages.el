@@ -58,7 +58,8 @@
     (add-to-list 'golden-ratio-exclude-buffer-names " *transient*")))
 
 (defun git/pre-init-evil-collection ()
-  (add-to-list 'spacemacs-evil-collection-allowed-list 'magit))
+  (when (spacemacs//support-evilified-buffer-p)
+    (add-to-list 'spacemacs-evil-collection-allowed-list 'magit)))
 
 (defun git/post-init-fill-column-indicator ()
   (add-hook 'git-commit-mode-hook 'fci-mode))
@@ -242,7 +243,7 @@
       (define-key magit-status-mode-map (kbd "C-S-w")
         'spacemacs/magit-toggle-whitespace)
       ;; Add missing which-key prefixes using the new keymap api
-      (when (spacemacs//support-evilified-buffer-p dotspacemacs-editing-style)
+      (when (spacemacs//support-evilified-buffer-p)
         (which-key-add-keymap-based-replacements magit-status-mode-map
           "gf"  "jump-to-unpulled"
           "gp"  "jump-to-unpushed"))
