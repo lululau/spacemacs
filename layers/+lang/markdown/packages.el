@@ -76,7 +76,6 @@
       (add-hook 'markdown-mode-hook 'orgtbl-mode)
       (define-key markdown-mode-map (kbd "M-<return>") nil)
       (spacemacs|diminish orgtbl-mode)
-      (add-hook 'markdown-mode-hook 'spacemacs//cleanup-org-tables-on-save)
       ;; Make markdown-mode behave a bit more like org w.r.t. code blocks i.e.
       ;; use proper syntax highlighting
       (setq markdown-fontify-code-blocks-natively t)
