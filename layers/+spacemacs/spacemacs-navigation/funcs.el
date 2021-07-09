@@ -58,8 +58,8 @@ If the universal prefix argument is used then kill also the window."
   (interactive)
   (if spacemacs-last-ahs-highlight-p
       (progn (goto-char (nth 1 spacemacs-last-ahs-highlight-p))
-             (spacemacs/ahs-highlight-now-wrapper)
-             (spacemacs/symbol-highlight-transient-state/body))
+             (spacemacs/symbol-highlight-transient-state/body)
+             (ahs-highlight-now))
     (message "No symbol has been searched for now.")))
 
 (defun spacemacs/integrate-evil-search (forward)
@@ -87,19 +87,6 @@ If the universal prefix argument is used then kill also the window."
         (setq evil-ex-last-was-search nil
               evil-ex-substitute-pattern `(,(concat isearch-string "\\C")
                                            nil (0 0))))
-
-(defun spacemacs/ensure-ahs-enabled-locally ()
-  "Ensures ahs is enabled for the local buffer."
-  (unless
-      (bound-and-true-p ahs-mode-line)
-    (auto-highlight-symbol-mode)
-    ))
-
-(defun spacemacs/ahs-highlight-now-wrapper ()
-  "Safe wrapper for ahs-highlight-now"
-  (eval '(progn
-           (spacemacs/ensure-ahs-enabled-locally)
-           (ahs-highlight-now)) nil))
 
 (defun spacemacs/enter-ahs-forward ()
   "Go to the next occurrence of symbol under point with
@@ -133,29 +120,52 @@ If the universal prefix argument is used then kill also the window."
   (if (eq forward spacemacs--ahs-searching-forward)
       (progn
         (spacemacs/integrate-evil-search t)
-        (spacemacs/ahs-highlight-now-wrapper)
         (evil-set-jump)
         (spacemacs/symbol-highlight-transient-state/body)
+        (ahs-highlight-now)
         (ahs-forward))
     (progn
       (spacemacs/integrate-evil-search nil)
-      (spacemacs/ahs-highlight-now-wrapper)
       (evil-set-jump)
       (spacemacs/symbol-highlight-transient-state/body)
+      (ahs-highlight-now)
       (ahs-backward))))
 
 (defun spacemacs/symbol-highlight ()
   "Highlight the symbol under point with `auto-highlight-symbol'."
   (interactive)
-  (spacemacs/ahs-highlight-now-wrapper)
-  (setq spacemacs-last-ahs-highlight-p (ahs-highlight-p))
+  (spacemacs//remember-last-ahs-highlight)
   (spacemacs/symbol-highlight-transient-state/body)
+  (ahs-highlight-now)
   (spacemacs/integrate-evil-search t))
+
+(defun spacemacs//remember-last-ahs-highlight ()
+  (setq spacemacs-last-ahs-highlight-p (ahs-highlight-p)))
+
+(defvar-local spacemacs//ahs-was-disabled t)
+
+(defun spacemacs//ahs-ts-on-enter ()
+  ;; Only remember the `auto-highlight-symbol-mode' state,
+  ;; when entering the Symbol Highlight Transient State,
+  ;; Not when the TS is open and one is navigating
+  ;; to the next or previous symbol.
+  ;; Because the TS is closed and reopened, when navigating
+  ;; to a symbol. With the following commands.
+  (unless (memq this-command '(spacemacs/quick-ahs-forward
+                               spacemacs/quick-ahs-backward))
+    (setq-local spacemacs//ahs-was-disabled
+          (not (bound-and-true-p auto-highlight-symbol-mode))))
+  (auto-highlight-symbol-mode))
 
 (defun spacemacs//ahs-ts-on-exit ()
   ;; Restore user search direction state as ahs has exitted in a state
   ;; good for <C-s>, but not for 'n' and 'N'"
-  (setq isearch-forward spacemacs--ahs-searching-forward))
+  (setq isearch-forward spacemacs--ahs-searching-forward)
+  ;; Don't disable `auto-highlight-symbol-mode', when navigating between symbols
+  (unless (memq this-command '(spacemacs/quick-ahs-forward
+                               spacemacs/quick-ahs-backward))
+    (when spacemacs//ahs-was-disabled
+      (auto-highlight-symbol-mode -1))))
 
 (defun spacemacs/symbol-highlight-reset-range ()
   "Reset the range for `auto-highlight-symbol'."
@@ -174,7 +184,7 @@ If the universal prefix argument is used then kill also the window."
                                (cond ((string= plighter "HS")  "Display")
                                      ((string= plighter "HSA") "Buffer")
                                      ((string= plighter "HSD") "Function"))))
-               (face (cond ((string= plighter "HS")  ahs-plugin-defalt-face)
+               (face (cond ((string= plighter "HS")  ahs-plugin-default-face)
                            ((string= plighter "HSA") ahs-plugin-whole-buffer-face)
                            ((string= plighter "HSD") ahs-plugin-bod-face))))
           (while (not (string= overlay current-overlay))
