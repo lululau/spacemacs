@@ -185,6 +185,9 @@ as the pyenv version then also return nil. This works around https://github.com/
                      ((spacemacs/pyenv-executable-find "pudb3") "import pudb; pudb.set_trace()")
                      ((spacemacs/pyenv-executable-find "python3.7") "breakpoint()")
                      ((spacemacs/pyenv-executable-find "python3.8") "breakpoint()")
+                     ((spacemacs/pyenv-executable-find "python3.9") "breakpoint()")
+                     ((spacemacs/pyenv-executable-find "python3.10") "breakpoint()")
+                     ((spacemacs/pyenv-executable-find "python3.11") "breakpoint()")
                      (t "import pdb; pdb.set_trace()")))
         (line (thing-at-point 'line)))
     (if (and line (string-match trace line))
@@ -473,6 +476,19 @@ Bind formatter to '==' for LSP and '='for all other backends."
   (call-interactively #'spacemacs/python-shell-send-statement)
   (python-shell-switch-to-shell)
   (evil-insert-state))
+
+(defun spacemacs/python-shell-send-with-output(start end)
+  "Send region content to shell and show output in comint buffer.
+If region is not active then send line."
+  (interactive "r")
+  (let ((python-mode-hook nil)
+        (process-buffer (python-shell-get-process))
+        (line-start (point-at-bol))
+        (line-end (point-at-eol)))
+    (if (region-active-p)
+        (comint-send-region process-buffer start end)
+      (comint-send-region process-buffer line-start line-end))
+    (comint-simple-send process-buffer "\r")))
 
 (defun spacemacs/python-start-or-switch-repl ()
   "Start and/or switch to the REPL."
