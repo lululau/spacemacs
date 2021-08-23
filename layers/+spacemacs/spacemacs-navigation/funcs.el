@@ -216,17 +216,11 @@ in the window where the Symbol Highlight Transient State was closed."
 
 (defun spacemacs//transient-state-buffer-title ()
   (let ((transient-state-buffer-name " *LV*"))
-    (when (spacemacs/buffer-exists transient-state-buffer-name)
+    (when (get-buffer transient-state-buffer-name)
       (with-current-buffer transient-state-buffer-name
         (buffer-substring-no-properties
          (point-min)
          (string-match "Transient State" (buffer-string)))))))
-
-(defun spacemacs/buffer-exists (name-of-buffer)
-  (catch 'buffer-found
-    (dolist (win (window-list))
-      (when (string= name-of-buffer (buffer-name (window-buffer win)))
-        (throw 'buffer-found t)))))
 
 (defun spacemacs/symbol-highlight-reset-range ()
   "Reset the range for `auto-highlight-symbol'."
@@ -391,19 +385,35 @@ in the window where the Symbol Highlight Transient State was closed."
 ;; junk-file
 
 (defun spacemacs/open-junk-file (&optional arg)
-  "Open junk file using helm or ivy.
+  "Create a junk file with the initial name that's based on the variable
+`open-junk-file-format'
+`~/.emacs.d/.cache/junk/%Y/%m/%d-%H%M%S.'
 
-Interface choice depends on whether the `ivy' layer is used or
-not.
+Or erase the name and open an existing junk file.
 
-When ARG is non-nil search in junk files."
+When ARG is non-nil, search in the junk files.
+
+The interface depends on the current completion layer:
+compleseus
+helm
+ivy"
   (interactive "P")
   (let* ((fname (format-time-string open-junk-file-format (current-time)))
          (rel-fname (file-name-nondirectory fname))
          (junk-dir (file-name-directory fname))
          (default-directory junk-dir))
     (make-directory junk-dir t)
-    (cond ((and arg (configuration-layer/layer-used-p 'ivy))
+    (cond ((and arg (configuration-layer/layer-used-p 'compleseus))
+           (cond ((executable-find "rg") (consult-ripgrep junk-dir))
+                 ((executable-find "grep") (consult-grep junk-dir))
+                 (t (message "Couldn't find either executable: rg or grep"))))
+          ((configuration-layer/layer-used-p 'compleseus)
+           (find-file
+            (completing-read
+             junk-dir
+             (directory-files junk-dir nil directory-files-no-dot-files-regexp)
+             nil nil rel-fname)))
+          ((and arg (configuration-layer/layer-used-p 'ivy))
            (spacemacs/counsel-search dotspacemacs-search-tools nil junk-dir))
           ((configuration-layer/layer-used-p 'ivy)
            (require 'counsel)

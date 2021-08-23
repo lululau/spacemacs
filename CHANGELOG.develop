@@ -762,6 +762,7 @@ Other:
   - Fixed duplicate quick help and release notes in home buffer
     (thanks to mark30247)
   - Fixed evil undo in =spacemacs-base= (thanks to duianto)
+  - Fix macOS GUI full screen button wreck caused by GUI setup in early-init.el
 - Other:
   - New function =configuration-layer/message= to display message in
     =*Messages*= buffer (thanks to Sylvain Benner)
@@ -2007,6 +2008,10 @@ Other:
 - erc-view-log related changes (thanks to Mpho Jele)
   - Modified erc-log transient state to open in erc-view-log-mode
   - Added utility to open log buffer/file from erc channel
+**** Erlang
+- Added =lsp= support through erlang-ls backend (thanks to cfclavijo)
+- Added =dap= support through els_dap backend (thanks to cfclavijo)
+- =lsp= layer is a dependency when backend is set to ='lsp= (thanks to cfclavijo)
 **** ESS
 - Key bindings:
   - Change ~SPC m s t~ to ~SPC m s f~ to respect convention (thanks to Yi Liu)
@@ -2482,6 +2487,7 @@ Other:
 - Fixed =cl= package deprecated =letf*= (thanks to duianto)
 - Fixed counsel find-file functions to use Spacemacs check for opening large
 files (thanks to Daniel Nicolai)
+- Add option to configure =all-the-icons-ivy-rich= (thanks to Daniel Nicolai)
 **** Imenu-list
 - Changed ~SPC b i~ to ~SPC b t~ for =imenu= tree view
   (thansk to Sylvain Benner)
@@ -3126,6 +3132,7 @@ files (thanks to Daniel Nicolai)
 - Enabled =purescript-decl-scan-mode= when loading =purescript-mode=
   (thanks to Bjarke Vad Andersen)
 - Allow adding node_modules/.bin path to exec-path (thanks to Anupam Jain)
+- Added support for purescript formatters (thanks to Anupam Jain)
 - Improved purescript keybinding discoverability & ergonomics.
   (thanks to Jason Walker)
 - Added =purescript-mode= to =spacemacs-indent-sensitive-modes=
