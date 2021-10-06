@@ -44,6 +44,7 @@
     poetry
     pippel
     py-isort
+    pydoc
     pyenv-mode
     (pylookup :location local)
     pytest
@@ -277,6 +278,15 @@
         "Se" 'sphinx-doc-mode
         "Sd" 'sphinx-doc))
     :config (spacemacs|hide-lighter sphinx-doc-mode)))
+
+(defun python/init-pydoc ()
+  (use-package pydoc
+    :defer t
+    :init
+    (progn
+      (spacemacs/set-leader-keys-for-major-mode 'python-mode
+        "hp" 'pydoc-at-point-no-jedi
+        "hP" 'pydoc))))
 
 (defun python/pre-init-pyenv-mode ()
   (add-to-list 'spacemacs--python-pyenv-modes 'python-mode))
