@@ -28,9 +28,8 @@
         ;; forge requires a C compiler on Windows so we disable
         ;; it by default on Windows.
         (forge :toggle (not (spacemacs/system-is-mswindows)))
-        gitattributes-mode
-        gitconfig-mode
-        gitignore-mode
+        ;; include the old git{attributes,config,ignore}-mode
+        git-modes
         gitignore-templates
         git-commit
         git-link
@@ -38,7 +37,6 @@
         git-timemachine
         golden-ratio
         (helm-git-grep :requires helm)
-        (helm-gitignore :requires helm)
         magit
         (magit-delta :toggle git-enable-magit-delta-plugin)
         (magit-gitflow :toggle git-enable-magit-gitflow-plugin)
@@ -70,11 +68,6 @@
     :init (spacemacs/set-leader-keys
             "g/" 'helm-git-grep
             "g*" 'helm-git-grep-at-point)))
-
-(defun git/init-helm-gitignore ()
-  (use-package helm-gitignore
-    :defer t
-    :init (spacemacs/set-leader-keys "gI" 'helm-gitignore)))
 
 (defun git/init-git-commit ()
   (use-package git-commit
@@ -131,16 +124,8 @@
         ("Y" git-timemachine-kill-revision)
         ("q" nil :exit t)))))
 
-(defun git/init-gitattributes-mode ()
-  (use-package gitattributes-mode
-    :defer t))
-
-(defun git/init-gitconfig-mode ()
-  (use-package gitconfig-mode
-    :defer t))
-
-(defun git/init-gitignore-mode ()
-  (use-package gitignore-mode
+(defun git/init-git-modes ()
+  (use-package git-modes
     :defer t))
 
 (defun git/init-gitignore-templates ()

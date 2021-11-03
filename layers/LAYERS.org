@@ -2531,7 +2531,6 @@ Features:
 - quick in buffer last commit message per line with [[https://github.com/syohex/emacs-git-messenger][git-messenger]]
 - colorize buffer line by age of commit with [[https://github.com/syohex/emacs-smeargle][smeargle]]
 - git grep with [[https://github.com/yasuyk/helm-git-grep][helm-git-grep]]
-- gitignore generator with [[https://github.com/jupl/helm-gitignore][helm-gitignore]]
 - org integration with magit via [[https://github.com/magit/orgit][orgit]]
 
 New to Magit? Checkout the [[https://magit.vc/about/][official intro]].
@@ -2543,7 +2542,6 @@ This layers adds support for [[http://github.com][GitHub]].
 
 Features:
 - [[https://github.com/magit/forge][forge]]: integration with various forges, such as GitHub and GitLab.
-- [[https://github.com/defunkt/gist.el][gist.el]]: full-featured mode to browse and post GitHub gists.
 - [[https://github.com/sshaw/git-link][git-link]]: quickly generate URLs for commits or files.
 - [[https://github.com/dgtized/github-clone.el][github-clone]] allows for easy cloning and forking of repositories.
 - [[https://github.com/seagle0128/grip-mode][grip-mode]] Github-flavored Markdown/Org preview using [[https://github.com/joeyespo/grip][Grip]].

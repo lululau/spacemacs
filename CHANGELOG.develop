@@ -372,6 +372,7 @@ In org-agenda-mode
   - Changed ~SPC g h o~ to ~SPC g o~ for =browse-at-remote= (thanks to Codruț
     Constantin Gușoi)
   - Add ~SPC g f m~ for ~magit-file-dispatch~ (thanks to Ag Ibragimov and Ilya Grigoriev)
+- Removed[[https://github.com/defunkt/gist.el][ gist.el]] due to it being broken and unmaintained (thanks to Robby O'Connor)
 ***** YAML
 - Added LSP support (thanks to Seong Yong-ju)
 ***** ycmd
@@ -806,8 +807,8 @@ Other:
     section (thank to Daniel Nicolai)
   - New function =spacemacs/inherit-leader-keys-from-parent-mode= to
     inherit leader key bindings from another mode
-  - Evilify buffer with major-mode derived from =special-mode= by default
-    (thanks to Daniel Nicolai)
+  - Open buffers with major-mode derived from =special-mode= in motion-state by
+    default (thanks to Daniel Nicolai)
 *** Distribution changes
 - Refactored =spacemacs-bootstrap=, =spacemacs-ui=, and =spacemacs-ui-visual=
   layers:
@@ -2066,6 +2067,7 @@ Other:
   Factor versions
 **** FASD
 - Add ~search from~ ivy action (thanks to Daniel Nicolai)
+- fasd & find layout. Initiates fasd search and opens the item in a layout (thanks to Ag Ibragimov)
 **** Finance
 - Remove key-bindings pointing to removed commands (thanks to Alexander Baier)
 - Added =evil-ledger= package (thanks to Alexander Miller)
