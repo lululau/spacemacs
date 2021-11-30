@@ -108,7 +108,7 @@ current perspective."
                           (switch-to-buffer (other-buffer (current-buffer) t))))
 
 (defun spacemacs-layouts/non-restricted-buffer-list-helm ()
-  "Show all buffers accross all layouts."
+  "Show all buffers across all layouts."
   (interactive)
   (let ((helm-buffer-list-reorder-fn #'helm-buffers-reorder-buffer-list))
     (helm-mini)))
@@ -119,7 +119,7 @@ current perspective."
     (ivy-switch-buffer)))
 
 (defun spacemacs-layouts//advice-with-persp-buffer-list (orig-fun &rest args)
-  "Advice to provide perp buffer list."
+  "Advice to provide persp buffer list."
   (with-persp-buffer-list () (apply orig-fun args)))
 
 
