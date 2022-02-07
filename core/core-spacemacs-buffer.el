@@ -1192,7 +1192,7 @@ SEQ, START and END are the same arguments as for `cl-subseq'"
                         (or (when (and (bound-and-true-p org-directory) (file-exists-p org-directory))
                               (member x (directory-files org-directory t)))
                             (when (bound-and-true-p org-agenda-files)
-                              (member x (mapcar #'expand-file-name org-agenda-files)))))
+                              (member x (mapcar #'expand-file-name (org-agenda-files))))))
                       recentf-list))
   (setq spacemacs-buffer//recent-files-list
         (spacemacs//subseq spacemacs-buffer//recent-files-list 0 list-size))
