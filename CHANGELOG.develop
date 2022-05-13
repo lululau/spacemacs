@@ -339,6 +339,7 @@ In org-agenda-mode
 ***** Search-engine
   - Add Debian & Ubuntu package search engines (thanks to Alfonso Montero).
   - Allow to configure a TLD other than =.com= for Amazon searches (thanks to Alfonso Montero).
+  - Add Rails API search engine
 ***** Spacemacs-navigation
 - Key bindings:
   - Add ~J/K~ to scroll up/down (or next/previous node) in Info-mode
@@ -479,6 +480,7 @@ In org-agenda-mode
 - sphinx (thanks to Wei-Wei Guo)
 - tern (thanks to Sylvain Benner and Juuso Valkeejärvi)
 - tide (thanks to Thanh Vuong)
+- translate (thanks to Ray Wang)
 - transmission (thanks to Eugene Yaremenko)
 - web-beautify (thanks to Sylvain Benner and Juuso Valkeejärvi)
 - xclipboard (thanks to Charles Weill, Sylvain Benner, and Alex Palaistras)
