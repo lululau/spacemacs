@@ -276,12 +276,14 @@
       (setq ivy-yasnippet-expand-keys nil)
       (spacemacs/set-leader-keys "is" 'spacemacs/ivy-yas))))
 
-(defun auto-completion/post-init-smartparens ()
-  (with-eval-after-load 'smartparens
-    (add-hook 'yas-before-expand-snippet-hook
-              #'spacemacs//smartparens-disable-before-expand-snippet)
-    (add-hook 'yas-after-exit-snippet-hook
-              #'spacemacs//smartparens-restore-after-exit-snippet)))
+;; (defun auto-completion/post-init-smartparens ()
+;;   (with-eval-after-load 'smartparens
+;;     (add-hook 'yas-before-expand-snippet-hook
+;;               #'spacemacs//smartparens-disable-before-expand-snippet)
+;;     (add-hook 'yas-after-exit-snippet-hook
+;;               #'spacemacs//smartparens-restore-after-exit-snippet)))
+
+(defun auto-completion/post-init-smartparens ())
 
 (defun auto-completion/init-yasnippet ()
   (use-package yasnippet
