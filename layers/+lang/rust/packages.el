@@ -32,7 +32,7 @@
     ggtags
     helm-gtags
     ron-mode
-    racer
+    (racer :toggle (eq rust-backend 'racer))
     rust-mode
     smartparens
     toml-mode))

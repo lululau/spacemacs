@@ -24,7 +24,9 @@
   '(auto-highlight-symbol
     imenu
     marginalia
-    (compleseus-spacemacs-help :location local)
+    ;; (compleseus-spacemacs-help :location local)
+    (compleseus-spacemacs-help
+     :location (recipe :fetcher local))
     consult
     consult-yasnippet
     embark
@@ -187,9 +189,6 @@
     ;; Optionally tweak the register preview window.
     ;; This adds thin lines, sorting and hides the mode line of the window.
     (advice-add #'register-preview :override #'consult-register-window)
-
-    ;; Replace `completing-read-multiple' with an enhanced version.
-    (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
 
     ;; Use Consult to select xref locations with preview
     (setq xref-prompt-for-identifier '(not xref-find-definitions
@@ -407,6 +406,7 @@
 
 (defun compleseus/init-compleseus-spacemacs-help ()
   (use-package compleseus-spacemacs-help
+    :defer t
     :init
     (spacemacs/set-leader-keys
       "h ."   'compleseus-spacemacs-help-dotspacemacs
