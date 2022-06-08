@@ -89,8 +89,8 @@
         (kbd "<return>") 'log-view-find-revision
         "H" 'log-view-toggle-entry-display
         "o" 'ace-link-woman)
-      (evilified-state-evilify-map vc-svn-log-view-mode-map
-        :mode vc-svn-log-view-mode)
+      ;; (evilified-state-evilify-map vc-svn-log-view-mode-map
+        ;; :mode vc-svn-log-view-mode)
       (evilified-state-evilify-map vc-git-log-view-mode-map
         :mode vc-git-log-view-mode)
       (evilified-state-evilify-map vc-git-log-view-mode-map
