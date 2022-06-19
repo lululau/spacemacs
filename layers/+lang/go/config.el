@@ -74,3 +74,11 @@ If not set then `go-mode' is the default backend unless `lsp' layer is used."
 (spacemacs|defc go-test-command "go test"
   "Go test command. Default is `go test`."
   'string nil t)
+
+(spacemacs|defc go-dap-mode 'dap-dlv-go
+  "Go dap mode. This variable defines which kind of dap integration will be used.
+
+Default is `dap-dlv-mode' which is completely self-contained.
+Alternatively the depreciated vscode integration can be used, to do so set this variable to `dap-go'.
+Remember that the legacy integration requires vscode extensions to work properly."
+  '(choice (const dap-dlv-go) (const dap-go)) nil t)
