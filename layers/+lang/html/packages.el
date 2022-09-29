@@ -191,7 +191,7 @@
   (spacemacs/add-to-hooks
    #'spacemacs//activate-smartparens
    '(css-mode-hook scss-mode-hook sass-mode-hook less-css-mode-hook))
-  (add-hook 'web-mode-hook #'spacemacs//deactivate-smartparens))
+  (add-hook 'web-mode-hook #'spacemacs//activate-smartparens))
 
 (defun html/init-tagedit ()
   (use-package tagedit
