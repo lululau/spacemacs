@@ -72,7 +72,7 @@
     :defer t
     :config
     (progn
-      (add-hook 'markdown-mode-hook 'orgtbl-mode)
+      ;; (add-hook 'markdown-mode-hook 'orgtbl-mode)
       (define-key markdown-mode-map (kbd "M-<return>") nil)
       (spacemacs|diminish orgtbl-mode)
       ;; Make markdown-mode behave a bit more like org w.r.t. code blocks i.e.
