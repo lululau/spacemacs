@@ -72,6 +72,34 @@
       (with-selected-window (get-buffer-window (cider-current-connection))
         (goto-char (point-max))))))
 
+(defun spacemacs/cider-send-paragraph-to-repl ()
+  "Send paragraph to REPL and evaluate it without changing
+the focus."
+  (interactive)
+  (spacemacs//cider-eval-in-repl-no-focus (substring-no-properties (thing-at-point 'paragraph))))
+
+(defun spacemacs/cider-send-paragraph-to-repl-focus ()
+  "Send paragraph to REPL and evaluate it and switch to the REPL in
+`insert state'."
+  (interactive)
+  (cider-insert-in-repl
+   (substring-no-properties (thing-at-point 'paragraph)) t)
+  (evil-insert-state))
+
+(defun spacemacs/cider-send-line-to-repl ()
+  "Send line to REPL and evaluate it without changing
+the focus."
+  (interactive)
+  (spacemacs//cider-eval-in-repl-no-focus (substring-no-properties (thing-at-point 'line))))
+
+(defun spacemacs/cider-send-line-to-repl-focus ()
+  "Send line to REPL and evaluate it and switch to the REPL in
+`insert state'."
+  (interactive)
+  (cider-insert-in-repl
+   (substring-no-properties (thing-at-point 'line)) t)
+  (evil-insert-state))
+
 (defun spacemacs/cider-send-last-sexp-to-repl ()
   "Send last sexp to REPL and evaluate it without changing
 the focus."

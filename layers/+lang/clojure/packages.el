@@ -189,8 +189,12 @@
             "sjj" 'cider-jack-in-clj
             "sjm" 'cider-jack-in-clj&cljs
             "sjs" 'cider-jack-in-cljs
-            "sl" 'spacemacs/cider-find-and-clear-repl-buffer
-            "sL" 'cider-find-and-clear-repl-output
+            ;; "sl" 'spacemacs/cider-find-and-clear-repl-buffer
+            ;; "sL" 'cider-find-and-clear-repl-output
+            "sl" 'spacemacs/cider-send-line-to-repl
+            "sL" 'spacemacs/cider-send-line-to-repl-focus
+            "sp" 'spacemacs/cider-send-paragraph-to-repl
+            "sP" 'spacemacs/cider-send-paragraph-to-repl-focus
             "sn" 'spacemacs/cider-send-ns-form-to-repl
             "sN" 'spacemacs/cider-send-ns-form-to-repl-focus
             "so" 'cider-repl-switch-to-other
