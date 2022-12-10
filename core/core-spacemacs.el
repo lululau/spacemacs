@@ -28,6 +28,8 @@
   :prefix 'spacemacs-)
 
 (require 'subr-x nil 'noerror)
+(require 'core-versions)
+(require 'core-load-paths)
 (require 'core-emacs-backports)
 (require 'core-env)
 (require 'page-break-lines)
@@ -52,6 +54,7 @@
 (require 'core-use-package-ext)
 (require 'core-spacebind)
 (require 'core-compilation)
+(require 'core-dumper)
 
 (defvar spacemacs-post-user-config-hook nil
   "Hook run after dotspacemacs/user-config")
@@ -91,7 +94,9 @@ the final step of executing code in `emacs-startup-hook'.")
   (when dotspacemacs-undecorated-at-startup
     ;; this should be called before toggle-frame-maximized
     (set-frame-parameter nil 'undecorated t)
-    (add-to-list 'default-frame-alist '(undecorated . t)))
+    (set-frame-parameter nil 'internal-border-width 0)
+    (add-to-list 'default-frame-alist '(undecorated . t))
+    (add-to-list 'default-frame-alist '(internal-border-width . 0)))
   (when dotspacemacs-maximized-at-startup
     (unless (frame-parameter nil 'fullscreen)
       (toggle-frame-maximized))
