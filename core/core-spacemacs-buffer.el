@@ -122,7 +122,7 @@ It's cleared when the idle timer runs.")
       (define-key map (kbd "8") 'spacemacs-buffer/jump-to-number-startup-list-line)
       (define-key map (kbd "9") 'spacemacs-buffer/jump-to-number-startup-list-line))
 
-    (define-key map [down-mouse-1] 'widget-button-click)
+    (define-key map [mouse-1] 'widget-button-click)
     (define-key map (kbd "RET") 'spacemacs-buffer/return)
 
     (define-key map [tab] 'widget-forward)
@@ -1274,22 +1274,28 @@ SEQ, START and END are the same arguments as for `cl-subseq'"
     (insert spacemacs-buffer-list-separator)))
 
 (defun spacemacs-buffer//insert-recent-files (list-size)
-  (let ((agenda-files-list (org-agenda-files)))
   (unless recentf-mode (recentf-mode))
-  (setq spacemacs-buffer//recent-files-list
-        (cl-delete-if (lambda (x)
-                              (member x (mapcar #'expand-file-name agenda-files-list)))
-                      recentf-list))
-  (setq spacemacs-buffer//recent-files-list
-        (spacemacs//subseq spacemacs-buffer//recent-files-list 0 list-size))
-  (when (spacemacs-buffer//insert-file-list
-         (spacemacs-buffer||propertize-heading
-          (when dotspacemacs-startup-buffer-show-icons
-            (all-the-icons-octicon "history" :face 'font-lock-keyword-face :v-adjust -0.05))
-          "Recent Files:" "r")
-         spacemacs-buffer//recent-files-list)
-    (spacemacs-buffer||add-shortcut "r" "Recent Files:"))
-  (insert spacemacs-buffer-list-separator)))
+  (let ((agenda-files (org-agenda-files))
+        (ignore-directory (or (and (boundp 'org-directory)
+                                   (expand-file-name org-directory))
+                              ""))
+        (recent-files-list))
+    (cl-loop for rfile in recentf-list
+             while (length< recent-files-list list-size)
+             collect (let ((full-path (expand-file-name rfile)))
+                       (unless (or (string-prefix-p ignore-directory full-path)
+                                   (member full-path agenda-files))
+                         (add-to-list 'recent-files-list rfile t))))
+
+    (when (spacemacs-buffer//insert-file-list
+           (spacemacs-buffer||propertize-heading
+            (when dotspacemacs-startup-buffer-show-icons
+              (all-the-icons-octicon
+               "history" :face 'font-lock-keyword-face :v-adjust -0.05))
+            "Recent Files:" "r")
+           recent-files-list)
+      (spacemacs-buffer||add-shortcut "r" "Recent Files:")))
+  (insert spacemacs-buffer-list-separator))
 
 (defun spacemacs-buffer//insert-recent-files-by-project (list-size)
   (unless recentf-mode (recentf-mode))
