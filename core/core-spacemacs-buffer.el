@@ -123,6 +123,12 @@ It's cleared when the idle timer runs.")
       (define-key map (kbd "9") 'spacemacs-buffer/jump-to-number-startup-list-line))
 
     (define-key map [down-mouse-1] 'spacemacs-buffer//mouse-1)
+    (define-key map [mouse-1] 'ignore) ;; left button, avoid multiple clicks
+    (define-key map [mouse-2] 'ignore) ;; mid button
+    (define-key map [mouse-3] 'ignore) ;; right button
+    (define-key map [drag-mouse-1] 'ignore)
+    (define-key map [drag-mouse-2] 'ignore)
+    (define-key map [drag-mouse-3] 'ignore)
     (define-key map (kbd "RET") 'spacemacs-buffer/return)
 
     (define-key map [tab] 'widget-forward)
@@ -1273,6 +1279,9 @@ SEQ, START and END are the same arguments as for `cl-subseq'"
     (insert spacemacs-buffer-list-separator)))
 
 (defun spacemacs-buffer//insert-recent-files (list-size)
+  "Insert recent file entries to spacemacs-buffer.
+
+LIST-SIZE is specified in `dotspacemacs-startup-lists' for recent entries."
   (unless recentf-mode (recentf-mode))
   (let ((agenda-files (org-agenda-files))
         (ignore-directory (or (and (boundp 'org-directory)
@@ -1280,12 +1289,13 @@ SEQ, START and END are the same arguments as for `cl-subseq'"
                               ""))
         (recent-files-list))
     (cl-loop for rfile in recentf-list
-             while (length< recent-files-list list-size)
-             collect (let ((full-path (expand-file-name rfile)))
-                       (unless (or (string-prefix-p ignore-directory full-path)
-                                   (member full-path agenda-files))
-                         (add-to-list 'recent-files-list rfile t))))
-
+             while (> list-size 0)
+             do (let ((full-path (expand-file-name rfile)))
+                  (unless (or (string-prefix-p ignore-directory full-path)
+                              (member full-path agenda-files))
+                    (cl-pushnew rfile recent-files-list)
+                    (setq list-size (1- list-size))))
+             finally do (setq recent-files-list (nreverse recent-files-list)))
     (when (spacemacs-buffer//insert-file-list
            (spacemacs-buffer||propertize-heading
             (when dotspacemacs-startup-buffer-show-icons
