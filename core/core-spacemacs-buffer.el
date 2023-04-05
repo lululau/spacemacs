@@ -1382,7 +1382,8 @@ LIST-SIZE is specified in `dotspacemacs-startup-lists' for recent entries."
   (let ((dotspacemacs-startup-buffer-show-icons dotspacemacs-startup-buffer-show-icons)
         (is-org-loaded (bound-and-true-p spacemacs-initialized)))
     (if (display-graphic-p)
-        (unless (configuration-layer/package-used-p 'all-the-icons)
+        (when (and spacemacs-initialized
+                   (not (configuration-layer/package-used-p 'all-the-icons)))
           (message "Package `all-the-icons' isn't installed")
           (setq dotspacemacs-startup-buffer-show-icons nil))
       (setq dotspacemacs-startup-buffer-show-icons nil))
