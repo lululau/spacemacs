@@ -40,6 +40,7 @@
     ggtags
     counsel-gtags
     (ielm :location built-in)
+    treeview
     (inspector :location (recipe
                           :fetcher github
                           :repo "mmontone/emacs-inspector"))
@@ -300,6 +301,10 @@
   ;; i.e (require 'company) will not give an error now
   (setq flycheck-emacs-lisp-load-path 'inherit))
 
+(defun emacs-lisp/init-treeview ()
+  (use-package treeview
+    :defer t))
+
 (defun emacs-lisp/init-flycheck-package ()
   (use-package flycheck-package
     :hook (emacs-lisp-mode . flycheck-package-setup)))
@@ -347,7 +352,8 @@
 
 (defun emacs-lisp/init-emr ()
   (use-package emr
-    :config
+    :defer t
+    :init
     (let ((key-binding-prefixes
            '(("mr" . "refactor")
              ("mrd" . "delete")
