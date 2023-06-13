@@ -23,6 +23,8 @@
 
 (defconst git-packages
   '(
+    code-review
+    emojify
     evil-collection
     evil-surround
     fill-column-indicator
@@ -81,6 +83,10 @@
 
 (defun git/init-git-commit ()
   (use-package git-commit
+    :defer t))
+
+(defun git/init-code-review ()
+  (use-package code-review
     :defer t))
 
 (defun git/init-git-link ()
@@ -260,6 +266,12 @@
       (evil-define-key 'normal magit-section-mode-map (kbd "M-7") 'spacemacs/winum-select-window-7)
       (evil-define-key 'normal magit-section-mode-map (kbd "M-8") 'spacemacs/winum-select-window-8)
       (evil-define-key 'normal magit-section-mode-map (kbd "M-9") 'spacemacs/winum-select-window-9))))
+
+(defun git/post-init-emojify ()
+  (spacemacs|use-package-add-hook code-review
+    :post-config
+    (use-package emojify
+      :hook (code-review-mode-hook . emojify-mode))))
 
 (defun git/init-magit-delta ()
   (use-package magit-delta
