@@ -1217,7 +1217,12 @@ LIST: list of `org-agenda' entries in the todo list."
                                 (format "- %s -"
                                         (cdr (assoc "time" el)))
                               "-")
-                            (cdr (assoc "text" el)))))
+                            ;; Replace links in org style in todo entries
+                            ;; "[[Link][Name]]" => "[Name]"
+                            (replace-regexp-in-string
+                             "\\[\\[[^][]+\\]\\[\\([^][]+\\)\\]\\]"
+                             "[\\1]"
+                             (cdr (assoc "text" el))))))
               (insert button-prefix)
               (widget-create 'push-button
                              :action `(lambda (&rest ignore)
@@ -1283,10 +1288,30 @@ SEQ, START and END are the same arguments as for `cl-subseq'"
 
 LIST-SIZE is specified in `dotspacemacs-startup-lists' for recent entries."
   (unless recentf-mode (recentf-mode))
-  (let ((agenda-files (org-agenda-files))
-        (ignore-directory (or (and (boundp 'org-directory)
-                                   (expand-file-name org-directory))
-                              ""))
+  (let (;; we need to remove `org-agenda-files' entries from recent files
+        (agenda-files
+         (when-let ((default-directory
+                     (or (bound-and-true-p org-directory) "~/org"))
+                    (files
+                     (when (bound-and-true-p org-agenda-files)
+                       (if (listp org-agenda-files)
+                           ;; if it's a list, we take that value directly
+                           org-agenda-files
+                         ;; but if it's a string, it must be file where the list
+                         ;; of agenda files are stored in that file and we have
+                         ;; to load `org-agenda' to process the list. If org is
+                         ;; already loaded, then we assume that the user has
+                         ;; already called org-agenda-files.
+                         (when (not (featurep 'org))
+                           (warn "`org-agenda-files' is a string and \
+not a list. This requires us to load `org' to process the org agenda files in \
+startup list.")
+                           (require 'org)
+                           (org-agenda-files))))))
+           (mapcar #'expand-file-name files)))
+        ;; we also need to skip sub-directories of `org-directory'
+        (ignore-directory (when (bound-and-true-p org-directory)
+                            (expand-file-name org-directory)))
         (recent-files-list))
     (cl-loop for rfile in recentf-list
              while (> list-size 0)
@@ -1579,10 +1604,10 @@ If a prefix argument is given, switch to it in an other, possibly new window."
             (force-mode-line-update)
             (spacemacs-buffer-mode)))
         (if save-line
-           (progn (goto-char (point-min))
-                  (forward-line (1- save-line))
-                  (forward-to-indentation 0))
-         (spacemacs-buffer/goto-link-line)))
+            (progn (goto-char (point-min))
+                   (forward-line (1- save-line))
+                   (forward-to-indentation 0))
+          (spacemacs-buffer/goto-link-line)))
       (unless do-not-switch
         (if current-prefix-arg
             (switch-to-buffer-other-window spacemacs-buffer-name))
