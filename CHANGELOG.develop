@@ -34,6 +34,7 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
 * Release 0.300.x
 ** 0.300.0
 *** Hot new feature
+- Add support for Android emacs.
 - Extensive use of lazy loading of packages and other tricks to reduce Spacemacs
   startup time. In most cases you should see a noticable improvement in load
   time and smoothness in startup. We also added the time spent to load your
@@ -338,6 +339,9 @@ In org-agenda-mode
     Gușoi)
   - Added ~SPC m r "~ for =ruby-toggle-string-quotes= (thanks to Codruț
     Constantin Gușoi)
+***** Rust
+Removed support for Racer, default backend for LSP is now rust-analizer due to
+both Racer and RLS not being maintained anymore.
 ***** Ruby on Rails
 - Key bindings:
   - New ~SPC m r f S~ to find serializer (thanks to Boris Buliga)
@@ -3475,6 +3479,10 @@ files (thanks to Daniel Nicolai)
   =cargo-audit=, =rustfmt=, and =clippy= (thanks to Lucius Hu)
 - Added support for Rusty Object Notation (RON) (thanks to Daniel Hutzley)
 - Improved LSP Rust server switch functionality (thanks to Lucius Hu)
+- Added Rust GDB DAP template (thanks to Elric Milon)
+- Migrated to =rustic-mode= (thanks to Elric Milon)
+- Removed support for obsoleted =Racer= and =RLS= and made ==rust-analyzer= the
+  default (thanks to Elric Milon)
 **** Sailfish-Developer
 - Key bindings:
   - Added =sailfish-scratchbox= key bindings (thanks to Victor Polevoy):

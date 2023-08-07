@@ -38,7 +38,8 @@
     (electric-indent-mode :location built-in)
     (ediff :location built-in)
     (eldoc :location built-in)
-    (help-fns+ :location (recipe :fetcher local))
+    (help-fns+ :location local
+               :toggle (not (fboundp 'describe-keymap))) ; built in emacs28+
     (hi-lock :location built-in)
     (image-mode :location built-in)
     (imenu :location built-in)
@@ -230,7 +231,6 @@
   (use-package help-fns+
     :commands (describe-keymap)
     :init
-    (spacemacs/set-leader-keys "hdK" 'describe-keymap)
     (advice-add 'help-do-xref :after (lambda (_pos _func _args) (setq-local tab-width 8)))))
 
 (defun spacemacs-defaults/init-hi-lock ()
@@ -347,25 +347,6 @@
                           (global-display-line-numbers-mode))
                         lazy-loading-line-numbers)
                     (global-display-line-numbers-mode)))))))
-
-(defun spacemacs-defaults/init-linum ()
-  (use-package linum
-    :init
-    (setq linum-format "%4d")
-    (spacemacs|add-toggle line-numbers
-      :mode linum-mode
-      :documentation "Show the line numbers."
-      :evil-leader "tn")
-    (advice-add #'linum-update-window
-                :after #'spacemacs//linum-update-window-scale-fix)
-    (advice-add #'linum-on
-                :around #'spacemacs//linum-on)
-    :config
-    (when (spacemacs//linum-backward-compabitility)
-      (add-hook 'prog-mode-hook 'linum-mode)
-      (add-hook 'text-mode-hook 'linum-mode))
-    (when dotspacemacs-line-numbers
-      (global-linum-mode))))
 
 (defun spacemacs-defaults/init-occur-mode ()
   (evilified-state-evilify-map occur-mode-map

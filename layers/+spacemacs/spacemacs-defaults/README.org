@@ -24,11 +24,10 @@ defaults.
   - easypg
   - ediff
   - eldoc
-  - help-fns+
+  - help-fns+ (only in Emacs 27.x and older)
   - hi-lock
   - image-mode
   - imenu
-  - linum (only in Emacs 25.x and older)
   - occur-mode
   - package-menu
   - page-break-lines
