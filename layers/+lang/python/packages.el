@@ -401,6 +401,8 @@
       "se" 'spacemacs/python-shell-send-statement
       "sF" 'spacemacs/python-shell-send-defun-switch
       "sf" 'spacemacs/python-shell-send-defun
+      "sP" 'spacemacs/python-shell-send-paragraph-switch
+      "sp" 'spacemacs/python-shell-send-paragraph
       "si" 'spacemacs/python-start-or-switch-repl
       "sR" 'spacemacs/python-shell-send-region-switch
       "sr" 'spacemacs/python-shell-send-region

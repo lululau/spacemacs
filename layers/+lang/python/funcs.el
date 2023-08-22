@@ -452,6 +452,20 @@ Bind formatter to '==' for LSP and '='for all other backends."
   (let ((python-mode-hook nil))
     (python-shell-send-defun nil)))
 
+(defun spacemacs/python-shell-send-paragraph ()
+  "Send function content to shell and switch to it in insert mode."
+  (interactive)
+  (let ((python-mode-hook nil))
+    (python-shell-send-region (save-excursion (backward-paragraph) (point)) (save-excursion (forward-paragraph) (point)))))
+
+(defun spacemacs/python-shell-send-paragraph-switch ()
+  "Send function content to shell and switch to it in insert mode."
+  (interactive)
+  (let ((python-mode-hook nil))
+    (python-shell-send-region (save-excursion (backward-paragraph) (point)) (save-excursion (forward-paragraph) (point)))
+    (python-shell-switch-to-shell)
+    (evil-insert-state)))
+
 (defun spacemacs/python-shell-send-region-switch (start end)
   "Send region content to shell and switch to it in insert mode."
   (interactive "r")
