@@ -356,8 +356,13 @@
 
 (defun spacemacs-navigation/init-restart-emacs ()
   (use-package restart-emacs
-    :after files
+    :defer (spacemacs/defer)
     :init
+    (with-eval-after-load 'files
+      ;; unbind `restart-emacs' and declare it from package for ticket #15505
+      (fmakunbound 'restart-emacs)
+      (autoload 'restart-emacs "restart-emacs"))
+
     (spacemacs/set-leader-keys
       "qd" 'spacemacs/restart-emacs-debug-init
       "qD" 'spacemacs/restart-stock-emacs-with-packages
