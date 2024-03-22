@@ -28,12 +28,10 @@
 (defun pdf/init-pdf-tools ()
   (use-package pdf-tools
     :defer t
-    :mode (("\\.pdf\\'" . pdf-view-mode))
     :init
     (spacemacs//pdf-tools-setup-transient-state)
+    (pdf-loader-install)
     :config
-    (pdf-tools-install)
-
     (spacemacs/declare-prefix-for-mode 'pdf-view-mode "ma" "annotations")
     (spacemacs/declare-prefix-for-mode 'pdf-view-mode "mf" "fit")
     (spacemacs/declare-prefix-for-mode 'pdf-view-mode "ms" "slice/search")
@@ -125,7 +123,6 @@
       [mouse-1]          'pdf-outline-mouse-display-link
       "o"                'pdf-outline-select-pdf-window
       "``"               'pdf-outline-move-to-current-page
-      "''"               'pdf-outline-move-to-current-page
       "Q"                'pdf-outline-quit-and-kill
       "q"                'quit-window
       "F"                'pdf-outline-follow-mode)
