@@ -163,10 +163,6 @@
     (push "magit: .*" spacemacs-useless-buffers-regexp)
     (push "magit-.*: .*"  spacemacs-useless-buffers-regexp)
     (spacemacs|require-when-dumping 'magit)
-    (setq magit-completing-read-function
-          (if (configuration-layer/layer-used-p 'ivy)
-              'ivy-completing-read
-            'magit-builtin-completing-read))
     (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
     ;; On Windows, we must use Git GUI to enter username and password
     ;; See: https://github.com/magit/magit/wiki/FAQ#windows-cannot-push-via-https
@@ -359,26 +355,26 @@
   (use-package forge
     :after magit
     :init
-      (setq forge-database-file (expand-file-name (concat spacemacs-cache-directory
-                                        "forge-database.sqlite"))
-            forge-add-default-bindings nil)
-      (spacemacs/set-leader-keys-for-major-mode 'forge-topic-mode
-        "a" 'forge-edit-topic-assignees
-        "c" 'forge-create-post
-        "C" 'forge-checkout-pullreq
-        "b" 'forge-browse-topic
-        "D" 'forge-delete-comment
-        "d" 'forge-post-toggle-draft
-        "e" 'forge-edit-post
-        "m" 'forge-edit-topic-marks
-        "M" 'forge-create-mark
-        "n" 'forge-edit-topic-note
-        "r" 'forge-edit-topic-review-requests
-        "s" 'forge-edit-topic-state
-        "t" 'forge-edit-topic-title
-        "u" 'forge-copy-url-at-point-as-kill)
-      (spacemacs/set-leader-keys-for-major-mode 'forge-post-mode
-        dotspacemacs-major-mode-leader-key 'forge-post-submit
-        "c" 'forge-post-submit
-        "k" 'forge-post-cancel
-        "a" 'forge-post-cancel)))
+    (setq forge-database-file (expand-file-name "forge-database.sqlite"
+                                                spacemacs-cache-directory)
+          forge-add-default-bindings (eq dotspacemacs-editing-style 'emacs))
+    (spacemacs/set-leader-keys-for-major-mode 'forge-topic-mode
+      "a" 'forge-edit-topic-assignees
+      "c" 'forge-create-post
+      "C" 'forge-checkout-pullreq
+      "b" 'forge-browse-topic
+      "D" 'forge-delete-comment
+      "d" 'forge-post-toggle-draft
+      "e" 'forge-edit-post
+      "m" 'forge-edit-topic-marks
+      "M" 'forge-create-mark
+      "n" 'forge-edit-topic-note
+      "r" 'forge-edit-topic-review-requests
+      "s" 'forge-edit-topic-state
+      "t" 'forge-edit-topic-title
+      "u" 'forge-copy-url-at-point-as-kill)
+    (spacemacs/set-leader-keys-for-major-mode 'forge-post-mode
+      dotspacemacs-major-mode-leader-key 'forge-post-submit
+      "c" 'forge-post-submit
+      "k" 'forge-post-cancel
+      "a" 'forge-post-cancel)))
