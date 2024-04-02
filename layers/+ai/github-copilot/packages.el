@@ -1,8 +1,8 @@
-;;; layers.el --- Rust Layer declarations File for Spacemacs
+;;; packages.el --- Large GitHub Copilot Client for Spacemacs
 ;;
 ;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
 ;;
-;; Author: Sylvain Benner <sylvain.benner@gmail.com>
+;; Author: Codruț Constantin Gușoi <mail+spacemacs@codrut.pro>
 ;; URL: https://github.com/syl20bnr/spacemacs
 ;;
 ;; This file is not part of GNU Emacs.
@@ -21,8 +21,12 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-(when (and (boundp 'rust-backend)
-           (eq rust-backend 'lsp))
-  (configuration-layer/declare-layer-dependencies '(lsp)))
+(defconst github-copilot-packages
+  '((copilot :location (recipe
+                         :fetcher github
+                         :repo "copilot-emacs/copilot.el"
+                         :files ("*.el" "dist")))))
 
-(configuration-layer/declare-layer-dependencies '(toml))
+(defun github-copilot/init-copilot ()
+  (use-package copilot
+    :defer t))
