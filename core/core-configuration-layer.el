@@ -572,54 +572,54 @@ refreshed during the current session."
 (defun configuration-layer/load ()
   "Load layers declared in dotfile if necessary."
   (run-hooks 'configuration-layer-pre-load-hook)
-  (setq changed-since-last-dump-p nil)
-  ;; check if layer list has changed since last dump
-  (when (file-exists-p
-         configuration-layer--last-dotspacemacs-configuration-layers-file)
-    (configuration-layer/load-file
-     configuration-layer--last-dotspacemacs-configuration-layers-file))
-  (let ((layers dotspacemacs-configuration-layers))
-    (dotspacemacs|call-func dotspacemacs/layers "Calling dotfile layers...")
-    ;; `dotspacemacs--configuration-layers-saved' is used to detect if the layer
-    ;; list has been changed outside of function `dotspacemacs/layers'
-    (setq dotspacemacs--configuration-layers-saved
-          dotspacemacs-configuration-layers)
-    (setq changed-since-last-dump-p
-          (not (equal layers dotspacemacs-configuration-layers)))
-    ;; save layers list to file
-    (spacemacs/dump-vars-to-file
-     '(dotspacemacs-configuration-layers)
-     configuration-layer--last-dotspacemacs-configuration-layers-file))
-  (cond
-   (changed-since-last-dump-p
-    ;; dump
-    (configuration-layer//load)
-    (when (spacemacs/emacs-with-pdumper-set-p)
-      (configuration-layer/message "Layer list has changed since last dump.")
-      (configuration-layer//dump-emacs)))
-   (spacemacs-force-dump
-    ;; force dump
-    (configuration-layer//load)
-    (when (spacemacs/emacs-with-pdumper-set-p)
+  (let (changed-since-last-dump-p)
+    ;; check if layer list has changed since last dump
+    (when (file-exists-p
+           configuration-layer--last-dotspacemacs-configuration-layers-file)
+      (configuration-layer/load-file
+       configuration-layer--last-dotspacemacs-configuration-layers-file))
+    (let ((layers dotspacemacs-configuration-layers))
+      (dotspacemacs|call-func dotspacemacs/layers "Calling dotfile layers...")
+      ;; `dotspacemacs--configuration-layers-saved' is used to detect if the layer
+      ;; list has been changed outside of function `dotspacemacs/layers'
+      (setq dotspacemacs--configuration-layers-saved
+            dotspacemacs-configuration-layers)
+      (setq changed-since-last-dump-p
+            (not (equal layers dotspacemacs-configuration-layers)))
+      ;; save layers list to file
+      (spacemacs/dump-vars-to-file
+       '(dotspacemacs-configuration-layers)
+       configuration-layer--last-dotspacemacs-configuration-layers-file))
+    (cond
+     (changed-since-last-dump-p
+      ;; dump
+      (configuration-layer//load)
+      (when (spacemacs/emacs-with-pdumper-set-p)
+        (configuration-layer/message "Layer list has changed since last dump.")
+        (configuration-layer//dump-emacs)))
+     (spacemacs-force-dump
+      ;; force dump
+      (configuration-layer//load)
+      (when (spacemacs/emacs-with-pdumper-set-p)
+        (configuration-layer/message
+         (concat "--force-dump passed on the command line or configuration has "
+                 "been reloaded, forcing a redump."))
+        (configuration-layer//dump-emacs)))
+     ((spacemacs-is-dumping-p)
+      ;; dumping
+      (configuration-layer//load))
+     ((and (spacemacs/emacs-with-pdumper-set-p)
+           (spacemacs-run-from-dump-p))
+      ;; dumped
       (configuration-layer/message
-       (concat "--force-dump passed on the command line or configuration has "
-               "been reloaded, forcing a redump."))
-      (configuration-layer//dump-emacs)))
-   ((spacemacs-is-dumping-p)
-    ;; dumping
-    (configuration-layer//load))
-   ((and (spacemacs/emacs-with-pdumper-set-p)
-         (spacemacs-run-from-dump-p))
-    ;; dumped
-    (configuration-layer/message
-     "Running from a dumped file. Skipping the loading process!"))
-   (t
-    ;; standard loading
-    (configuration-layer//load)
-    (when (spacemacs/emacs-with-pdumper-set-p)
-      (configuration-layer/message
-       (concat "Layer list has not changed since last time. "
-               "Skipping dumping process!")))))
+       "Running from a dumped file. Skipping the loading process!"))
+     (t
+      ;; standard loading
+      (configuration-layer//load)
+      (when (spacemacs/emacs-with-pdumper-set-p)
+        (configuration-layer/message
+         (concat "Layer list has not changed since last time. "
+                 "Skipping dumping process!"))))))
   (run-hooks 'configuration-layer-post-load-hook))
 
 (defun configuration-layer//dump-emacs ()
@@ -632,7 +632,7 @@ refreshed during the current session."
 
 (defun configuration-layer//load ()
   "Actually load the layers.
-CHANGEDP non-nil means that layers list has changed since last dump
+
 To prevent package from being installed or uninstalled set the variable
 `spacemacs-sync-packages' to nil."
   ;; declare used layers then packages as soon as possible to resolve
@@ -715,12 +715,12 @@ layer directory."
             (candidates . ,(append current-layer-paths
                                    (list other-choice)))
             (action . (lambda (c) c))))
-         (layer-path-sel (if (configuration-layer/layer-used-p 'ivy)
-                             (ivy-read "Configuration layer path: "
-                                       (append current-layer-paths
-                                               (list other-choice)))
-                           (helm :sources helm-lp-source
-                                 :prompt "Configuration layer path: ")))
+         (layer-path-sel (if (configuration-layer/layer-used-p 'helm)
+                             (helm :sources helm-lp-source
+                                   :prompt "Configuration layer path: ")
+                           (completing-read "Configuration layer path: "
+                                            (append current-layer-paths
+                                                    (list other-choice)))))
          (layer-path (cond
                       ((string-equal layer-path-sel other-choice)
                        (read-directory-name (concat "Other configuration "
