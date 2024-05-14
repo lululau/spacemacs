@@ -51,7 +51,7 @@
     (spacemacs/transient-state-register-add-bindings 'symbol-highlight
       '(("s" spacemacs/consult-line :exit t)
         ("f" spacemacs/compleseus-search-auto :exit t)
-        ("/" spacemacs/compleseus-search-projectile-auto :exit t)))))
+        ("/" spacemacs/compleseus-search-projectile :exit t)))))
 
 (defun compleseus/post-init-imenu ()
   (spacemacs/set-leader-keys "ji" 'spacemacs/consult-jump-in-buffer)
@@ -146,11 +146,8 @@
       "bB" #'consult-buffer
       "fb" #'consult-bookmark
       "ff" #'spacemacs/compleseus-find-file
-      "fel" #'find-library
       "fL" #'consult-locate
       "fr" #'consult-recent-file
-      "hda" #'apropos-command
-      "hdm" #'describe-mode
       "hm" #'consult-man
       "jm" #'consult-mark
       "jM" #'consult-global-mark
@@ -196,6 +193,7 @@
     ;; customize preview activation and delay while selecting candiates
     (consult-customize
      consult-theme
+     spacemacs/theme-loader
      :preview-key '("M-." "C-SPC"
                     :debounce 0.2 any)
 

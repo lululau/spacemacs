@@ -363,7 +363,8 @@
  (("f" "Files"
    ("A" spacemacs/find-file-and-replace-buffer "Set another file for buffer...")
    ("c" spacemacs/save-as "Save file or active region as a new file...")
-   ("D" spacemacs/delete-current-buffer-file "Delete...")
+   ("D" spacemacs/delete-current-buffer-file-yes "Delete without confirm...")
+   ("d" spacemacs/delete-current-buffer-file "Delete...")
    ("i" spacemacs/insert-file "Insert file content...")
    ("l" find-file-literally "Open file literally...")
    ("E" spacemacs/sudo-edit "Open using sudo...")
@@ -383,6 +384,7 @@
     ("D" spacemacs/ediff-dotfile-and-template "Diff. with dotfile template")
     ("e" spacemacs/edit-env "Open \".spacemacs.env\"")
     ("E" dotspacemacs/call-user-env "Refresh env. variables")
+    ("l" find-library "Find Emacs library...")
     ("R" dotspacemacs/sync-configuration-layers "Reload configuration")
     ("v" spacemacs/display-and-copy-version "Copy Spacemacs version")
     ("U" configuration-layer/update-packages "Update packages..."))
@@ -415,12 +417,17 @@
 ;; help -----------------------------------------------------------------------
 (defalias 'emacs-tutorial 'help-with-tutorial)
 (spacemacs/set-leader-keys
+  "hda" 'apropos-command
   "hdb" 'describe-bindings
   "hdc" 'describe-char
   "hdf" 'describe-function
+  "hdF" 'describe-face
   "hdk" 'describe-key
   "hdK" 'describe-keymap
   "hdl" 'spacemacs/describe-last-keys
+  "hdm" (if (configuration-layer/package-used-p 'helm)
+            'spacemacs/describe-mode
+          'describe-mode)
   "hdp" 'describe-package
   "hdP" 'configuration-layer/describe-package
   "hds" 'spacemacs/describe-system-info

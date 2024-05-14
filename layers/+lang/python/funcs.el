@@ -488,16 +488,10 @@ Bind formatter to '==' for LSP and '='for all other backends."
     (python-shell-send-region start end)))
 
 (defun spacemacs/python-shell-send-statement ()
-  "Send the current statement to shell, same as `python-shell-send-statement' in Emacs27."
+  "Send the statement under cursor to shell."
   (interactive)
-  (if (fboundp 'python-shell-send-statement)
-      (call-interactively #'python-shell-send-statement)
-    (if (region-active-p)
-        (call-interactively #'python-shell-send-region)
-      (let ((python-mode-hook nil))
-        (python-shell-send-region
-         (save-excursion (python-nav-beginning-of-statement))
-         (save-excursion (python-nav-end-of-statement)))))))
+  (let ((python-mode-hook nil))
+    (call-interactively #'python-shell-send-statement)))
 
 (defun spacemacs/python-shell-send-statement-switch ()
   "Send statement to shell and switch to it in insert mode."
@@ -522,22 +516,12 @@ If region is not active then send line."
 (defun spacemacs/python-start-or-switch-repl ()
   "Start and/or switch to the REPL."
   (interactive)
-  (let ((shell-process
-         (or (python-shell-get-process)
-             ;; `run-python' has different return values and different
-             ;; errors in different emacs versions. In 24.4, it throws an
-             ;; error when the process didn't start, but in 25.1 it
-             ;; doesn't throw an error, so we demote errors here and
-             ;; check the process later
-             (with-demoted-errors "Error: %S"
-               ;; in Emacs 24.5 and 24.4, `run-python' doesn't return the
-               ;; shell process
-               (call-interactively #'run-python)
-               (python-shell-get-process)))))
-    (unless shell-process
-      (error "Failed to start python shell properly"))
-    (pop-to-buffer (process-buffer shell-process))
-    (evil-insert-state)))
+  (if-let ((shell-process (or (python-shell-get-process)
+                              (call-interactively #'run-python))))
+      (progn
+        (pop-to-buffer (process-buffer shell-process))
+        (evil-insert-state))
+    (error "Failed to start python shell properly")))
 
 (defun spacemacs/python-execute-file (arg)
   "Execute a python script in a shell."

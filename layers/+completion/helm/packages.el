@@ -132,7 +132,6 @@
     (spacemacs||set-helm-key "sgG"  spacemacs/helm-file-do-grep-region-or-symbol)
     ;; various key bindings
     (spacemacs||set-helm-key "fel" helm-locate-library)
-    (spacemacs||set-helm-key "hdm" describe-mode)
     (spacemacs||set-helm-key "hdx" spacemacs/describe-ex-command)
     (spacemacs||set-helm-key "swg" helm-google-suggest)
     (with-eval-after-load 'helm-files
@@ -321,13 +320,20 @@
   (use-package helm-ls-git
     :defer t
     :init
-    (spacemacs/set-leader-keys "gff" 'helm-ls-git-ls)
+    (spacemacs/set-leader-keys "gff" 'helm-ls-git)
     (when (configuration-layer/package-usedp 'magit)
       ;; Do not use helm-ls-git-rebase-todo-mode for git-rebase-todo,
       ;; instead let it be handled by magit
-      (delete '("/git-rebase-todo$" . helm-ls-git-rebase-todo-mode) auto-mode-alist))
+      (setq auto-mode-alist
+            (delete '("/git-rebase-todo$" . helm-ls-git-rebase-todo-mode)
+                    auto-mode-alist)))
     :config
     (when (configuration-layer/package-usedp 'magit)
+      ;; Undo the forced action of adding helm-ls-git-rebase-todo-mode to
+      ;; auto-mode-alist by helm-ls-git.
+      (setq auto-mode-alist
+            (delete '("/git-rebase-todo$" . helm-ls-git-rebase-todo-mode)
+                    auto-mode-alist))
       ;; Set `helm-ls-git-status-command' conditonally on `git' layer
       ;; If `git' is in use, use default `\'magit-status-setup-buffer'
       ;; Otherwise, use defaault `\'vc-dir'

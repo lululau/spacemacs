@@ -28,13 +28,9 @@
 
 ;;;; PATH variables/constants
 
-(defconst user-home-directory
-  (expand-file-name "~/")
-  "User home directory (default ~/).")
-
 ;; ~/.emacs.d
 (defvar spacemacs-start-directory
-  (concat (file-name-directory (or load-file-name buffer-file-name)) "../")
+  (expand-file-name "../" (file-name-directory (or load-file-name buffer-file-name)))
   "Spacemacs start directory.")
 
 ;; ~/.emacs.d/assets
@@ -96,7 +92,7 @@
 
 ;; ~/.emacs.d/.cache
 (defconst spacemacs-cache-directory
-  (concat user-emacs-directory ".cache/")
+  (concat spacemacs-start-directory ".cache/")
   "Spacemacs storage area for persistent files.")
 
 ;; ~/.emacs.d/.cache/auto-save
@@ -107,9 +103,7 @@
 
 ;;;; Setup cache directories
 
-;; TODO: Should also catch any IO error such as permission error (Apr 25 2021 Lucius)
-(unless (file-exists-p spacemacs-cache-directory)
-  (make-directory spacemacs-cache-directory))
+(make-directory spacemacs-cache-directory 'parents)
 
 ;;;; Load Paths
 (dolist (subdirectory '(nil "libs/" "libs/spacemacs-theme/" "libs/forks/"))
