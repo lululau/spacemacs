@@ -406,6 +406,8 @@
       "sP" 'spacemacs/python-shell-send-paragraph-switch
       "sp" 'spacemacs/python-shell-send-paragraph
       "si" 'spacemacs/python-start-or-switch-repl
+      "sn" 'spacemacs/python-shell-restart
+      "sN" 'spacemacs/python-shell-restart-switch
       "sR" 'spacemacs/python-shell-send-region-switch
       "sr" 'spacemacs/python-shell-send-region
       "sl" 'spacemacs/python-shell-send-line
