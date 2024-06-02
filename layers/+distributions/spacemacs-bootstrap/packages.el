@@ -82,9 +82,8 @@
   (require 'evil)
   (evil-mode 1)
 
-  (when (and (fboundp 'evil-set-undo-system)
-             (configuration-layer/package-used-p 'undo-tree))
-    (evil-set-undo-system 'undo-tree))
+  (when (configuration-layer/package-used-p 'undo-tree)
+    (customize-set-variable 'evil-undo-system 'undo-tree))
 
   ;; Use evil as a default jump handler
   (add-to-list 'spacemacs-default-jump-handlers 'evil-goto-definition)
@@ -612,7 +611,7 @@ Press \\[which-key-toggle-persistent] to hide."
                      (hybrid-mode -1)
                      (spacemacs/declare-prefix "tEh" "hybrid (hybrid-mode)"))
                    (holy-mode)
-                   (spacemacs/declare-prefix "tEe" "vim (evil-mode"))
+                   (spacemacs/declare-prefix "tEe" "vim (evil-mode)"))
         :off (progn (holy-mode -1)
                     (spacemacs/declare-prefix "tEe" "emacs (holy-mode)"))
         :off-message "evil-mode enabled."
