@@ -84,17 +84,24 @@ active and `force-input' is not nil, `thing-at-point' will be returned."
   (consult-line
    (spacemacs/initial-search-input t)))
 
-(defun spacemacs/consult-line-multi ()
-  (interactive)
+(defun spacemacs/consult-line-multi (&optional query)
+  (interactive "P")
   (consult-line-multi
-   nil
+   query
    (spacemacs/initial-search-input)))
 
-(defun spacemacs/consult-line-multi-symbol ()
-  (interactive)
+(defun spacemacs/consult-line-multi-symbol (&optional query)
+  (interactive "P")
   (consult-line-multi
-   nil
+   query
    (spacemacs/initial-search-input t)))
+
+(defun spacemacs/embark-consult-line-multi (buffer-names)
+  "Embark action to search in any subset of buffers using `consult-line-multi'.
+If there is an active region, it is used as the initial input."
+  (consult-line-multi
+   (list :predicate (lambda (buf) (member (buffer-name buf) buffer-names)))
+   (spacemacs/initial-search-input)))
 
 (defun spacemacs/compleseus-search-auto ()
   "Choose folder to search."
@@ -129,7 +136,7 @@ active and `force-input' is not nil, `thing-at-point' will be returned."
 (defun spacemacs/compleseus-search-default ()
   "Search."
   (interactive)
-  (spacemacs/compleseus-search-projectile))
+  (spacemacs/compleseus-search-projectile-symbol))
 
 (defun spacemacs/compleseus-search-from (input)
   "Embark action to start ripgrep search from candidate's directory."
