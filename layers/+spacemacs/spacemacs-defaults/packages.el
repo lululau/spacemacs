@@ -38,8 +38,6 @@
     (electric-indent-mode :location built-in)
     (ediff :location built-in)
     (eldoc :location built-in)
-    (help-fns+ :location local
-               :toggle (not (fboundp 'describe-keymap))) ; built in emacs28+
     (hi-lock :location built-in)
     (image-mode :location built-in)
     (imenu :location built-in)
@@ -155,7 +153,7 @@
   ;; additional key bindings such as "* ." to dired. To keep the old behavior,
   ;; load dired-x after dired.
   (with-eval-after-load 'dired
-        (require 'dired-x))
+    (require 'dired-x))
   (use-package dired-x
     :commands (dired-jump
                dired-jump-other-window
@@ -232,12 +230,6 @@
     (eldoc-add-command #'evil-append)
     (eldoc-add-command #'evil-append-line)
     (eldoc-add-command #'evil-force-normal-state)))
-
-(defun spacemacs-defaults/init-help-fns+ ()
-  (use-package help-fns+
-    :commands (describe-keymap)
-    :init
-    (advice-add 'help-do-xref :after (lambda (_pos _func _args) (setq-local tab-width 8)))))
 
 (defun spacemacs-defaults/init-hi-lock ()
   (with-eval-after-load 'hi-lock
@@ -334,13 +326,10 @@
       :off-message "Line numbers disabled."
       :evil-leader "tnv")
 
-    (when (spacemacs//linum-backward-compabitility)
-      (add-hook 'prog-mode-hook 'display-line-numbers-mode)
-      (add-hook 'text-mode-hook 'display-line-numbers-mode))
-
     ;; it's ok to add an advice before the function is defined, and we must
     ;; add this advice before calling `global-display-line-numbers-mode'
-    (advice-add #'display-line-numbers--turn-on :around #'spacemacs//linum-on)
+    (define-advice display-line-numbers--turn-on (:before-while (&rest _) spacemacs//enable-line-numbers)
+      (spacemacs/enable-line-numbers-p))
     (when dotspacemacs-line-numbers
       ;; delay the initialization of number lines when opening Spacemacs
       ;; normally. If opened via the command line with a file to visit then
