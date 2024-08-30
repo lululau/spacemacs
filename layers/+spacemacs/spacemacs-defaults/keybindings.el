@@ -98,7 +98,6 @@
         "xg"  "google-translate"
         "xj"  "justification"
         "xl"  "lines"
-        "xR"  "Randomize"
         "xt"  "transpose"
         "xw"  "words"
         "z"   "zoom"))
@@ -110,7 +109,7 @@
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;; improve delete-other-windows
-(define-key global-map (kbd "C-x 1") 'spacemacs/toggle-maximize-buffer)
+(define-key global-map (kbd "C-x 1") 'spacemacs/toggle-maximize-window)
 ;; adds two spacing modes while preserving just-one-space behaviour
 (define-key global-map (kbd "M-SPC") 'cycle-spacing)
 
@@ -682,7 +681,7 @@ respond to this toggle."
   "w <S-right>"  'evil-window-move-far-right
   "wl"  'evil-window-right
   "w <right>"  'evil-window-right
-  "wm"  'spacemacs/toggle-maximize-buffer
+  "wm"  'spacemacs/toggle-maximize-window
   ;; "wcc"  'spacemacs/toggle-centered-buffer
   ;; "wcC"  'spacemacs/toggle-distraction-free
   ;; "wc."  'spacemacs/centered-buffer-transient-state
@@ -956,7 +955,7 @@ Select: _a_ _h_ _j_ _k_ _l_ _w_ _0_.._9_ Move: _H_ _J_ _K_ _L_ _r_ _R_ Split: _s
   ("v" split-window-right)
   ("V" split-window-right-and-focus)
   ("/" split-window-right-and-focus)
-  ("m" spacemacs/toggle-maximize-buffer)
+  ("m" spacemacs/toggle-maximize-window)
   ("|" spacemacs/maximize-vertically)
   ("_" spacemacs/maximize-horizontally)
   ;; Resize
