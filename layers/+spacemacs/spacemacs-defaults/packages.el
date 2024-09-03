@@ -114,7 +114,7 @@
   ;; - `C-c' as a prefix command still works.
   ;; - Activating normal-mode makes evil override the custom-mode-map normal-state
   ;;   its mouse button bindings. So we bind them explicitly in normal-state
-  (evil-define-key 'normal 'custom-mode-map [down-mouse-1] 'widget-button-click)
+  (evil-define-key 'normal custom-mode-map [down-mouse-1] 'widget-button-click)
   ;; - `u' as `Custom-goto-parent' conflicts with Evil undo. However it is
   ;;   questionable whether this will work properly in a Custom buffer;
   ;;   choosing to restore this binding.
@@ -376,6 +376,10 @@
       (add-hook 'find-file-hook (lambda () (unless recentf-mode
                                              (recentf-mode)
                                              (recentf-track-opened-file)))))
+    ;; Do not leave dangling timers when reloading the configuration.
+    (when (and (boundp 'recentf-auto-save-timer)
+               (timerp recentf-auto-save-timer))
+      (cancel-timer recentf-auto-save-timer))
     (setq recentf-save-file (concat spacemacs-cache-directory "recentf")
           recentf-max-saved-items 1000
           recentf-auto-cleanup 'never
@@ -396,9 +400,7 @@
     (setq savehist-file (concat spacemacs-cache-directory "savehist")
           enable-recursive-minibuffers t ; Allow commands in minibuffers
           history-length 1000
-          savehist-additional-variables '(mark-ring
-                                          global-mark-ring
-                                          search-ring
+          savehist-additional-variables '(search-ring
                                           regexp-search-ring
                                           extended-command-history
                                           kill-ring)

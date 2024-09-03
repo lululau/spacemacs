@@ -27,6 +27,7 @@
     (common-lisp-snippets :requires yasnippet)
     evil
     evil-cleverparens
+    evil-collection
     ggtags
     counsel-gtags
     helm
@@ -57,6 +58,10 @@
     (progn
       (add-to-list 'evil-lisp-safe-structural-editing-modes 'common-lisp-mode)
       (add-to-list 'evil-lisp-safe-structural-editing-modes 'lisp-mode))))
+
+(defun common-lisp/pre-init-evil-collection ()
+  (when (spacemacs//support-evilified-buffer-p)
+    (add-to-list 'spacemacs-evil-collection-allowed-list 'slime)))
 
 (defun common-lisp/post-init-helm ()
   (spacemacs/set-leader-keys-for-major-mode 'lisp-mode
@@ -96,7 +101,6 @@
     (spacemacs/add-to-hooks 'slime-mode '(lisp-mode-hook))
     :config
     (slime-setup)
-    ;; TODO: Add bindings for the SLIME debugger?
     (spacemacs/set-leader-keys-for-major-mode 'lisp-mode
       "'" 'spacemacs/slime-repl
 
@@ -129,7 +133,8 @@
       "hT" 'slime-untrace-all
       "h<" 'slime-who-calls
       "h>" 'slime-calls-who
-      ;; TODO: Add key bindings for who binds/sets globals?
+      "hS" 'slime-who-sets
+      "hb" 'slime-who-binds
       "hr" 'slime-who-references
       "hm" 'slime-who-macroexpands
       "hs" 'slime-who-specializes

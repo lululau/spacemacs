@@ -228,22 +228,19 @@
       :body
       (spacemacs/find-dotfile))
     :config
-      (spacemacs|hide-lighter persp-mode)
-      (defadvice persp-activate (before spacemacs//save-toggle-layout activate)
-        (setq spacemacs--last-selected-layout persp-last-persp-name))
-      (add-hook 'persp-mode-hook 'spacemacs//layout-autosave)
-      (advice-add 'persp-load-state-from-file
-                  :before 'spacemacs//layout-wait-for-modeline)
-      (when layouts-enable-local-variables
-        (advice-add 'persp-switch :before #'spacemacs//load-layout-local-vars))
-      (dolist (fn spacemacs-layouts-restricted-functions)
-        (advice-add fn
-                    :around 'spacemacs-layouts//advice-with-persp-buffer-list))
-      (spacemacs/declare-prefix "b" "persp-buffers")
-      (spacemacs/set-leader-keys
-        "TAB"  'spacemacs/alternate-buffer-in-persp
-        "ba"   'persp-add-buffer
-        "br"   'persp-remove-buffer)))
+    (spacemacs|hide-lighter persp-mode)
+    (define-advice persp-activate (:before (&rest _) spacemacs//save-toggle-layout)
+      (setq spacemacs--last-selected-layout persp-last-persp-name))
+    (add-hook 'persp-mode-hook 'spacemacs//layout-autosave)
+    (advice-add 'persp-load-state-from-file
+                :before 'spacemacs//layout-wait-for-modeline)
+    (when layouts-enable-local-variables
+      (advice-add 'persp-switch :before #'spacemacs//load-layout-local-vars))
+    (spacemacs/declare-prefix "b" "persp-buffers")
+    (spacemacs/set-leader-keys
+      "TAB"  'spacemacs/alternate-buffer-in-persp
+      "ba"   'persp-add-buffer
+      "br"   'persp-remove-buffer)))
 
 
 

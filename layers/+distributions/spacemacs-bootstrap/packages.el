@@ -146,11 +146,12 @@
     (define-key evil-visual-state-map "K" 'drag-stuff-up))
 
   ;; Fix broken artist-mode under evil-mode
-  (advice-add 'artist-mode :around #'spacemacs/toggle-evil-mouse-drag-for-artist-mode)
+  (with-eval-after-load 'artist
+    (evil-make-intercept-map artist-mode-map))
 
   ;; evil-refresh-cursor is called as part of the window-configuration-change-hook
   ;; and seems to induce performance problems
-  (when (boundp 'pdf-view-mode)
+  (with-eval-after-load 'pdf-view
     (advice-add 'evil-refresh-cursor :around #'spacemacs/not-in-pdf-view-mode))
 
   (when vim-style-enable-undo-region
