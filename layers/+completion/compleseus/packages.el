@@ -152,6 +152,9 @@
 
     ;; The :init configuration is always executed (Not lazy)
     :init
+    ;; disable automatic preview by default
+    (setq consult-preview-key '("M-." "C-SPC" "C-M-j" "C-M-k"))
+
     (define-key read-expression-map (kbd "C-r") #'consult-history)
     (spacemacs/set-leader-keys
       dotspacemacs-emacs-command-key 'execute-extended-command
@@ -207,28 +210,11 @@
     (add-to-list 'consult-buffer-sources 'compleseus--source-window-buffers)
     (add-to-list 'consult-buffer-sources 'compleseus--source-workspace-buffers)
 
-    ;; disable automatic preview by default,
-    ;; selectively enable it for some prompts below.
-    (setq consult-preview-key '("M-." "C-SPC"))
-
     ;; customize preview activation and delay while selecting candiates
     (consult-customize
      consult-theme
      spacemacs/theme-loader
-     :preview-key '("M-." "C-SPC"
-                    :debounce 0.2 any)
-
-     ;; slightly delayed preview upon candidate selection
-     ;; one usually wants quick feedback
-     consult-buffer
-     consult-ripgrep
-     consult-git-grep
-     consult-grep
-     consult-bookmark
-     consult-yank-pop
-     :preview-key '("M-." "C-SPC"
-                    :debounce 0.3 "<up>" "<down>" "C-n" "C-p"
-                    :debounce 0.6 any))
+     :preview-key '(:debounce 0.2 any))
 
     ;; hide magit buffer
     (add-to-list 'consult-buffer-filter "magit.*:.*")
@@ -242,6 +228,8 @@
     ;; Optionally make narrowing help available in the minibuffer.
     ;; You may want to use `embark-prefix-help-command' or which-key instead.
     ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
+    (define-key consult-narrow-map [C-left] #'consult-narrow-cycle-backward)
+    (define-key consult-narrow-map [C-right] #'consult-narrow-cycle-forward)
 
     ;; Make M-n as smart as ivy and helm equivalents
     (setq minibuffer-default-add-function 'spacemacs/minibuffer-default-add-function)
@@ -432,6 +420,7 @@
     (vertico-mode)
 
     :config
+    (define-key vertico-map (kbd "C-.") 'spacemacs/embark-select)
     (when (spacemacs//support-hjkl-navigation-p)
       (define-key vertico-map (kbd "C-j") #'vertico-next)
       (define-key vertico-map (kbd "C-k") #'vertico-previous)
@@ -442,7 +431,8 @@
       (define-key vertico-map (kbd "C-M-k") #'spacemacs/previous-candidate-preview)
       (define-key vertico-map (kbd "M-RET") #'vertico-exit-input)
       (define-key vertico-map (kbd "C-SPC") #'spacemacs/embark-preview)
-      (define-key vertico-map (kbd "C-r") #'consult-history)))
+      (define-key vertico-map (kbd "C-r") #'consult-history)
+      (define-key vertico-map (kbd "M-P") #'spacemacs/consult-toggle-preview)))
 
   (use-package vertico-directory
     :after vertico
@@ -473,7 +463,8 @@
 
 (defun compleseus/post-init-grep ()
   (spacemacs/set-leader-keys-for-major-mode 'grep-mode
-    "w" 'spacemacs/compleseus-grep-change-to-wgrep-mode))
+    "w" 'spacemacs/compleseus-grep-change-to-wgrep-mode
+    "f" 'next-error-follow-minor-mode))
 
 (defun compleseus/init-wgrep ()
   (evil-define-key 'normal wgrep-mode-map ",," #'spacemacs/wgrep-finish-edit)
@@ -481,7 +472,11 @@
   (evil-define-key 'normal wgrep-mode-map ",a" #'spacemacs/wgrep-abort-changes)
   (evil-define-key 'normal wgrep-mode-map ",k" #'spacemacs/wgrep-abort-changes)
   (evil-define-key 'normal wgrep-mode-map ",q" #'spacemacs/wgrep-abort-changes-and-quit)
-  (evil-define-key 'normal wgrep-mode-map ",s" #'spacemacs/wgrep-save-changes-and-quit))
+  (evil-define-key 'normal wgrep-mode-map ",s" #'spacemacs/wgrep-save-changes-and-quit)
+  (evil-define-key 'normal wgrep-mode-map ",r" #'wgrep-toggle-readonly-area)
+  (evil-define-key 'normal wgrep-mode-map ",d" #'wgrep-mark-deletion)
+  (evil-define-key 'normal wgrep-mode-map ",f" #'next-error-follow-minor-mode)
+  )
 
 (defun compleseus/init-compleseus-spacemacs-help ()
   (use-package compleseus-spacemacs-help

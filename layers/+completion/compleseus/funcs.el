@@ -169,6 +169,13 @@ This solves the problem: Binding a key to: `find-file' calls: `ido-find-file'"
    (completing-read "Layouts:" (persp-names))))
 
 ;; vertico
+(defun spacemacs/embark-select ()
+  "Select the current candidate in the vertico buffer
+to act on with `embark-act-all', and move to the next candidate."
+  (interactive)
+  (embark-select)
+  (vertico-next))
+
 (defun spacemacs/embark-preview ()
   "Previews candidate in vertico buffer, unless it's a consult command"
   (interactive)
@@ -293,6 +300,30 @@ Note: this function relies on embark internals and might break upon embark updat
     ((eq major-mode 'org-mode) 'consult-org-heading)
     (t 'consult-imenu))))
 
+(defun spacemacs/consult-narrow-cycle-backward ()
+  "Cycle backward through the narrowing keys."
+  (interactive)
+  (when consult--narrow-keys
+    (consult-narrow
+     (if consult--narrow
+         (let ((idx (seq-position consult--narrow-keys
+                                  (assq consult--narrow consult--narrow-keys))))
+           (unless (eq idx 0)
+             (car (nth (1- idx) consult--narrow-keys))))
+       (caar (last consult--narrow-keys))))))
+
+(defun spacemacs/consult-narrow-cycle-forward ()
+  "Cycle forward through the narrowing keys."
+  (interactive)
+  (when consult--narrow-keys
+    (consult-narrow
+     (if consult--narrow
+         (let ((idx (seq-position consult--narrow-keys
+                                  (assq consult--narrow consult--narrow-keys))))
+           (unless (eq idx (1- (length consult--narrow-keys)))
+             (car (nth (1+ idx) consult--narrow-keys))))
+       (caar consult--narrow-keys)))))
+
 (defun spacemacs/compleseus-grep-change-to-wgrep-mode ()
   (interactive)
   (require 'wgrep)
@@ -337,3 +368,12 @@ Note: this function relies on embark internals and might break upon embark updat
   (spacemacs/wgrep-finish-edit)
   (wgrep-save-all-buffers)
   (quit-window))
+
+(defun spacemacs/consult-toggle-preview ()
+  "Toggle auto-preview mode for compleseus buffers"
+  (interactive)
+  (if (eq consult-preview-key 'any)
+      (setq consult-preview-key '("M-." "C-SPC"))
+    (setq consult-preview-key ("M-." "C-SPC" :debounce 0.3 any))
+    )
+  )
