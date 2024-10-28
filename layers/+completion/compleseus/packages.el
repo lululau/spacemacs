@@ -34,6 +34,7 @@
     (helm-make :location (recipe :fetcher github
                                  :repo "myrgy/helm-make"
                                  :branch "add_emacs_completion"))
+    (nerd-icons-completion :toggle compleseus-use-nerd-icons)
     orderless
     persp-mode
     (selectrum :toggle (eq compleseus-engine 'selectrum))
@@ -170,6 +171,7 @@
       "hm" #'consult-man
       "jm" #'consult-mark
       "jM" #'consult-global-mark
+
       "sb" #'spacemacs/consult-line-multi
       "sB" #'spacemacs/consult-line-multi-symbol
       "ss" #'spacemacs/consult-line
@@ -497,3 +499,11 @@
     (setq
      spacemacs--persp-display-buffers-func 'spacemacs/compleseus-switch-to-buffer
      spacemacs--persp-display-perspectives-func 'spacemacs/compleseus-spacemacs-layout-layouts)))
+
+(defun compleseus/init-nerd-icons-completion ()
+  (use-package nerd-icons-completion
+    :defer t
+    :after marginalia
+    :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
+    :init
+    (nerd-icons-completion-mode)))
