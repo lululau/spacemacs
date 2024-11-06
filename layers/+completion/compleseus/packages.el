@@ -41,7 +41,7 @@
     (vertico
      :toggle (eq compleseus-engine 'vertico)
      :location elpa)
-    (vertico-posframe :togle (and (eq compleseus-engine 'vertico)
+    (vertico-posframe :toggle (and (eq compleseus-engine 'vertico)
                                   compleseus-use-vertico-posframe))
     (grep :location built-in)
     wgrep))
