@@ -159,7 +159,8 @@ the final step of executing code in `emacs-startup-hook'.")
                                      (file-name-directory load-file-name)))
                                (car load-path))
                           (seq-uniq bases 'string-equal))))
-        (save-buffer)))))
+        (save-buffer)
+        (kill-buffer)))))
 
 (defun spacemacs/init ()
   "Perform startup initialization."
@@ -234,7 +235,7 @@ the final step of executing code in `emacs-startup-hook'.")
     (defvar load-hints '()))   ; *-autoloads.el after the feature was toggled.
 
   ;; theme
-  (spacemacs/load-default-theme spacemacs--fallback-theme 'disable)
+  (spacemacs/load-default-theme)
   ;; font
   (spacemacs|do-after-display-system-init
    ;; If you are thinking to remove this call to `message', think twice. You'll
