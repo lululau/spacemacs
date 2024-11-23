@@ -406,7 +406,7 @@ Will work on both org-mode and any mode that accepts plain html."
       "aof" "feeds"
       "aoC" (org-clocks-prefix))
     ;; org-agenda
-    (unless (when-let ((pkg (configuration-layer/get-package 'helm-org-rifle)))
+    (unless (when-let* ((pkg (configuration-layer/get-package 'helm-org-rifle)))
               ;; TODO: `configuration-layer/package-used-p' doesn't check
               ;; :toggle status.  When it is fixed, we can use it again.
               (cfgl-package-used-p pkg))
@@ -843,6 +843,7 @@ Headline^^            Visit entry^^               Filter^^                    Da
 
 (defun org/init-org-projectile ()
   (use-package org-projectile
+    :after org-project-capture ; backend for projectile after org-project-capture
     :config
     (setq org-project-capture-default-backend
           (make-instance 'org-project-capture-projectile-backend))))
