@@ -30,6 +30,7 @@ defaults.
   - occur-mode
   - package-menu
   - page-break-lines
+  - proced
   - process-menu
   - quickrun
   - recentf

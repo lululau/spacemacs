@@ -24,7 +24,7 @@
 (defconst emacs-built-in-themes (cons 'default (custom-available-themes))
   "List of emacs built-in themes")
 
-(defvar spacemacs--fallback-theme 'spacemacs-dark
+(defvar spacemacs--fallback-theme nil
   "Fallback theme if user theme cannot be applied.")
 
 (defvar spacemacs--delayed-user-theme nil
@@ -341,16 +341,20 @@ package name does not match theme name + `-theme' suffix.")
 (defvar spacemacs-post-theme-change-hook nil
   "Hook run after theme has changed.")
 
-(defun spacemacs/get-theme-package-name (theme-name)
+(defun spacemacs/get-theme-package-name (theme)
   "Returns the package theme for the given THEME name."
-  (cond
-   ;; built-in
-   ((memq theme-name emacs-built-in-themes) nil)
-   ;; from explicit alist
-   ((assq theme-name spacemacs-theme-name-to-package)
-    (cdr (assq theme-name spacemacs-theme-name-to-package)))
-   ;; fallback to <name>-theme
-   (t (intern (format "%S-theme" theme-name)))))
+  (if-let* (((listp theme))
+            (pkg-name (plist-get (cdr theme) :package)))
+      pkg-name
+    (let ((theme-name (or (car-safe theme) theme)))
+      (cond
+       ;; built-in
+       ((memq theme-name emacs-built-in-themes) nil)
+       ;; from explicit alist
+       ((assq theme-name spacemacs-theme-name-to-package)
+        (cdr (assq theme-name spacemacs-theme-name-to-package)))
+       ;; fallback to <name>-theme
+       (t (intern (format "%S-theme" theme-name)))))))
 
 (defun spacemacs//get-theme-name (theme)
   "Return the name of THEME."
@@ -360,8 +364,7 @@ package name does not match theme name + `-theme' suffix.")
 
 (defun spacemacs//get-theme-package-directory (theme)
   "Return the THEME location on disk."
-  (let* ((theme-name (spacemacs//get-theme-name theme))
-         (pkg-name (spacemacs/get-theme-package-name theme-name))
+  (let* ((pkg-name (spacemacs/get-theme-package-name theme))
          (dir (when (listp theme)
                 (configuration-layer/get-location-directory
                  pkg-name
@@ -372,6 +375,16 @@ package name does not match theme name + `-theme' suffix.")
       (setq dir (configuration-layer/get-elpa-package-install-directory
                  pkg-name)))
     dir))
+
+(defun spacemacs//guess-fallback-theme (theme)
+  "Guess the fallback theme for a THEME"
+  (when theme
+    (or (and (listp theme)
+             (plist-get (cdr theme) :fallback))
+        (cond ((string-match-p "light" (symbol-name theme))
+               'spacemacs-light)
+              ((string-match-p "dark" (symbol-name theme))
+               'spacemacs-dark)))))
 
 (defun spacemacs/load-default-theme ()
   "Load default theme.
@@ -384,7 +397,11 @@ the action."
             (theme-name (spacemacs//get-theme-name default-theme)))
       (condition-case err
           (spacemacs//load-theme-internal theme-name)
-        ('error (setq spacemacs--delayed-user-theme theme-name)))
+        ('error (setq spacemacs--delayed-user-theme theme-name)
+                (setq spacemacs--fallback-theme
+                      (or (spacemacs//guess-fallback-theme default-theme)
+                          'spacemacs-dark))
+                (spacemacs//load-theme-internal spacemacs--fallback-theme)))
     (spacemacs-buffer/warning
      (concat "Please check the `dotspacemacs-themes' in your dotfile\n"
              "to make sure it has valid themes. Invalid value: \"%s\"")
@@ -479,8 +496,7 @@ has been changed to THEME."
   "Add all theme packages from `dotspacemacs-themes' to packages to install."
   (setq dotspacemacs--additional-theme-packages nil)
   (dolist (theme dotspacemacs-themes)
-    (let* ((theme-name (spacemacs//get-theme-name theme))
-           (pkg-name (spacemacs/get-theme-package-name theme-name))
+    (let* ((pkg-name (spacemacs/get-theme-package-name theme))
            (theme2 (copy-tree theme)))
       (when pkg-name
         (if (listp theme2)
