@@ -54,8 +54,24 @@ of this community. If you are not convinced then be assured that the only evil
 part in Spacemacs is the evil mode :-)
 
 ** Guidelines
-These guidelines apply to all collaborators of the project, namely @syl20bnr,
-@TheBB, @d12frosted and @bmag.
+These guidelines apply to all collaborators of the project, namely:
+
+- [[https://github.com/syl20bnr][@syl20bnr]]
+- [[https://github.com/JAremko][@JAremko]]
+- [[https://github.com/smile13241324][@smile13241324]]
+- [[https://github.com/bcc32][@bcc32]]
+- [[https://github.com/fnussbaum][@fnussbaum]]
+
+And they applied to all former collaborators during their period of activity:
+
+- [[https://github.com/lebensterben][@lebensterben]]
+- [[https://github.com/bmag][@bmag]]
+- [[https://github.com/duianto][@duianto]]
+- [[https://github.com/sdwolfz][@sdwolfz]]
+- [[https://github.com/d12frosted][@d12frosted]]
+- [[https://github.com/TheBB][@TheBB]]
+- [[https://github.com/justbur][@justbur]]
+- [[https://github.com/trishume][@trishume]]
 
 *** People
 - Collaborators cannot ban any GitHub user from the repository but they can ban
@@ -122,3 +138,4 @@ moderation actions have been taken:
 |------------+-----------+--------+-------+-----------------------------------------------------------------|
 | 2016/01/27 | syl20bnr  | lock   | #3484 | comments judged to be offending towards the Spacemacs community |
 | 2016/01/27 | syl20bnr  | unlock | #3484 | let's make it happen, i.e. this document                        |
+
