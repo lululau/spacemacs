@@ -25,6 +25,7 @@
   '(
     (comint :location built-in)
     company
+    consult
     eat
     esh-help
     (eshell :location built-in)
@@ -157,6 +158,16 @@
     (add-hook 'eshell-mode-hook 'spacemacs/init-ivy-eshell))
   (spacemacs/set-leader-keys-for-major-mode 'shell-mode
     "H" 'counsel-shell-history))
+
+(defun shell/pre-init-consult ()
+  (spacemacs|use-package-add-hook consult
+    :post-init
+    (progn
+      ;; eshell
+      (add-hook 'eshell-mode-hook 'spacemacs/init-consult-eshell)
+      ;;shell
+      (spacemacs/set-leader-keys-for-major-mode 'shell-mode
+        "H" 'spacemacs/consult-shell-history))))
 
 (defun shell/pre-init-magit ()
   (spacemacs|use-package-add-hook magit

@@ -3624,6 +3624,8 @@ files (thanks to Daniel Nicolai)
   (thanks to JAremko and duianto)
 - Better keybindings for ~ESC~ and ~RET~ in vterm =evil-normal-state= (thanks to kenkangxgwe)
 - Added support for multi-vterm as default terminal option
+- Added ~M-l~ for =eshell= mode and ~SPC m H~ for both =shell= and =eshell=
+  modes for =consult-history= (thanks to Jaehyun Yeom)
 **** Shell Scripts
 - Added new company-shell environment variable backend
   (thanks to Alexander-Miller)

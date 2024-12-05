@@ -233,6 +233,25 @@ is achieved by adding the relevant text properties."
   (define-key eshell-mode-map (kbd "M-l") #'spacemacs/ivy-eshell-history)
   (define-key eshell-mode-map (kbd "<tab>") #'spacemacs/pcomplete-std-complete))
 
+(defun spacemacs/consult-eshell-history ()
+  "Correctly revert to insert state after selection."
+  (interactive)
+  (consult-history)
+  (evil-insert-state))
+
+(defun spacemacs/consult-shell-history ()
+  "Correctly revert to insert state after selection."
+  (interactive)
+  (consult-history)
+  (evil-insert-state))
+
+(defun spacemacs/init-consult-eshell ()
+  "Initialize consult-eshell."
+  (spacemacs/set-leader-keys-for-major-mode 'eshell-mode
+    "H" 'spacemacs/consult-eshell-history)
+  (define-key eshell-mode-map
+              (kbd "M-l") 'spacemacs/consult-eshell-history))
+
 (defun term-send-tab ()
   "Send tab in term mode."
   (interactive)
