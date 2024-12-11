@@ -224,7 +224,7 @@ directory local variable in your project root. ~SPC f v d~ in Spacemacs. See
 The root of the project is detected with a =.git= directory or a =setup.cfg= file.
 
 ** Buffer formatting
-One of [[https://github.com/google/yapf][YAPF]] (the default), [[https://github.com/ambv/black][black]] or =lsp= may be selected as the formatter, via
+One of [[https://github.com/google/yapf][YAPF]], [[https://github.com/ambv/black][black]] or =lsp= may be selected as the formatter, via
 =python-formatter=, as =yapf=, =black= or =lsp= respectively.
 
 #+BEGIN_SRC emacs-lisp
@@ -232,8 +232,10 @@ One of [[https://github.com/google/yapf][YAPF]] (the default), [[https://github.
     (python :variables python-formatter 'yapf)))
 #+END_SRC
 
-Alternatively the =lsp= formatter will be automatically chosen if the layer =lsp=
-is used and you did not specify any value for =python-formatter=.
+The default =python-formatter= is =yapf=, with the following exception: When
+both the =lsp= layer is used, and =python-lsp-server= is =pylsp=, the default
+formatter is =lsp=. Note that the =pyright= language server does not support
+formatting.
 
 The key binding ~SPC m =~ invokes the selected formatter on the current buffer
 when in non LSP python mode otherwise ~SPC m ==~ is used.

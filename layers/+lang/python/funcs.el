@@ -406,6 +406,12 @@ to be called for each testrunner. "
 (defun spacemacs//bind-python-formatter-keys ()
   "Bind the python formatter keys.
 Bind formatter to '==' for LSP and '='for all other backends."
+  (when (and (eq python-formatter 'lsp)
+             (eq python-lsp-server 'pyright))
+    (display-warning
+     '(spacemacs python)
+     "Configuration error: `python-formatter' is `lsp', but `python-lsp-server' is `pyright', which does not support formatting."
+     :error))
   (spacemacs/set-leader-keys-for-major-mode 'python-mode
     (if (eq python-backend 'lsp)
         "=="
@@ -420,6 +426,23 @@ Bind formatter to '==' for LSP and '='for all other backends."
     ('black (blacken-buffer))
     ('lsp (lsp-format-buffer))
     (code (message "Unknown formatter: %S" code))))
+
+(defun spacemacs//python-lsp-set-up-format-on-save ()
+  (when (and python-format-on-save
+             (eq python-formatter 'lsp)
+             (eq python-lsp-server 'pylsp))
+    (add-hook
+     'python-mode-hook
+     'spacemacs//python-lsp-set-up-format-on-save-local)))
+
+(defun spacemacs//python-lsp-set-up-format-on-save-local ()
+  (add-hook 'before-save-hook 'spacemacs//python-lsp-format-on-save nil t))
+
+(defun spacemacs//python-lsp-format-on-save ()
+  (when (and python-format-on-save
+             (eq python-formatter 'lsp)
+             (eq python-lsp-server 'pylsp))
+    (lsp-format-buffer)))
 
 
 ;; REPL

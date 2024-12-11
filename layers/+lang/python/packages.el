@@ -128,7 +128,6 @@
   (use-package blacken
     :defer t
     :init
-    (spacemacs//bind-python-formatter-keys)
     (when (and python-format-on-save
                (eq 'black python-formatter))
       (add-hook 'python-mode-hook 'blacken-mode))
@@ -374,6 +373,8 @@
     (spacemacs/register-repl 'python
                              'spacemacs/python-start-or-switch-repl "python")
     (spacemacs//bind-python-repl-keys)
+    (spacemacs//bind-python-formatter-keys)
+    (spacemacs//python-lsp-set-up-format-on-save)
     (add-hook 'python-mode-local-vars-hook 'spacemacs//python-setup-backend)
     (add-hook 'python-mode-hook 'spacemacs//python-default)
     :config
@@ -457,16 +458,7 @@
               'spacemacs//disable-semantic-idle-summary-mode t))
   (spacemacs/add-to-hook 'python-mode-hook
                          '(semantic-mode
-                           spacemacs//python-imenu-create-index-use-semantic-maybe))
-  (define-advice semantic-python-get-system-include-path
-      (:around (f &rest args) semantic-python-skip-error-advice)
-    "Don't cause error when Semantic cannot retrieve include
-paths for Python then prevent the buffer to be switched. This
-issue might be fixed in Emacs 25. Until then, we need it here to
-fix this issue."
-    (condition-case-unless-debug nil
-        (apply f args)
-      (error nil))))
+                           spacemacs//python-imenu-create-index-use-semantic-maybe)))
 
 (defun python/pre-init-smartparens ()
   (spacemacs|use-package-add-hook smartparens
@@ -491,7 +483,6 @@ fix this issue."
   (use-package yapfify
     :defer t
     :init
-    (spacemacs//bind-python-formatter-keys)
     (when (and python-format-on-save
                (eq 'yapf python-formatter))
       (add-hook 'python-mode-hook 'yapf-mode))
