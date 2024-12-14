@@ -351,20 +351,22 @@
                                                 spacemacs-cache-directory)
           forge-add-default-bindings (eq dotspacemacs-editing-style 'emacs))
     (spacemacs/set-leader-keys-for-major-mode 'forge-topic-mode
-      "a" 'forge-edit-topic-assignees
+      "a" 'forge-topic-set-assignees
       "c" 'forge-create-post
       "C" 'forge-checkout-pullreq
       "b" 'forge-browse-topic
       "D" 'forge-delete-comment
       "d" 'forge-post-toggle-draft
       "e" 'forge-edit-post
-      "m" 'forge-edit-topic-marks
+      "m" 'forge-topic-set-marks
       "M" 'forge-create-mark
       "n" 'forge-edit-topic-note
-      "r" 'forge-edit-topic-review-requests
-      "s" 'forge-edit-topic-state
-      "t" 'forge-edit-topic-title
+      "r" 'forge-topic-set-review-requests
+      "s" 'forge-topic-state-menu
+      "t" 'forge-topic-set-title
       "u" 'forge-copy-url-at-point-as-kill)
+    (dolist (mode '(forge-issue-mode forge-pullreq-mode))
+      (spacemacs/inherit-leader-keys-from-parent-mode mode 'forge-topic-mode))
     (spacemacs/set-leader-keys-for-major-mode 'forge-post-mode
       dotspacemacs-major-mode-leader-key 'forge-post-submit
       "c" 'forge-post-submit
