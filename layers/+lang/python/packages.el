@@ -395,7 +395,7 @@
       "cc" 'spacemacs/python-execute-file
       "cC" 'spacemacs/python-execute-file-focus
       "db" 'spacemacs/python-toggle-breakpoint
-      "gb" 'xref-pop-marker-stack
+      "gb" 'xref-go-back
       "ri" 'spacemacs/python-remove-unused-imports
       "sB" 'spacemacs/python-shell-send-buffer-switch
       "sb" 'spacemacs/python-shell-send-buffer

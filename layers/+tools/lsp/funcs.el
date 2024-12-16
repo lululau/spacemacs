@@ -141,7 +141,7 @@
     (concat prefix-char "d") #'xref-find-definitions
     (concat prefix-char "r") #'xref-find-references
     (concat prefix-char "e") #'lsp-treemacs-errors-list
-    (concat prefix-char "b") #'xref-pop-marker-stack)
+    (concat prefix-char "b") #'xref-go-back)
   (cond
    ((configuration-layer/package-usedp 'helm)
     (spacemacs/set-leader-keys-for-minor-mode 'lsp-mode

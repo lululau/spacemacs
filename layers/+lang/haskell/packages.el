@@ -72,7 +72,7 @@
     :config
     (dolist (mode haskell-modes)
       (spacemacs/set-leader-keys-for-major-mode mode
-        "gb" 'xref-pop-marker-stack
+        "gb" 'xref-go-back
         "ht" 'dante-type-at
         "hT" 'spacemacs-haskell//dante-insert-type
         "hi" 'dante-info

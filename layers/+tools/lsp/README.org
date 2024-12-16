@@ -244,7 +244,7 @@ The lsp minor mode bindings are:
 | ~SPC m g r~   | find references (=xref= / =lsp=)                                                 |
 | ~SPC m g s~   | find symbol in project (=helm-lsp=)                                              |
 | ~SPC m g S~   | find symbol in all projects (=helm-lsp=)                                         |
-| ~SPC m g p~   | goto previous (~xref-pop-marker-stack~)                                          |
+| ~SPC m g p~   | goto previous (~xref-go-back~)                                          |
 |---------------+----------------------------------------------------------------------------------|
 | Note          | /Omitted when ~lsp-navigation~ is ~'peek~ or ~'simple~ /                         |
 |               | /Bound under ~SPC m g~ rather than ~SPC m G~ when ~lsp-navigation~ == ~'peek~/   |

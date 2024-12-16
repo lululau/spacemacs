@@ -185,7 +185,7 @@
     (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
       (spacemacs/declare-prefix-for-mode mode "mg" "find-symbol")
       (spacemacs/set-leader-keys-for-major-mode mode
-        "gb" 'xref-pop-marker-stack)
+        "gb" 'xref-go-back)
       (spacemacs/declare-prefix-for-mode mode "mh" "help")
 
       ;; Load better help mode if helpful is installed
