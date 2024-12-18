@@ -38,12 +38,13 @@ buffer you create. This function switches the current buffer
 view; to pop-up a full width buffer, use
 `spacemacs/projectile-shell-pop'."
   (interactive)
-  (call-interactively
-   (or (pcase shell-default-shell
-         ('multi-term #'projectile-multi-term-in-root)
-         ('eat #'eat-project))
-       (intern-soft (format "projectile-run-%s" shell-default-shell))
-       #'projectile-run-shell)))
+  (pcase shell-default-shell
+    ((or 'multi-term 'multi-vterm)
+     (projectile-with-default-dir (projectile-project-root)
+       (call-interactively shell-default-shell)))
+    ('eat (call-interactively #'eat-project))
+    (_ (call-interactively (or (intern-soft (format "projectile-run-%s" shell-default-shell))
+                               #'projectile-run-shell)))))
 
 (defun spacemacs/disable-hl-line-mode ()
   "Locally disable global-hl-line-mode"
@@ -119,11 +120,6 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
               (lambda nil (,func ,shell))))
        (shell-pop index)
        (spacemacs/resize-shell-to-desired-width))))
-
-(defun projectile-multi-term-in-root ()
-  "Invoke `multi-term' in the project's root."
-  (interactive)
-  (projectile-with-default-dir (projectile-project-root) (multi-term)))
 
 (defun spacemacs//toggle-shell-auto-completion-based-on-path ()
   "Deactivates automatic completion on remote paths.

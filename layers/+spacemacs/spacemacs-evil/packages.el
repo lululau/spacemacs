@@ -151,9 +151,9 @@
       (define-key evil-normal-state-map evil-exchange-key 'evil-exchange)
       (define-key evil-visual-state-map evil-exchange-key 'evil-exchange)
       (define-key evil-normal-state-map evil-exchange-cancel-key
-        'evil-exchange-cancel)
+                  'evil-exchange-cancel)
       (define-key evil-visual-state-map evil-exchange-cancel-key
-        'evil-exchange-cancel))))
+                  'evil-exchange-cancel))))
 
 (defun spacemacs-evil/init-evil-goggles ()
   (use-package evil-goggles
@@ -191,7 +191,7 @@
     (spacemacs//iedit-state-TAB-key-bindings dotspacemacs-editing-style)
     ;; activate leader in iedit and iedit-insert states
     (define-key evil-iedit-state-map
-      (kbd dotspacemacs-leader-key) spacemacs-default-map)
+                (kbd dotspacemacs-leader-key) spacemacs-default-map)
     (spacemacs//iedit-insert-state-hybrid dotspacemacs-editing-style)
     (add-hook 'spacemacs-editing-style-hook
               #'spacemacs//iedit-insert-state-hybrid)))
@@ -205,9 +205,9 @@
     (define-key evil-inner-text-objects-map "I" 'evil-indent-plus-i-indent-up)
     (define-key evil-outer-text-objects-map "I" 'evil-indent-plus-a-indent-up)
     (define-key evil-inner-text-objects-map "J"
-      'evil-indent-plus-i-indent-up-down)
+                'evil-indent-plus-i-indent-up-down)
     (define-key evil-outer-text-objects-map "J"
-      'evil-indent-plus-a-indent-up-down)))
+                'evil-indent-plus-a-indent-up-down)))
 
 (defun spacemacs-evil/init-evil-lion ()
   (use-package evil-lion
@@ -381,9 +381,9 @@
                evil-visualstar/begin-search-backward)
     :init
     (define-key evil-visual-state-map (kbd "*")
-      'evil-visualstar/begin-search-forward)
+                'evil-visualstar/begin-search-forward)
     (define-key evil-visual-state-map (kbd "#")
-      'evil-visualstar/begin-search-backward)))
+                'evil-visualstar/begin-search-backward)))
 
 (defun spacemacs-evil/init-hs-minor-mode ()
   (add-hook 'prog-mode-hook 'spacemacs//enable-hs-minor-mode))

@@ -29,7 +29,6 @@
 
 (defun deft/init-zetteldeft ()
   (use-package zetteldeft
-    :if (eq deft-zetteldeft t)
     :init
     (spacemacs/declare-prefix-for-mode 'deft-mode "mz" "zetteldeft")
     (spacemacs/declare-prefix-for-mode 'org-mode "mz" "zetteldeft")
@@ -76,11 +75,11 @@
     ;; put in capture prefix
     (spacemacs/set-leader-keys "Cd" 'deft-new-file)
     :config (spacemacs/set-leader-keys-for-major-mode 'deft-mode
-             "c" 'deft-filter-clear
-             "d" 'deft-delete-file
-             "i" 'deft-toggle-incremental-search
-             "n" 'deft-new-file
-             "N" 'deft-new-file-named
-             "q" 'quit-window
-             "o" 'deft-open-file-other-window
-             "r" 'deft-rename-file)))
+              "c" 'deft-filter-clear
+              "d" 'deft-delete-file
+              "i" 'deft-toggle-incremental-search
+              "n" 'deft-new-file
+              "N" 'deft-new-file-named
+              "q" 'quit-window
+              "o" 'deft-open-file-other-window
+              "r" 'deft-rename-file)))

@@ -27,7 +27,6 @@
         erlang
         dap-mode
         ggtags
-        counsel-gtags
         flycheck))
 
 
@@ -40,9 +39,9 @@
     :defer t
     ;; explicitly run prog-mode hooks since erlang mode does is not
     ;; derived from prog-mode major-mode
-    :hook (erlang-mode . spacemacs/run-prog-mode-hooks)
-          (erlang-mode . spacemacs//erlang-default)
-          (erlang-mode-local-vars . spacemacs//erlang-setup-backend)
+    :hook ((erlang-mode . spacemacs/run-prog-mode-hooks)
+           (erlang-mode . spacemacs//erlang-default)
+           (erlang-mode-local-vars . spacemacs//erlang-setup-backend))
     :init
     ;; (setq erlang-root-dir "/usr/lib/erlang/erts-5.10.3")
     ;; (add-to-list 'exec-path "/usr/lib/erlang/erts-5.10.3/bin")
@@ -64,5 +63,3 @@
 
 (defun erlang/post-init-ggtags ()
   (add-hook 'erlang-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
-
-(defun erlang/post-init-counsel-gtags nil)

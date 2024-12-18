@@ -395,12 +395,6 @@ to be called for each testrunner. "
 (defun spacemacs//bind-python-formatter-keys ()
   "Bind the python formatter keys.
 Bind formatter to '==' for LSP and '='for all other backends."
-  (when (and (eq python-formatter 'lsp)
-             (eq python-lsp-server 'pyright))
-    (display-warning
-     '(spacemacs python)
-     "Configuration error: `python-formatter' is `lsp', but `python-lsp-server' is `pyright', which does not support formatting."
-     :error))
   (spacemacs/set-leader-keys-for-major-mode 'python-mode
     (if (eq python-backend 'lsp)
         "=="
@@ -418,8 +412,7 @@ Bind formatter to '==' for LSP and '='for all other backends."
 
 (defun spacemacs//python-lsp-set-up-format-on-save ()
   (when (and python-format-on-save
-             (eq python-formatter 'lsp)
-             (eq python-lsp-server 'pylsp))
+             (eq python-formatter 'lsp))
     (add-hook
      'python-mode-hook
      'spacemacs//python-lsp-set-up-format-on-save-local)))
@@ -428,10 +421,16 @@ Bind formatter to '==' for LSP and '='for all other backends."
   (add-hook 'before-save-hook 'spacemacs//python-lsp-format-on-save nil t))
 
 (defun spacemacs//python-lsp-format-on-save ()
-  (when (and python-format-on-save
-             (eq python-formatter 'lsp)
-             (eq python-lsp-server 'pylsp))
-    (lsp-format-buffer)))
+  (condition-case err
+      (when (and python-format-on-save
+                 (eq python-formatter 'lsp))
+        (lsp-format-buffer))
+    (lsp-capability-not-supported
+     (display-warning
+       '(spacemacs python)
+       "Configuration error: `python-formatter' is `lsp', no active workspace supports textDocument/formatting"
+       :error))))
+
 
 
 ;; REPL

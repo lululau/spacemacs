@@ -24,10 +24,9 @@
 (defconst lua-packages
   '(
     company
-    (company-lua :requires company)
+    (company-lua :requires company :toggle (eq lua-backend 'lua-mode))
     flycheck
     ggtags
-    counsel-gtags
     lua-mode))
 
 (defun lua/post-init-flycheck ()
@@ -66,10 +65,7 @@
 
 (defun lua/init-company-lua ()
   (use-package company-lua
-    :if (eq lua-backend 'lua-mode)
     :defer t))
 
 (defun lua/post-init-ggtags ()
   (add-hook 'lua-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
-
-(defun lua/post-init-counsel-gtags nil)

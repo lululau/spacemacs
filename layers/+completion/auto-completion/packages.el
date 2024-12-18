@@ -22,24 +22,24 @@
 
 
 (defconst auto-completion-packages
-      '(
-        (auto-yasnippet)
-        (auto-complete :toggle (not (eq auto-completion-front-end 'company)))
-        (ac-ispell :toggle (not (eq auto-completion-front-end 'company)))
-        (company :toggle (eq auto-completion-front-end 'company))
-        (company-posframe :toggle auto-completion-use-company-posframe)
-        (company-box :toggle auto-completion-use-company-box)
-        (company-quickhelp :toggle auto-completion-enable-help-tooltip)
-        (company-statistics :toggle auto-completion-enable-sort-by-usage)
-        counsel
-        (fuzzy :toggle (not (eq auto-completion-front-end 'company)))
-        (helm-company :requires helm :toggle (eq auto-completion-front-end 'company))
-        (helm-c-yasnippet :requires helm)
-        hippie-exp
-        (ivy-yasnippet :requires ivy)
-        smartparens
-        yasnippet
-        yasnippet-snippets))
+  '(
+    (auto-yasnippet)
+    (auto-complete :toggle (not (eq auto-completion-front-end 'company)))
+    (ac-ispell :toggle (not (eq auto-completion-front-end 'company)))
+    (company :toggle (eq auto-completion-front-end 'company))
+    (company-posframe :toggle auto-completion-use-company-posframe)
+    (company-box :toggle auto-completion-use-company-box)
+    (company-quickhelp :toggle auto-completion-enable-help-tooltip)
+    (company-statistics :toggle auto-completion-enable-sort-by-usage)
+    counsel
+    (fuzzy :toggle (not (eq auto-completion-front-end 'company)))
+    (helm-company :requires helm :toggle (eq auto-completion-front-end 'company))
+    (helm-c-yasnippet :requires helm)
+    hippie-exp
+    (ivy-yasnippet :requires ivy)
+    smartparens
+    yasnippet
+    yasnippet-snippets))
 
 
 ;; TODO replace by company-ispell which comes with company
@@ -172,38 +172,38 @@
     (spacemacs|hide-lighter company-box-mode)
     (setq company-box-backends-colors nil)
     (setq company-box-icons-all-the-icons
-     `((Unknown . ,(all-the-icons-octicon "file-text" :height 0.8 :v-adjust -0.05))
-       (Text . ,(all-the-icons-faicon "file-text-o" :height 0.8 :v-adjust -0.0575))
-       (Method . ,(all-the-icons-faicon "cube" :height 0.8 :v-adjust -0.0575))
-       (Function . ,(all-the-icons-faicon "cube" :height 0.8 :v-adjust -0.0575))
-       (Constructor . ,(all-the-icons-faicon "cube" :height 0.8 :v-adjust -0.0575))
-       (Field . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
-       (Variable . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
-       (Class . ,(all-the-icons-faicon "cog" :height 0.8 :v-adjust -0.0575))
-       (Interface . ,(all-the-icons-faicon "cogs" :height 0.8 :v-adjust -0.0575))
-       (Module . ,(all-the-icons-alltheicon "less" :height 0.8))
-       (Property . ,(all-the-icons-faicon "wrench" :height 0.8 :v-adjust -0.0575))
-       (Unit . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
-       (Value . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
-       (Enum . ,(all-the-icons-faicon "file-text-o" :height 0.8 :v-adjust -0.0575))
-       (Keyword . ,(all-the-icons-material "format_align_center" :height 0.8 :v-adjust -0.225))
-       (Snippet . ,(all-the-icons-material "content_paste" :height 0.8 :v-adjust -0.225))
-       (Color . ,(all-the-icons-material "palette" :height 0.8 :v-adjust -0.225))
-       (File . ,(all-the-icons-faicon "file" :height 0.8 :v-adjust -0.0575))
-       (Reference . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
-       (Folder . ,(all-the-icons-faicon "folder" :height 0.8 :v-adjust -0.0575))
-       (EnumMember . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
-       (Constant . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
-       (Struct . ,(all-the-icons-faicon "cog" :height 0.8 :v-adjust -0.0575))
-       (Event . ,(all-the-icons-faicon "bolt" :height 0.8 :v-adjust -0.0575))
-       (Operator . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
-       (TypeParameter . ,(all-the-icons-faicon "cog" :height 0.8 :v-adjust -0.0575))
-       (Template . ,(all-the-icons-octicon "file-code" :height 0.8 :v-adjust -0.05))))
+          `((Unknown . ,(all-the-icons-octicon "file-text" :height 0.8 :v-adjust -0.05))
+            (Text . ,(all-the-icons-faicon "file-text-o" :height 0.8 :v-adjust -0.0575))
+            (Method . ,(all-the-icons-faicon "cube" :height 0.8 :v-adjust -0.0575))
+            (Function . ,(all-the-icons-faicon "cube" :height 0.8 :v-adjust -0.0575))
+            (Constructor . ,(all-the-icons-faicon "cube" :height 0.8 :v-adjust -0.0575))
+            (Field . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
+            (Variable . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
+            (Class . ,(all-the-icons-faicon "cog" :height 0.8 :v-adjust -0.0575))
+            (Interface . ,(all-the-icons-faicon "cogs" :height 0.8 :v-adjust -0.0575))
+            (Module . ,(all-the-icons-alltheicon "less" :height 0.8))
+            (Property . ,(all-the-icons-faicon "wrench" :height 0.8 :v-adjust -0.0575))
+            (Unit . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
+            (Value . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
+            (Enum . ,(all-the-icons-faicon "file-text-o" :height 0.8 :v-adjust -0.0575))
+            (Keyword . ,(all-the-icons-material "format_align_center" :height 0.8 :v-adjust -0.225))
+            (Snippet . ,(all-the-icons-material "content_paste" :height 0.8 :v-adjust -0.225))
+            (Color . ,(all-the-icons-material "palette" :height 0.8 :v-adjust -0.225))
+            (File . ,(all-the-icons-faicon "file" :height 0.8 :v-adjust -0.0575))
+            (Reference . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
+            (Folder . ,(all-the-icons-faicon "folder" :height 0.8 :v-adjust -0.0575))
+            (EnumMember . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
+            (Constant . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
+            (Struct . ,(all-the-icons-faicon "cog" :height 0.8 :v-adjust -0.0575))
+            (Event . ,(all-the-icons-faicon "bolt" :height 0.8 :v-adjust -0.0575))
+            (Operator . ,(all-the-icons-faicon "tag" :height 0.8 :v-adjust -0.0575))
+            (TypeParameter . ,(all-the-icons-faicon "cog" :height 0.8 :v-adjust -0.0575))
+            (Template . ,(all-the-icons-octicon "file-code" :height 0.8 :v-adjust -0.05))))
     (add-hook 'company-box-selection-hook
               (lambda (selection frame) (company-box-doc--hide frame)))
     (cl-case auto-completion-enable-help-tooltip
       (manual (define-key company-active-map
-                (kbd "M-h") #'company-box-doc-manually))
+                          (kbd "M-h") #'company-box-doc-manually))
       (t (setq company-box-doc-enable t)))))
 
 (defun auto-completion/init-company-posframe ()

@@ -234,8 +234,10 @@ One of [[https://github.com/google/yapf][YAPF]], [[https://github.com/ambv/black
 
 The default =python-formatter= is =yapf=, with the following exception: When
 both the =lsp= layer is used, and =python-lsp-server= is =pylsp=, the default
-formatter is =lsp=. Note that the =pyright= language server does not support
-formatting.
+formatter is =lsp=.
+
+Note that the =pyright= language server does not support formatting, but it
+can be used alongside with =ruff=, which does support it.
 
 The key binding ~SPC m =~ invokes the selected formatter on the current buffer
 when in non LSP python mode otherwise ~SPC m ==~ is used.

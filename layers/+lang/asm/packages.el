@@ -28,7 +28,6 @@
         company
         electric-indent-mode
         ggtags
-        counsel-gtags
         nasm-mode
         x86-lookup
         ))
@@ -45,7 +44,7 @@
 
 (defun asm/post-init-electric-indent-mode ()
   (spacemacs/add-to-hooks 'asm-electric-indent-local-mode-off
-                   '(asm-mode-hook nasm-mode-hook)))
+                          '(asm-mode-hook nasm-mode-hook)))
 
 (defun asm/init-nasm-mode ()
   "Setup for built-in `nasm-mode', which could be thought as improved `asm-mode'"
@@ -74,5 +73,3 @@
 
 (defun asm/post-init-ggtags ()
   (add-hook 'asm-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
-
-(defun asm/post-init-counsel-gtags nil)

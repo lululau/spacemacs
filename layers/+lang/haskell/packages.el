@@ -39,9 +39,8 @@
         ggtags
         haskell-mode
         haskell-snippets
-        counsel-gtags
         (helm-hoogle :requires helm)
-        hindent
+        (hindent :toggle haskell-enable-hindent)
         hlint-refactor))
 
 (defun haskell/init-lsp-haskell ()
@@ -93,8 +92,8 @@
 
 (defun haskell/post-init-flycheck ()
   (add-hook 'dante-mode-hook
-              (lambda () (flycheck-add-next-checker 'haskell-dante '(warning . haskell-hlint)))
-  (spacemacs/enable-flycheck 'haskell-mode)))
+            (lambda () (flycheck-add-next-checker 'haskell-dante '(warning . haskell-hlint)))
+            (spacemacs/enable-flycheck 'haskell-mode)))
 
 
 (defun haskell/init-flycheck-haskell ()
@@ -309,13 +308,10 @@
 
   (with-eval-after-load 'yasnippet (haskell-snippets-initialize)))
 
-(defun haskell/post-init-counsel-gtags nil)
-
 ;; doesn't support haskell-literate-mode :(
 (defun haskell/init-hindent ()
   (use-package hindent
     :defer t
-    :if haskell-enable-hindent
     :init
     (add-hook 'haskell-mode-hook #'hindent-mode)
     :config
