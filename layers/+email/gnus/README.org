@@ -31,8 +31,8 @@ file.
 * Basic Concepts
 Gnus is a news reading application. The Gnus terminology can be confusing for
 new users so the basics are listed here:
-- A Newsgroup but can also be a RSS Feed or a mail directory
-- Newsgroups can be assigned to topics which will be used to structure
+- Group :: A Newsgroup but can also be a RSS Feed or a mail directory
+- Topic :: Newsgroups can be assigned to topics which will be used to structure
   the Group Buffer if Topic Mode is enabled(default).
 
 * Adding news sources

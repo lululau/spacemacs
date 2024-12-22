@@ -40,11 +40,11 @@ layers with descriptions see [[https://spacemacs.org/layers/LAYERS.html][Spacema
 
 * Nomenclature
 Layers and packages. What gives?
-- A set of Emacs Lisp files that, taken together, provide some
+- Package :: A set of Emacs Lisp files that, taken together, provide some
   feature. Packages may be available on a package repository, such as ELPA or
   MELPA or on a third-party service provider (such as github) or even
   locally on the disk.
-- A collected unit of configuration that can be enabled (or disabled)
+- Layer :: A collected unit of configuration that can be enabled (or disabled)
   in Spacemacs. A layer typically brings together one or more packages, as
   well as the glue configuration code required to make them play well with
   each other and Spacemacs in general.
@@ -276,11 +276,11 @@ more.
 * Anatomy of a layer
 A layer is simply a folder somewhere in Spacemacs's layer search path that
 usually contains these files (listed in loading order).
-- declare additional layers
-- the packages list and configuration
-- all functions used in the layer should be declared here
-- layer specific configuration
-- general key bindings
+- =layers.el= :: declare additional layers
+- =packages.el= :: the packages list and configuration
+- =funcs.el= :: all functions used in the layer should be declared here
+- =config.el= :: layer specific configuration
+- =keybindings.el= :: general key bindings
 
 Additionally, for each local package (see the next section), there should be a
 folder =<layer>/local/<package>/= containing the source code for that package.

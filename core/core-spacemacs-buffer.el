@@ -955,7 +955,9 @@ REAL-WIDTH: the real width of the line.  If the line contains an image, the size
                            ((configuration-layer/layer-used-p 'helm)
                             'helm-spacemacs-help)
                            ((configuration-layer/layer-used-p 'ivy)
-                            'ivy-spacemacs-help))))
+                            'ivy-spacemacs-help)
+                           ((configuration-layer/layer-used-p 'compleseus)
+                            'compleseus-spacemacs-help))))
                      (call-interactively comp-frontend)))
                  :mouse-face 'highlight
                  :follow-link "\C-m")

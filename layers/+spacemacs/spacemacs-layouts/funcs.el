@@ -855,7 +855,7 @@ Otherwise create a new workspace at the next free slot."
 
 (defun spacemacs//get-persp-workspace (&optional persp frame)
   "Get the correct workspace parameters for perspective.
-PERSP is the perspective, and defaults to the current perspective.
+PERSP is the perspective, and defaults to the default layout.
 FRAME is the frame where the parameters are expected to be used, and
 defaults to the current frame."
   (let ((param-names (if (display-graphic-p frame)

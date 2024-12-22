@@ -68,6 +68,8 @@
               (cond
                ((string-equal r "BEGINNERS_TUTORIAL.org")
                 `("Beginners tutorial" . ,r))
+               ((string-equal r "CI_PLUMBING.org")
+                `("CI setup on GitHub" . ,r))
                ((string-equal r "CONTRIBUTING.org")
                 `("How to contribute to Spacemacs" . ,r))
                ((string-equal r "CONVENTIONS.org")
@@ -83,7 +85,7 @@
                ((string-equal r "VIMUSERS.org")
                 `("Vim users migration guide" . ,r))
                (t
-                `(r . ,r))))
+                `(,r . ,r))))
             result)))
 
 (defun ivy-spacemacs-help//documentation-action-open-file (candidate)
