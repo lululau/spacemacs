@@ -24,4 +24,4 @@
 
 
 (defvar deft-zetteldeft nil
-  "Use zetteldeft if non nil")
+  "Use zetteldeft if non-nil.")

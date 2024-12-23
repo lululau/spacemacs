@@ -25,7 +25,7 @@
 (defconst deft-packages
   '(
     deft
-    (zetteldeft :toggle (eq deft-zetteldeft t))))
+    (zetteldeft :toggle deft-zetteldeft)))
 
 (defun deft/init-zetteldeft ()
   (use-package zetteldeft

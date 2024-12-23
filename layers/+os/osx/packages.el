@@ -124,7 +124,7 @@
 
 (defun osx/init-reveal-in-osx-finder ()
   (use-package reveal-in-osx-finder
-    :commands reveal-in-osx-finder))
+    :defer t))
 
 (defun osx/post-init-term ()
   (with-eval-after-load 'term
