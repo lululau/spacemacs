@@ -66,7 +66,8 @@ full hint text will not show up!"
   [_<_/_>_] history back/forw^^^^  [_c_] toggle colors            [_=_] unzoom        [_B_] list bookmarks [_d_] download
   [_[_/_]_] page previous/next^^^^ [_t_] toggle latex             ^^                  [_V_] view source    [_B_] add bookmark
   [_u_] page up^^^^^^              [_C_] cycle theme              ^^                  ^^                   [_q_] quit
-  [_t_] top url^^^^^^")
+  [_t_] top url^^^^^^"
+    '("w" "+" "-" "="))
   (spacemacs|define-transient-state eww
     :title "Eww Transient State"
     :hint-is-doc t

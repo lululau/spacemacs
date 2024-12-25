@@ -442,6 +442,14 @@ the build in =project.el= alternative.
   (setq-default dotspacemacs-configuration-layers
     '((org :variables org-project-capture-projects-file "TODOs.org")))
 #+END_SRC
+You can also pass a function as `org-project-capture-projects-file`. This allows you to
+set file name based on project
+
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default dotspacemacs-configuration-layers
+    '((org :variables org-project-capture-projects-file '(lambda (arg) (concat (projectile-project-name) ".org")))))
+#+END_SRC
 
 The TODO files are not added to the agenda automatically. You can do this with
 the following snippet.

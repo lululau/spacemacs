@@ -815,7 +815,7 @@ Headline^^            Visit entry^^               Filter^^                    Da
       "aop" 'spacemacs/org-project-capture-capture
       "po" 'spacemacs/org-project-capture-goto-todos)
     :config
-    (if (file-name-absolute-p org-project-capture-projects-file)
+    (if (and (stringp org-project-capture-projects-file) (file-name-absolute-p org-project-capture-projects-file))
         (progn
           (setq org-project-capture-projects-file org-project-capture-projects-file)
           (push (org-project-capture-project-todo-entry :empty-lines 1)
