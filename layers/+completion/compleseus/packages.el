@@ -37,6 +37,7 @@
     (nerd-icons-completion :toggle compleseus-use-nerd-icons)
     orderless
     persp-mode
+    savehist
     (selectrum :toggle (eq compleseus-engine 'selectrum))
     (vertico
      :toggle (eq compleseus-engine 'vertico)
@@ -496,6 +497,11 @@
     (setq
      spacemacs--persp-display-buffers-func 'spacemacs/compleseus-switch-to-buffer
      spacemacs--persp-display-perspectives-func 'spacemacs/compleseus-spacemacs-layout-layouts)))
+
+(defun compleseus/pre-init-savehist ()
+  (spacemacs|use-package-add-hook savehist
+    :post-config
+    (add-to-list 'savehist-additional-variables '(vertico-repeat-history . 50))))
 
 (defun compleseus/init-nerd-icons-completion ()
   (use-package nerd-icons-completion
