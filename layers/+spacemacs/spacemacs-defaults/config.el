@@ -196,6 +196,13 @@ or `nil' to only save and not visit the file."
 ;; Session
 ;; ---------------------------------------------------------------------------
 
+(spacemacs|defc spacemacs-savehist-autosave-idle-interval 60
+  "Idle interval between autosaves of minibuffer histories and other
+variables (see `savehist-mode' and `savehist-additional-variables')."
+  'integer)
+
+(defvar spacemacs--savehist-idle-timer nil)
+
 ;; scratch buffer empty
 (setq initial-scratch-message dotspacemacs-initial-scratch-message)
 ;; don't create backup~ files
