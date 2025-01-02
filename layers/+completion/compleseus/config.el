@@ -182,15 +182,17 @@ and with narrowing key \"B\".")
        (let* ((prev-buffers (delq (window-buffer) (mapcar #'car (window-prev-buffers))))
               (next-buffers (window-next-buffers))
               (buffers
-               (if vertico-cycle
-                   ;; If cycling is enabled, this order makes sense:
-                   ;; One can move down to previous buffers,
-                   ;; and move up to next buffers.
-                   (append (list (window-buffer))
-                           (seq-difference prev-buffers next-buffers)
-                           (nreverse next-buffers))
-                 ;; Note that next-buffers is a subset of prev-buffers.
-                 (cons (window-buffer) prev-buffers))))
+               (cl-remove-if-not
+                #'buffer-live-p
+                (if vertico-cycle
+                    ;; If cycling is enabled, this order makes sense:
+                    ;; One can move down to previous buffers,
+                    ;; and move up to next buffers.
+                    (append (list (window-buffer))
+                            (seq-difference prev-buffers next-buffers)
+                            (nreverse next-buffers))
+                  ;; Note that next-buffers is a subset of prev-buffers.
+                  (cons (window-buffer) prev-buffers)))))
          (consult--buffer-query
           :sort nil
           :filter nil
