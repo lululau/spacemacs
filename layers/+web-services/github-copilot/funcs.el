@@ -1,8 +1,8 @@
-;;; packages.el --- Large GitHub Copilot Client for Spacemacs
+;;; funcs.el --- GitHub Copilot Layer functions file for Spacemacs -*- lexical-binding: t; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2024 Sylvain Benner & Contributors
 ;;
-;; Author: Codruț Constantin Gușoi <mail+spacemacs@codrut.pro>
+;; Author: Ferdinand Nussbaum <ferdinand.nussbaum@inf.ethz.ch>
 ;; URL: https://github.com/syl20bnr/spacemacs
 ;;
 ;; This file is not part of GNU Emacs.
@@ -20,16 +20,10 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-(defconst github-copilot-packages
-  '((copilot :location (recipe
-                         :fetcher github
-                         :repo "copilot-emacs/copilot.el"
-                         :files ("*.el" "dist")))))
-
-(defun github-copilot/init-copilot ()
-  (use-package copilot
-    :custom
-    (copilot-enable-predicates '(spacemacs//copilot-enable-predicate
-                                 copilot--buffer-changed))
-    :defer t))
+(defun spacemacs//copilot-enable-predicate ()
+  "Copilot is by default only enabled in `evil-insert-state', not in `evil-emacs-state',
+see the default value of `copilot-enable-predicates'.
+In `holy-mode', we enable `evil-emacs-state' permanently, hence this workaround."
+  (or (not (bound-and-true-p evil-local-mode))
+      (bound-and-true-p holy-mode)
+      (evil-insert-state-p)))
