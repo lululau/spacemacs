@@ -22,10 +22,7 @@
 
 
 (defconst github-copilot-packages
-  '((copilot :location (recipe
-                         :fetcher github
-                         :repo "copilot-emacs/copilot.el"
-                         :files ("*.el" "dist")))))
+  '((copilot)))
 
 (defun github-copilot/init-copilot ()
   (use-package copilot

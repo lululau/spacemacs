@@ -147,8 +147,9 @@
     :defer (spacemacs/defer)
     :custom (magit-bury-buffer-function #'magit-restore-window-configuration)
     :init
-    (cl-pushnew "magit: .*" spacemacs-useless-buffers-regexp :test 'equal)
-    (cl-pushnew "magit-.*: .*"  spacemacs-useless-buffers-regexp :test 'equal)
+    (when git-magit-buffers-useless
+      (cl-pushnew "magit: .*" spacemacs-useless-buffers-regexp :test 'equal)
+      (cl-pushnew "magit-.*: .*"  spacemacs-useless-buffers-regexp :test 'equal))
     (spacemacs|require-when-dumping 'magit)
     (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
     ;; On Windows, we must use Git GUI to enter username and password

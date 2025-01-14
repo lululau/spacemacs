@@ -23,6 +23,10 @@
 
 ;; Variables
 
+(defvar git-magit-buffers-useless nil
+  "When non-nil, magit buffers are marked as useless,
+see `spacemacs-useless-buffers-regexp'.")
+
 (defvar git-enable-magit-delta-plugin nil
   "If non nil, enable `magit-delta' plugin.")
 

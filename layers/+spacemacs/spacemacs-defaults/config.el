@@ -38,10 +38,20 @@
 
 ;; Regexp for useful and useless buffers for smarter buffer switching
 (defvar spacemacs-useless-buffers-regexp '()
-  "Regexp used to determine if a buffer is not useful.")
+  "Regexp used to determine if a buffer is not useful.
+
+Such useless buffers are skipped by `previous-buffer',
+`next-buffer', and, optionally, by `spacemacs/alternate-buffer'
+(see `spacemacs-useful-buffers-restrict-spc-tab').")
 (defvar spacemacs-useful-buffers-regexp '()
   "Regexp used to define buffers that are useful despite matching
 `spacemacs-useless-buffers-regexp'.")
+
+(spacemacs|defc spacemacs-useful-buffers-restrict-spc-tab t
+  "When non-nil, \\[spacemacs/alternate-buffer] does not switch to
+useless buffers as defined by `spacemacs-useless-buffers-regexp'
+and `spacemacs-useful-buffers-regexp'."
+  'boolean)
 
 ;; no beep pleeeeeease ! (and no visual blinking too please)
 (setq ring-bell-function 'ignore
@@ -190,7 +200,14 @@ or `nil' to only save and not visit the file."
     ;; `buffer-predicate' entry doesn't exist, create it
     (push '(buffer-predicate . spacemacs/useful-buffer-p) default-frame-alist)))
 
-(add-to-list 'window-persistent-parameters '(spacemacs-max-state . writable))
+;; It could be considered to persist more (or even all) of the window parameters
+;; here, see also https://debbugs.gnu.org/cgi/bugreport.cgi?bug=23858.
+(setq window-persistent-parameters
+      (cl-union window-persistent-parameters
+                '((spacemacs-max-state . t)
+                  (spacemacs-max-state-writable . writable)
+                  (quit-restore . t))
+                :test 'equal))
 
 ;; ---------------------------------------------------------------------------
 ;; Session

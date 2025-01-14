@@ -219,24 +219,36 @@ persistent which-key) are kept or minimized too."
          (window-already-maximal
           (eq max-target-window (selected-window))))
     (cond ((and window-already-maximal
-                (window-parameter nil 'spacemacs-max-state))
+                (window-parameter nil 'spacemacs-max-state-writable))
            ;; Restore the previously deleted windows, keeping the state of the
            ;; selected window.
            (let ((selected-win-state (window-state-get (selected-window))))
              (window-state-put
-              (window-parameter nil 'spacemacs-max-state) (selected-window))
+              ;; Prefer non-writable window states during a session,
+              ;; because they persist more information. For example, they contain
+              ;; markers and references to buffers instead of buffer positions
+              ;; and buffer names only.
+              (or (window-parameter nil 'spacemacs-max-state)
+                  (window-parameter nil 'spacemacs-max-state-writable))
+              (selected-window))
              (window-state-put selected-win-state (selected-window))
-             (set-window-parameter nil 'spacemacs-max-state nil)))
+             (set-window-parameter nil 'spacemacs-max-state nil)
+             (set-window-parameter nil 'spacemacs-max-state-writable nil)))
           ((and (not window-already-maximal)
                 (window-parameter nil 'window-side))
            ;; Raise the same error as `delete-other-windows'
            ;; (with `ignore-window-parameters' nil).
            (error "Cannot make side window the only window"))
           ((not window-already-maximal)
-           ;; Store the current state as a window parameter of the selected window
-           ;; and delete other windows.
-           (walk-windows (lambda (win) (set-window-parameter win 'spacemacs-max-state nil)))
-           (set-window-parameter nil 'spacemacs-max-state (window-state-get max-target-window t))
+           ;; Clean up ...
+           (walk-windows
+            (lambda (win)
+              (set-window-parameter win 'spacemacs-max-state nil)
+              (set-window-parameter win 'spacemacs-max-state-writable nil)))
+           ;; ... and store the current state as a window parameter of the selected window
+           ;; before deleting other windows.
+           (set-window-parameter nil 'spacemacs-max-state (window-state-get max-target-window))
+           (set-window-parameter nil 'spacemacs-max-state-writable (window-state-get max-target-window t))
            (if dotspacemacs-maximize-window-keep-side-windows
                (spacemacs//delete-other-non-side-windows)
              (let ((ignore-window-parameters t))
@@ -950,6 +962,17 @@ variable."
   "Try `outline-show-all' for ediff buffers."
   (when (fboundp 'outline-show-all)
     (outline-show-all)))
+
+(spacemacs|eval-until-emacs-min-version "31.0.50"
+  "Use builtin `ediff--delete-temp-files-on-kill-emacs' first"
+
+  (defun spacemacs//ediff-delete-temp-files ()
+    "Delete the temp-files associated with the ediff buffers."
+    (let ((inhibit-interaction t))
+      (dolist (b ediff-session-registry)
+        (ignore-errors
+          (with-current-buffer b
+            (ediff-delete-temp-files)))))))
 
 (defun spacemacs/new-empty-buffer (&optional split)
   "Create a new buffer called: \"untitled\".
