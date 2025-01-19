@@ -556,6 +556,10 @@ Set the variable =org-enable-valign= to =t=:
 
 [[https://github.com/casouri/valign#valignel][Known problem: Rendering large tables (≥100 lines) is laggy.]]
 
+Valign and org-modern (below) both provide visual enhancements for org
+tables (if =org-modern-table= is non-nil), and they are not compatible
+with each other.
+
 ** Org-modern support
 [[https://github.com/minad/org-modern][org-modern]] beautifies org files with many visual enhancements.
 It toggles visibility of some markers, changes faces of common elements and just "modernizes" the visual appearance.
@@ -567,6 +571,10 @@ To enable it by default, set the =org-enable-modern-support= to =t=:
 #+END_SRC
 
 To toggle its features, either call ~M-x org-modern-mode~ or ~ESC , T m~.
+
+Org-modern and valign (above) both provide visual enhancements for org
+tables (if =org-modern-table= is non-nil), and they are not compatible
+with each other.
 
 ** Org-appear support
 To install [[https://github.com/awth13/org-appear][org-appear]], which toggles visibility of emphasis markers, links, subscripts, and superscripts in org mode, set the =org-enable-appear-support= to =t=:
