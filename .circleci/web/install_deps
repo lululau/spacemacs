@@ -12,6 +12,10 @@
 ## License: GPLv3
 
 cp .circleci/web/.spacemacs ~/
+# First time fails
+emacs -batch -l ~/.emacs.d/init.el
+
+# But the second one?
 emacs -batch -l ~/.emacs.d/init.el
 if [ $? -ne 0 ]; then
     echo "Dependencies installation failed."

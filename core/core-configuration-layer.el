@@ -966,6 +966,9 @@ a new object."
   (interactive
    (list (intern
           (completing-read "Package: " configuration-layer--used-packages))))
+  (help-setup-xref (list #'configuration-layer/describe-package
+                         pkg-symbol layer-list pkg-list)
+                   (called-interactively-p 'interactive))
   (let* ((pkg (configuration-layer/get-package pkg-symbol))
          (owners (oref pkg :owners))
          (owner (car owners)))
