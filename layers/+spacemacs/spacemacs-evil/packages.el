@@ -31,7 +31,8 @@
                                        :repo "smile13241324/evil-escape"))
         evil-exchange
         evil-goggles
-        evil-iedit-state
+        (evil-iedit-state :location (recipe :fetcher github
+                                            :repo "smile13241324/evil-iedit-state"))
         evil-indent-plus
         evil-lion
         evil-lisp-state

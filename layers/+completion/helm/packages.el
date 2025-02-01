@@ -28,8 +28,7 @@
     helm
     (helm-ag :location (recipe
                         :fetcher github
-                        :repo "zozowell/helm-ag"
-                        :branch "further-support-rg"))
+                        :repo "smile13241324/helm-ag"))
     helm-comint
     helm-descbinds
     (helm-ls-git :toggle (configuration-layer/layer-used-p 'git))
@@ -137,9 +136,9 @@
     (spacemacs||set-helm-key "swg" helm-google-suggest)
     (with-eval-after-load 'helm-files
       (define-key helm-find-files-map
-        (kbd "C-c C-e") 'spacemacs/helm-find-files-edit)
+                  (kbd "C-c C-e") 'spacemacs/helm-find-files-edit)
       (define-key helm-find-files-map
-        (kbd "S-<return>") 'helm-ff-run-switch-other-window)
+                  (kbd "S-<return>") 'helm-ff-run-switch-other-window)
       (defun spacemacs//add-action-helm-find-files-edit ()
         (helm-add-action-to-source
          "Edit files in dired `C-c C-e'" 'spacemacs//helm-find-files-edit
@@ -148,7 +147,7 @@
                 'spacemacs//add-action-helm-find-files-edit))
     (with-eval-after-load 'helm-buffers
       (define-key helm-buffer-map
-        (kbd "S-<return>") 'helm-buffer-switch-other-window))
+                  (kbd "S-<return>") 'helm-buffer-switch-other-window))
     ;; Add minibuffer history with `helm-minibuffer-history'
     (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
     ;; Delay this key bindings to override the defaults
@@ -206,19 +205,19 @@
       (define-key helm-bookmark-map (kbd "C-d") 'helm-bookmark-run-delete)
       (define-key helm-bookmark-map (kbd "C-e") 'helm-bookmark-run-edit)
       (define-key helm-bookmark-map
-        (kbd "C-f") 'helm-bookmark-toggle-filename)
+                  (kbd "C-f") 'helm-bookmark-toggle-filename)
       (define-key helm-bookmark-map
-        (kbd "S-<return>") 'helm-bookmark-run-jump-other-window)
+                  (kbd "S-<return>") 'helm-bookmark-run-jump-other-window)
       (define-key helm-bookmark-map (kbd "C-/") 'helm-bookmark-help))
     (with-eval-after-load 'helm-bookmark
       (simpler-helm-bookmark-keybindings))
     (when (configuration-layer/package-used-p 'winum)
       (define-key helm-buffer-map
-        (kbd "RET") 'spacemacs/helm-find-buffers-windows)
+                  (kbd "RET") 'spacemacs/helm-find-buffers-windows)
       (define-key helm-generic-files-map
-        (kbd "RET") 'spacemacs/helm-find-files-windows)
+                  (kbd "RET") 'spacemacs/helm-find-files-windows)
       (define-key helm-find-files-map
-        (kbd "RET") 'spacemacs/helm-find-files-windows))))
+                  (kbd "RET") 'spacemacs/helm-find-files-windows))))
 
 (defun helm/init-helm-comint ()
   (use-package helm-comint
@@ -234,17 +233,17 @@
     ;; to search using rg/ag/pt/whatever instead of just grep
     (with-eval-after-load 'helm-projectile
       (define-key helm-projectile-projects-map
-        (kbd "C-s") 'spacemacs/helm-projectile-grep)
+                  (kbd "C-s") 'spacemacs/helm-projectile-grep)
       ;; `spacemacs/helm-projectile-grep' calls:
       ;; `spacemacs/helm-project-smart-do-search-in-dir'
       ;; which needs to be an action.
       ;; Delete the current action.
       (helm-delete-action-from-source
-        "Grep in projects `C-s'" helm-source-projectile-projects)
+       "Grep in projects `C-s'" helm-source-projectile-projects)
       (helm-add-action-to-source
-        "Search in projects `C-s'"
-        'spacemacs/helm-project-smart-do-search-in-dir
-        helm-source-projectile-projects))
+       "Search in projects `C-s'"
+       'spacemacs/helm-project-smart-do-search-in-dir
+       helm-source-projectile-projects))
 
     (spacemacs/set-leader-keys
       ;; helm-ag marks
@@ -417,7 +416,7 @@
       'helm-projectile-grep)
     :config (when (configuration-layer/package-used-p 'winum)
               (define-key helm-projectile-find-file-map
-                (kbd "RET") 'spacemacs/helm-find-files-windows))))
+                          (kbd "RET") 'spacemacs/helm-find-files-windows))))
 
 (defun helm/init-helm-spacemacs-help ()
   (use-package helm-spacemacs-help
