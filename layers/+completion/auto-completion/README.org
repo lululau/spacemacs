@@ -251,6 +251,7 @@ Emacs style:
 | ~TAB~       | expand selection or select next candidate                            |
 | ~S-TAB~     | select previous candidate                                            |
 | ~RET~       | complete word, if word is already completed insert a carriage return |
+| ~C-g~       | stop completion without selecting a candidate                        |
 
 ** Yasnippet
 
