@@ -146,11 +146,6 @@ If you use Emacs editing style, check the key bindings at the [[https://github.c
 |----------------------+-------------------------------------------|
 | ~+/-~                | Zoom in/out                               |
 | ~zr~                 | Reset zoom                                |
-|----------------------+-------------------------------------------|
-| *Theme*              |                                           |
-|----------------------+-------------------------------------------|
-| ~n~                  | Midnight mode (dark theme)                |
-| ~t~                  | Themed mode (matches emacs theme)         |
 
 /For evil users/: Note that the search keys activate =isearch=, which works
 differently from the default Evil search. To go to the next match, use ~C-s~.
@@ -183,9 +178,13 @@ differently from the default Evil search. To go to the next match, use ~C-s~.
 | ~SPC m f h~           | Fit height to window                      |
 | ~SPC m f p~           | Fit page to window                        |
 |-----------------------+-------------------------------------------|
+| *Theme*               |                                           |
+|-----------------------+-------------------------------------------|
+| ~SPC m n~             | Toggle midnight mode (dark theme)         |
+| ~SPC m t~             | Toggle themed mode (matches emacs theme)  |
+|-----------------------+-------------------------------------------|
 | *Other*               |                                           |
 |-----------------------+-------------------------------------------|
-| ~SPC m n~             | Toggle night view mode                    |
 | ~SPC m s~             | Run =pdf-occur=                           |
 | ~SPC m p~             | Display print version                     |
 

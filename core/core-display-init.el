@@ -60,6 +60,7 @@ See `spacemacs|do-after-display-system-init'."
 
 Otherwise, enqueue it until after the first graphical frame is
 created."
+  (declare (indent defun))
   `(spacemacs--call-after-display-system-init (lambda () ,@body)))
 
 (provide 'core-display-init)

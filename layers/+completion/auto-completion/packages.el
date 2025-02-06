@@ -153,11 +153,11 @@
     :commands company-quickhelp-manual-begin
     :init
     (spacemacs|do-after-display-system-init
-     (with-eval-after-load 'company
-       (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends))
-       (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin)
-       (unless (eq auto-completion-enable-help-tooltip 'manual)
-         (company-quickhelp-mode))))))
+      (with-eval-after-load 'company
+        (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends))
+        (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin)
+        (unless (eq auto-completion-enable-help-tooltip 'manual)
+          (company-quickhelp-mode))))))
 
 (defun auto-completion/init-company-box ()
   (use-package company-box

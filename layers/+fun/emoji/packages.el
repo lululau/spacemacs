@@ -55,7 +55,7 @@
     (spacemacs//set-emoji-font nil)
     ;; Hook for when a frame is created with emacsclient
     (spacemacs|do-after-display-system-init
-     (spacemacs//set-emoji-font-for-current-frame))
+      (spacemacs//set-emoji-font-for-current-frame))
     (spacemacs|add-company-backends
      :backends company-emoji
      :modes text-mode)

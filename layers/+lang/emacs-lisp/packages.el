@@ -272,8 +272,8 @@
     ;; in a terminal nameless triggers all sorts of graphical glitches.
     (spacemacs|unless-dumping-and-eval-after-loaded-dump nameless
       (spacemacs|do-after-display-system-init
-       (when emacs-lisp-hide-namespace-prefix
-         (spacemacs/toggle-nameless-on-register-hook-emacs-lisp-mode))))))
+        (when emacs-lisp-hide-namespace-prefix
+          (spacemacs/toggle-nameless-on-register-hook-emacs-lisp-mode))))))
 
 (defun emacs-lisp/init-overseer ()
   (use-package overseer

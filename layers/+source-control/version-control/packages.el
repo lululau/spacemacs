@@ -156,8 +156,8 @@
       (run-with-idle-timer 1 nil 'diff-hl-margin-mode))
     :config
     (spacemacs|do-after-display-system-init
-     (setq diff-hl-side (if (eq version-control-diff-side 'left)
-                            'left 'right)))))
+      (setq diff-hl-side (if (eq version-control-diff-side 'left)
+                             'left 'right)))))
 
 (defun version-control/post-init-evil-unimpaired ()
   (define-key evil-normal-state-map (kbd "[ h") 'spacemacs/vcs-previous-hunk)
@@ -191,8 +191,8 @@
     :defer t
     :init
     (spacemacs|do-after-display-system-init
-     (with-eval-after-load 'git-gutter
-       (require 'git-gutter-fringe)))
+      (with-eval-after-load 'git-gutter
+        (require 'git-gutter-fringe)))
     (setq git-gutter-fr:side (if (eq version-control-diff-side 'left)
                                  'left-fringe 'right-fringe))))
 

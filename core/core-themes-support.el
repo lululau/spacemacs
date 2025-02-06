@@ -451,7 +451,7 @@ THEME."
     (setq spacemacs--cur-theme theme-name)
     (unless (display-graphic-p)
       (spacemacs|do-after-display-system-init
-       (load-theme theme-name t)))))
+        (load-theme theme-name t)))))
 
 (defun spacemacs/cycle-spacemacs-theme (&optional backward)
   "Cycle through themes defined in `dotspacemacs-themes'.

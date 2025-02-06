@@ -43,8 +43,8 @@
     (nyan-mode)
     ;; explicitly re-enable the cat for the first GUI client
     (spacemacs|do-after-display-system-init
-     (nyan-mode -1)
-     (nyan-mode))
+      (nyan-mode -1)
+      (nyan-mode))
 
     (spacemacs|add-toggle nyan-cat-progress-bar
       :mode nyan-mode
