@@ -41,7 +41,7 @@
 
     ;; Enable xref-backend of dumb-jump. It's chosen only when no better
     ;; options is available
-    (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)))
+    (add-hook 'xref-backend-functions #'dumb-jump-xref-activate 90)))
 
 (defun spacemacs-misc/init-request ()
   (setq request-storage-directory
