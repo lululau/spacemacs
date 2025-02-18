@@ -358,7 +358,7 @@ Note: the hooked function is not executed when in dumped mode."
        (spacemacs/load-theme spacemacs--delayed-user-theme
                              spacemacs--fallback-theme t))
      (spacemacs-buffer//startup-hook)
-     (configuration-layer/display-summary emacs-start-time)
+     (configuration-layer/display-summary)
      (spacemacs/check-for-new-version nil spacemacs-version-check-interval)
      (spacemacs-buffer/goto-link-line)
      (setq spacemacs-initialized t)

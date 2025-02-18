@@ -2541,7 +2541,7 @@ When called interactively, delete all orphan packages."
 (defvar configuration-layer--spacemacs-startup-time nil
   "Spacemacs full startup duration.")
 
-(defun configuration-layer/display-summary (start-time)
+(defun configuration-layer/display-summary ()
   "Display a summary of loading time."
   (unless configuration-layer--spacemacs-startup-time
     (setq configuration-layer--spacemacs-startup-time

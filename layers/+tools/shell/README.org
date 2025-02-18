@@ -266,7 +266,7 @@ layer variable to non-nil:
 
 #+BEGIN_SRC emacs-lisp
   (setq-default dotspacemacs-configuration-layers
-    '((shell :variables close-window-with-terminal t)))
+    '((shell :variables shell-close-window-with-terminal t)))
 #+END_SRC
 
 This is only applied to =term= and =ansi-term= modes.

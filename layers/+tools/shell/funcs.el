@@ -68,7 +68,7 @@ view; to pop-up a full width buffer, use
                             (when (string-match "\\(finished\\|exited\\)"
                                                 change)
                               (kill-buffer (process-buffer proc))
-                              (when (and close-window-with-terminal
+                              (when (and shell-close-window-with-terminal
                                          (> (count-windows) 1))
                                 (delete-window)))))))
 
