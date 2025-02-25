@@ -278,8 +278,7 @@ and bugs are fixed quickly.
   If you have issues with your thumbs you can still use Spacemacs using
   modifiers.
 - Contribute easily with your improvements and new configuration layers.
-- *Very active and helpful community* on =Gitter= and =IRC=
-  (via Gitter IRC bridge)
+- *Very active and helpful community* on =Gitter=
 
 * Screenshots
 [[file:img/spacemacs-python.png]]
