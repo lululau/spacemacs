@@ -27,19 +27,9 @@
 
 (defconst syntax-checking-packages
   '(
-    ;; Can be removed once https://github.com/purcell/package-lint/issues/285
-    ;; is fixed.
-    (package-lint :location
-                  (recipe :fetcher github :repo "purcell/package-lint"
-                          :files (:defaults "data" (:exclude "*flymake.el"))
-                          :commit "21edc6d0d0eadd2d0a537f422fb9b7b8a3ae6991"))
     flycheck
     (flycheck-pos-tip :toggle syntax-checking-enable-tooltips)
     popwin))
-
-(defun syntax-checking/init-package-lint ()
-  (use-package package-lint
-    :defer t))
 
 (defun syntax-checking/init-flycheck ()
   (use-package flycheck
