@@ -13,6 +13,7 @@ This layer adds support for basic language server protocol packages speaking
 
 ** Features:
 - Provide LSP support using eglot.
+- Provide Flycheck integration using [[https://github.com/flycheck/flycheck-eglot][flycheck-eglot]]
 
 * In Development!
 There is not much going on with this layer right now, it only has the most basic
@@ -24,18 +25,18 @@ The first thing it needs it key bindings...
 Here is an example on how to integrate eglot into the language backend of a layer:
 
 #+BEGIN_SRC elisp
-    (defun spacemacs//ruby-setup-backend ()
-      "Conditionally configure Ruby backend"
-      (spacemacs//ruby-setup-version-manager)
-      (pcase ruby-backend
-        ('eglot (spacemacs//ruby-setup-eglot))
-        ('lsp (spacemacs//ruby-setup-lsp))
-        (nil (ignore))
-        (_ (spacemacs-buffer/error "Ruby Layer - unknown language backend: %s" ruby-backend))))
+  (defun spacemacs//ruby-setup-backend ()
+    "Conditionally configure Ruby backend"
+    (spacemacs//ruby-setup-version-manager)
+    (pcase ruby-backend
+      ('eglot (spacemacs//ruby-setup-eglot))
+      ('lsp (spacemacs//ruby-setup-lsp))
+      (nil (ignore))
+      (_ (spacemacs-buffer/error "Ruby Layer - unknown language backend: %s" ruby-backend))))
 
   (defun spacemacs//ruby-setup-eglot ()
     "Setup Ruby eglot."
     (if (configuration-layer/layer-used-p 'eglot)
-      (eglot-ensure)
+        (eglot-ensure)
       (message "`eglot' layer is not installed, please add `eglot' layer to your dotfile.")))
 #+END_SRC

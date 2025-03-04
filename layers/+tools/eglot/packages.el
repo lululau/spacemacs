@@ -22,8 +22,15 @@
 
 
 (defconst eglot-packages
-  '(eglot))
+  '(eglot
+    (flycheck-eglot :requires flycheck)))
 
 (defun eglot/init-eglot ()
   (use-package eglot
     :defer t))
+
+(defun eglot/init-flycheck-eglot ()
+  (use-package flycheck-eglot
+    :after eglot
+    :config
+    (global-flycheck-eglot-mode)))

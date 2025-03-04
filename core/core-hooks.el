@@ -50,6 +50,8 @@
 Transient hooks are ephemeral hooks that vanishes when executed.
 If FUNC is a lambda you must give it a name with FNAME. "
   (declare (indent 1))
+  (unless (or (symbolp func) fname)
+    (error "spacemacs|add-transient-hook: No name provided for transient hook"))
   (let ((hfunc (intern (format "spacemacs//transient-hook-%s"
                                (if fname fname func))))
         result)
