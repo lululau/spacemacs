@@ -74,7 +74,10 @@ Allowed values are defined in `TeX-engine-alist'. The default allowed values are
   "Whether to use `TeX-fold-mode' or not in tex/latex buffers.")
 
 (defvar latex-enable-magic nil
-  "Whether to enable \"magic\" symbols in the buffer.")
+  "Whether to enable \"magic\" symbols in the buffer.
+
+Note that enabling this can have a negative impact on performance,
+especially when `magic-latex-enable-pretty-symbols' is t (the default).")
 
 (defvar latex-nofill-env '("equation"
                            "equation*"

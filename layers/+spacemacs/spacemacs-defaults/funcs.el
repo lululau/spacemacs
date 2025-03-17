@@ -817,17 +817,8 @@ not typically change the buffer displayed by a dedicated window."
 (defun spacemacs--directory-path ()
   "Retrieve the directory path of the current buffer.
 
-If the buffer is not visiting a file, use the `list-buffers-directory' variable
-as a fallback to display the directory, useful in buffers like the ones created
-by `magit' and `dired'.
-
-Returns:
-  - A string containing the directory path in case of success.
-  - nil in case the current buffer does not have a directory."
-  (when-let* ((directory-name (if-let* ((file-name (buffer-file-name)))
-                                  (file-name-directory file-name)
-                                list-buffers-directory)))
-    (file-truename directory-name)))
+The return value is always an expanded absolute path."
+  (file-truename default-directory))
 
 (defun spacemacs--file-path ()
   "Retrieve the file path of the current buffer.
@@ -880,8 +871,7 @@ otherwise the listed directory's path."
   (interactive)
   (if-let* ((file-path (or (spacemacs--file-path)
                            (and (derived-mode-p 'dired-mode)
-                                (dired-get-filename nil t))
-                           (spacemacs--directory-path))))
+                                (dired-get-filename nil t)))))
       (progn
         (kill-new file-path)
         (message "%s" file-path))

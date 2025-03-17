@@ -240,7 +240,8 @@ is nil.
 
 ** Magic latex buffer
 To enable "magic" symbols in latex buffers, set the variable
-=latex-enable-magic= to =t=.
+=latex-enable-magic= to =t=. But please note that enabling this feature can have
+a negative impact on performance, see also [[https://github.com/zk-phi/magic-latex-buffer/issues/20][this issue upstream]].
 
 #+BEGIN_SRC emacs-lisp
   (setq-default dotspacemacs-configuration-layers

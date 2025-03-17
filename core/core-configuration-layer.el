@@ -361,7 +361,7 @@ is ignored."
 
 (defvar configuration-layer-elpa-archives nil
   "List of ELPA archives required by Spacemacs. This value is set by the lock
-file.")
+file. It can be overridden by users inside `dotspacemacs/user-init'.")
 
 (defvar configuration-layer-exclude-all-layers nil
   "If non nil then only the distribution layer is loaded.")

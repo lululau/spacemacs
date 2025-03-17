@@ -27,6 +27,7 @@
   - [[#i-want-to-learn-elisp-where-do-i-start-][I want to learn elisp, where do I start ?]]
 - [[#how-do-i][How do I]]
   - [[#install-a-package-not-provided-by-a-layer][Install a package not provided by a layer?]]
+  - [[#change-the-package-archives-or-package-archive-priorities][Change the =package-archives= or =package-archive-priorities=?]]
   - [[#how-to-override-a-layer-package][How to override a layer package?]]
   - [[#disable-a-package-completely][Disable a package completely?]]
   - [[#disable-a-package-only-for-a-specific-major-mode][Disable a package only for a specific major-mode?]]
@@ -268,6 +269,22 @@ Spacemacs provides a variable in the =dotspacemacs/layers= function in
 =.spacemacs= called =dotspacemacs-additional-packages=. Just add a package name
 to the list and it will be installed when you reload your configuration with
 ~SPC f e R~, or at the next Spacemacs launch.
+
+** Change the =package-archives= or =package-archive-priorities=?
+Set the values of =configuration-layer-elpa-archives= and
+=package-archive-priorities= inside =dotspacemacs/user-init=.
+
+#+BEGIN_SRC emacs-lisp
+  (defun dotspacemacs/user-init ()
+    (setq configuration-layer-elpa-archives
+          '(("melpa" . "https://melpa.org/packages/")
+            ("gnu" . "https://elpa.gnu.org/packages/")
+            ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+    (setq package-archive-priorities
+          '(("melpa" . 4)
+            ("nongnu" . 2)
+            ("gnu" . 1))))
+#+END_SRC
 
 ** How to override a layer package?
 To replace a package that is installed and configured by a layer, without

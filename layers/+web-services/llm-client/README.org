@@ -13,17 +13,7 @@
 - [[#key-bindings][Key bindings]]
   - [[#gptel][GPTel]]
   - [[#ellama][Ellama]]
-    - [[#general-tasks][General tasks]]
-    - [[#code-tasks][Code tasks]]
-    - [[#summarization-tasks][Summarization tasks]]
-    - [[#edit-tasks][Edit tasks]]
-    - [[#question-answering-tasks][Question-Answering tasks]]
-    - [[#problem-solving-tasks][Problem solving tasks]]
-    - [[#translation-tasks][Translation tasks]]
-    - [[#thesaurus-tasks][Thesaurus tasks]]
-    - [[#context-management][Context management]]
-    - [[#session-management][Session management]]
-    - [[#provider-management][Provider management]]
+    - [[#transient-menu][Transient menu]]
 
 * Description
 This layer enables usage of GPT Clients in Spacemacs using [[https://github.com/karthink/gptel][GPTel]] and [[https://github.com/s-kostyaev/ellama][Ellama]].
@@ -122,103 +112,29 @@ In addition, this layer adds the following key bindings to =org-mode=
 | ~SPC m $ g p~ | gptel-org-set-properties | Set properties in Org-mode |
 
 ** Ellama
-*** General tasks
+Ellama provides its own transient key binding menu, which is
+self-documenting.
 
 | Key binding | Command                    | Description                 |
 |-------------+----------------------------+-----------------------------|
-| ~SPC $ e .~ | ellama-transient-main-menu | Show ellama transient state |
+| ~SPC $ e~   | ellama-transient-main-menu | Show ellama transient state |
 
-| Key binding  | Command              | Description                       |
-|--------------+----------------------+-----------------------------------|
-| ~SPC $ ec c~ | ellama-code-complete | Complete code in current buffer   |
-| ~SPC $ ec a~ | ellama-code-add      | Add code according to description |
-| ~SPC $ ec e~ | ellama-code-edit     | Edit code according to change     |
-| ~SPC $ ec i~ | ellama-code-improve  | Improve code                      |
-| ~SPC $ ec r~ | ellama-code-review   | Review code                       |
-|              |                      |                                   |
+*** Transient menu
+Only a small subset of the prefixes in the transient menu are
+documented here. Press ~SPC $ e~ to see the full menu.
 
-*** Code tasks
-
-| Key binding  | Command              | Description                       |
-|--------------+----------------------+-----------------------------------|
-| ~SPC $ ec c~ | ellama-code-complete | Complete code in current buffer   |
-| ~SPC $ ec a~ | ellama-code-add      | Add code according to description |
-| ~SPC $ ec e~ | ellama-code-edit     | Edit code according to change     |
-| ~SPC $ ec i~ | ellama-code-improve  | Improve code                      |
-| ~SPC $ ec r~ | ellama-code-review   | Review code                       |
-
-*** Summarization tasks
-
-| Key binding  | Command                   | Description                         |
-|--------------+---------------------------+-------------------------------------|
-| ~SPC $ es s~ | ellama-summarize          | Summarize selected region or buffer |
-| ~SPC $ es w~ | ellama-summarize-webpage  | Summarize webpage                   |
-| ~SPC $ es c~ | ellama-summarize-killring | Summarize text from kill ring       |
-
-*** Edit tasks
-
-| Key binding  | Command                    | Description                     |
-|--------------+----------------------------+---------------------------------|
-| ~SPC $ ei c~ | ellama-complete            | Complete text in current buffer |
-| ~SPC $ ei w~ | ellama-improve-wording     | Improve wording                 |
-| ~SPC $ ei g~ | ellama-improve-grammar     | Improve grammar                 |
-| ~SPC $ ei s~ | ellama-improve-conciseness | Shorten text (make concise)     |
-| ~SPC $ ei l~ | ellama-make-list           | Create markdown list            |
-| ~SPC $ ei t~ | ellama-make-table          | Create markdown table           |
-| ~SPC $ ei f~ | ellama-make-format         | Render text as specified format |
-
-*** Question-Answering tasks
-
-| Key binding  | Command              | Description                         |
-|--------------+----------------------+-------------------------------------|
-| ~SPC $ ea a~ | ellama-ask-about     | Ask about selected region or buffer |
-| ~SPC $ ea c~ | ellama-chat          | Chat with ellama                    |
-| ~SPC $ ea i~ | ellama-instant       | Prompt ellama for instant reply     |
-| ~SPC $ ea l~ | ellama-ask-line      | Send current line to ellama         |
-| ~SPC $ ea s~ | ellama-ask-selection | Send selected region to ellama      |
-
-*** Problem solving tasks
-
-| Key binding  | Command                              | Description                                         |
-|--------------+--------------------------------------+-----------------------------------------------------|
-| ~SPC $ ep r~ | ellama-solve-reasoning-problem       | Solve reasoning PROBLEM with abstraction of thought |
-| ~SPC $ ep d~ | ellama-solve-domain-specific-problem | Solve domain-specific PROBLEM                       |
-
-*** Translation tasks
-
-| Key binding  | Command                         | Description                                |
-|--------------+---------------------------------+--------------------------------------------|
-| ~SPC $ et t~ | ellama-translate                | Translate selected region or word at point |
-| ~SPC $ et b~ | ellama-translate-buffer         | Translate current buffer                   |
-| ~SPC $ et e~ | ellama-chat-translation-enable  | Enable chat translation                    |
-| ~SPC $ et d~ | ellama-chat-translation-disable | Disable chat translation                   |
-
-*** Thesaurus tasks
-
-| Key binding  | Command            | Description         |
-|--------------+--------------------+---------------------|
-| ~SPC $ ed w~ | ellama-define-word | Define current word |
-
-*** Context management
-
-| Key binding  | Command                      | Description              |
-|--------------+------------------------------+--------------------------|
-| ~SPC $ ex b~ | ellama-context-add-buffer    | Add buffer to context    |
-| ~SPC $ ex f~ | ellama-context-add-file      | Add file to context      |
-| ~SPC $ ex s~ | ellama-context-add-selection | Add selection to context |
-| ~SPC $ ex i~ | ellama-context-add-info-node | Add info node to context |
-
-*** Session management
-
-| Key binding  | Command               | Description           |
-|--------------+-----------------------+-----------------------|
-| ~SPC $ eS l~ | ellama-load-session   | Load ellama session   |
-| ~SPC $ eS r~ | ellama-session-rename | Rename ellama session |
-| ~SPC $ eS d~ | ellama-session-remove | Remove ellama session |
-| ~SPC $ eS a~ | ellama-session-switch | Switch ellama session |
-
-*** Provider management
-
-| Key binding  | Command                | Description            |
-|--------------+------------------------+------------------------|
-| ~SPC $ ep s~ | ellama-provider-select | Select ellama provider |
+| Key binding | Description                   |
+|-------------+-------------------------------|
+| ~a~         | ask about                     |
+| ~c~         | chat                          |
+| ~C~         | code                          |
+| ~d~         | define word                   |
+| ~i~         | improve text                  |
+| ~s~         | summarize text                |
+| ~t~         | translate text                |
+| ~S~         | add/manage sessions           |
+| ~x~         | add/manage context            |
+| ~p~         | select provider               |
+| ~R~         | solve reasoning problem       |
+| ~D~         | solve domain-specific problem |
+| ~q~         | quit menu                     |
