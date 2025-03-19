@@ -63,50 +63,37 @@ The return value is nil if no font was found, truthy otherwise."
           (set-face-attribute 'fixed-pitch nil :family 'unspecified)
 
           ;; fallback font for unicode characters used in spacemacs
-          (pcase system-type
-            (`gnu/linux
-             (setq fallback-font-name "NanumGothic")
-             (setq fallback-font-name2 "NanumGothic"))
-            (`android
-             (setq fallback-font-name "NanumGothic")
-             (setq fallback-font-name2 "NanumGothic"))
-            (`darwin
-             (setq fallback-font-name "Arial Unicode MS")
-             (setq fallback-font-name2 "Arial Unicode MS"))
-            (`windows-nt
-             (setq fallback-font-name "MS Gothic")
-             (setq fallback-font-name2 "Lucida Sans Unicode"))
-            (`cygwin
-             (setq fallback-font-name "MS Gothic")
-             (setq fallback-font-name2 "Lucida Sans Unicode"))
-            (other
-             (setq fallback-font-name nil)
-             (setq fallback-font-name2 nil)))
-          (when (and fallback-font-name fallback-font-name2)
-            ;; remove any size or height properties in order to be able to
-            ;; scale the fallback fonts with the default one (for zoom-in/out
-            ;; for instance)
-            (let* ((fallback-props (spacemacs/mplist-remove
-                                    (spacemacs/mplist-remove font-props :size)
-                                    :height))
-                   (fallback-spec (apply 'font-spec
-                                         :name fallback-font-name
-                                         fallback-props))
-                   (fallback-spec2 (apply 'font-spec
-                                          :name fallback-font-name2
-                                          fallback-props)))
-              ;; window numbers (ding bang circled digits)
-              (set-fontset-font "fontset-default"
-                                '(#x2776 . #x2793) fallback-spec nil 'prepend)
-              ;; mode-line circled letters (circled latin capital/small letters)
-              (set-fontset-font "fontset-default"
-                                '(#x24b6 . #x24e9) fallback-spec nil 'prepend)
-              ;; mode-line additional characters (circled/squared mathematical operators)
-              (set-fontset-font "fontset-default"
-                                '(#x2295 . #x22a1) fallback-spec nil 'prepend)
-              ;; new version lighter (arrow block)
-              (set-fontset-font "fontset-default"
-                                '(#x2190 . #x21ff) fallback-spec2 nil 'prepend))))
+          (cl-destructuring-bind (fallback-font-name fallback-font-name2)
+              (cl-case system-type
+                ((gnu/linux android) '("NanumGothic"      "NanumGothic"))
+                ((darwin)            '("Arial Unicode MS" "Arial Unicode MS"))
+                ((windows-nt cygwin) '("MS Gothic"        "Lucida Sans Unicode"))
+                (t nil))
+            (when (and fallback-font-name fallback-font-name2)
+              ;; remove any size or height properties in order to be able to
+              ;; scale the fallback fonts with the default one (for zoom-in/out
+              ;; for instance)
+              (let* ((fallback-props (spacemacs/mplist-remove
+                                      (spacemacs/mplist-remove font-props :size)
+                                      :height))
+                     (fallback-spec (apply 'font-spec
+                                           :name fallback-font-name
+                                           fallback-props))
+                     (fallback-spec2 (apply 'font-spec
+                                            :name fallback-font-name2
+                                            fallback-props)))
+                ;; window numbers (ding bang circled digits)
+                (set-fontset-font "fontset-default"
+                                  '(#x2776 . #x2793) fallback-spec nil 'prepend)
+                ;; mode-line circled letters (circled latin capital/small letters)
+                (set-fontset-font "fontset-default"
+                                  '(#x24b6 . #x24e9) fallback-spec nil 'prepend)
+                ;; mode-line additional characters (circled/squared mathematical operators)
+                (set-fontset-font "fontset-default"
+                                  '(#x2295 . #x22a1) fallback-spec nil 'prepend)
+                ;; new version lighter (arrow block)
+                (set-fontset-font "fontset-default"
+                                  '(#x2190 . #x21ff) fallback-spec2 nil 'prepend)))))
         (throw 'break t)))
     nil))
 
