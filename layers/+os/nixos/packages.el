@@ -23,18 +23,18 @@
 
 (defconst nixos-packages
   '((company-nixos-options :requires company)
-     flycheck
-     (helm-nixos-options :requires helm)
-     nix-mode
-     nixos-options))
+    flycheck
+    (helm-nixos-options :requires helm)
+    nix-mode
+    nixos-options))
 
 (defun nixos/post-init-company ()
   (let ((backends '(company-capf)))
     (when (configuration-layer/package-used-p 'company-nixos-options)
       (add-to-list 'backends 'company-nixos-options t))
     (eval `(spacemacs|add-company-backends
-              :backends ,backends
-              :modes nix-mode))))
+            :backends ,backends
+            :modes nix-mode))))
 
 (defun nixos/init-company-nixos-options ()
   (use-package company-nixos-options

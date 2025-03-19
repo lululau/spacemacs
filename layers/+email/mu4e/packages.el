@@ -78,9 +78,7 @@
       :bindings
       (kbd "C-j") 'mu4e-headers-next
       (kbd "C-k") 'mu4e-headers-prev
-      (kbd "J") (lambda ()
-                  (interactive)
-                  (mu4e-headers-mark-thread nil '(read))))
+      (kbd "J")   'mu4e/headers-mark-thread)
 
     (evilified-state-evilify-map
       mu4e-view-mode-map
@@ -88,10 +86,8 @@
       :bindings
       (kbd "C-j") 'mu4e-view-headers-next
       (kbd "C-k") 'mu4e-view-headers-prev
-      (kbd "J") (lambda ()
-                  (interactive)
-                  (mu4e-view-mark-thread '(read)))
-      (kbd "gu") 'mu4e-view-go-to-url)
+      (kbd "J")   'mu4e/view-mark-thread-read
+      (kbd "gu")  'mu4e-view-go-to-url)
 
     (spacemacs/set-leader-keys-for-major-mode 'mu4e-compose-mode
       dotspacemacs-major-mode-leader-key 'message-send-and-exit

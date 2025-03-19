@@ -35,3 +35,13 @@
     (or (mu4e-message-contact-field-matches msg :to rx)
         (mu4e-message-contact-field-matches msg :cc rx)
         (mu4e-message-contact-field-matches msg :bcc rx))))
+
+(defun mu4e/headers-mark-thread-read ()
+  "Mark all messages in the thread as read."
+  (interactive)
+  (mu4e-headers-mark-thread nil '(read)))
+
+(defun mu4e/view-mark-thread-read ()
+  "Mark all messages in the thread as read."
+  (interactive)
+  (mu4e-view-mark-thread '(read)))

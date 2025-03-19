@@ -100,10 +100,10 @@
     :loader
     (with-eval-after-load 'shell BODY)
     :common
-    (dolist (m '(normal insert))
-      (eval `(kl/evil-correct-keys `,m comint-mode-map
-               "C-j"
-               "C-k")))))
+    (dolist (state '(normal insert))
+      (kl/evil-correct-keys state comint-mode-map
+        "C-j"
+        "C-k"))))
 
 (defun keyboard-layout/pre-init-company ()
   (kl|config company
@@ -520,26 +520,25 @@
       (evil-define-key 'normal evil-org-mode-map
         "t" 'evil-next-line
         "j" 'org-todo)
-      (dolist (m '(normal insert))
-        (eval `(evil-define-key ',m evil-org-mode-map
-                 ;; ctsr
-                 (kbd "M-c") 'org-metaleft
-                 (kbd "M-t") 'org-metadown
-                 (kbd "M-s") 'org-metaup
-                 (kbd "M-r") 'org-metaright
-                 (kbd "M-C") 'org-shiftmetaleft
-                 (kbd "M-T") 'org-shiftmetadown
-                 (kbd "M-S") 'org-shiftmetaup
-                 (kbd "M-R") 'org-shiftmetaright
-                 ;; hjkl
-                 (kbd "M-h") 'capitalize-word
-                 (kbd "M-j") 'transpose-chars
-                 (kbd "M-k") 'kill-sentence
-                 (kbd "M-l") 'move-to-window-line-top-bottom
-                 (kbd "M-H") 'capitalize-word
-                 (kbd "M-J") 'transpose-chars
-                 (kbd "M-K") 'kill-sentence
-                 (kbd "M-L") 'move-to-window-line-top-bottom)))
+      (evil-define-key '(normal insert) evil-org-mode-map
+        ;; ctsr
+        (kbd "M-c") 'org-metaleft
+        (kbd "M-t") 'org-metadown
+        (kbd "M-s") 'org-metaup
+        (kbd "M-r") 'org-metaright
+        (kbd "M-C") 'org-shiftmetaleft
+        (kbd "M-T") 'org-shiftmetadown
+        (kbd "M-S") 'org-shiftmetaup
+        (kbd "M-R") 'org-shiftmetaright
+        ;; hjkl
+        (kbd "M-h") 'capitalize-word
+        (kbd "M-j") 'transpose-chars
+        (kbd "M-k") 'kill-sentence
+        (kbd "M-l") 'move-to-window-line-top-bottom
+        (kbd "M-H") 'capitalize-word
+        (kbd "M-J") 'transpose-chars
+        (kbd "M-K") 'kill-sentence
+        (kbd "M-L") 'move-to-window-line-top-bottom)
       (spacemacs/set-leader-keys-for-major-mode 'org-mode
         ;; ctsr
         "C-S-c" 'org-shiftcontrolleft
@@ -591,26 +590,25 @@
             "gr" 'org-backward-heading-same-level
             "gj" nil
             "gk" nil)
-          (dolist (m '(normal insert))
-            (eval `(evil-define-key ',m evil-org-mode-map
-                     ;; snrt
-                     (kbd "M-s") 'org-metaleft
-                     (kbd "M-n") 'org-metadown
-                     (kbd "M-r") 'org-metaup
-                     (kbd "M-t") 'org-metaright
-                     (kbd "M-S") 'org-shiftmetaleft
-                     (kbd "M-N") 'org-shiftmetadown
-                     (kbd "M-R") 'org-shiftmetaup
-                     (kbd "M-T") 'org-shiftmetaright
-                     ;; hjkl
-                     (kbd "M-h") 'capitalize-word
-                     (kbd "M-j") 'transpose-chars
-                     (kbd "M-k") 'kill-sentence
-                     (kbd "M-l") 'move-to-window-line-top-bottom
-                     (kbd "M-H") 'capitalize-word
-                     (kbd "M-J") 'transpose-chars
-                     (kbd "M-K") 'kill-sentence
-                     (kbd "M-L") 'move-to-window-line-top-bottom)))
+          (evil-define-key '(normal insert) evil-org-mode-map
+            ;; snrt
+            (kbd "M-s") 'org-metaleft
+            (kbd "M-n") 'org-metadown
+            (kbd "M-r") 'org-metaup
+            (kbd "M-t") 'org-metaright
+            (kbd "M-S") 'org-shiftmetaleft
+            (kbd "M-N") 'org-shiftmetadown
+            (kbd "M-R") 'org-shiftmetaup
+            (kbd "M-T") 'org-shiftmetaright
+            ;; hjkl
+            (kbd "M-h") 'capitalize-word
+            (kbd "M-j") 'transpose-chars
+            (kbd "M-k") 'kill-sentence
+            (kbd "M-l") 'move-to-window-line-top-bottom
+            (kbd "M-H") 'capitalize-word
+            (kbd "M-J") 'transpose-chars
+            (kbd "M-K") 'kill-sentence
+            (kbd "M-L") 'move-to-window-line-top-bottom)
           (spacemacs/set-leader-keys-for-major-mode 'org-mode
             ;; snrt
             "C-S-s" 'org-shiftcontrolleft
