@@ -243,7 +243,7 @@
    ("9" buffer-to-window-9 "Move buffer to window 9")
    ("C-d" spacemacs/kill-other-buffers "Kill other buffers...")
    ("C-S-d" spacemacs/kill-matching-buffers-rudely "Kill buffers...")
-   ("d" spacemacs/kill-this-buffer "Kill buffer")
+   ("d" kill-current-buffer "Kill buffer")
    ("e" spacemacs/safe-erase-buffer "Erase...")
    ("h" spacemacs/home "Spacemacs home buffer")
    ("H" spacemacs/switch-to-help-buffer "Help buffer")
@@ -661,7 +661,7 @@ respond to this toggle."
   "w3"  'spacemacs/window-split-triple-columns
   "w4"  'spacemacs/window-split-grid
   "wb"  'spacemacs/switch-to-minibuffer-window
-  "wd"  'spacemacs/delete-window
+  "wd"  'delete-window
   "wt"  'spacemacs/toggle-current-window-dedication
   "wf"  'follow-mode
   "wF"  'make-frame
@@ -811,7 +811,7 @@ respond to this toggle."
               (ivy-switch-buffer))
              ((configuration-layer/layer-used-p 'compleseus)
               (spacemacs/compleseus-switch-to-buffer))))
-  ("d" spacemacs/kill-this-buffer)
+  ("d" kill-current-buffer)
   ("x" kill-buffer-and-window)
   ("C-d" bury-buffer)
   ("z" recenter-top-bottom)
