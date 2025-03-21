@@ -29,7 +29,9 @@
                                  '(spacemacs all-the-icons custom)))
         (spaceline-all-the-icons :toggle (eq (spacemacs/get-mode-line-theme-name) 'all-the-icons))
         symon
-        (vim-powerline :location (recipe :fetcher local))))
+        (powerline :toggle (eq (spacemacs/get-mode-line-theme-name) 'vim-powerline))
+        (vim-powerline :location (recipe :fetcher local)
+                       :toggle (eq (spacemacs/get-mode-line-theme-name) 'vim-powerline))))
 
 (defun spacemacs-modeline/init-doom-modeline ()
   ;; doom modeline depends on `display-graphic-p' so we delay its initialization
@@ -186,27 +188,28 @@
       :documentation "Tiny graphical system monitor."
       :evil-leader "tms")))
 
+(defun spacemacs-modeline/init-powerline ())
+
 (defun spacemacs-modeline/init-vim-powerline ()
-  (when (eq 'vim-powerline (spacemacs/get-mode-line-theme-name))
-    (require 'powerline)
-    (if (display-graphic-p)
-        (setq powerline-default-separator 'arrow)
-      (setq powerline-default-separator 'utf-8))
-    (defun powerline-raw (str &optional face pad)
-      "Render STR as mode-line data using FACE and optionally
+  (require 'powerline)
+  (if (display-graphic-p)
+      (setq powerline-default-separator 'arrow)
+    (setq powerline-default-separator 'utf-8))
+  (defun powerline-raw (str &optional face pad)
+    "Render STR as mode-line data using FACE and optionally
 PAD import on left (l) or right (r) or left-right (lr)."
-      (when str
-        (let* ((rendered-str (format-mode-line str))
-               (padded-str (concat
-                            (when (and (> (length rendered-str) 0)
-                                       (or (eq pad 'l) (eq pad 'lr))) " ")
-                            (if (listp str) rendered-str str)
-                            (when (and (> (length rendered-str) 0)
-                                       (or (eq pad 'r) (eq pad 'lr))) " "))))
-          (if face
-              (pl/add-text-property padded-str 'face face)
-            padded-str))))
-    (require 'vim-powerline-theme)
-    (powerline-vimish-theme)
-    (add-hook 'emacs-startup-hook
-              'spacemacs//set-vimish-powerline-for-startup-buffers)))
+    (when str
+      (let* ((rendered-str (format-mode-line str))
+             (padded-str (concat
+                          (when (and (> (length rendered-str) 0)
+                                     (or (eq pad 'l) (eq pad 'lr))) " ")
+                          (if (listp str) rendered-str str)
+                          (when (and (> (length rendered-str) 0)
+                                     (or (eq pad 'r) (eq pad 'lr))) " "))))
+        (if face
+            (pl/add-text-property padded-str 'face face)
+          padded-str))))
+  (require 'vim-powerline-theme)
+  (powerline-vimish-theme)
+  (add-hook 'emacs-startup-hook
+            'spacemacs//set-vimish-powerline-for-startup-buffers))
