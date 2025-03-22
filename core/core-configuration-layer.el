@@ -28,7 +28,6 @@
 (require 'package)
 (require 'warnings)
 (require 'help-mode)
-(require 'spacemacs-ht)
 (require 'core-dotspacemacs)
 (require 'core-funcs)
 (require 'core-progress-bar)
@@ -1184,21 +1183,20 @@ USEDP non-nil means that PKG is a used layer."
 (defun configuration-layer/get-layer (layer-name)
   "Return a layer object with name LAYER-NAME.
 Return nil if layer object is not found."
-  (when (spacemacs-ht-contains? configuration-layer--indexed-layers layer-name)
-    (spacemacs-ht-get configuration-layer--indexed-layers layer-name)))
+  (gethash layer-name configuration-layer--indexed-layers))
 
 (defun configuration-layer/get-layers-list ()
   "Return a list of all discovered layer symbols."
-  (spacemacs-ht-keys configuration-layer--indexed-layers))
+  (hash-table-keys configuration-layer--indexed-layers))
 
 (defun configuration-layer/get-layer-local-dir (layer)
   "Return the value of SLOT for the given LAYER."
-  (let ((obj (spacemacs-ht-get configuration-layer--indexed-layers layer)))
+  (let ((obj (gethash layer configuration-layer--indexed-layers)))
     (when obj (concat (oref obj :dir) "local/"))))
 
 (defun configuration-layer/get-layer-path (layer)
   "Return the path for LAYER symbol."
-  (let ((obj (spacemacs-ht-get configuration-layer--indexed-layers layer)))
+  (let ((obj (gethash layer configuration-layer--indexed-layers)))
     (when obj (oref obj :dir))))
 
 (defun configuration-layer//add-package (pkg &optional usedp)
@@ -1211,13 +1209,12 @@ USEDP non-nil means that PKG is a used package."
 
 (defun configuration-layer/get-packages-list ()
   "Return a list of all package symbols."
-  (spacemacs-ht-keys configuration-layer--indexed-packages))
+  (hash-table-keys configuration-layer--indexed-packages))
 
 (defun configuration-layer/get-package (pkg-name)
   "Return a package object with name PKG-NAME.
 Return nil if package object is not found."
-  (when (spacemacs-ht-contains? configuration-layer--indexed-packages pkg-name)
-    (spacemacs-ht-get configuration-layer--indexed-packages pkg-name)))
+  (gethash pkg-name configuration-layer--indexed-packages))
 
 (defun configuration-layer//sort-packages (packages)
   "Return a sorted list of PACKAGES objects."
@@ -2369,43 +2366,35 @@ depends on it."
              (deps (configuration-layer//get-package-deps-from-alist pkg-sym)))
         (dolist (dep deps)
           (let* ((dep-sym (car dep))
-                 (value (spacemacs-ht-get result dep-sym)))
+                 (value (gethash dep-sym result)))
             (puthash dep-sym
                      (if value (cl-pushnew pkg-sym value) (list pkg-sym))
                      result)))))
     result))
 
 (defun configuration-layer//get-implicit-packages-from-alist (packages)
-  "Returns packages in `packages-alist' which are not found in PACKAGES."
+  "Return packages in `packages-alist' which are not found in PACKAGES."
   (let (imp-pkgs)
     (dolist (pkg package-alist)
       (let ((pkg-sym (car pkg)))
         (unless (memq pkg-sym packages)
-          (cl-pushnew pkg-sym imp-pkgs))))
+          (push pkg-sym imp-pkgs))))
     imp-pkgs))
 
-(defun configuration-layer//get-orphan-packages
-    (dist-pkgs implicit-pkgs dependencies)
+(defun configuration-layer//get-orphan-packages (dist-pkgs implicit-pkgs dependencies)
   "Return orphan packages."
-  (let (result)
-    (dolist (imp-pkg implicit-pkgs)
-      (when (configuration-layer//is-package-orphan
-             imp-pkg dist-pkgs dependencies)
-        (cl-pushnew imp-pkg result)))
-    result))
+  (cl-remove-if-not (lambda (imp-pkg)
+                      (configuration-layer//package-orphan-p imp-pkg dist-pkgs dependencies))
+                    implicit-pkgs))
 
-(defun configuration-layer//is-package-orphan (pkg-name dist-pkgs dependencies)
-  "Returns not nil if PKG-NAME is the name of an orphan package."
-  (unless (or (memq pkg-name dist-pkgs)
-              (memq pkg-name configuration-layer--protected-packages))
-    (if (spacemacs-ht-contains? dependencies pkg-name)
-        (let ((parents (spacemacs-ht-get dependencies pkg-name)))
-          (cl-reduce (lambda (x y) (and x y))
-                     (mapcar (lambda (p) (configuration-layer//is-package-orphan
-                                          p dist-pkgs dependencies))
-                             parents)
-                     :initial-value t))
-      (not (memq pkg-name dist-pkgs)))))
+(defun configuration-layer//package-orphan-p (pkg-name dist-pkgs dependencies)
+  "Return non-nil if PKG-NAME is the name of an orphan package."
+  (and (not (memq pkg-name dist-pkgs))
+       (not (memq pkg-name configuration-layer--protected-packages))
+       (cl-every
+        (lambda (p)
+          (configuration-layer//package-orphan-p p dist-pkgs dependencies))
+        (gethash pkg-name dependencies))))
 
 (defun configuration-layer//get-package-directory (pkg-name)
   "Return the directory path for package with name PKG-NAME."
@@ -2435,28 +2424,14 @@ depends on it."
     (when pkg-desc
       (package-version-join (package-desc-version (cadr pkg-desc))))))
 
-(defun configuration-layer//get-package-version (pkg-name)
-  "Return the version list for package with name PKG-NAME."
-  (let ((version-string (configuration-layer//get-package-version-string
-                         pkg-name)))
-    (unless (string-empty-p version-string)
-      (version-to-list version-string))))
-
 (defun configuration-layer//get-latest-package-version-string (pkg-name)
   "Return the version string for package with name PKG-NAME."
   (let ((pkg-arch (assq pkg-name package-archive-contents)))
     (when pkg-arch
       (package-version-join (package-desc-version (cadr pkg-arch))))))
 
-(defun configuration-layer//get-latest-package-version (pkg-name)
-  "Return the versio list for package with name PKG-NAME."
-  (let ((version-string
-         (configuration-layer//get-latest-package-version-string pkg-name)))
-    (unless (string-empty-p version-string)
-      (version-to-list version-string))))
-
 (defun configuration-layer//system-package-p (pkg-desc)
-  "Take `PKG-DESC' and return true if it is a system package."
+  "Return non-nil if PKG-DESC is a system package."
   (not (string-prefix-p
         (file-name-as-directory
          (expand-file-name package-user-dir))
@@ -2511,14 +2486,14 @@ When called interactively, delete all orphan packages."
       (spacemacs-buffer/message "No orphan package to delete."))))
 
 (defun configuration-layer//gather-auto-mode-extensions (mode)
-  "Return a regular expression matching all the extensions associate to MODE."
+  "Return a regular expression matching all the extensions associated to MODE.
+
+Return nil if MODE does not appear in `auto-mode-alist'."
   (let (gather-extensions)
     (dolist (x auto-mode-alist)
       (let ((ext (car x))
             (auto-mode (cdr x)))
-        (when (and (stringp ext)
-                   (symbolp auto-mode)
-                   (eq auto-mode mode))
+        (when (and (stringp ext) (eq auto-mode mode))
           (push (car x) gather-extensions))))
     (when gather-extensions
       (concat "\\("
@@ -2526,14 +2501,14 @@ When called interactively, delete all orphan packages."
               "\\)"))))
 
 (defun configuration-layer//lazy-install-extensions-for-layer (layer-name)
-  "Return an alist of owned modes and extensions for the passed layer."
+  "Return an alist of owned modes and extensions for the layer named LAYER-NAME."
   (let* ((layer (configuration-layer/get-layer layer-name))
          (package-names (cfgl-layer-owned-packages layer))
          result)
     (dolist (pkg-name package-names)
       (dolist (mode (list pkg-name (intern (format "%S-mode" pkg-name))))
-        (let ((ext (configuration-layer//gather-auto-mode-extensions mode)))
-          (when ext (push (cons mode ext) result)))))
+        (when-let* ((ext (configuration-layer//gather-auto-mode-extensions mode)))
+          (push (cons mode ext) result))))
     result))
 
 (defun configuration-layer//insert-lazy-install-form (layer-name mode ext)
@@ -2552,7 +2527,7 @@ When called interactively, delete all orphan packages."
   (interactive)
   (let ((layer-name
          (intern (completing-read
-                  "Choose a used layer"
+                  "Choose a used layer: "
                   (sort (cl-copy-list configuration-layer--used-layers) #'string<)))))
     (let ((mode-exts (configuration-layer//lazy-install-extensions-for-layer
                       layer-name)))
@@ -2591,7 +2566,7 @@ When called interactively, delete all orphan packages."
   "Return a list of all ELPA packages in indexed packages and dependencies."
   (let (result)
     (dolist (pkg-sym (configuration-layer//filter-distant-packages
-                      (spacemacs-ht-keys configuration-layer--indexed-packages) nil))
+                      (hash-table-keys configuration-layer--indexed-packages) nil))
       (when (assq pkg-sym package-archive-contents)
         (let* ((deps (mapcar 'car
                              (configuration-layer//get-package-deps-from-archive
@@ -2612,11 +2587,6 @@ When called interactively, delete all orphan packages."
                      ,(package-desc-summary obj)
                      ,(package-desc-kind obj)
                      ,(package-desc-extras obj)])))
-
-(defun configuration-layer//patch-package-descriptor (desc)
-  "Return a patched DESC.))))))
-The URL of the descriptor is patched to be the passed URL")
-
 
 (defun configuration-layer//download-elpa-file
     (pkg-name filename archive-url output-dir
