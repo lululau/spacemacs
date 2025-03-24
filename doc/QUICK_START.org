@@ -97,7 +97,7 @@ Variables can be directly set within =dotspacemacs-configuration-layers= like so
 At anytime you can apply the changes made to the dotfile or layers
 _without restarting_ Spacemacs by pressing ~SPC f e R~.
 
-The [[https://github.com/syl20bnr/spacemacs/blob/master/core/templates/.spacemacs.template][dotfile template]] contains further information about how to customize
+The [[https://github.com/syl20bnr/spacemacs/blob/develop/core/templates/dotspacemacs-template.el][dotfile template]] contains further information about how to customize
 Spacemacs. See the dotfile configuration section of the [[https://github.com/syl20bnr/spacemacs/blob/develop/doc/DOCUMENTATION.org#dotfile-configuration][documentation]] for
 more details.
 

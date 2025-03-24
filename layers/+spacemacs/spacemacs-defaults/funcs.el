@@ -927,7 +927,7 @@ variable."
   "ediff the current `dotfile' with the template."
   (interactive)
   (ediff-files (dotspacemacs/location)
-               (concat dotspacemacs-template-directory ".spacemacs.template")))
+               (concat dotspacemacs-template-directory "dotspacemacs-template.el")))
 
 (defun spacemacs//ediff-buffer-outline-show-all ()
   "Try `outline-show-all' for ediff buffers."

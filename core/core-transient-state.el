@@ -233,40 +233,41 @@ used."
        (add-to-list ',props-var '(exit-sexp ,exit-sexp))
        (spacemacs/defer-until-after-user-config
         (lambda ()
-           (eval
-            (append
-             '(defhydra ,func
-                (nil nil
-                 :hint ,hint
-                 :columns ,columns
-                 :timeout ,timeout
-                 :idle ,idle
-                 :foreign-keys ,foreign-keys
-                 :body-pre ,entry-sexp
-                 :before-exit ,exit-sexp)
-                ,doc)
-             (spacemacs//transient-state-adjust-bindings
-              ',bindings ',remove-bindings ',add-bindings)))
-           (when ,title
-             (let ((guide (concat "[" (propertize "KEY" 'face 'hydra-face-blue)
-                                  "] exits state  ["
-                                  (if ',foreign-keys
-                                      (propertize "KEY" 'face 'hydra-face-pink)
-                                    (propertize "KEY" 'face 'hydra-face-red))
-                                  "] will not exit")))
-               ;; (add-face-text-property 0 (length guide) '(:height 0.9) t guide)
-               (add-face-text-property 0 (length guide) 'italic t guide)
-               (setq ,hint-var
-                     (list 'concat
-                           (when dotspacemacs-show-transient-state-title
-                             (concat
-                              (propertize
-                               ,title
-                               'face 'spacemacs-transient-state-title-face)
-                              (if ,hint-doc-p " " "\n"))) ,hint-var
-                              ',dyn-hint
-                              (when dotspacemacs-show-transient-state-color-guide
-                                (concat "\n" guide))))))
-           ,@bindkeys)))))
+          (eval
+           (append
+            '(defhydra ,func
+               (nil nil
+                    :hint ,hint
+                    :columns ,columns
+                    :timeout ,timeout
+                    :idle ,idle
+                    :foreign-keys ,foreign-keys
+                    :body-pre ,entry-sexp
+                    :before-exit ,exit-sexp)
+               ,doc)
+            (spacemacs//transient-state-adjust-bindings
+             ',bindings ',remove-bindings ',add-bindings)))
+          (evil-declare-ignore-repeat ',body-func)
+          (when ,title
+            (let ((guide (concat "[" (propertize "KEY" 'face 'hydra-face-blue)
+                                 "] exits state  ["
+                                 (if ',foreign-keys
+                                     (propertize "KEY" 'face 'hydra-face-pink)
+                                   (propertize "KEY" 'face 'hydra-face-red))
+                                 "] will not exit")))
+              ;; (add-face-text-property 0 (length guide) '(:height 0.9) t guide)
+              (add-face-text-property 0 (length guide) 'italic t guide)
+              (setq ,hint-var
+                    (list 'concat
+                          (when dotspacemacs-show-transient-state-title
+                            (concat
+                             (propertize
+                              ,title
+                              'face 'spacemacs-transient-state-title-face)
+                             (if ,hint-doc-p " " "\n"))) ,hint-var
+                          ',dyn-hint
+                          (when dotspacemacs-show-transient-state-color-guide
+                            (concat "\n" guide))))))
+          ,@bindkeys)))))
 
 (provide 'core-transient-state)

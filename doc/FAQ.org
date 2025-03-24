@@ -87,13 +87,13 @@ To install packages that does not belong to any Spacemacs layers, you can:
   which will prevent Spacemacs from removing the packages you installed
   manually.
 
-To create a new configuration layer see the [[https://github.com/syl20bnr/spacemacs/blob/master/doc/QUICK_START.org][quick start guide]] for more info.
+To create a new configuration layer see the [[https://github.com/syl20bnr/spacemacs/blob/develop/doc/QUICK_START.org][quick start guide]] for more info.
 
 ** Environment variables or PATH are not set properly
 If you use Emacs GUI and don't launch if from a terminal then edit the
 environment variables in the =env= file. You can open this file with
 ~SPC f e e~. More information in the =Environment variables= section of the
-[[https://github.com/syl20bnr/spacemacs/blob/master/doc/DOCUMENTATION.org][documentation]].
+[[https://github.com/syl20bnr/spacemacs/blob/develop/doc/DOCUMENTATION.org][documentation]].
 
 ** How to fix =error: Package 'package-build-' is unavailable=?
 This may occur due to heavy network traffic. You can fix it by setting the

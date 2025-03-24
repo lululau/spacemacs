@@ -32,7 +32,7 @@
 Spacemacs is a beginner-friendly and powerful extension of a popular text
 editor called Emacs. To install Spacemacs you need to first install base Emacs
 and then download the Spacemacs extension files, which is most easily done by
-using a program called Git. The steps are easy and detailed in the [[https://github.com/syl20bnr/spacemacs/blob/master/README.md#prerequisites][readme]].
+using a program called Git. The steps are easy and detailed in the [[https://github.com/syl20bnr/spacemacs/blob/develop/README.md#prerequisites][readme]].
 
 * Getting started
 ** Key binding notation

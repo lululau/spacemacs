@@ -81,28 +81,6 @@ or `spacemacs'."
   '(choice (const spacemacs-base) (const spacemacs))
   'spacemacs-dotspacemacs-layers)
 
-(spacemacs|defc dotspacemacs-enable-emacs-pdumper nil
-  "If non-nil then enable support for the portable dumper. You'll need
-to compile Emacs 27 from source following the instructions in file
-EXPERIMENTAL.org at the root of the git repository."
-  'boolean
-  'spacemacs-dotspacemacs-init)
-
-(spacemacs|defc dotspacemacs-emacs-pdumper-executable-file "emacs"
-  "File path pointing to emacs 27 or later executable."
-  'string
-  'spacemacs-dotspacemacs-init)
-
-(spacemacs|defc dotspacemacs-emacs-dumper-dump-file
-  (format "spacemacs-%s.pdmp" emacs-version)
-  "Name of the Spacemacs dump file. This is the file will be created by the
-portable dumper in the cache directory under dumps sub-directory.
-To load it when starting Emacs add the parameter `--dump-file'
-when invoking Emacs 27.1 executable on the command line, for instance:
-./emacs --dump-file=$HOME/.emacs.d/.cache/dumps/spacemacs-27.1.pdmp"
-  'string
-  'spacemacs-dotspacemacs-init)
-
 (spacemacs|defc dotspacemacs-gc-cons '(100000000 0.1)
   "Set `gc-cons-threshold' and `gc-cons-percentage' when startup finishes.
 This is an advanced option and should not be changed unless you suspect
@@ -928,9 +906,6 @@ Called with `C-u C-u' skips `dotspacemacs/user-config' _and_ preliminary tests."
                       (dotspacemacs//read-editing-style-config
                        dotspacemacs-editing-style))
                 (dotspacemacs/call-user-env)
-                ;; try to force a redump when reloading the configuration
-                (let ((spacemacs-force-dump t))
-                  (configuration-layer/load))
                 (if (member arg '((4) (16)))
                     (message (concat "Done (`dotspacemacs/user-config' "
                                      "function has been skipped)."))
@@ -968,15 +943,16 @@ If SYMBOL value is `display-graphic-p' then return the result of
   dotspacemacs-filepath)
 
 (defun dotspacemacs/copy-template ()
-  "Copy `.spacemacs.template' in home directory. Ask for confirmation
-before copying the file if the destination already exists."
+  "Copy `dotspacemacs-template.el' to `dotspacemacs-filepath'.
+
+Ask for confirmation before copying the file if the destination already exists."
   (interactive)
   (let* ((copy? (if (file-exists-p dotspacemacs-filepath)
                     (y-or-n-p
                      (format "%s already exists. Do you want to overwrite it ? "
                              dotspacemacs-filepath)) t)))
     (when copy?
-      (copy-file (concat dotspacemacs-template-directory ".spacemacs.template")
+      (copy-file (concat dotspacemacs-template-directory "dotspacemacs-template.el")
                  dotspacemacs-filepath t)
       (message "%s has been installed." dotspacemacs-filepath))))
 
@@ -1027,7 +1003,7 @@ If ARG is non nil then ask questions to the user before installing the dotfile."
                     spacemacs-base)))))))))
     (with-current-buffer (find-file-noselect
                           (concat dotspacemacs-template-directory
-                                  ".spacemacs.template"))
+                                  "dotspacemacs-template.el"))
       (dolist (p preferences)
         (goto-char (point-min))
         (re-search-forward (car p))
@@ -1132,7 +1108,7 @@ Loads default .spacemacs template and suspends pruning of orphan packages.
 Informs users of error and prompts for default editing style for use during
 error recovery."
   (load (concat dotspacemacs-template-directory
-                ".spacemacs.template"))
+                "dotspacemacs-template.el"))
   (define-advice dotspacemacs/layers (:after (&rest _) error-recover-preserve-packages)
     (setq-default dotspacemacs-install-packages 'used-but-keep-unused)
     (advice-remove 'dotspacemacs/layers #'dotspacemacs/layers@error-recover-preserve-packages))
