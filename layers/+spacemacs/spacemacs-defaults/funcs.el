@@ -832,11 +832,7 @@ Returns:
             (+ (current-column) (if column-number-indicator-zero-based 0 1)))))
 
 (defun spacemacs/copy-directory-path ()
-  "Copy and show the directory path of the current buffer.
-
-If the buffer is not visiting a file, use the `list-buffers-directory'
-variable as a fallback to display the directory, useful in buffers like the
-ones created by `magit' and `dired'."
+  "Copy and show the `default-directory' of the current buffer."
   (interactive)
   (if-let* ((directory-path (spacemacs--directory-path)))
       (progn

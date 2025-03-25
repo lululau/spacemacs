@@ -255,6 +255,7 @@ variables (see `savehist-mode' and `savehist-additional-variables')."
 
 ;; cache files
 (setq tramp-persistency-file-name (concat spacemacs-cache-directory "tramp"))
+(setq request-storage-directory (concat spacemacs-cache-directory "request/"))
 
 ;; seems pointless to warn. There's always undo.
 (put 'narrow-to-region 'disabled nil)
