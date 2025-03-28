@@ -906,6 +906,7 @@ Called with `C-u C-u' skips `dotspacemacs/user-config' _and_ preliminary tests."
                       (dotspacemacs//read-editing-style-config
                        dotspacemacs-editing-style))
                 (dotspacemacs/call-user-env)
+                (configuration-layer/load)
                 (if (member arg '((4) (16)))
                     (message (concat "Done (`dotspacemacs/user-config' "
                                      "function has been skipped)."))

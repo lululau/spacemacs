@@ -758,9 +758,8 @@ respond to this toggle."
 (define-key indent-rigidly-map "L" 'indent-rigidly-right-to-tab-stop)
 
 ;; shell ----------------------------------------------------------------------
-(with-eval-after-load 'shell
-  (evil-define-key 'insert comint-mode-map [up] 'comint-previous-input)
-  (evil-define-key 'insert comint-mode-map [down] 'comint-next-input))
+(evil-define-key 'insert comint-mode-map [up] 'comint-previous-input)
+(evil-define-key 'insert comint-mode-map [down] 'comint-next-input)
 
 ;; ---------------------------------------------------------------------------
 ;; Transient-states

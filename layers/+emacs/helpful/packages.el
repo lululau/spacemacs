@@ -50,8 +50,7 @@
     (advice-add 'helpful--navigate :after (lambda (_) (setq-local tab-width 8)))))
 
 (defun helpful/post-init-link-hint ()
-  (with-eval-after-load 'helpful
-    (evil-define-key 'normal helpful-mode-map (kbd "o") 'link-hint-open-link)))
+  (evil-define-key 'normal helpful-mode-map (kbd "o") 'link-hint-open-link))
 
 (defun helpful/pre-init-popwin ()
   (spacemacs|use-package-add-hook popwin

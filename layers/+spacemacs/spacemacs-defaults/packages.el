@@ -42,8 +42,7 @@
     (image-mode :location built-in)
     (imenu :location built-in)
     (package-menu :location built-in)
-    ;; page-break-lines is shipped with spacemacs core
-    (page-break-lines :location built-in)
+    (page-break-lines :location local)
     (proced :location built-in)
     (process-menu :location built-in)
     quickrun
@@ -339,9 +338,9 @@
     (define-advice display-line-numbers--turn-on (:before-while (&rest _) spacemacs//enable-line-numbers)
       (spacemacs/enable-line-numbers-p))
     (when dotspacemacs-line-numbers
-      ;; delay the initialization of number lines when opening Spacemacs
-      ;; normally. If opened via the command line with a file to visit then
-      ;; load it immediately
+      ;; delay the initialization of line numbers when opening Spacemacs
+      ;; normally. If opened via the command line with a file to visit then load
+      ;; it immediately
       (add-hook 'emacs-startup-hook
                 (lambda ()
                   (if (string-equal "*scratch*" (buffer-name))

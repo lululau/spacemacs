@@ -120,10 +120,9 @@
     ;; replace `dired-goto-file' with equivalent helm and ivy functions:
     ;; `spacemacs/helm-find-files' fuzzy matching and other features
     ;; `spacemacs/counsel-find-file' more `M-o' actions
-    (with-eval-after-load 'dired
-      (evil-define-key 'normal dired-mode-map "J"
-        (cond ((configuration-layer/layer-used-p 'helm) 'spacemacs/helm-find-files)
-              ((configuration-layer/layer-used-p 'ivy) 'spacemacs/counsel-find-file))))))
+    (evil-define-key 'normal dired-mode-map "J"
+      (cond ((configuration-layer/layer-used-p 'helm) 'spacemacs/helm-find-files)
+            ((configuration-layer/layer-used-p 'ivy) 'spacemacs/counsel-find-file)))))
 
 (defun spacemacs-evil/init-evil-escape ()
   (use-package evil-escape

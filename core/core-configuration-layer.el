@@ -459,8 +459,8 @@ cache folder.")
       (make-directory quelpa-build-dir t))))
 
 (defun configuration-layer//make-quelpa-recipe (pkg)
-  "Read recipe in PKG if :fetcher is local, then turn it to a correct file recepe.
-Otherwise return the recipe unchanged. PKG is of `cfgl-package' type."
+  "Read recipe in PKG if :fetcher is local, then turn it to a correct file recipe.
+Otherwise return the recipe unchanged.  PKG is of `cfgl-package' type."
   (let* ((config (cdr (oref pkg :location)))
          (fetcher (plist-get config :fetcher))
          (pkg-name (oref pkg :name)))
@@ -1798,15 +1798,7 @@ RNAME is the name symbol of another existing layer."
 
 (defun configuration-layer//install-from-recipe (pkg)
   "Install PKG from a recipe."
-  (let* ((pkg-name (oref pkg :name))
-         (layer (car (oref pkg :owners)))
-         (recipe (cons pkg-name (cdr (oref pkg :location)))))
-    (if recipe
-        (quelpa (configuration-layer//make-quelpa-recipe pkg))
-      (configuration-layer//warning
-       (concat "Cannot find any recipe for package %S! Be sure "
-               "to add a recipe for it in alist %S.")
-       pkg-name recipes-var))))
+  (quelpa (configuration-layer//make-quelpa-recipe pkg)))
 
 (defun configuration-layer//filter-packages-with-deps-recur
     (checked-packages pkg-names filter &optional use-archive)
