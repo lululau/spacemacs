@@ -62,7 +62,7 @@ This layer adds support for the Python language.
 - Test Runners using [[https://github.com/ionrock/pytest-el][pytest]] or [[https://github.com/syl20bnr/nose.el][nose.el]]
 - Virtual Environment using [[https://github.com/jorgenschaefer/pyvenv][pyvenv]] and [[https://github.com/yyuu/pyenv][pyenv]] as well as [[https://github.com/pypa/pipenv][pipenv]] and [[https://github.com/galaunay/poetry.el][poetry]]
 - semantic mode is enabled
-- PEP8 compliant formatting via [[https://github.com/google/yapf][YAPF]] or [[https://github.com/ambv/black][black]]
+- PEP8 compliant formatting via [[https://github.com/google/yapf][YAPF]], [[https://github.com/ambv/black][black]], or [[https://github.com/astral-sh/ruff][ruff]]
 - PEP8 checks with [[https://pypi.python.org/pypi/flake8][flake8]] or [[https://pypi.python.org/pypi/pylint/1.6.4][pylint]]
 - Suppression of unused import with [[https://github.com/myint/autoflake][autoflake]]
 - Use the ~%~ key to jump between blocks with [[https://github.com/redguardtoo/evil-matchit][evil-matchit]]
@@ -224,8 +224,8 @@ directory local variable in your project root. ~SPC f v d~ in Spacemacs. See
 The root of the project is detected with a =.git= directory or a =setup.cfg= file.
 
 ** Buffer formatting
-One of [[https://github.com/google/yapf][YAPF]], [[https://github.com/ambv/black][black]] or =lsp= may be selected as the formatter, via
-=python-formatter=, as =yapf=, =black= or =lsp= respectively.
+One of [[https://github.com/google/yapf][YAPF]], [[https://github.com/ambv/black][black]], [[https://github.com/astral-sh/ruff][ruff]] or =lsp= may be selected as the formatter, via
+=python-formatter=, as =yapf=, =black=, =ruff= or =lsp= respectively.
 
 #+BEGIN_SRC emacs-lisp
   (setq-default dotspacemacs-configuration-layers '(
@@ -243,7 +243,7 @@ The key binding ~SPC m =~ invokes the selected formatter on the current buffer
 when in non LSP python mode otherwise ~SPC m ==~ is used.
 
 Note that a specific formatter may also be invoked unconditionally via
-=yapfify-buffer=, =blacken-buffer= or =lsp-format-buffer=, provided
+=yapfify-buffer=, =blacken-buffer=, =ruff-format-buffer= or =lsp-format-buffer=, provided
 these are installed.
 
 ** Automatic buffer formatting on save
