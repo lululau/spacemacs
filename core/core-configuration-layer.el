@@ -28,6 +28,7 @@
 (require 'package)
 (require 'warnings)
 (require 'help-mode)
+(require 'core-command-line)
 (require 'core-dotspacemacs)
 (require 'core-funcs)
 (require 'core-progress-bar)
@@ -377,13 +378,13 @@ file. It can be overridden by users inside `dotspacemacs/user-init'.")
 (defvar configuration-layer--layers-dependencies '()
   "List of layers declared in `layers.el' files.")
 
-(defvar configuration-layer--indexed-layers (make-hash-table :size 1024)
+(defvar configuration-layer--indexed-layers (make-hash-table)
   "Hash map to index `cfgl-layer' objects by their names.")
 
 (defvar configuration-layer--used-packages '()
   "An alphabetically sorted list of used package names.")
 
-(defvar configuration-layer--indexed-packages (make-hash-table :size 2048)
+(defvar configuration-layer--indexed-packages (make-hash-table)
   "Hash map to index `cfgl-package' objects by their names.")
 
 (defvar configuration-layer--check-new-version-error-packages nil
@@ -454,7 +455,7 @@ cache folder.")
           quelpa-build-explicit-tar-format-p (eq (quelpa--tar-type) 'gnu))
 
     ;; Try to pre create the build dir to avoid having quelpa builds fail
-    ;; but don't aboard if this is not allowed.
+    ;; but don't abort if this is not allowed.
     (ignore-errors
       (make-directory quelpa-build-dir t))))
 
@@ -1361,7 +1362,7 @@ discovery."
   ;; must have the final word on configuration choices. Let
   ;; `dotspacemacs-directory' override the private directory if it exists.
   (when refresh-index
-    (setq configuration-layer--indexed-layers (make-hash-table :size 1024)))
+    (setq configuration-layer--indexed-layers (make-hash-table)))
   (spacemacs-buffer/set-mode-line "Indexing layers..." t)
   (let ((search-paths (append
                        ;; layers shipped with spacemacs
@@ -1375,8 +1376,7 @@ discovery."
                                                               "layers/"))))
                            (when (file-exists-p dir) (list dir))))
                        ;; additional layer directories provided by the user
-                       dotspacemacs-configuration-layer-path))
-        (discovered '()))
+                       dotspacemacs-configuration-layer-path)))
     ;; filter out directories that don't exist
     (setq search-paths (cl-remove-if-not
                         (lambda (x)
@@ -1839,7 +1839,7 @@ RNAME is the name symbol of another existing layer."
                  (not (package-installed-p x min-version))))))
 
 (defun configuration-layer//get-package-recipe (pkg-name)
-  "Return the recipe for PGK-NAME if it has one."
+  "Return the recipe for PKG-NAME if it has one."
   (let ((pkg (configuration-layer/get-package pkg-name)))
     (when pkg
       (let ((location (oref pkg :location)))
@@ -1974,7 +1974,8 @@ RNAME is the name symbol of another existing layer."
         nil)))))
 
 (defun configuration-layer//package-enabled-p (pkg layer)
-  "Returns true if PKG should be configured for LAYER.
+  "Return non-nil if PKG should be configured for LAYER.
+
 LAYER must not be the owner of PKG."
   (let* ((owner (configuration-layer/get-layer (car (oref pkg :owners))))
          (disabled (when owner (oref owner :disabled-for)))
@@ -1992,8 +1993,7 @@ LAYER must not be the owner of PKG."
 
 (defun configuration-layer//pre-configure-package (pkg)
   "Pre-configure PKG object, i.e. call its pre-init functions."
-  (let* ((pkg-name (oref pkg :name))
-         (owner (car (oref pkg :owners))))
+  (let* ((pkg-name (oref pkg :name)))
     (mapc
      (lambda (layer)
        (when (configuration-layer/layer-used-p layer)
@@ -2012,7 +2012,7 @@ LAYER must not be the owner of PKG."
      (oref pkg :pre-layers))))
 
 (defun configuration-layer//configure-package (pkg)
-  "Configure PKG object, i.e. call its post-init function."
+  "Configure PKG object, i.e. call its init function."
   (spacemacs/update-progress-bar)
   (let* ((pkg-name (oref pkg :name))
          (owner (car (oref pkg :owners))))
@@ -2022,8 +2022,7 @@ LAYER must not be the owner of PKG."
 
 (defun configuration-layer//post-configure-package (pkg)
   "Post-configure PKG object, i.e. call its post-init functions."
-  (let* ((pkg-name (oref pkg :name))
-         (owner (car (oref pkg :owners))))
+  (let* ((pkg-name (oref pkg :name)))
     (mapc
      (lambda (layer)
        (when (configuration-layer/layer-used-p layer)
@@ -2052,7 +2051,7 @@ LAYER must not be the owner of PKG."
          (dirs (sort dirattrs
                      (lambda (d e)
                        (time-less-p (nth 6 d) (nth 6 e))))))
-    (dotimes (c (- (length dirs) dotspacemacs-max-rollback-slots))
+    (dotimes (_ (- (length dirs) dotspacemacs-max-rollback-slots))
       (delete-directory (concat configuration-layer-rollback-directory
                                 "/" (car (pop dirs)))
                         t t))))
@@ -2261,20 +2260,18 @@ Rollback slots are stored in
   (unless (memq pkg package-activated-list)
     (package-activate pkg)))
 
-(defun configuration-layer//get-packages-upstream-dependencies-from-alist ()
-  "Returns upstream dependencies hash map for all packages in `package-alist'.
+(defun configuration-layer//get-packages-downstream-dependencies-from-alist ()
+  "Return downstream dependencies hash map for all packages in `package-alist'.
+
 The keys are package names and the values are lists of package names that
 depends on it."
-  (let ((result (make-hash-table :size 1024)))
+  (let ((result (make-hash-table)))
     (dolist (pkg package-alist)
       (let* ((pkg-sym (car pkg))
              (deps (configuration-layer//get-package-deps-from-alist pkg-sym)))
         (dolist (dep deps)
-          (let* ((dep-sym (car dep))
-                 (value (gethash dep-sym result)))
-            (puthash dep-sym
-                     (if value (cl-pushnew pkg-sym value) (list pkg-sym))
-                     result)))))
+          (let ((dep-sym (car dep)))
+            (push pkg-sym (gethash dep-sym result))))))
     result))
 
 (defun configuration-layer//get-implicit-packages-from-alist (packages)
@@ -2356,7 +2353,7 @@ depends on it."
 When called interactively, delete all orphan packages."
   (interactive (list (configuration-layer/get-packages-list)))
   (let* ((dependencies
-          (configuration-layer//get-packages-upstream-dependencies-from-alist))
+          (configuration-layer//get-packages-downstream-dependencies-from-alist))
          (implicit-packages
           (configuration-layer//get-implicit-packages-from-alist
            packages))
