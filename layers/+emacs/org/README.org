@@ -938,6 +938,7 @@ The evilified org agenda supports the following bindings:
 | ~SPC m i P~          | org-agenda-priority               |
 | ~SPC m i t~          | org-agenda-set-tags               |
 | ~SPC m s r~          | org-agenda-refile                 |
+| ~t~ or ~SPC m T T~   | org-agenda-todo                   |
 | ~M-j~                | next item                         |
 | ~M-k~                | previous item                     |
 | ~M-h~                | earlier view                      |
@@ -947,6 +948,7 @@ The evilified org agenda supports the following bindings:
 | ~C-v~                | change view                       |
 | ~RET~                | org-agenda-goto                   |
 | ~M-RET~              | org-agenda-show-and-scroll-up     |
+| ~s~                  | org-save-all-org-buffers          |
 
 *** Org agenda transient state
 Use ~SPC m .~, ~M-SPC~ or ~s-M-SPC~ in an org agenda buffer to activate its

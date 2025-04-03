@@ -83,14 +83,9 @@ the final step of executing code in `emacs-startup-hook'.")
            (package-desc-name pkg-desc) pkg-dir))))))
 
 (defun spacemacs//lookup-load-hints (file)
-  "Findout the `load-hints' items for the file."
-  (if-let* ((load-hints)
-            ((not (member (substring file 0 1) '("/" "~")))))
-      (seq-some
-       (lambda (row)
-         (when (member file (cdr row))                 ; prefix match
-           (car row)))
-       load-hints)))
+  "Findout the `load-hints' item for the FILE."
+  (unless (file-name-absolute-p file)
+    (car-safe (seq-find (lambda (row) (member file (cdr row))) load-hints))))
 
 (defun spacemacs//activate-load-hints ()
   "Enable the `load-hints' support for Spacemacs."
