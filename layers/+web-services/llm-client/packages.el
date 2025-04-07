@@ -1,6 +1,6 @@
 ;;; packages.el --- Large Language Model Client for Spacemacs
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Codruț Constantin Gușoi <mail+spacemacs@codrut.pro>
 ;; Author: Alexander Matyasko <alexander.matyasko@gmail.com>

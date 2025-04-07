@@ -1,6 +1,6 @@
 ;;; packages.el --- Spacemacs Navigation Layer packages File
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -46,6 +46,7 @@
   (use-package ace-link
     :commands spacemacs/ace-buffer-links
     :init
+    (evil-add-command-properties 'ace-link :jump t)
     (define-key spacemacs-buffer-mode-map "o" 'spacemacs/ace-buffer-links)
     (with-eval-after-load 'info
       (define-key Info-mode-map "o" 'ace-link-info))

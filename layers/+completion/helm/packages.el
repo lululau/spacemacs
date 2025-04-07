@@ -1,6 +1,6 @@
 ;;; packages.el --- Helm Layer packages File
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -123,6 +123,8 @@
     (spacemacs||set-helm-key "ry"   helm-show-kill-ring)
     (spacemacs||set-helm-key "sl"   spacemacs/resume-last-search-buffer)
     (spacemacs||set-helm-key "sj"   spacemacs/helm-jump-in-buffer)
+    (evil-add-command-properties 'spacemacs/helm-jump-in-buffer :jump t)
+    (evil-add-command-properties 'lazy-helm/spacemacs/helm-jump-in-buffer :jump t)
     ;; search with grep
     (spacemacs||set-helm-key "sgb"  spacemacs/helm-buffers-do-grep)
     (spacemacs||set-helm-key

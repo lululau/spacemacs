@@ -1,6 +1,6 @@
 ;;; funcs.el --- Gleam layer functions file for Spacemacs
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Qynn Schwaab <qynn@riseup.net>
 ;; URL: https://github.com/syl20bnr/spacemacs
