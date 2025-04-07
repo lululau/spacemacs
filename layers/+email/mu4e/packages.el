@@ -56,9 +56,9 @@
   ;;
   ;; See https://github.com/syl20bnr/spacemacs/issues/16931
   (unless (featurep 'mu4e-autoloads)
-    (spacemacs-buffer/warning "`mu4e-autoloads' was not provided at startup.  Please ensure `mu4e' is installed and activated correctly.
+;;     (spacemacs-buffer/warning "`mu4e-autoloads' was not provided at startup.  Please ensure `mu4e' is installed and activated correctly.
 
-See https://github.com/syl20bnr/spacemacs/issues/16931#issuecomment-2767608202.")
+;; See https://github.com/syl20bnr/spacemacs/issues/16931#issuecomment-2767608202.")
     (require 'mu4e-autoloads))
   (use-package mu4e
     :defer t
