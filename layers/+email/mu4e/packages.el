@@ -108,11 +108,6 @@
       "s" 'message-dont-send         ; saves as draft
       "f" 'mml-attach-file)
 
-    (when mu4e-enable-async-operations
-      (require 'smtpmail-async)
-      (setq send-mail-function         'async-smtpmail-send-it
-            message-send-mail-function 'async-smtpmail-send-it))
-
     (when (fboundp 'imagemagick-register-types)
       (imagemagick-register-types))
 

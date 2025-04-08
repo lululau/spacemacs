@@ -33,9 +33,6 @@
 (defvar mu4e-spacemacs-kill-layout-on-exit t
   "When non-nil, exiting mu4e app will automatically kill its layout")
 
-(defvar mu4e-enable-async-operations nil
-  "Prefer async operations when sending emails.")
-
 (defvar mu4e-enable-notifications nil
   "If non-nil, enable desktop notifications for unread emails.")
 
