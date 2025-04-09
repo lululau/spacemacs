@@ -152,14 +152,14 @@ If EDIT is false, open org files in view mode."
   "Adds layer to dotspacemacs file and reloads configuration"
   (if (configuration-layer/layer-used-p (intern candidate))
       (message "Layer already added.")
-    (let ((dotspacemacs   (find-file-noselect (dotspacemacs/location))))
+    (let ((dotspacemacs (find-file-noselect (dotspacemacs/location))))
       (with-current-buffer dotspacemacs
         (beginning-of-buffer)
         (let ((insert-point (re-search-forward
                              "dotspacemacs-configuration-layers *\n?.*\\((\\)")))
           (insert (format "\n%s\n" candidate))
           (indent-region insert-point (+ insert-point (length candidate)))
-          (save-current-buffer)))
+          (save-buffer)))
       (dotspacemacs/sync-configuration-layers))))
 
 (defun compleseus-spacemacs-help//layer-action-open-dired (candidate)
@@ -286,14 +286,14 @@ If EDIT is false, open org files in view mode."
   "Adds layer to dotspacemacs file and reloads configuration"
   (if (configuration-layer/layer-used-p (intern (cadr args)))
       (message "Layer already added.")
-    (let ((dotspacemacs   (find-file-noselect (dotspacemacs/location))))
+    (let ((dotspacemacs (find-file-noselect (dotspacemacs/location))))
       (with-current-buffer dotspacemacs
         (beginning-of-buffer)
         (let ((insert-point (re-search-forward
                              "dotspacemacs-configuration-layers *\n?.*\\((\\)")))
           (insert (format "\n%s\n" (cadr args)))
           (indent-region insert-point (+ insert-point (length (cadr args))))
-          (save-current-buffer)))
+          (save-buffer)))
       (dotspacemacs/sync-configuration-layers))))
 
 ;;;###autoload

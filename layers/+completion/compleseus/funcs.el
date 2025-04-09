@@ -21,21 +21,6 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-(defun spacemacs//compleseus-selectrum-hjkl-navigation (style)
-  "Set navigation on 'hjkl' for the given editing STYLE."
-  (cond
-   ((or (eq 'vim style)
-        (and (eq 'hybrid style)
-             hybrid-style-enable-hjkl-bindings))
-
-    (dolist (map (list selectrum-minibuffer-map))
-      (define-key map (kbd "C-j") 'selectrum-next-candidate)
-      (define-key map (kbd "C-k") 'selectrum-previous-candidate)))
-   (t
-    (define-key selectrum-minibuffer-map (kbd "C-j") 'selectrum-next-candidate)
-    (define-key selectrum-minibuffer-map (kbd "C-k") 'selectrum-previous-candidate))))
-
-
 (defun compleseus//persp-contain-buffer-p (buf)
   "Return non-nil if BUF is part of the current perspective.
 
