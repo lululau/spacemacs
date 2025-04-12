@@ -284,7 +284,7 @@ persistent which-key) are kept or minimized too."
 
 (defun spacemacs/useful-buffer-p (buffer)
   "Return non-nil if BUFFER should be offered when switching buffers."
-  (let ((buf-name (buffer-name buffer)))
+  (when-let* ((buf-name (buffer-name buffer)))
     (or (provided-mode-derived-p (buffer-local-value 'major-mode buffer) 'comint-mode)
         (cl-loop for useful-regexp in spacemacs-useful-buffers-regexp
                  thereis (string-match-p useful-regexp buf-name))
