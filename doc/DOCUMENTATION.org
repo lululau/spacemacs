@@ -2711,14 +2711,16 @@ Initiate the transient state with ~M-SPC~ or ~s-M-SPC~ while in an =ido= buffer.
 Bookmarks can be set anywhere in a file. Bookmarks are persistent. They are very
 useful to jump to/open a known project.
 
-Open the bookmark completion window by pressing= ~SPC f b~
+Open the bookmark completion window by pressing= ~SPC f b~. Inside this
+completion window, the following key bindings are available when using the helm
+layer:
 
-| Key binding | Description                                  |
-|-------------+----------------------------------------------|
-| ~C-d~       | delete the selected bookmark                 |
-| ~C-e~       | edit the selected bookmark                   |
-| ~C-f~       | toggle filename location                     |
-| ~C-o~       | open the selected bookmark in another window |
+| Key binding  | Description                                  |
+|--------------+----------------------------------------------|
+| ~C-d~        | delete the selected bookmark                 |
+| ~C-e~        | edit the selected bookmark                   |
+| ~C-f~        | toggle filename location                     |
+| ~S-<return>~ | open the selected bookmark in another window |
 
 To save a new bookmark, just type the name of the bookmark and press ~RET~.
 
