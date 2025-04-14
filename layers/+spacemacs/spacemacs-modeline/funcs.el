@@ -50,6 +50,10 @@ Return nil if no scale is defined."
 
 ;; spaceline
 
+(defun spacemacs//enable-spaceline-p ()
+  (memq (spacemacs/get-mode-line-theme-name)
+        '(spacemacs all-the-icons custom)))
+
 (defun spacemacs/spaceline-config-startup-hook ()
   "Install a transient hook to delay spaceline config after Emacs starts."
   (spacemacs|add-transient-hook window-configuration-change-hook
@@ -81,13 +85,19 @@ Return nil if no scale is defined."
 (defun spacemacs//restore-buffers-powerline ()
   "Restore the powerline in the buffers.
 Excluding which-key."
-  (dolist (buffer (buffer-list))
-    (unless (string-match-p "\\*which-key\\*" (buffer-name buffer))
-      (with-current-buffer buffer
-        (setq-local mode-line-format (default-value 'mode-line-format)))))
-  (powerline-reset)
-  (powerline-set-selected-window)
-  (force-mode-line-update t))
+  (if (spacemacs//enable-spaceline-p)
+      (progn
+        (dolist (buffer (buffer-list))
+          (unless (string-match-p "\\*which-key\\*" (buffer-name buffer))
+            (with-current-buffer buffer
+              (setq-local mode-line-format (default-value 'mode-line-format)))))
+        (powerline-reset)
+        (powerline-set-selected-window)
+        (force-mode-line-update t))
+    ;; In case `dotspacemacs-mode-line-theme' has changed and the configuration
+    ;; was reloaded.
+    (remove-hook 'spacemacs-post-user-config-hook
+                 #'spacemacs//restore-buffers-powerline)))
 
 (defun spacemacs//prepare-diminish ()
   (when spaceline-minor-modes-p

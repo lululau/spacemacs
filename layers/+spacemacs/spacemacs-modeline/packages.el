@@ -25,8 +25,7 @@
       '(
         (doom-modeline :toggle (eq (spacemacs/get-mode-line-theme-name) 'doom))
         fancy-battery
-        (spaceline :toggle (memq (spacemacs/get-mode-line-theme-name)
-                                 '(spacemacs all-the-icons custom)))
+        (spaceline :toggle (spacemacs//enable-spaceline-p))
         (spaceline-all-the-icons :toggle (eq (spacemacs/get-mode-line-theme-name) 'all-the-icons))
         symon
         (powerline :toggle (eq (spacemacs/get-mode-line-theme-name) 'vim-powerline))
@@ -138,8 +137,8 @@
     (when (configuration-layer/package-used-p 'info+)
       (spaceline-info-mode t))
     ;; Enable spaceline for buffers created before the configuration of
-    ;; spaceline
-    (spacemacs//restore-buffers-powerline)))
+    ;; spaceline, and reset after reloading configuration.
+    (add-hook 'spacemacs-post-user-config-hook #'spacemacs//restore-buffers-powerline)))
 
 (defun spacemacs-modeline/pre-init-spaceline-all-the-icons ()
   (when (eq 'all-the-icons (spacemacs/get-mode-line-theme-name))

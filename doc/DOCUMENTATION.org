@@ -3897,7 +3897,23 @@ server is to use the following bindings:
 If any errors happen during the loading the mode-line will turn red and the
 errors should appear inline in the startup buffer. Spacemacs should still be
 usable; if it is not then restart Emacs with =emacs --debug-init= and open a
-[[https://github.com/syl20bnr/spacemacs/issues][GitHub issue]] with the backtrace.
+[[https://github.com/syl20bnr/spacemacs/issues][GitHub issue]] with the backtrace. However, please note that in many cases, errors
+are caught by Spacemacs. Such errors will not trigger the debugger in Emacs 30
+or later, even when using =--debug-init=. In order to obtain a backtrace you
+need to add the following to =dotspacemacs/user-init=:
+
+#+BEGIN_SRC emacs-lisp
+  (setq debug-on-error t)
+#+END_SRC
+
+(This variable can also be toggled during a session using ~SPC t D~.)
+
+Additionally, in the rare case where the type of the error is one of those
+listed in =debug-ignored-errors=, you need to remove it from the list, for example:
+
+#+BEGIN_SRC emacs-lisp
+  (setq debug-ignored-errors (delq 'buffer-read-only debug-ignored-errors))
+#+END_SRC
 
 ** Upgrading/Downgrading Emacs version
 To ensure that packages are correctly compiled for the new Emacs version you

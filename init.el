@@ -46,16 +46,15 @@
     (error (concat "Your version of Emacs (%s) is too old. "
                    "Spacemacs requires Emacs version %s or above.")
            emacs-version spacemacs-emacs-min-version)
-  ;; Disabling file-name-handlers for a speed boost during init might seem like
-  ;; a good idea but it causes issues like
-  ;; https://github.com/syl20bnr/spacemacs/issues/11585 "Symbol's value as
-  ;; variable is void: \213" when emacs is not built having:
-  ;; `--without-compress-install`
+  ;; `file-name-handler-alist' affects the startup speed, but setting it to nil
+  ;; will cause issues like #11585: "Symbol's value as variable is void: \213",
+  ;; which failed to load the *.el.gz files.  So we use a simple value for
+  ;; speed.
 
   ;; Users may update Spacemacs *.el files directly without byte-compile
-  ;; them(eg: git pull in Spacemacs folder), so we prefer newer files
+  ;; them (e.g., git pull in Spacemacs folder), so we prefer newer files.
   (let ((load-prefer-newer t)
-        (please-do-not-disable-file-name-handler-alist nil))
+        (file-name-handler-alist '(("\\.gz\\'" . jka-compr-handler))))
     (require 'core-spacemacs)
     (configuration-layer/load-lock-file)
     (spacemacs/init)
