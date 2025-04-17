@@ -168,8 +168,8 @@
       "gL"  'magit-list-repositories
       "gm"  'magit-dispatch
       "gs"  'magit-status
-      "gS"  'magit-stage-file
-      "gU"  'magit-unstage-file)
+      "gS"  'magit-stage-files
+      "gU"  'magit-unstage-files)
     (spacemacs|define-transient-state git-blame
       :title "Git Blame Transient State"
       :hint-is-doc t
