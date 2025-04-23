@@ -1,4 +1,4 @@
-;;; ivy-spacemacs-help.el --- Spacemacs layer exploration with `ivy'.
+;;; ivy-spacemacs-help.el --- Spacemacs layer exploration with `ivy'.  -*- lexical-binding: nil; -*-
 
 ;; Author: Justin Burkett <justin@burkett.cc>
 ;; Keywords: ivy, spacemacs
@@ -381,7 +381,7 @@ If EDIT is false, open org files in view mode."
 
 (defun ivy-spacemacs-help//go-to-dotfile-variable (candidate)
   "Go to candidate in the dotfile."
-  (find-file dotspacemacs-filepath)
+  (find-file (dotspacemacs/location))
   (goto-char (point-min))
   ;; try to exclude comments
   (re-search-forward (format "^[a-z\s\\(\\-]*%s" candidate))
