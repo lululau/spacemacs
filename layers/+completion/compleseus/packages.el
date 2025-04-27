@@ -299,6 +299,9 @@
     (define-key embark-file-map "s" 'spacemacs/compleseus-search-from)
     (define-key embark-buffer-map "s" #'spacemacs/embark-consult-line-multi)
     (add-to-list 'embark-multitarget-actions #'spacemacs/embark-consult-line-multi)
+    ;; Allow using `embark-select' and `embark-act-all' instead of CRM to select packages
+    ;; to update in `configuration-layer/update-packages'.
+    (add-to-list 'embark-multitarget-actions 'configuration-layer/select-packages-to-update)
     (defvar spacemacs-embark-layer-map
       (let ((map (make-sparse-keymap)))
         (set-keymap-parent map embark-general-map)

@@ -132,6 +132,10 @@ subdirectory of ROOT is used."
 (defvar configuration-layer-post-load-hook nil
   "Hook executed at the end of configuration loading.")
 
+(defvar configuration-layer--packages-to-update nil
+  "List containing package names for which a new version is available.
+It is populated by `configuration-layer/update-packages'.")
+
 (defconst configuration-layer--elpa-root-directory
   (concat spacemacs-start-directory "elpa/")
   "Spacemacs ELPA root directory.")
@@ -847,7 +851,7 @@ a new object."
                          "replacing it with layer %S.")
                  pkg-name (car (oref obj owners)) layer-name)))
       ;; last owner wins over the previous one
-      (object-add-to-list obj :owners layer-name))
+      (object-add-to-list obj 'owners layer-name))
     ;; check consistency between package and defined init functions
     (unless (or ownerp
                 (eq 'dotfile layer-name)
@@ -876,9 +880,9 @@ a new object."
                        "layer %S does not own it.")
                pkg-name layer-name)))
     (when (fboundp pre-init-func)
-      (object-add-to-list obj :pre-layers layer-name))
+      (object-add-to-list obj 'pre-layers layer-name))
     (when (fboundp post-init-func)
-      (object-add-to-list obj :post-layers layer-name))
+      (object-add-to-list obj 'post-layers layer-name))
     obj))
 
 (define-button-type 'help-dotfile-variable
@@ -1199,7 +1203,7 @@ USEDP if non-nil indicates that made packages are used packages."
         ;; set :toggle to t for user defined package should be enabled default
         (unless (listp pkg)
           (oset obj toggle t)
-          (object-add-to-list obj :owners 'dotfile t)))
+          (object-add-to-list obj 'owners 'dotfile t)))
       (configuration-layer//add-package obj usedp)))
   (dolist (xpkg dotspacemacs-excluded-packages)
     (let ((obj (configuration-layer/get-package xpkg)))
@@ -2073,13 +2077,7 @@ to update."
           (configuration-layer//get-packages-to-update distant-packages))
          (skipped-count (length
                          configuration-layer--check-new-version-error-packages))
-         (date (format-time-string "%y-%m-%d_%H.%M.%S"))
-         (rollback-dir (expand-file-name
-                        (concat configuration-layer-rollback-directory
-                                (file-name-as-directory date))))
-         (upgrade-count (length update-packages))
-         (upgraded-count 0)
-         (update-packages-alist))
+         (upgrade-count (length update-packages)))
     (when configuration-layer--check-new-version-error-packages
       (spacemacs-buffer/warning
        (concat "--> Warning: cannot update %s package(s), possibly due"
@@ -2088,21 +2086,29 @@ to update."
        (mapconcat #'symbol-name
                   configuration-layer--check-new-version-error-packages
                   " ")))
-    ;; (message "packages to udpate: %s" update-packages)
-    (when (> upgrade-count 0)
+    ;; (message "packages to update: %s" update-packages)
+    (if (eq upgrade-count 0)
+        (progn
+          (spacemacs-buffer/append "--> All packages are up to date.\n")
+          (spacemacs//redisplay))
       (spacemacs-buffer/append
        (format (concat "--> Found %s package(s) to update"
                        (if (> skipped-count 0)
                            (format " (skipped %s):\n" skipped-count)
                          ":\n"))
                upgrade-count) t)
+      (sort update-packages #'string<)
       (mapc (lambda (x)
               (spacemacs-buffer/append
-               (format (if (memq (intern x) dotspacemacs-frozen-packages)
+               (format (if (memq x dotspacemacs-frozen-packages)
                            "%s (won't be updated because package is frozen)\n"
                          "%s\n") x) t))
-            (sort (mapcar 'symbol-name update-packages) 'string<))
-      (unless no-confirmation
+            update-packages)
+      (setq update-packages (cl-set-difference update-packages
+                                               dotspacemacs-frozen-packages)
+            configuration-layer--packages-to-update update-packages)
+      (if no-confirmation
+          (configuration-layer//update-packages update-packages)
         (let ((answer (let ((read-answer-short t))
                         (read-answer (format "Do you want to update %s package(s)? "
                                              upgrade-count)
@@ -2110,57 +2116,90 @@ to update."
                                        ("yes"  ?  "upgrade all listed packages")
                                        ("some" ?s "select packages to upgrade")
                                        ("no"   ?n "don't upgrade packages"))))))
-          (if (string= answer "no")
-              (progn (spacemacs-buffer/append "Packages update has been cancelled.\n" t)
-                     (user-error "Packages update has been cancelled.\n"))
-            ;; backup the package directory and construct an alist
-            ;; variable to be cached for easy update and rollback
-            (when (string= answer "some")
-              (setq update-packages
-                    ;; 'apply nconc on list of lists' is equivalent to 'cl-remove-if nil'
-                    (apply #'nconc (mapcar (lambda (pkg)
-                                             (when (yes-or-no-p (format "Update package '%s'? " pkg))
-                                               (list pkg)))
-                                           update-packages))))
-            (setq upgrade-count (length update-packages)))))
-      (spacemacs-buffer/append
+          (pcase answer
+            ("yes"
+             (configuration-layer//update-packages update-packages))
+            ("some"
+             ;; Embark consults the value of `this-command' to determine the
+             ;; default action.
+             (let ((this-command 'configuration-layer/select-packages-to-update))
+               (call-interactively 'configuration-layer/select-packages-to-update)))
+            ("no"
+             (spacemacs-buffer/append "Packages update has been cancelled.\n" t)
+             (user-error "Packages update has been cancelled.\n"))))))))
+
+;; We define `configuration-layer/select-packages-to-update' as an interactive
+;; function taking a single argument, such that embark users have the option to
+;; use `embark-select' and `embark-act-all' instead of CRM.
+(defun configuration-layer/select-packages-to-update (selected-packages)
+  "Select and update SELECTED-PACKAGES from `configuration-layer--packages-to-update'.
+
+This command is usually only internally used by
+`configuration-layer/update-packages' (\\[configuration-layer/update-packages]),
+but it can also be called interactively after an invocation of the
+latter command, in order to quickly update more packages that were not
+selected previously.
+
+SELECTED-PACKAGES must be a list of strings, rather than a list of
+symbols.  This is to support using this command with `embark-act-all'."
+  (interactive
+   (list (if configuration-layer--packages-to-update
+             (completing-read-multiple
+              "Packages to update: " configuration-layer--packages-to-update nil t)
+           (user-error (substitute-command-keys "In order to update packages, \
+please use \\[configuration-layer/update-packages] instead")))))
+  (setq selected-packages (mapcar #'intern selected-packages))
+  (configuration-layer//update-packages selected-packages))
+
+(defun configuration-layer//update-packages (update-packages)
+  "Back up and delete packages in UPDATE-PACKAGES.
+
+Keep records in `update-packages-alist', and store the alist in a file
+in the back-up directory."
+  (let* ((date (format-time-string "%y-%m-%d_%H.%M.%S"))
+         (rollback-dir (expand-file-name
+                        (concat configuration-layer-rollback-directory
+                                (file-name-as-directory date))))
+         (update-packages-alist)
+         (upgraded-count 0)
+         (upgrade-count (length update-packages)))
+    (spacemacs-buffer/append
        "--> performing backup of package(s) to update...\n" t)
-      (spacemacs//redisplay)
-      (dolist (pkg update-packages)
-        (unless (memq pkg dotspacemacs-frozen-packages)
-          (let* ((src-dir (configuration-layer//get-package-directory pkg))
-                 (dest-dir (expand-file-name
-                            (concat rollback-dir
-                                    (file-name-as-directory
-                                     (file-name-nondirectory src-dir))))))
-            (copy-directory src-dir dest-dir 'keeptime 'create 'copy-content)
-            (push (cons pkg (file-name-nondirectory src-dir))
-                  update-packages-alist))))
-      (spacemacs/dump-vars-to-file
-       '(update-packages-alist)
-       (expand-file-name (concat rollback-dir
-                                 configuration-layer-rollback-info)))
-      (dolist (pkg update-packages)
-        (unless (memq pkg dotspacemacs-frozen-packages)
-          (setq upgraded-count (1+ upgraded-count))
-          (spacemacs-buffer/replace-last-line
-           (format "--> preparing update of package %s... [%s/%s]"
-                   pkg upgraded-count upgrade-count) t)
-          (spacemacs//redisplay)
-          (configuration-layer//package-delete pkg)))
-      (spacemacs-buffer/append
-       (format "\n--> %s package(s) to be updated.\n" upgraded-count))
-      (spacemacs-buffer/append
-       (format "\nRestart Emacs to install the updated packages. %s\n"
-               (if (member 'restart-emacs update-packages)
-                   (concat "\n(SPC q r) won't work this time, because the"
-                           "\nrestart-emacs package is being updated.")
-                 "(SPC q r)")))
-      (configuration-layer//cleanup-rollback-directory)
-      (spacemacs//redisplay))
-    (when (eq upgrade-count 0)
-      (spacemacs-buffer/append "--> All packages are up to date.\n")
-      (spacemacs//redisplay))))
+    (spacemacs//redisplay)
+    (dolist (pkg update-packages)
+      (unless (memq pkg dotspacemacs-frozen-packages)
+        (let* ((src-dir (configuration-layer//get-package-directory pkg))
+               (dest-dir (expand-file-name
+                          (concat rollback-dir
+                                  (file-name-as-directory
+                                   (file-name-nondirectory src-dir))))))
+          (copy-directory src-dir dest-dir 'keeptime 'create 'copy-content)
+          (push (cons pkg (file-name-nondirectory src-dir))
+                update-packages-alist))))
+    (spacemacs/dump-vars-to-file
+     '(update-packages-alist)
+     (expand-file-name (concat rollback-dir
+                               configuration-layer-rollback-info)))
+    (dolist (pkg update-packages)
+      (unless (memq pkg dotspacemacs-frozen-packages)
+        (setq upgraded-count (1+ upgraded-count))
+        (spacemacs-buffer/replace-last-line
+         (format "--> preparing update of package %s... [%s/%s]"
+                 pkg upgraded-count upgrade-count) t)
+        (spacemacs//redisplay)
+        (configuration-layer//package-delete pkg)
+        (setq configuration-layer--packages-to-update
+              (delq pkg configuration-layer--packages-to-update))))
+    (spacemacs-buffer/append
+     (format "\n--> %s package(s) to be updated.\n" upgraded-count))
+    (spacemacs-buffer/append
+     (format "\nRestart Emacs to install the updated packages. %s\n"
+             (if (member 'restart-emacs update-packages)
+                 (concat "\n(SPC q r) won't work this time, because the"
+                         "\nrestart-emacs package is being updated.")
+               "(SPC q r)")))
+    (configuration-layer//cleanup-rollback-directory)
+    (spacemacs//redisplay)))
 
 (defun configuration-layer//rollback-slots ()
   "Return a completion table for rollback slots."
