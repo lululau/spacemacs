@@ -29,6 +29,7 @@
   (use-package whisper
     :defer t
     :init
+    (spacemacs/declare-prefix "$" "AI")
     (spacemacs/declare-prefix "$w" "Whisper")
     (spacemacs/set-leader-keys
       "$wr" 'whisper-run ; Start recording and transcribe/translate audio

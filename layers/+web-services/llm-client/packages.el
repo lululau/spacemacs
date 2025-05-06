@@ -34,6 +34,7 @@
     :defer t
     :ensure t
     :init
+    (spacemacs/declare-prefix "$" "AI")
     (spacemacs/declare-prefix "$e" "Ellama")
     (spacemacs/set-leader-keys "$e" 'ellama-transient-main-menu)))
 

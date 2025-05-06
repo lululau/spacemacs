@@ -27,3 +27,19 @@ In `holy-mode', we enable `evil-emacs-state' permanently, hence this workaround.
   (or (not (bound-and-true-p evil-local-mode))
       (bound-and-true-p holy-mode)
       (evil-insert-state-p)))
+
+(defun spacemacs/github-copilot-next-completion ()
+  "Move to the next completion in the Copilot completion menu.
+This function will make sure to show the next completion,
+if necessary triggering a `copilot-complete' command beforehand."
+  (interactive)
+  (copilot-complete)
+  (copilot-next-completion))
+
+(defun spacemacs/github-copilot-previous-completion ()
+  "Move to the previous completion in the Copilot completion menu.
+This function will make sure to show the previous completion,
+if necessary triggering a `copilot-complete' command beforehand."
+  (interactive)
+  (copilot-complete)
+  (copilot-previous-completion))
