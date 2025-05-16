@@ -32,6 +32,7 @@
     (evil :step bootstrap)
     (hydra :step bootstrap)
     (use-package :step bootstrap)
+    (system-packages :step bootstrap)
     (which-key :step bootstrap)
     ;; pre packages, initialized after the bootstrap packages
     ;; these packages can use use-package
@@ -345,6 +346,9 @@
 
 (defun spacemacs-bootstrap/init-use-package ()
   (spacemacs/use-package-extend))
+
+(defun spacemacs-bootstrap/init-system-packages ()
+  (use-package system-packages))
 
 (defun spacemacs-bootstrap/init-which-key ()
   (require 'which-key)

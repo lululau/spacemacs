@@ -28,6 +28,8 @@
     company
     cython-mode
     dap-mode
+    ;; We are using a fork until pet is prefering ipython as default shell (https://github.com/wyuenho/emacs-pet/pull/56)
+    (pet :location (recipe :fetcher github :repo "smile13241324/emacs-pet"))
     eldoc
     evil-matchit
     flycheck
@@ -44,12 +46,11 @@
     poetry
     pippel
     py-isort
-    pydoc
     pyenv-mode
+    pydoc
     (pylookup :location (recipe :fetcher local))
     (pytest :toggle (memq 'pytest (flatten-list (list python-test-runner))))
     (python :location built-in)
-    pyvenv
     (ruff-format :toggle (eq 'ruff python-formatter))
     semantic
     sphinx-doc
@@ -62,6 +63,13 @@
     (company-anaconda :requires (anaconda-mode company))
     ;; packages for Microsoft's pyright language server
     (lsp-pyright :requires lsp-mode :toggle (eq python-lsp-server 'pyright))))
+
+(defun python/init-pet ()
+  (use-package pet
+    :hook (python-base-mode . pet-mode)
+    :if (and (executable-find "dasel")
+             (executable-find "sqlite3"))
+    :defer t))
 
 (defun python/init-anaconda-mode ()
   (use-package anaconda-mode
@@ -106,10 +114,7 @@
   (add-hook 'python-mode-local-vars-hook #'spacemacs//python-setup-company)
   (spacemacs|add-company-backends
     :backends (company-files company-capf)
-    :modes inferior-python-mode
-    :variables
-    company-minimum-prefix-length 0
-    company-idle-delay 0.5)
+    :modes inferior-python-mode)
   (when (configuration-layer/package-used-p 'pip-requirements)
     (spacemacs|add-company-backends
       :backends company-capf
@@ -149,7 +154,10 @@
   (add-hook `python-mode-hook `turn-on-evil-matchit-mode))
 
 (defun python/post-init-flycheck ()
-  (spacemacs/enable-flycheck 'python-mode))
+  (spacemacs/enable-flycheck 'python-mode)
+  ;; Setup flycheck but only after pet is loaded.
+  (with-eval-after-load 'pet
+    (add-hook 'python-mode-hook 'pet-flycheck-setup)))
 
 (defun python/pre-init-helm-cscope ()
   (spacemacs|use-package-add-hook xcscope
@@ -226,6 +234,26 @@
         "vps" 'pipenv-shell
         "vpu" 'pipenv-uninstall))))
 
+(defun python/pre-init-pyenv-mode ()
+  (add-to-list 'spacemacs--python-pyenv-modes 'python-mode))
+(defun python/init-pyenv-mode ()
+  (use-package pyenv-mode
+    :if (executable-find "pyenv")
+    :commands (pyenv-mode-versions)
+    :init
+    (pcase python-auto-set-local-pyenv-version
+      ('on-visit
+       (dolist (m spacemacs--python-pyenv-modes)
+         (add-hook (intern (format "%s-hook" m))
+                   'spacemacs//pyenv-mode-set-local-version)))
+      ('on-project-switch
+       (add-hook 'projectile-after-switch-project-hook
+                 'spacemacs//pyenv-mode-set-local-version)))
+    ;; setup shell correctly on environment switch
+    (spacemacs/set-leader-keys-for-major-mode 'python-mode
+      "vu" 'pyenv-mode-unset
+      "vs" 'pyenv-mode-set)))
+
 (defun python/pre-init-poetry ()
   (add-to-list 'spacemacs--python-poetry-modes 'python-mode))
 (defun python/init-poetry ()
@@ -280,55 +308,6 @@
     (spacemacs/set-leader-keys-for-major-mode 'python-mode
       "hp" 'pydoc-at-point-no-jedi
       "hP" 'pydoc)))
-
-(defun python/pre-init-pyenv-mode ()
-  (add-to-list 'spacemacs--python-pyenv-modes 'python-mode))
-(defun python/init-pyenv-mode ()
-  (use-package pyenv-mode
-    :if (executable-find "pyenv")
-    :commands (pyenv-mode-versions)
-    :init
-    (pcase python-auto-set-local-pyenv-version
-      ('on-visit
-       (dolist (m spacemacs--python-pyenv-modes)
-         (add-hook (intern (format "%s-hook" m))
-                   'spacemacs//pyenv-mode-set-local-version)))
-      ('on-project-switch
-       (add-hook 'projectile-after-switch-project-hook
-                 'spacemacs//pyenv-mode-set-local-version)))
-    ;; setup shell correctly on environment switch
-    (dolist (func '(pyenv-mode-set pyenv-mode-unset))
-      (advice-add func :after
-                  (lambda (&optional version)
-                    (spacemacs/python-setup-everything
-                     (when version (pyenv-mode-full-path version))))))
-    (spacemacs/set-leader-keys-for-major-mode 'python-mode
-      "vu" 'pyenv-mode-unset
-      "vs" 'pyenv-mode-set)))
-
-(defun python/pre-init-pyvenv ()
-  (add-to-list 'spacemacs--python-pyvenv-modes 'python-mode))
-(defun python/init-pyvenv ()
-  (use-package pyvenv
-    :defer t
-    :init
-    (add-hook 'python-mode-hook #'pyvenv-tracking-mode)
-    (pcase python-auto-set-local-pyvenv-virtualenv
-      ('on-visit
-       (dolist (m spacemacs--python-pyvenv-modes)
-         (add-hook (intern (format "%s-hook" m))
-                   'spacemacs//pyvenv-mode-set-local-virtualenv)))
-      ('on-project-switch
-       (add-hook 'projectile-after-switch-project-hook
-                 'spacemacs//pyvenv-mode-set-local-virtualenv)))
-    (dolist (m spacemacs--python-pyvenv-modes)
-      (spacemacs/set-leader-keys-for-major-mode m
-        "va" 'pyvenv-activate
-        "vd" 'pyvenv-deactivate
-        "vw" 'pyvenv-workon))
-    ;; setup shell correctly on environment switch
-    (dolist (func '(pyvenv-activate pyvenv-deactivate))
-      (advice-add func :after 'spacemacs/python-setup-everything))))
 
 (defun python/init-pylookup ()
   (use-package pylookup
@@ -435,16 +414,7 @@
 
     ;; add this optional key binding for Emacs user, since it is unbound
     (define-key inferior-python-mode-map
-                (kbd "C-c M-l") 'spacemacs/comint-clear-buffer)
-
-    (setq spacemacs--python-shell-interpreter-origin
-          (eval (car (get 'python-shell-interpreter 'standard-value))))
-    ;; setup the global variables for python shell if no custom value
-    (when (equal python-shell-interpreter spacemacs--python-shell-interpreter-origin)
-      (spacemacs//python-setup-shell default-directory)
-      (setq spacemacs--python-shell-interpreter-origin python-shell-interpreter)
-      (dolist (x '(python-shell-interpreter python-shell-interpreter-args))
-        (set-default-toplevel-value x (symbol-value x))))))
+                (kbd "C-c M-l") 'spacemacs/comint-clear-buffer)))
 
 (defun python/post-init-semantic ()
   (when (configuration-layer/package-used-p 'anaconda-mode)
