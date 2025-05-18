@@ -2380,7 +2380,7 @@ depends on it."
   "Return non-nil if PKG-DESC is a system package."
   (not (string-prefix-p
         (file-name-as-directory (expand-file-name package-user-dir))
-        (expand-file-name (if (not (stringp pkg-desc))
+        (expand-file-name (if (package-desc-p pkg-desc)
                               (package-desc-dir pkg-desc)
                             (package-desc-dir (car (alist-get pkg-desc package-alist))))))))
 
@@ -2390,7 +2390,7 @@ depends on it."
   (if (configuration-layer//system-package-p pkg-desc)
       (message "Would have removed package %s but this is a system package so it has not been changed."
                (package-desc-name pkg-desc))
-    (if (not (stringp pkg-desc))
+    (if (package-desc-p pkg-desc)
         (package-delete pkg-desc t t)
       (package-delete (car (alist-get pkg-desc package-alist)) t t))))
 
