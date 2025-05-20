@@ -109,14 +109,14 @@
 (defun spacemacs/vcs-margin-p ()
   (interactive)
   (cl-case version-control-diff-tool
-    (diff-hl     diff-hl-margin-local-mode)
+    (diff-hl     (bound-and-true-p diff-hl-margin-local-mode))
     (git-gutter  (bound-and-true-p git-gutter-mode))))
 
 (defun spacemacs/vcs-margin-global-p ()
   (interactive)
   (cl-case version-control-diff-tool
-    (diff-hl     diff-hl-margin-mode)
-    (git-gutter  global-git-gutter-mode)))
+    (diff-hl     (bound-and-true-p diff-hl-margin-mode))
+    (git-gutter  (bound-and-true-p global-git-gutter-mode))))
 
 (spacemacs|add-toggle version-control-margin
   :status (spacemacs/vcs-margin-p)
