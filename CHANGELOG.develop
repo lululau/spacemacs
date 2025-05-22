@@ -468,6 +468,7 @@ both Racer and RLS not being maintained anymore.
 **** Misc
 - tree-sitter
 - copy-as-format (thanks to Ruslan Kamashev)
+- denote (thanks to Choan Gálvez)
 - dtrt-indent (thanks to Kevin Doherty)
 - ietf (thanks to Christian Hopps and Robby O'Connor)
 - multiple-cursors (thanks to Codruț Constantin Gușoi and Thomas de Beauchêne)
