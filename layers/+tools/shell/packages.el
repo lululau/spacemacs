@@ -355,7 +355,8 @@
     (spacemacs/set-leader-keys "atsa" 'spacemacs/shell-pop-eat)
     (spacemacs/register-repl 'eat 'eat)
     :config
-    (setq eat-shell shell-default-term-shell)))
+    (setq eat-shell shell-default-term-shell)
+    (add-hook 'eat-mode-hook 'spacemacs/disable-hl-line-mode)))
 
 (defun shell/init-vterm ()
   (use-package vterm
