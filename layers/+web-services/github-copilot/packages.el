@@ -42,12 +42,14 @@
 (defun github-copilot/init-copilot-chat ()
   "Initialize the `copilot-chat' package and set up keybindings."
   (use-package copilot-chat
-    :hook (git-commit-setup . copilot-chat-insert-commit-message)
     :defer t
     :init
     ;; Provide our transient state in the AI menu
     (spacemacs/declare-prefix "$" "AI")
     (spacemacs/set-leader-keys "$c" 'copilot-chat-transient)
+    (when github-copilot-enable-commit-messages
+      (add-hook 'git-commit-setup-hook
+                #'copilot-chat-insert-commit-message))
     :config
     ;; Make sure that standard ,, works as confirm in the chat window
     (evil-define-key 'normal copilot-chat-prompt-mode-map ",," #'copilot-chat-prompt-send)
