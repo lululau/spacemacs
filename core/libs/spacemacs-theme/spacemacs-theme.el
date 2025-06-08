@@ -92,11 +92,13 @@ to `auto', tags may not be properly aligned. "
   :type 'boolean
   :group 'spacemacs-theme)
 
+(defun true-color-p ()
+  (or
+   (display-graphic-p)
+   (= (tty-display-color-cells) 16777216)))
+
 (defun create-spacemacs-theme (variant theme-name)
-  (let* ((true-color-p (lambda ()
-                         (or (display-graphic-p)
-                             (= (tty-display-color-cells) 16777216))))
-         ;; Helper function to get custom color or default value
+  (let* (;; Helper function to get custom color or default value
          (get-color (lambda (color-name default-value)
                       (or (alist-get color-name spacemacs-theme-custom-colors)
                           default-value)))
