@@ -23,7 +23,8 @@
 
 (setq typography-packages
       '(tildify
-        typo))
+        (typo :location (recipe :fetcher github
+                                :repo "jorgenschaefer/typoel"))))
 
 (defun typography/init-typo ()
   (use-package typo
