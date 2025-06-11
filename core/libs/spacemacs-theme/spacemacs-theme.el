@@ -205,8 +205,8 @@ to `auto', tags may not be properly aligned. "
      `(hl-line ((,class (:background ,bg2 :extend t))))
      `(isearch ((,class (:foreground ,bg1 :background ,mat))))
      `(lazy-highlight ((,class (:background ,green-bg-s))))
-     `(link ((,class (:foreground ,comment :underline t))))
-     `(link-visited ((,class (:foreground ,comp :underline t))))
+     `(link ((,class (:foreground ,blue :underline t))))
+     `(link-visited ((,class (:foreground ,magenta :underline t))))
      `(match ((,class (:background ,highlight :foreground ,mat))))
      `(minibuffer-prompt ((,class (:inherit bold :foreground ,keyword))))
      `(page-break-lines ((,class (:foreground ,act2))))
@@ -583,6 +583,20 @@ to `auto', tags may not be properly aligned. "
      `(helm-time-zone-home ((,class (:foreground ,comp :background ,bg1))))
      `(helm-visible-mark ((,class (:foreground ,keyword :background ,bg3))))
 
+;;;;; helm-ls-git
+     `(helm-ls-git-added-copied-face ((,class (:foreground ,green))))
+     `(helm-ls-git-added-modified-face ((,class (:foreground ,cyan))))
+     `(helm-ls-git-branches-current ((,class (:foreground ,yellow))))
+     `(helm-ls-git-branches-name ((,class (:foreground ,red))))
+     `(helm-ls-git-branches-name-current ((,class (:foreground ,green))))
+     `(helm-ls-git-conflict-face ((,class (:foreground ,magenta))))
+     `(helm-ls-git-deleted-and-staged-face ((,class (:foreground ,comment))))
+     `(helm-ls-git-deleted-not-staged-face ((,class (:foreground ,war))))
+     `(helm-ls-git-modified-and-staged-face ((,class (:foreground ,war))))
+     `(helm-ls-git-modified-not-staged-face ((,class (:foreground ,yellow))))
+     `(helm-ls-git-renamed-modified-face ((,class (:foreground ,war))))
+     `(helm-ls-git-untracked-face ((,class (:foreground ,red))))
+
 ;;;;; helm-swoop
      `(helm-swoop-target-line-block-face ((,class (:foreground ,base :background ,highlight))))
      `(helm-swoop-target-line-face ((,class (:background ,highlight))))
@@ -825,7 +839,7 @@ to `auto', tags may not be properly aligned. "
      `(org-level-6 ((,class (:weight normal :foreground ,head2))))
      `(org-level-7 ((,class (:weight normal :foreground ,head3))))
      `(org-level-8 ((,class (:weight normal :foreground ,head4))))
-     `(org-link ((,class (:underline t :foreground ,comment))))
+     `(org-link ((,class (:underline t :foreground ,blue))))
      `(org-meta-line ((,class (:foreground ,meta))))
      `(org-mode-line-clock-overrun ((,class (:foreground ,err))))
      `(org-priority ((,class (:foreground ,war :inherit bold :weight ,(if spacemacs-theme-org-priority-bold 'unspecified 'normal)))))
@@ -846,14 +860,14 @@ to `auto', tags may not be properly aligned. "
      `(org-warning ((,class (:foreground ,err :inherit org-priority))))
 
 ;;;;; outline
-     `(outline-1 ((,class (:inherit org-level-1))))
-     `(outline-2 ((,class (:inherit org-level-2))))
-     `(outline-3 ((,class (:inherit org-level-3))))
-     `(outline-4 ((,class (:inherit org-level-4))))
-     `(outline-5 ((,class (:inherit org-level-5))))
-     `(outline-6 ((,class (:inherit org-level-6))))
-     `(outline-7 ((,class (:inherit org-level-7))))
-     `(outline-8 ((,class (:inherit org-level-8))))
+     `(outline-1 ((,class (:foreground ,head1))))
+     `(outline-2 ((,class (:foreground ,head2))))
+     `(outline-3 ((,class (:foreground ,head3))))
+     `(outline-4 ((,class (:foreground ,head4))))
+     `(outline-5 ((,class (:foreground ,head1))))
+     `(outline-6 ((,class (:foreground ,head2))))
+     `(outline-7 ((,class (:foreground ,head3))))
+     `(outline-8 ((,class (:foreground ,head4))))
 
 ;;;;; parinfer
      `(parinfer-pretty-parens:dim-paren-face ((,class (:foreground ,base-dim))))
