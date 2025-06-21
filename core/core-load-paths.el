@@ -86,7 +86,7 @@
 
 ;; ~/.emacs.d/private
 (defconst spacemacs-private-directory
-  (concat spacemacs-start-directory "private/")
+  (concat user-emacs-directory "private/")
   "Spacemacs private directory.")
 
 ;; ~/.emacs.d/tests

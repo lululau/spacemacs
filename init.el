@@ -62,10 +62,10 @@
     (configuration-layer/load)
     (spacemacs-buffer/display-startup-note)
     (spacemacs/setup-startup-hook)
-    (when dotspacemacs-enable-server
+    (when (and dotspacemacs-enable-server (not noninteractive))
       (require 'server)
       (when dotspacemacs-server-socket-dir
         (setq server-socket-dir dotspacemacs-server-socket-dir))
-      (unless (server-running-p)
+      (unless (or (daemonp) (server-running-p))
         (message "Starting a server...")
         (server-start)))))
