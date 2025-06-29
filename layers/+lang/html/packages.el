@@ -177,6 +177,10 @@
     :init
     (when scss-enable-lsp
       (add-hook 'scss-mode-hook #'spacemacs//setup-lsp-for-web-mode-buffers t))
+    :config
+    ;; Workaround for old scss-mode from melpa, can be removed when we switch to the build in version in emacs 30 and later
+    (with-eval-after-load 'flymake
+      (require 'flymake-proc nil t))
     :mode ("\\.scss\\'" . scss-mode)))
 
 (defun html/init-slim-mode ()
