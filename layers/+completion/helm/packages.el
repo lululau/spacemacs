@@ -38,8 +38,14 @@
     helm-org
     (helm-posframe :toggle helm-use-posframe)
     helm-projectile
-    helm-swoop
-    helm-themes
+    ;; FIXME Remove obsolete packages helm-swoop, helm-themes,
+    ;; helm-ag, helm-git-grep, etc. (see https://github.com/melpa/melpa/pull/9520)
+    (helm-swoop :location (recipe
+                           :fetcher github
+                           :repo "emacsattic/helm-swoop"))
+    (helm-themes :location (recipe
+                           :fetcher github
+                           :repo "emacsattic/helm-themes"))
     (helm-spacemacs-help :location local)
     helm-xref
     imenu
