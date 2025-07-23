@@ -29,7 +29,12 @@
     :init
     (setq-default amx-history-length 32
                   amx-save-file (concat spacemacs-cache-directory
-                                         ".amx-items"))
+                                         ".amx-items")
+
+                  ;; Set `smex-save-file' so that `amx' can migrate any existing
+                  ;; history.  See `amx-load-save-file'.
+                  smex-save-file (concat spacemacs-cache-directory
+                                        ".smex-items"))
     ;; define the key binding at the very end in order to allow the user
     ;; to overwrite any key binding
     (add-hook 'emacs-startup-hook
