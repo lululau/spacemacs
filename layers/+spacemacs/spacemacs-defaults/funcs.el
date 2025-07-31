@@ -931,8 +931,6 @@ variable."
     (outline-show-all)))
 
 (spacemacs|eval-until-emacs-min-version "31.0.50"
-  "Use builtin `ediff--delete-temp-files-on-kill-emacs' first"
-
   (defun spacemacs//ediff-delete-temp-files ()
     "Delete the temp-files associated with the ediff buffers."
     (let ((inhibit-interaction t))

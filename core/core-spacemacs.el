@@ -20,14 +20,17 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;; Increase the message log size to avoid losing startup messages.
 (setq message-log-max 16384)
 
+;; Define the main customization group for Spacemacs.
 (defgroup spacemacs nil
   "Spacemacs customizations."
   :group 'emacs
   :prefix 'spacemacs-)
 
-(require 'subr-x nil 'noerror)
+;; Load required core modules and libraries.
+(require 'subr-x nil 'noerror) ;; Useful string and list functions.
 (require 'core-versions)
 (require 'core-load-paths)
 (require 'core-emacs-backports)
@@ -54,6 +57,7 @@
 (require 'core-spacebind)
 (require 'core-compilation)
 
+;; Hooks for post-user configuration and scratch buffer customization.
 (defvar spacemacs-post-user-config-hook nil
   "Hook run after dotspacemacs/user-config")
 (defvar spacemacs-post-user-config-hook-run nil
@@ -61,15 +65,19 @@
 (defvar spacemacs-scratch-mode-hook nil
   "Hook run on buffer *scratch* after `dotspacemacs-scratch-mode' is invoked.")
 
+;; Backup of the default mode line format, so it can be restored if needed.
 (defvar spacemacs--default-mode-line mode-line-format
   "Backup of default mode line format.")
 
+;; Flag indicating whether Spacemacs has finished initializing.
 (defvar spacemacs-initialized nil
   "Whether or not spacemacs has finished initializing by completing
 the final step of executing code in `emacs-startup-hook'.")
 
+;; Utility to regenerate autoloads for installed packages.
 (defun spacemacs//package-regenerate-autoloads (&optional path)
-  "Regenerate the autoloads for installed packages."
+  "Regenerate the autoloads for installed packages.
+If PATH is provided, use it as the package directory, otherwise use `package-user-dir'."
   (interactive "P")
   (dolist (dir (or path (list package-user-dir)))
     (when (file-directory-p dir)
@@ -77,17 +85,23 @@ the final step of executing code in `emacs-startup-hook'.")
         (when-let* (((file-directory-p pkg-dir))
                     (pkg-desc (package-load-descriptor pkg-dir)))
           (let ((default-directory pkg-dir))
+            ;; Remove existing autoload files before regenerating.
             (mapc 'delete-file (file-expand-wildcards "*-autoloads.el" )))
           (package-generate-autoloads
            (package-desc-name pkg-desc) pkg-dir))))))
 
+;; Lookup load hints for a given file.
 (defun spacemacs//lookup-load-hints (file)
-  "Findout the `load-hints' item for the FILE."
+  "Find out the `load-hints' item for the FILE.
+Returns the directory path from load-hints where FILE is found."
   (unless (file-name-absolute-p file)
     (car-safe (seq-find (lambda (row) (member file (cdr row))) load-hints))))
 
+;; Activate load hints support for Spacemacs.
 (defun spacemacs//activate-load-hints ()
-  "Enable the `load-hints' support for Spacemacs."
+  "Enable the `load-hints' support for Spacemacs.
+This helps Emacs locate files more efficiently by maintaining a mapping
+of directories to file basenames."
   (setq package-enable-load-hints dotspacemacs-enable-load-hints
         load-hints
         (mapcar
@@ -96,7 +110,7 @@ the final step of executing code in `emacs-startup-hook'.")
                        (files (seq-difference
                                (directory-files path) '("." "..")
                                #'string=))
-                       ;; list of files basename, the load-suffixes was removed
+                       ;; Remove load-suffixes from file basenames.
                        (bases
                         (mapcar
                          (lambda (f)
@@ -111,8 +125,9 @@ the final step of executing code in `emacs-startup-hook'.")
              (cons path (seq-uniq (remove nil bases) 'string-equal))))
          load-path))
 
+  ;; Advice for `require' to use load-hints when loading features.
   (defun require@LOAD-HINTS (args)
-    "The advice for `require' function"
+    "Advice for `require' to use load-hints for locating files."
     (let ((feature (nth 0 args))
           (filename (nth 1 args))
           (noerror (nth 2 args)))
@@ -124,9 +139,9 @@ the final step of executing code in `emacs-startup-hook'.")
 
   (advice-add #'require :filter-args #'require@LOAD-HINTS)
 
+  ;; Advice to update load-hints after autoload generation.
   (define-advice package-generate-autoloads (:after (name pkg-dir) LOAD-HINTS)
-    ;; if package-enabled-load-hints is non-nil then collecting loadable
-    ;; files in pkg-dir and generating the load-hints list.
+    ;; If load-hints are enabled, collect loadable files in pkg-dir and update load-hints.
     (when-let* (dotspacemacs-enable-load-hints
                 (auto-name (format "%s-autoloads.el" name))
                 (output-file (expand-file-name auto-name pkg-dir))
@@ -135,7 +150,7 @@ the final step of executing code in `emacs-startup-hook'.")
                         (directory-files pkg-dir)
                         `("." ".." ,(concat name "-pkg.el") ,auto-name)
                         #'string=))
-                ;; list of files basename, the load-suffixes was removed
+                ;; Remove load-suffixes from file basenames.
                 (bases
                  (remove nil
                          (mapcar
@@ -161,32 +176,34 @@ the final step of executing code in `emacs-startup-hook'.")
         (save-buffer)
         (kill-buffer)))))
 
+;; Main initialization function for Spacemacs startup.
 (defun spacemacs/init ()
-  "Perform startup initialization."
+  "Perform startup initialization for Spacemacs."
+  ;; Parse command line arguments for Spacemacs-specific options.
   (setq command-line-args (spacemacs//parse-command-line command-line-args))
+  ;; Enable debug mode if requested.
   (when spacemacs-debugp (spacemacs/init-debug))
-  ;; silence ad-handle-definition about advised functions getting redefined
+  ;; Accept redefinition of advised functions to silence warnings.
   (setq ad-redefinition-action 'accept)
-  ;; this is for a smoother UX at startup (i.e. less graphical glitches)
+  ;; Hide mode line for smoother startup visuals.
   (hidden-mode-line-mode)
+  ;; Disable GUI elements (toolbars, scrollbars, etc.) for a cleaner look.
   (spacemacs//toggle-gui-elements 0)
+  ;; Setup vertical ido mode for the setup wizard.
   (spacemacs//setup-ido-vertical-mode)
-  ;; explicitly set the preferred coding systems to avoid annoying prompt
-  ;; from emacs (especially on Microsoft Windows)
+  ;; Set preferred coding system to UTF-8 to avoid prompts.
   (prefer-coding-system 'utf-8)
-  ;; Extend use package if already installed
+  ;; Extend use-package if installed.
   (spacemacs/use-package-extend)
-  ;; TODO move these variables when evil is removed from the bootstrapped
-  ;; packages.
+  ;; Evil mode settings for scrolling and jump behavior.
   (setq-default evil-want-C-u-scroll t
-                ;; `evil-want-C-i-jump' is set to nil to avoid `TAB' being
-                ;; overlapped in terminal mode. The GUI specific `<C-i>' is used
-                ;; instead.
                 evil-want-C-i-jump nil)
+  ;; Load the user's dotspacemacs file.
   (dotspacemacs/load-file)
+  ;; Call the user's initialization function.
   (dotspacemacs|call-func dotspacemacs/init "Calling dotfile init...")
+  ;; Handle undecorated and maximized frame settings at startup.
   (when dotspacemacs-undecorated-at-startup
-    ;; this should be called before toggle-frame-maximized
     (set-frame-parameter nil 'undecorated t)
     (set-frame-parameter nil 'internal-border-width 0)
     (add-to-list 'default-frame-alist '(undecorated . t))
@@ -195,46 +212,31 @@ the final step of executing code in `emacs-startup-hook'.")
     (unless (frame-parameter nil 'fullscreen)
       (toggle-frame-maximized))
     (add-to-list 'default-frame-alist '(fullscreen . maximized)))
+  ;; Call the user's user-init function.
   (dotspacemacs|call-func dotspacemacs/user-init "Calling dotfile user init...")
-  ;; Given the loading process of Spacemacs we have no choice but to set the
-  ;; custom settings twice:
-  ;; - once at the very beginning of startup (here)
-  ;; - once at the very end of loading (in `spacemacs/setup-startup-hook')
-  ;; The first application of custom settings is to be sure that Emacs knows all
-  ;; the defined settings before saving them to a file (otherwise we loose all
-  ;; the settings that Emacs does not know of).
-  ;; The second application is to override any setting set in dotfile functions
-  ;; like `dotspacemacs/user-config`, users expect the custom settings to be the
-  ;; effective ones.
-  ;; Note: Loading custom-settings twice is not ideal since they can have side
-  ;; effects! Maybe an inhibit variable in Emacs can suppress these side effects?
+  ;; Initialize custom settings early to ensure Emacs knows about them.
   (spacemacs/initialize-custom-file)
-  ;; Commenting the first load although it is mentioned above that we must do it
-  ;; I don't recall why we must load the custom settings twice and my experiment
-  ;; seems to show that we don't need this double loading process anymore.
-  ;; related issue: https://github.com/syl20bnr/spacemacs/issues/9736
-  ;; (dotspacemacs|call-func dotspacemacs/emacs-custom-settings
-  ;;                         "Calling dotfile Emacs custom settings...")
+  ;; Set editing style from config.
   (setq dotspacemacs-editing-style (dotspacemacs//read-editing-style-config
                                     dotspacemacs-editing-style))
+  ;; Initialize the configuration layer (layers, packages, etc.).
   (configuration-layer/initialize)
-  ;; frame title init
+  ;; Set frame and icon title formats if specified.
   (when dotspacemacs-frame-title-format
     (require 'format-spec)
     (setq frame-title-format '((:eval (spacemacs/title-prepare dotspacemacs-frame-title-format))))
     (if dotspacemacs-icon-title-format
         (setq icon-title-format '((:eval (spacemacs/title-prepare dotspacemacs-icon-title-format))))
       (setq icon-title-format frame-title-format)))
-
+  ;; Activate load hints if enabled and not already available.
   (when (and dotspacemacs-enable-load-hints (not (boundp 'load-hints)))
     (spacemacs//activate-load-hints))
-
-  (unless (boundp 'load-hints) ; make sure the `load-hints' avaliable for the
-    (defvar load-hints '()))   ; *-autoloads.el after the feature was toggled.
-
-  ;; theme
+  ;; Ensure load-hints variable exists for autoloads.
+  (unless (boundp 'load-hints)
+    (defvar load-hints '()))
+  ;; Load the default theme.
   (spacemacs/load-default-theme)
-  ;; font
+  ;; Set the default font after display system is initialized.
   (spacemacs|do-after-display-system-init
     (unless (spacemacs/set-default-font dotspacemacs-default-font)
       (spacemacs-buffer/warning
@@ -242,58 +244,51 @@ the final step of executing code in `emacs-startup-hook'.")
        (if (listp (car dotspacemacs-default-font))
            (mapconcat 'car dotspacemacs-default-font ", ")
          (car dotspacemacs-default-font)))))
-  ;; spacemacs init
+  ;; Inhibit the default Emacs startup screen.
   (setq inhibit-startup-screen t)
-
-  ;; Draw the spacemacs buffer without lists and scalling to avoid having
-  ;; to load build-in org which will conflict with elpa org
+  ;; Go to the Spacemacs buffer on startup.
   (spacemacs-buffer/goto-buffer t)
-
-  ;; This is set to nil during startup to allow Spacemacs to show buffers opened
-  ;; as command line arguments.
+  ;; Allow buffers opened via command line arguments to be shown.
   (setq initial-buffer-choice nil)
   (require 'core-keybindings)
-  ;; for convenience and user support
+  ;; Warn if graphical support is missing.
   (unless (fboundp 'tool-bar-mode)
     (spacemacs-buffer/message (concat "No graphical support detected, "
                                       "you won't be able to launch a "
                                       "graphical instance of Emacs"
                                       "with this build.")))
-  ;; check for new version
+  ;; Set mode line lighter for version check if unicode symbols are enabled.
   (if dotspacemacs-mode-line-unicode-symbols
       (setq-default spacemacs-version-check-lighter "[⇪]"))
-  ;; load environment variables
+  ;; Load environment variables from user config or default env.
   (if (fboundp 'dotspacemacs/user-env)
       (dotspacemacs/call-user-env)
     (spacemacs/load-spacemacs-env))
-  ;; install the dotfile if required
+  ;; Install the dotfile if required.
   (dotspacemacs/maybe-install-dotfile))
 
+;; Setup ido-vertical-mode for the setup wizard.
 (defun spacemacs//setup-ido-vertical-mode ()
   "Setup `ido-vertical-mode' for the setup wizard.
-
-Does nothing until `ido' is loaded, since most Spacemacs invocations
-don't actually need ido (it is only used for the dotfile setup wizard
-`dotspacemacs/maybe-install-dotfile')."
+Only activates after ido is loaded, for use in the dotfile setup wizard."
   (with-eval-after-load 'ido
     (require 'ido-vertical-mode)
     (ido-vertical-mode t)
     (add-hook
      'ido-setup-hook
-     ;; think about hacking directly `ido-vertical-mode' source in libs instead.
+     ;; Natural navigation keys for ido vertical mode.
      (defun spacemacs//ido-vertical-natural-navigation ()
-       ;; more natural navigation keys: up, down to change current item
-       ;; left to go up dir
-       ;; right to open the selected item
        (define-key ido-completion-map (kbd "<up>") 'ido-prev-match)
        (define-key ido-completion-map (kbd "<down>") 'ido-next-match)
        (define-key ido-completion-map (kbd "<left>") 'ido-delete-backward-updir)
        (define-key ido-completion-map (kbd "<right>") 'ido-exit-minibuffer)))))
 
+;; Override the default startup echo area message.
 (defun display-startup-echo-area-message ()
   "Change the default welcome message of minibuffer to another one."
   (message "Spacemacs is ready."))
 
+;; Utility to defer function execution until after user config.
 (defun spacemacs/defer-until-after-user-config (func)
   "Call FUNC if dotspacemacs/user-config has been called. Otherwise,
 defer call using `spacemacs-post-user-config-hook'."
@@ -301,67 +296,68 @@ defer call using `spacemacs-post-user-config-hook'."
       (funcall func)
     (add-hook 'spacemacs-post-user-config-hook func)))
 
+;; Remove byte-compiled versions of files listed in spacemacs-compiled-files.
 (defun spacemacs//byte-compile-cleanup ()
   "Remove byte-compiled versions of `spacemacs-compiled-files'."
   (let ((default-directory spacemacs-start-directory))
     (spacemacs//remove-byte-compiled-files
      spacemacs-compiled-files)))
 
+;; Setup the startup hook for post-initialization processing.
 (defun spacemacs/setup-startup-hook ()
-  "Add post init processing."
+  "Add post init processing to `emacs-startup-hook'."
   (add-hook
    'emacs-startup-hook
    (defun spacemacs/startup-hook ()
-     ;; This is set here so that emacsclient will show the startup buffer (and
-     ;; so that it can be changed in user-config if necessary). It was set to
-     ;; nil earlier in the startup process to properly handle command line
-     ;; arguments.
+     ;; Set initial buffer choice to the Spacemacs buffer.
      (setq initial-buffer-choice (lambda () (get-buffer spacemacs-buffer-name)))
-
-     ;; Activate winner-mode for non dumped emacs sessions. Do this prior to
-     ;; user-config to allow users to disable the feature and patch ediff
-     ;; themselves. See issue 12582 for details.
+     ;; Enable winner-mode for window configuration undo/redo.
      (winner-mode t)
-
-     ;; Ultimate configuration decisions are given to the user who can defined
-     ;; them in his/her ~/.spacemacs file
+     ;; Call user config and custom settings from dotfile.
      (dotspacemacs|call-func dotspacemacs/user-config
                              "Calling dotfile user config...")
      (dotspacemacs|call-func dotspacemacs/emacs-custom-settings
                              "Calling dotfile Emacs custom settings...")
-     ;; don't write custom settings into the dotfile before loading them,
-     ;; otherwise https://github.com/syl20bnr/spacemacs/issues/10504 happens
+     ;; Sync custom file settings.
      (spacemacs/initialize-custom-file-sync)
+     ;; Run post-user-config hooks.
      (run-hooks 'spacemacs-post-user-config-hook)
      (setq spacemacs-post-user-config-hook-run t)
+     ;; Setup scratch buffer mode if defined.
      (when (fboundp dotspacemacs-scratch-mode)
        (when (get-buffer "*scratch*")
          (with-current-buffer "*scratch*"
            (funcall dotspacemacs-scratch-mode)
            (run-hooks 'spacemacs-scratch-mode-hook))))
+     ;; Load delayed user theme if set.
      (when spacemacs--delayed-user-theme
        (spacemacs/load-theme spacemacs--delayed-user-theme
                              spacemacs--fallback-theme t))
+     ;; Display configuration layer summary.
      (configuration-layer/display-summary)
+     ;; Check for new Spacemacs version.
      (spacemacs/check-for-new-version nil spacemacs-version-check-interval)
+     ;; Move cursor to link line in Spacemacs buffer.
      (spacemacs-buffer/goto-link-line)
+     ;; Mark Spacemacs as initialized.
      (setq spacemacs-initialized t)
+     ;; Set process output max for LSP and other features.
      (setq read-process-output-max dotspacemacs-read-process-output-max)
-     ;; Redraw the spacemacs buffer with full org support
-     ;; Before it must be drawn without org related features to
-     ;; avoid loading build in org in emacs >= 29
+     ;; Redraw Spacemacs buffer to ensure it displays correctly.
      (spacemacs-buffer//startup-hook)
-     ;; change gc settings at the last for it will take effect immediately
+     ;; Set garbage collection settings for performance.
      (setq gc-cons-threshold (car dotspacemacs-gc-cons)
            gc-cons-percentage (cadr dotspacemacs-gc-cons))))
 
+  ;; Byte-compile or clean up core libs as needed.
   (if dotspacemacs-byte-compile
       (when (> 1 (spacemacs//dir-byte-compile-state
                   (concat spacemacs-core-directory "libs/")))
         (byte-recompile-directory (concat spacemacs-core-directory "libs/") 0))
     (spacemacs//remove-byte-compiled-files-in-dir spacemacs-core-directory))
 
-  ;; Check if revision has changed.
+  ;; Check if Spacemacs revision has changed.
   (spacemacs//revision-check))
 
+;; Provide the core-spacemacs feature for require.
 (provide 'core-spacemacs)

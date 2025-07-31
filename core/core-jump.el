@@ -106,7 +106,6 @@ They are in order: `spacemacs-jump-handlers',
   (evil-set-command-property 'spacemacs/jump-to-definition :jump t))
 
 (spacemacs|eval-until-emacs-min-version "29.1"
-  "The `xref-go-back' is a built-in function since Emacs 29.1."
   (unless (fboundp 'xref-go-back)
     (defalias 'xref-pop-marker-stack 'xref-go-back)))
 

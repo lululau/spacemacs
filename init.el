@@ -19,53 +19,77 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-;; Without this comment emacs25 adds (package-initialize) here
-;; (package-initialize)
-
-;; Avoid garbage collection during startup.
-;; see `SPC h . dotspacemacs-gc-cons' for more info
-
+;;
+;; ---------------------------------------------------------------------------
+;; * Startup Optimization
+;; ---------------------------------------------------------------------------
+;; Increase garbage collection threshold to speed up startup.
 (defconst emacs-start-time (current-time))
 (setq gc-cons-threshold 402653184 gc-cons-percentage 0.6)
+
+;; ---------------------------------------------------------------------------
+;; * Load Core Paths
+;; ---------------------------------------------------------------------------
+;; Load the paths to Spacemacs core files.
 (load (concat (file-name-directory load-file-name) "core/core-load-paths")
       nil (not init-file-debug))
+
+;; ---------------------------------------------------------------------------
+;; * Load Version Info
+;; ---------------------------------------------------------------------------
+;; Load Spacemacs and Emacs version information.
 (load (concat spacemacs-core-directory "core-versions")
       nil (not init-file-debug))
 
-;; Remove compiled core files if they become stale or Emacs version has changed.
+;; ---------------------------------------------------------------------------
+;; * Remove Stale Compiled Files
+;; ---------------------------------------------------------------------------
+;; Remove old compiled files if Emacs version has changed.
 (load (concat spacemacs-core-directory "core-compilation")
       nil (not init-file-debug))
 (load spacemacs--last-emacs-version-file t (not init-file-debug))
-;; Update saved Emacs version.
+
+;; Update saved Emacs version if necessary.
 (unless (string= spacemacs--last-emacs-version emacs-version)
   (spacemacs//update-last-emacs-version))
 
-(if (not (version<= spacemacs-emacs-min-version emacs-version))
-    (error (concat "Your version of Emacs (%s) is too old. "
-                   "Spacemacs requires Emacs version %s or above.")
-           emacs-version spacemacs-emacs-min-version)
-  ;; `file-name-handler-alist' affects the startup speed, but setting it to nil
-  ;; will cause issues like #11585: "Symbol's value as variable is void: \213",
-  ;; which failed to load the *.el.gz files.  So we use a simple value for
-  ;; speed.
+;; ---------------------------------------------------------------------------
+;; * Emacs Version Check
+;; ---------------------------------------------------------------------------
+;; Stop initialization if Emacs is too old.
+(when (not (version<= spacemacs-emacs-min-version emacs-version))
+  (error (concat "Your version of Emacs (%s) is too old. "
+                 "Spacemacs requires Emacs version %s or above.")
+         emacs-version spacemacs-emacs-min-version))
 
-  ;; Users may update Spacemacs *.el files directly without byte-compile
-  ;; them (e.g., git pull in Spacemacs folder), so we prefer newer files.
-  (let ((load-prefer-newer t)
-        (file-name-handler-alist '(("\\.gz\\'" . jka-compr-handler))))
-    (require 'core-spacemacs)
-    (configuration-layer/load-lock-file)
-    (spacemacs/init)
-    (configuration-layer/stable-elpa-init)
-    (configuration-layer/load)
-    (spacemacs-buffer/display-startup-note)
-    (spacemacs/setup-startup-hook)
-    (when (and dotspacemacs-enable-server (not noninteractive))
-      (require 'server)
-      (when dotspacemacs-server-socket-dir
-        (setq server-socket-dir dotspacemacs-server-socket-dir))
-      (unless (or (daemonp) (server-running-p))
-        (message "Starting a server...")
-        (server-start)))))
+;; -------------------------------------------------------------------------
+;; * Startup Speed Tweaks
+;; -------------------------------------------------------------------------
+;; Simplify file-name-handler-alist for faster startup.
+;; Prefer newer files over older compiled ones.
+(let ((load-prefer-newer t)
+      (file-name-handler-alist '(("\\.gz\\'" . jka-compr-handler))))
+
+  ;; -----------------------------------------------------------------------
+  ;; * Load Spacemacs Core
+  ;; -----------------------------------------------------------------------
+  ;; Load main Spacemacs core and configuration layers.
+  (require 'core-spacemacs)
+  (configuration-layer/load-lock-file)
+  (spacemacs/init)
+  (configuration-layer/stable-elpa-init)
+  (configuration-layer/load)
+  (spacemacs-buffer/display-startup-note)
+  (spacemacs/setup-startup-hook)
+
+  ;; -----------------------------------------------------------------------
+  ;; * Start Emacs Server (Optional)
+  ;; -----------------------------------------------------------------------
+  ;; Start Emacs server if enabled in user config.
+  (when (and dotspacemacs-enable-server (not noninteractive))
+    (require 'server)
+    (when dotspacemacs-server-socket-dir
+      (setq server-socket-dir dotspacemacs-server-socket-dir))
+    (unless (or (daemonp) (server-running-p))
+      (message "Starting a server...")
+      (server-start))))

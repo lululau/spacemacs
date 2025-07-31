@@ -530,6 +530,16 @@ perspectives does."
           (helm-quit-hook (append helm-quit-hook
                                   (lambda ()
                                     (persp-kill-without-buffers project)))))
+      ;; HACK Fixes the bug reported in
+      ;; https://github.com/syl20bnr/spacemacs/issues/17074#issuecomment-3134120413.
+      ;; `helm-projectile' is invoked as our `projectile-switch-project-action'.
+      ;; It tries to determine the project through `projectile-acquire-root'
+      ;; within `with-helm-current-buffer', but this fails for buffers that are
+      ;; not part of the project. As a workaround we preemptively switch to one of
+      ;; the project's buffers here.
+      (when (eq projectile-switch-project-action 'helm-projectile)
+        (let ((project-buffers (projectile-project-buffers (expand-file-name project))))
+          (switch-to-buffer (or (car project-buffers) (dired project)))))
       (projectile-switch-project-by-name project))))
 
 (defun spacemacs//helm-persp-switch-project-action-maker (project-action)
@@ -889,13 +899,14 @@ graphical frames, and one set for terminal frames."
     (--zip-with (set-persp-parameter it other persp)
                 param-names workspace-params)))
 
-(defun spacemacs/load-eyebrowse-for-perspective (type &optional frame)
+(defun spacemacs/load-eyebrowse-for-perspective (type &optional frame persp)
   "Load an eyebrowse workspace according to a perspective's parameters.
- FRAME's perspective is the perspective that is considered, defaulting to
- the current frame's perspective.
- If the perspective doesn't have a workspace, create one."
+If the perspective doesn't have a workspace, create one.
+
+See the hook `persp-activated-functions'."
   (when (eq type 'frame)
-    (let* ((workspace-params (spacemacs//get-persp-workspace (get-frame-persp frame) frame))
+    (let* ((workspace-params (spacemacs//get-persp-workspace
+                              (or persp (get-frame-persp frame)) frame))
            (window-configs (nth 0 workspace-params))
            (current-slot (nth 1 workspace-params))
            (last-slot (nth 2 workspace-params)))
