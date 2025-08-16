@@ -149,7 +149,7 @@ The started process is also added to `exwm--autostart-process-list'."
      "xrandr" nil exwm-randr-command))
   ;; The first workspaces will match the order in RandR
   (setq exwm-randr-workspace-monitor-plist exwm-randr-command)
-  (exwm-randr-enable))
+  (exwm-randr-mode 1))
 
 
 ;;;; Systray
@@ -157,4 +157,4 @@ The started process is also added to `exwm--autostart-process-list'."
   "Setup `exwm-systray'."
   (when exwm-enable-systray
     (require 'exwm-systemtray)
-    (exwm-systemtray-enable)))
+    (exwm-systemtray-mode 1)))
