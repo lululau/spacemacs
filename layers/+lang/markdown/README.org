@@ -159,10 +159,11 @@ To generate a table of contents type on top of the buffer:
 
 ** Following and Jumping
 
-| Key binding | Description           |
-|-------------+-----------------------|
-| ~SPC m o~   | follow thing at point |
-| ~RET~       | jump (markdown-do)    |
+| Key binding | Description               |
+|-------------+---------------------------|
+| ~SPC m o~   | follow thing at point     |
+| ~SPC m p~   | toc follow thing at point |
+| ~RET~       | jump (markdown-do)        |
 
 ** Indentation
 
