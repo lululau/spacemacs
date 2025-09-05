@@ -210,11 +210,13 @@
   - [[#themes-megapack][Themes Megapack]]
   - [[#theming][Theming]]
 - [[#tools][Tools]]
+  - [[#aider-layer][Aider Layer]]
   - [[#ansible][Ansible]]
   - [[#apache][Apache]]
   - [[#bm][Bm]]
   - [[#cfengine][CFEngine]]
   - [[#chrome][Chrome]]
+  - [[#claude-code-layer][Claude Code Layer]]
   - [[#cmake][CMake]]
   - [[#command-log][Command-log]]
   - [[#dap][DAP]]
@@ -2748,6 +2750,21 @@ Features:
 - Includes three additional layer variables for tweaking headings.
 
 * Tools
+** Aider Layer
+[[file:+tools/aider/README.org][+tools/aider/README.org]]
+
+This layer adds support for [[https://github.com/Aider-AI/aider][Aider]], an AI pair programming tool that helps you
+edit code in your local git repository. Aider works with various language models
+(GPT-4, Claude, etc.) to make changes to your codebase.
+
+Features:
+- AI-powered code editing and generation
+- Multiple AI modes: code, ask, architect, and help
+- Seamless integration with git repositories
+- File management for AI context
+- Unit test generation and debugging
+- Auto-commit with generated messages
+
 ** Ansible
 [[file:+tools/ansible/README.org][+tools/ansible/README.org]]
 
@@ -2805,6 +2822,21 @@ Features:
 - Edit text boxes with Emacs using [[https://github.com/stsquad/emacs_chrome][edit-server]]
 - Write markdown in Emacs and realtime show in chrome using [[https://github.com/mola-T/flymd][flymd]]
 - gmail message mode uses standard markdown key bindings
+
+** Claude Code Layer
+[[file:+tools/claude-code/README.org][+tools/claude-code/README.org]]
+
+This layer adds support for [[https://github.com/manzaltu/claude-code-ide.el][Claude Code IDE]], an Emacs package that provides
+seamless integration with Claude Code CLI for AI-assisted coding.
+
+Features:
+- AI-powered code editing and generation using Claude
+- Terminal-based interaction with Claude Code CLI
+- Multi-project session management
+- Deep Emacs integration with transient menus
+- Resume and continue conversations
+- Send code regions and symbols for analysis
+- Project-aware context handling
 
 ** CMake
 [[file:+tools/cmake/README.org][+tools/cmake/README.org]]
