@@ -40,8 +40,6 @@
 (define-obsolete-variable-alias
   'dotspacemacs-helm-position 'helm-position "20180608")
 
-(defvar helm-use-posframe nil
-  "Use helm-posframe to display completions in a separate frame")
 
 (defvar spacemacs-helm-rg-max-column-number 512
   "Controls the maximum number of columns to display with ripgrep (otherwise
