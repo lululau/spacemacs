@@ -1024,54 +1024,75 @@ otherwise it is scaled down."
 ;; Transparency transient-state
 
 (defun spacemacs/toggle-transparency (&optional frame)
-  "Toggle between transparent and opaque state for FRAME.
-If FRAME is nil, it defaults to the selected frame."
+  "Toggle between configured active/inactive transparency and opaque for FRAME.
+Uses spacemacs//frame-alpha-get-pair and spacemacs//frame-alpha-set-pair."
   (interactive)
-  (let ((alpha (frame-parameter frame 'alpha))
-        (dotfile-setting (cons dotspacemacs-active-transparency
-                               dotspacemacs-inactive-transparency)))
-    (if (equal alpha dotfile-setting)
-        (spacemacs/disable-transparency frame)
-      (spacemacs/enable-transparency frame dotfile-setting))))
+  (let* ((frame (or frame (selected-frame)))
+         (current (spacemacs//frame-alpha-get-pair frame))
+         (cfg-active (max frame-alpha-lower-limit
+                          (min 100
+                               (or (bound-and-true-p dotspacemacs-active-transparency)
+                                   90))))
+         (cfg-inactive (max frame-alpha-lower-limit
+                            (min 100
+                                 (or (bound-and-true-p dotspacemacs-inactive-transparency)
+                                     cfg-active))))
+         (target (cons cfg-active cfg-inactive)))
 
-(defun spacemacs/enable-transparency (&optional frame alpha)
-  "Enable transparency for FRAME.
-If FRAME is nil, it defaults to the selected frame.
-ALPHA is a pair of active and inactive transparency values. The
-default value for ALPHA is based on
-`dotspacemacs-active-transparency' and
-`dotspacemacs-inactive-transparency'."
-  (interactive)
-  (let ((alpha-setting (or alpha
-                           (cons dotspacemacs-active-transparency
-                                 dotspacemacs-inactive-transparency))))
-    (set-frame-parameter frame 'alpha alpha-setting)))
+    (if (equal current (cons 100 100))
+        (spacemacs//frame-alpha-set-pair frame cfg-active cfg-inactive)
+      (spacemacs//frame-alpha-set-pair frame 100 100))))
 
-(defun spacemacs/disable-transparency (&optional frame)
-  "Disable transparency for FRAME.
-If FRAME is nil, it defaults to the selected frame."
-  (interactive)
-  (set-frame-parameter frame 'alpha '(100 . 100)))
+(defun spacemacs//frame-alpha-get-pair (&optional frame)
+  "Return (ACTIVE . INACTIVE) alpha for FRAME, defaulting to the selected frame."
+  (let* ((frame (or frame (selected-frame)))
+         (a  (frame-parameter frame 'alpha))
+         (ab (frame-parameter frame 'alpha-background)))
+    (cond
+     ((and (consp a) (numberp (car a)) (numberp (cdr a))) a)
+     ((numberp a) (cons a a))
+     ((numberp ab) (cons ab ab))
+     (t (cons 100 100)))))
+
+(defun spacemacs//frame-alpha-set-pair (frame active inactive)
+  "Set FRAME transparency to ACTIVE when focused and INACTIVE when unfocused.
+Clamps values to [frame-alpha-lower-limit, 100], updates both 'alpha and
+'alpha-background, and forces an immediate redisplay. Returns the applied pair."
+  (let* ((frame (or frame (selected-frame)))
+         (a (max frame-alpha-lower-limit (min 100 (round active))))
+         (i (max frame-alpha-lower-limit (min 100 (round inactive)))))
+    (modify-frame-parameters
+     frame `((alpha . (,a . ,i))
+             (alpha-background . ,a)))
+    (redisplay t)
+    (cons a i)))
+
+(defvar spacemacs--transparency-step 5
+  "Step size for transparency adjustments.")
 
 (defun spacemacs/increase-transparency (&optional frame)
-  "Increase transparency for FRAME.
-If FRAME is nil, it defaults to the selected frame."
+  "Increase transparency (reduce alpha) for FRAME or the selected frame.
+Adjusts both active and inactive alphas by `spacemacs--transparency-step'."
   (interactive)
-  (let* ((current-alpha (or (car (frame-parameter frame 'alpha)) 100))
-         (increased-alpha (- current-alpha 5)))
-    (when (>= increased-alpha frame-alpha-lower-limit)
-      (set-frame-parameter frame 'alpha
-                           (cons increased-alpha increased-alpha)))))
+  (let* ((frame (or frame (selected-frame)))
+         (pair  (spacemacs//frame-alpha-get-pair frame))
+         (a     (car pair))
+         (i     (cdr pair)))
+    (spacemacs//frame-alpha-set-pair
+     frame (- a spacemacs--transparency-step)
+     (- i spacemacs--transparency-step))))
 
 (defun spacemacs/decrease-transparency (&optional frame)
-  "Decrease transparency for FRAME.
-If FRAME is nil, it defaults to the selected frame."
+  "Decrease transparency (increase alpha) for FRAME or the selected frame.
+Adjusts both active and inactive alphas by `spacemacs--transparency-step'."
   (interactive)
-  (let* ((current-alpha (or (car (frame-parameter frame 'alpha)) 100))
-         (decreased-alpha (+ current-alpha 5)))
-    (when (<= decreased-alpha 100)
-      (set-frame-parameter frame 'alpha
-                           (cons decreased-alpha decreased-alpha)))))
+  (let* ((frame (or frame (selected-frame)))
+         (pair  (spacemacs//frame-alpha-get-pair frame))
+         (a     (car pair))
+         (i     (cdr pair)))
+    (spacemacs//frame-alpha-set-pair
+     frame (+ a spacemacs--transparency-step)
+     (+ i spacemacs--transparency-step))))
 
 (spacemacs|define-transient-state scale-transparency
   :title "Frame Transparency Transient State"
@@ -1085,8 +1106,7 @@ If FRAME is nil, it defaults to the selected frame."
   ("j" spacemacs/decrease-transparency)
   ("T" spacemacs/toggle-transparency)
   ("q" nil :exit t))
-(spacemacs/set-leader-keys "TT"
-  'spacemacs/scale-transparency-transient-state/spacemacs/toggle-transparency)
+(spacemacs/set-leader-keys "TT" 'spacemacs/scale-transparency-transient-state/body)
 
 ;; end of Transparency Transient State
 

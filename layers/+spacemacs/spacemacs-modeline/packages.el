@@ -48,8 +48,7 @@
     (setq-default fancy-battery-show-percentage t)))
 
 (defun spacemacs-modeline/init-spaceline ()
-  (use-package spaceline
-    :commands (spaceline-compile spaceline-define-segment)
+  (use-package spaceline-config
     :init
     (add-hook 'spacemacs-post-user-config-hook
               'spacemacs/spaceline-config-startup-hook)

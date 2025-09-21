@@ -334,7 +334,7 @@ Right justified, based on the Spacemacs buffers window width."
   "The icons font for spacemacs startup buffer. If nil means undetermined,
 `none' means no icons-font should be applied, otherwise it's a icons-font.")
 
-(defun spacemacs-buffer//determind-icons-font (&optional skip-require)
+(defun spacemacs-buffer//determine-icons-font (&optional skip-require)
   "Return the icons font, `none' for non-applicatible."
   (unless spacemacs-buffer--icons-font
     (setq spacemacs-buffer--icons-font
@@ -351,40 +351,48 @@ Right justified, based on the Spacemacs buffers window width."
     (require spacemacs-buffer--icons-font))
   spacemacs-buffer--icons-font)
 
+(defun spacemacs-buffer//safe-alist-get (key alist)
+  "Like alist-get but warn if KEY is missing."
+  (let ((val (alist-get key alist)))
+    (unless val
+      (message "[spacemacs icons] unknown icon key: %S (available: %S)"
+               key (mapcar #'car alist)))
+    val))
+
 (defun spacemacs-buffer//font-icons-icon (str icon &rest params)
   "Apply the ICON if it available, otherwise return str, PARAMS for icon."
-  (if-let* ((font (spacemacs-buffer//determind-icons-font))
+  (if-let* ((font (spacemacs-buffer//determine-icons-font))
             (icons
              (pcase font
                ('all-the-icons
-                '((bookmark all-the-icons-octicon "bookmark" :face 'font-lock-keyword-face :v-adjust -0.05)
-                  (calendar all-the-icons-octicon "calendar" :face 'font-lock-keyword-face :v-adjust -0.05)
-                  (check all-the-icons-octicon "check" :face 'font-lock-keyword-face :v-adjust -0.05)
+                '((bookmark all-the-icons-octicon "bookmark" :face font-lock-keyword-face :v-adjust -0.05)
+                  (calendar all-the-icons-octicon "calendar" :face font-lock-keyword-face :v-adjust -0.05)
+                  (check all-the-icons-octicon "check" :face font-lock-keyword-face :v-adjust -0.05)
                   (dot all-the-icons-octicon "primitive-dot" :height 1.0 :v-adjust 0.01)
-                  (error all-the-icons-material "error" :face 'font-lock-keyword-face)
+                  (error all-the-icons-material "error" :face font-lock-keyword-face)
                   (heart all-the-icons-faicon "heart" :height 0.8 :v-adjust -0.05)
-                  (history all-the-icons-octicon "history" :face 'font-lock-keyword-face :v-adjust -0.05)
+                  (history all-the-icons-octicon "history" :face font-lock-keyword-face :v-adjust -0.05)
                   (radio-tower all-the-icons-octicon "radio-tower" :height 0.8 :v-adjust -0.05)
-                  (rocket all-the-icons-octicon "rocket" :face 'font-lock-keyword-face :v-adjust -0.05)
-                  (warn all-the-icons-material "warning" :face 'font-lock-keyword-face)))
+                  (rocket all-the-icons-octicon "rocket" :face font-lock-keyword-face :v-adjust -0.05)
+                  (warning all-the-icons-material "warning" :face font-lock-keyword-face)))
                ('nerd-icons
-                '((bookmark nerd-icons-octicon "nf-oct-bookmark" :face 'font-lock-keyword-face :v-adjust -0.05)
-                  (calendar nerd-icons-octicon "nf-oct-calendar" :face 'font-lock-keyword-face :v-adjust -0.05)
-                  (check nerd-icons-octicon "nf-oct-check" :face 'font-lock-keyword-face :v-adjust -0.05)
+                '((bookmark nerd-icons-octicon "nf-oct-bookmark" :face font-lock-keyword-face :v-adjust -0.05)
+                  (calendar nerd-icons-octicon "nf-oct-calendar" :face font-lock-keyword-face :v-adjust -0.05)
+                  (check nerd-icons-octicon "nf-oct-check" :face font-lock-keyword-face :v-adjust -0.05)
                   (dot nerd-icons-octicon "nf-oct-dot" :height 1.0 :v-adjust 0.01)
-                  (error nerd-icons-codicon "nf-cod-error" :face 'font-lock-keyword-face)
+                  (error nerd-icons-codicon "nf-cod-error" :face font-lock-keyword-face)
                   (heart nerd-icons-faicon "nf-fa-heart" :height 0.8 :v-adjust -0.05)
-                  (history nerd-icons-octicon "nf-oct-history" :face 'font-lock-keyword-face :v-adjust -0.05)
+                  (history nerd-icons-octicon "nf-oct-history" :face font-lock-keyword-face :v-adjust -0.05)
                   (radio-tower nerd-icons-codicon "nf-cod-radio_tower" :height 0.8 :v-adjust -0.05)
-                  (rotket nerd-icons-octicon "nf-oct-rocket" :face 'font-lock-keyword-face :v-adjust -0.05)
-                  (warning nerd-icons-codicon "nf-cod-warning" :face 'font-lock-keyword-face)))))
-            (res (alist-get icon icons)))
+                  (rocket nerd-icons-octicon "nf-oct-rocket" :face font-lock-keyword-face :v-adjust -0.05)
+                  (warning nerd-icons-codicon "nf-cod-warning" :face font-lock-keyword-face)))))
+            (res (spacemacs-buffer//safe-alist-get icon icons)))
       (apply (car res) (cadr res) (or params (cddr res)))
     str))
 
 (defun spacemacs-buffer//font-icons-icon-for-path (str path &rest args)
   "Apply the icon for PATH if it available, otherwise return str, PARAMS for icon."
-  (if-let* ((font (spacemacs-buffer//determind-icons-font))
+  (if-let* ((font (spacemacs-buffer//determine-icons-font))
             ((not (memq font '(nil none)))))
       (if (file-remote-p path)
           (spacemacs-buffer//font-icons-icon str 'radio-tower)
@@ -1475,7 +1483,7 @@ LIST-SIZE is specified in `dotspacemacs-startup-lists' for recent entries."
   (let ((spacemacs-buffer--icons-font nil) ; need to be updated
         (is-org-loaded (bound-and-true-p spacemacs-initialized)))
     (when-let* (spacemacs-initialized
-                (font (spacemacs-buffer//determind-icons-font 'skip-require))
+                (font (spacemacs-buffer//determine-icons-font 'skip-require))
                 ((not (memq font '(nil none))))
                 ((not (configuration-layer/package-used-p font))))
       (message "Package `%s' isn't installed" font)
