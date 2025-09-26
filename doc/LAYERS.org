@@ -377,18 +377,6 @@ It contains all the defined functions used in the layer.
 
 This file is loaded after =packages.el= and before =config.el=.
 
-It is good practice to guard the definition of functions to make sure a package
-is actually used. For instance:
-
-#+BEGIN_SRC emacs-lisp
-  (when (configuration-layer/package-used-p 'my-package)
-    (defun spacemacs/my-package-enable () ...)
-    (defun spacemacs/my-package-disable () ...))
-#+END_SRC
-
-By guarding these functions we avoid defining them when the package =my-package=
-is not used.
-
 ** config.el
 This file configures the layer by declaring layer variables' default values and
 setting up some other variables related to the layer.

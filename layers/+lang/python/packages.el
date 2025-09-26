@@ -28,9 +28,7 @@
     company
     cython-mode
     dap-mode
-    ;; We are using a fork until pet is prefering ipython as default shell (https://github.com/wyuenho/emacs-pet/pull/56)
-    (pet :location (recipe :fetcher github :repo "smile13241324/emacs-pet")
-         :toggle (eq python-virtualenv-management 'pet))
+    pet
     eldoc
     evil-matchit
     flycheck
@@ -52,7 +50,7 @@
     pyenv-mode
     pydoc
     (pylookup :location (recipe :fetcher local))
-    (pytest :toggle (memq 'pytest (flatten-list (list python-test-runner))))
+    (python-pytest :toggle (memq 'pytest (flatten-list (list python-test-runner))))
     (python :location built-in)
     ;; Use the performance enhanced fork (https://github.com/jorgenschaefer/pyvenv/pull/128)
     (pyvenv :location (recipe :fetcher github :repo "sunlin7/pyvenv")
@@ -359,18 +357,22 @@
             pylookup-db-file (concat pylookup-dir "pylookup.db")))
     (setq pylookup-completing-read 'completing-read)))
 
-(defun python/init-pytest ()
-  (use-package pytest
-    :commands (pytest-one
-               pytest-pdb-one
-               pytest-all
-               pytest-pdb-all
-               pytest-last-failed
-               pytest-pdb-last-failed
-               pytest-module
-               pytest-pdb-module)
-    :init (spacemacs//bind-python-testing-keys)
-    :config (add-to-list 'pytest-project-root-files "setup.cfg")))
+(defun python/init-python-pytest ()
+  (use-package python-pytest
+    :defer t
+    :commands (python-pytest
+               python-pytest-file
+               python-pytest-file-dwim
+               python-pytest-function
+               python-pytest-last-failed
+               python-pytest-repeat
+               python-pytest-dispatch)
+    :init
+    ;; Reuse the generic testing bindings for a consistent UX.
+    (spacemacs//bind-python-testing-keys)
+    :config
+    ;; Preserve previous behavior: recognize setup.cfg as project root.
+    (add-to-list 'python-pytest-project-root-files "setup.cfg")))
 
 (defun python/init-python ()
   (use-package python

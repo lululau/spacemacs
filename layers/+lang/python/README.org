@@ -43,6 +43,9 @@
   - [[#inferior-repl-process][Inferior REPL process]]
   - [[#running-python-script-in-shell][Running Python Script in shell]]
   - [[#testing][Testing]]
+    - [[#cross-runner-bindings][Cross-runner bindings]]
+    - [[#pytest-only-bindings][Pytest-only bindings]]
+    - [[#nose-only-bindings][Nose-only bindings]]
   - [[#refactoring][Refactoring]]
   - [[#pip-package-management][Pip package management]]
   - [[#live-coding][Live coding]]
@@ -548,22 +551,48 @@ compilation command.
 Test commands start with ~m t~. To use the secondary test runner call the
 function with a prefix argument, for example ~SPC u SPC m t a~.
 
-| No Debug    | Description                                              |
-|-------------+----------------------------------------------------------|
-| ~SPC m t a~ | launch all tests of the project                          |
-| ~SPC m t b~ | launch all tests of the current buffer (same as module)  |
-| ~SPC m t l~ | launch last tests                                        |
-| ~SPC m t m~ | launch all tests of the current module                   |
-| ~SPC m t s~ | launch all tests of the current suite (only with =nose=) |
-| ~SPC m t t~ | launch the current test (function)                       |
+*** Cross-runner bindings
+These bindings work with whichever runner(s) you enabled via ~python-test-runner~.
 
-| Debug       | Description                                                            |
+| No Debug    | Description                                   |
+|-------------+-----------------------------------------------|
+| ~SPC m t a~ | launch all tests of the project               |
+| ~SPC m t m~ | launch all tests of the current module (file) |
+| ~SPC m t t~ | launch the current test (function)            |
+| ~SPC m t l~ | re-run the last test command                  |
+| ~SPC m t f~ | re-run the tests that last failed             |
+
+| Debug       | Description                                          |
+|-------------+------------------------------------------------------|
+| ~SPC m t A~ | launch all tests of the project in debug mode        |
+| ~SPC m t M~ | launch all tests of the current module in debug mode |
+| ~SPC m t T~ | launch the current test (function) in debug mode     |
+| ~SPC m t F~ | re-run the tests that last failed in debug mode      |
+
+#+BEGIN_QUOTE
+  The previous buffer-oriented bindings ~SPC m t b~ and ~SPC m t B~ were redundant.
+  Use ~SPC m t m~ and ~SPC m t M~ instead.
+#+END_QUOTE
+
+*** Pytest-only bindings
+These are available only when ~pytest~ is enabled in ~python-test-runner~.
+
+| Binding     | Description                              |
+|-------------+------------------------------------------|
+| ~SPC m t D~ | pytest dispatch/transient (if available) |
+
+#+BEGIN_QUOTE
+  Tip: For ad-hoc flags (e.g. ~--pdb~, ~-k expr~, ~-x~), use the universal argument:
+  ~SPC u~ before a test command to be prompted for extra CLI args.
+#+END_QUOTE
+
+*** Nose-only bindings
+These are available only when ~nose~ is enabled (either as primary or secondary).
+
+| Binding     | Description                                                            |
 |-------------+------------------------------------------------------------------------|
-| ~SPC m t A~ | launch all tests of the project in debug mode                          |
-| ~SPC m t B~ | launch all tests of the current buffer (module) in debug mode          |
-| ~SPC m t M~ | launch all tests of the current module in debug mode                   |
+| ~SPC m t s~ | launch all tests of the current suite (only with =nose=)               |
 | ~SPC m t S~ | launch all tests of the current suite in debug mode (only with =nose=) |
-| ~SPC m t T~ | launch the current test (function) in debug mode                       |
 
 ** Refactoring
 
