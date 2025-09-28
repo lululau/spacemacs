@@ -418,6 +418,17 @@ to be called for each testrunner. "
       "ts" 'spacemacs/python-test-suite
       "tS" 'spacemacs/python-test-pdb-suite)))
 
+;; Forward declare to silence byte-compiler and allow early local binding.
+(defvar python-pytest-project-root-override nil
+  "Directory to use as project root for python-pytest, or nil.")
+
+(defun spacemacs//python-pytest-set-root-from-setup-cfg ()
+  "If a setup.cfg is found above `default-directory', set pytest root to that dir.
+Unset the override when not found."
+  (let* ((dir (locate-dominating-file default-directory "setup.cfg"))
+         (root (and dir (file-name-as-directory (expand-file-name dir)))))
+    (setq-local python-pytest-project-root-override root)))
+
 (defun spacemacs//python-sort-imports ()
   ;; py-isort-before-save checks the major mode as well, however we can prevent
   ;; it from loading the package unnecessarily by doing our own check

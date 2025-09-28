@@ -370,9 +370,9 @@
     :init
     ;; Reuse the generic testing bindings for a consistent UX.
     (spacemacs//bind-python-testing-keys)
-    :config
-    ;; Preserve previous behavior: recognize setup.cfg as project root.
-    (add-to-list 'python-pytest-project-root-files "setup.cfg")))
+    ;; Make the override robust per-buffer, regardless of load order.
+    (add-hook 'python-mode-local-vars-hook
+              #'spacemacs//python-pytest-set-root-from-setup-cfg)))
 
 (defun python/init-python ()
   (use-package python
