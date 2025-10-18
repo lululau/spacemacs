@@ -150,6 +150,7 @@
     ;; key bindings
     (spacemacs/declare-prefix "gf" "file")
     (spacemacs/set-leader-keys
+      "feg" '("Magit status in Spacemacs dir" . spacemacs/magit-status)
       "gb"  'spacemacs/git-blame-transient-state/body
       "gc"  'magit-clone
       "gfF" 'magit-find-file
