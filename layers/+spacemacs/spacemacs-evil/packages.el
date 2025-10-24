@@ -247,49 +247,6 @@
   (use-package evil-nerd-commenter
     :commands evilnc-comment-operator
     :init
-    ;; double all the commenting functions so that the inverse operations
-    ;; can be called without setting a flag
-    (defun spacemacs/comment-or-uncomment-lines-inverse (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line t))
-        (evilnc-comment-or-uncomment-lines arg)))
-
-    (defun spacemacs/comment-or-uncomment-lines (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line nil))
-        (evilnc-comment-or-uncomment-lines arg)))
-
-    (defun spacemacs/copy-and-comment-lines-inverse (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line t))
-        (evilnc-copy-and-comment-lines arg)))
-
-    (defun spacemacs/copy-and-comment-lines (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line nil))
-        (evilnc-copy-and-comment-lines arg)))
-
-    (defun spacemacs/quick-comment-or-uncomment-to-the-line-inverse
-        (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line t))
-        (evilnc-comment-or-uncomment-to-the-line arg)))
-
-    (defun spacemacs/quick-comment-or-uncomment-to-the-line (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line nil))
-        (evilnc-comment-or-uncomment-to-the-line arg)))
-
-    (defun spacemacs/comment-or-uncomment-paragraphs-inverse (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line t))
-        (evilnc-comment-or-uncomment-paragraphs arg)))
-
-    (defun spacemacs/comment-or-uncomment-paragraphs (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line nil))
-        (evilnc-comment-or-uncomment-paragraphs arg)))
-
     (define-key evil-normal-state-map "gc" 'evilnc-comment-operator)
     (define-key evil-normal-state-map "gy" 'spacemacs/copy-and-comment-lines)
 
