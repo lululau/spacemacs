@@ -522,24 +522,36 @@ ivy"
   (spacemacs/restart-emacs (cons "--adv-timers" args)))
 
 (defun spacemacs/restart-stock-emacs-with-packages (packages &optional args)
-  "Restart emacs without the spacemacs configuration, enable
-debug-init and load the given list of packages."
+  "Restart Emacs without the Spacemacs configuration, enable
+--debug-init and load the given PACKAGES.
+
+PACKAGES may be a list of strings or symbols.
+
+ARGS should be additional command-line arguments for Emacs."
   (interactive
    (progn
      (unless package--initialized
        (package-initialize t))
-     (let ((packages (append (mapcar 'car package-alist)
-                             (mapcar 'car package-archive-contents)
-                             (mapcar 'car package--builtins))))
-       (setq packages (mapcar 'symbol-name packages))
-       (let ((val (completing-read-multiple "Packages to load (comma separated): "
-                                            packages nil t)))
-         `(,val)))))
+     (let* ((all-packages
+             (append package-alist
+                     ;; In order to activate packages from an archive
+                     ;; that are not installed (i.e. not in `package-alist'),
+                     ;; we would first need to set up `package-archives' and
+                     ;; then install the packages, perhaps implicitly via
+                     ;; `use-package-always-ensure'.
+                     ;; (mapcar 'car package-archive-contents)
+                     package--builtins))
+            (packages (completing-read-multiple "Packages to load (comma separated): "
+                                                all-packages nil t)))
+       (list packages))))
   (let ((load-packages-string (mapconcat (lambda (pkg) (format "(use-package %s)" pkg))
                                          packages " ")))
     (spacemacs/restart-emacs-debug-init
      (append (list "-q" "--execute"
-                   (concat "(progn (package-initialize) "
-                           "(require 'use-package)"
-                           load-packages-string ")"))
+                   (format "
+(progn
+  (setq package-user-dir %S)
+  (package-initialize)
+  (require 'use-package)
+  %s)" package-user-dir load-packages-string))
              args))))

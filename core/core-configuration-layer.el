@@ -426,8 +426,11 @@ installation of initialization.")
 directory with a name starting with `+'.")
 
 (defvar update-packages-alist '()
-  "Used to collect information about rollback packages in the
-cache folder.")
+  "List used to collect information about rollback packages in the
+cache folder.
+
+Each element is a cons cell of the form (PACKAGE-NAME . DIRECTORY),
+where DIRECTORY may be nil for built-in packages.")
 
 (defun configuration-layer/load-lock-file ()
   "Load the .lock file"
@@ -825,7 +828,7 @@ a new object."
     (oset obj excluded
           (and (configuration-layer/layer-used-p layer-name)
                (or excluded (oref obj excluded))))
-    (when location
+    (if location
       (if (and (listp location)
                (eq (car location) 'recipe)
                (eq (plist-get (cdr location) :fetcher) 'local))
@@ -838,7 +841,9 @@ a new object."
                     (oset
                      obj location `(recipe :fetcher file :path ,path))))
            ((eq 'dotfile layer-name) nil))
-        (oset obj location location)))
+        (oset obj location location))
+      (when (and ownerp (package-built-in-p pkg-name))
+        (oset obj location 'built-in)))
     ;; cannot override protected packages
     (unless copyp
       ;; a bootstrap package is protected
@@ -1699,7 +1704,9 @@ RNAME is the name symbol of another existing layer."
              not-inst-count)
      t)
     (spacemacs//redisplay)
-    (unless (package-installed-p pkg-name min-version)
+    (unless (and (package-installed-p pkg-name min-version)
+                 (not (and (package-built-in-p pkg-name)
+                           (not (eq location 'built-in)))))
       (condition-case-unless-debug err
           (cond
            ((or (null pkg) (eq 'elpa location))
@@ -1774,6 +1781,11 @@ RNAME is the name symbol of another existing layer."
       ;; installation
       (when upkg-names
         (spacemacs-buffer/set-mode-line "Installing packages..." t)
+        ;; Prevent built-in org from being loaded when updating consult, for example.
+        (dolist (pkg-name configuration-layer--used-packages)
+          (when (and (package-built-in-p pkg-name)
+                     (not (memq pkg-name upkg-names)))
+            (package-activate pkg-name)))
         (let ((delayed-warnings-backup delayed-warnings-list))
           (spacemacs-buffer/append
            (format "Found %s new package(s) to install...\n"
@@ -1781,18 +1793,41 @@ RNAME is the name symbol of another existing layer."
           (configuration-layer/retrieve-package-archives)
           (setq installed-count 0)
           (spacemacs//redisplay)
-          ;; bootstrap and pre step packages first
-          (dolist (pkg-name upkg-names)
-            (let ((pkg (configuration-layer/get-package pkg-name)))
-              (when (and pkg (memq (oref pkg step) '(bootstrap pre)))
-                (setq installed-count (1+ installed-count))
+
+          ;; We sort the packages to be installed as follows:
+          ;; 1. built-in packages
+          ;; 2. bootstrap and pre packages
+          ;; 3. all other packages
+          ;; In particular, we install new versions of built-in packages first,
+          ;; to avoid having the built-in package loaded instead of the new one
+          ;; (for example when another package only depends on an older version;
+          ;; or does not explicitly depend on it, but requires some of its
+          ;; features somewhere).
+          ;; FIXME Dependencies between built-in packages that should get updated
+          ;; could still lead to errors due to built-in versions being loaded. For
+          ;; example, if hypothetically, org (optionally) requires transient in
+          ;; the future, we should take care to update transient before org.
+          (let* (built-in bootstrap-pre remaining
+                 sorted-upkg-names)
+            (dolist (pkg-name upkg-names)
+              (let ((pkg (configuration-layer/get-package pkg-name)))
+                (push pkg-name
+                      (cond ((package-built-in-p pkg-name)
+                             built-in)
+                            ((and pkg (or (eq (oref pkg step) 'bootstrap)
+                                          (eq (oref pkg step) 'pre)))
+                             bootstrap-pre)
+                            (t
+                             remaining)))))
+            (setq sorted-upkg-names
+                  (append (nreverse built-in)
+                          (nreverse bootstrap-pre)
+                          (nreverse remaining)))
+            (dolist (pkg-name sorted-upkg-names)
+              (cl-incf installed-count)
+              (let ((pkg (configuration-layer/get-package pkg-name)))
                 (configuration-layer//install-package pkg pkg-name installed-count not-inst-count))))
-          ;; then all other packages
-          (dolist (pkg-name upkg-names)
-            (let ((pkg (configuration-layer/get-package pkg-name)))
-              (unless (and pkg (memq (oref pkg step) '(bootstrap pre)))
-                (setq installed-count (1+ installed-count))
-                (configuration-layer//install-package pkg pkg-name installed-count not-inst-count))))
+
           (spacemacs-buffer/append "\n")
           (unless init-file-debug
             ;; get rid of all delayed warnings when byte-compiling packages
@@ -1857,7 +1892,11 @@ RNAME is the name symbol of another existing layer."
    pkg-names (lambda (x)
                (let* ((pkg (configuration-layer/get-package x))
                       (min-version (when pkg (oref pkg min-version))))
-                 (not (package-installed-p x min-version))))))
+                 (or (and pkg
+                          (package-built-in-p x)
+                          (not (eq 'built-in (oref pkg location)))
+                          (not (assq x package-alist)))
+                     (not (package-installed-p x min-version)))))))
 
 (defun configuration-layer//get-package-recipe (pkg-name)
   "Return the recipe for PKG-NAME if it has one."
@@ -1874,7 +1913,11 @@ RNAME is the name symbol of another existing layer."
         (cur-version (configuration-layer//get-package-version-string pkg-name))
         (quelpa-upgrade-p t)
         new-version)
-    (when cur-version
+    (when (and cur-version
+               ;; Consider built-in packages, but only when
+               ;; they are installed from a different location.
+               (or (not (package-built-in-p pkg-name))
+                   (and pkg (not (eq 'built-in (oref pkg location))))))
       (setq new-version
             (if recipe
                 (or (quelpa-checkout (configuration-layer//make-quelpa-recipe pkg)
@@ -2188,12 +2231,14 @@ in the back-up directory."
     (dolist (pkg update-packages)
       (unless (memq pkg dotspacemacs-frozen-packages)
         (let* ((src-dir (configuration-layer//get-package-directory pkg))
-               (dest-dir (expand-file-name
-                          (concat rollback-dir
-                                  (file-name-as-directory
-                                   (file-name-nondirectory src-dir))))))
-          (copy-directory src-dir dest-dir 'keeptime 'create 'copy-content)
-          (push (cons pkg (file-name-nondirectory src-dir))
+               (dest-dir (and src-dir
+                              (expand-file-name
+                               (concat rollback-dir
+                                       (file-name-as-directory
+                                        (file-name-nondirectory src-dir)))))))
+          (when src-dir
+            (copy-directory src-dir dest-dir 'keeptime 'create 'copy-content))
+          (push (cons pkg (and src-dir (file-name-nondirectory src-dir)))
                 update-packages-alist))))
     (spacemacs/dump-vars-to-file
      '(update-packages-alist)
@@ -2284,13 +2329,14 @@ Rollback slots are stored in
       (spacemacs//redisplay)
       (dolist (apkg update-packages-alist)
         (let* ((pkg (car apkg))
-               (pkg-dir-name (cdr apkg))
+               (pkg-dir-name (cdr apkg)) ; nil for built-in packages
                (installed-ver
                 (configuration-layer//get-package-version-string pkg))
                (elpa-dir (file-name-as-directory package-user-dir))
-               (src-dir (expand-file-name
-                         (concat rollback-dir (file-name-as-directory
-                                               pkg-dir-name))))
+               (src-dir (and pkg-dir-name
+                             (expand-file-name
+                              (concat rollback-dir (file-name-as-directory
+                                                    pkg-dir-name)))))
                (dest-dir (expand-file-name
                           (concat elpa-dir (file-name-as-directory
                                             pkg-dir-name)))))
@@ -2304,9 +2350,15 @@ Rollback slots are stored in
               (spacemacs-buffer/replace-last-line
                (format "--> rolling back package %s... [%s/%s]"
                        pkg rollbacked-count rollback-count) t)
-              (configuration-layer//package-delete pkg)
-              (copy-directory src-dir dest-dir
-                              'keeptime 'create 'copy-content)))
+              (let ((pkg-desc (cadr (assq pkg package-alist))))
+                (cond
+                 (pkg-desc
+                  (configuration-layer//package-delete pkg-desc))
+                 ((package-built-in-p pkg)
+                  (message "Skipping deletion of package %s since it is built-in." pkg))))
+              (when src-dir
+                (copy-directory src-dir dest-dir
+                                'keeptime 'create 'copy-content))))
           (spacemacs//redisplay)))
       (spacemacs-buffer/append
        (format "\n--> %s packages rolled back.\n" rollbacked-count))
@@ -2358,8 +2410,10 @@ depends on it."
         (gethash pkg-name dependencies))))
 
 (defun configuration-layer//get-package-directory (pkg-name)
-  "Return the directory path for package with name PKG-NAME."
-  (let ((pkg-desc (cadr (assq pkg-name package-alist))))
+  "Return the directory path for package with name PKG-NAME.
+
+Return nil when the package is built-in, and no other version is installed."
+  (and-let* ((pkg-desc (cadr (assq pkg-name package-alist))))
     (package-desc-dir pkg-desc)))
 
 (defun configuration-layer//get-package-deps-from-alist (pkg-name)
@@ -2381,8 +2435,11 @@ depends on it."
 
 (defun configuration-layer//get-package-version-string (pkg-name)
   "Return the version string for package with name PKG-NAME."
-  (and-let* ((pkg-desc (cadr (assq pkg-name package-alist))))
-    (package-version-join (package-desc-version pkg-desc))))
+  (and-let* ((pkg-version
+              (or (and-let* ((pkg-desc (cadr (assq pkg-name package-alist))))
+                    (package-desc-version pkg-desc))
+                  (alist-get pkg-name package--builtin-versions))))
+    (package-version-join pkg-version)))
 
 (defun configuration-layer//get-latest-package-version-string (pkg-name)
   "Return the version string for package with name PKG-NAME."
@@ -2403,9 +2460,7 @@ depends on it."
   (if (configuration-layer//system-package-p pkg-desc)
       (message "Would have removed package %s but this is a system package so it has not been changed."
                (package-desc-name pkg-desc))
-    (if (package-desc-p pkg-desc)
-        (package-delete pkg-desc t t)
-      (package-delete (car (alist-get pkg-desc package-alist)) t t))))
+    (package-delete pkg-desc t t)))
 
 (defun configuration-layer/delete-orphan-packages (packages &optional include-system)
   "Delete PACKAGES if they are orphan.

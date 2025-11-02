@@ -24,7 +24,9 @@
 (defconst ruby-packages
   '(
     add-node-modules-path
-    bundler
+    (bundler :location (recipe
+                        :fetcher github
+                        :repo "emacsattic/bundler"))
     (chruby :toggle (eq ruby-version-manager 'chruby))
     company
     dap-mode
