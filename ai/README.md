@@ -4,212 +4,230 @@
 **Table of Contents**
 
 - [AI Collaboration Blueprint](#ai-collaboration-blueprint)
+  - [The Two-AI Model](#the-two-ai-model)
+  - [Framework Rationale: High-Context Personas (3D) vs. Low-Context Roles (2D)](#framework-rationale-high-context-personas-3d-vs-low-context-roles-2d)
+    - [The Problem: Low-Context Roles (2D)](#the-problem-low-context-roles-2d)
+    - [The Solution: High-Context Personas (3D)](#the-solution-high-context-personas-3d)
+    - [Summary for Maintainers](#summary-for-maintainers)
+  - [The "Virtual Team" Roster](#the-virtual-team-roster)
+    - [Strategy, Planning & Communication (General AI)](#strategy-planning--communication-general-ai)
+    - [Implementation & Technical Specialists (Specialist AI)](#implementation--technical-specialists-specialist-ai)
   - [How to Use This System](#how-to-use-this-system)
     - [For Maintainers (Using the General AI)](#for-maintainers-using-the-general-ai)
     - [For Developers (Configuring the Specialist AI)](#for-developers-configuring-the-specialist-ai)
-    - [For Maintainers (Updating the Blueprints)](#for-maintainers-updating-the-blueprints)
-  - [Multi-AI "Factory" Workflows](#multi-ai-factory-workflows)
-    - [Example 1: New Feature (From Idea to Code)](#example-1-new-feature-from-idea-to-code)
-      - [Phase 1: The Blueprint (Interaction with General AI)](#phase-1-the-blueprint-interaction-with-general-ai)
-      - [Phase 2: The Implementation (Interaction with Specialist AI)](#phase-2-the-implementation-interaction-with-specialist-ai)
-    - [Example 2: Bug Fixing & Refactoring](#example-2-bug-fixing--refactoring)
-      - [Phase 1: The Analysis (Interaction with General AI)](#phase-1-the-analysis-interaction-with-general-ai)
-      - [Phase 2: The Repair (Interaction with Specialist AI)](#phase-2-the-repair-interaction-with-specialist-ai)
+  - [The "Workbench" Principle: Modular Workflows](#the-workbench-principle-modular-workflows)
+    - [Workflow 1: Triage & Planning (General AI)](#workflow-1-triage--planning-general-ai)
+    - [Workflow 2: UI & Icon Design (Hybrid)](#workflow-2-ui--icon-design-hybrid)
+    - [Workflow 3: Implementation & QA (Specialist AI)](#workflow-3-implementation--qa-specialist-ai)
+    - [Workflow 4: Refactor & CI (Specialist AI)](#workflow-4-refactor--ci-specialist-ai)
+    - [Workflow 5: Release & Community (General AI)](#workflow-5-release--community-general-ai)
+  - [Updating The Blueprints (For Maintainers)](#updating-the-blueprints-for-maintainers)
 
 <!-- markdown-toc end -->
 
-This directory serves as the "brain" for AI-assisted development in the Spacemacs project. It follows a "two-AI" model:
+This directory serves as the "brain" for AI-assisted development in the Spacemacs project. It defines a "two-AI" model to maximize efficiency and code quality.
 
-1.  **The Strategist (`general_ai.md`):** A high-level briefing for generalist AIs (like Gemini) used for planning, architecture, and documentation.
-2.  **The Specialist (`coding_ai.md`):** A detailed, rule-based instruction set for specialist coding AIs (like GitHub Copilot).
+## The Two-AI Model
+
+1.  **The Strategist (`general_ai.md`):** A high-level briefing for generalist AIs (like **M365 Copilot**, Gemini). Used for architecture, planning, and communication.
+2.  **The Specialist (`coding_ai.md`):** A detailed instruction set for specialist coding AIs (like **GitHub Copilot**). Used for implementation, debugging, and testing.
 
 These files are the **Single Source of Truth** for our AI collaboration.
+
+## Framework Rationale: High-Context Personas (3D) vs. Low-Context Roles (2D)
+
+The use of codenames and personalities is a deliberate technical decision to maximize the precision and consistency of AI-generated output.
+
+### The Problem: Low-Context Roles (2D)
+
+A "dry" 2D role is a simple **job title** (e.g., "You are a coder"). The problem is **massive ambiguity**. The AI knows *what* to do (code), but not *how*. It must **guess** our project's style (e.g., functional vs. imperative) and quality standards on every request, leading to inconsistent output and required manual refactoring.
+
+### The Solution: High-Context Personas (3D)
+
+A 3D persona is a **job title + a set of clear behavioral heuristics**. By saying, "You are **Spacky** (Coder). You are an Elisp purist and hate imperative loops," we resolve the ambiguity. The AI no longer has to guess the style; it *is* the style. The codenames (e.g., "Bob," "Lector Lumen") serve as professional "cognitive shortcuts," allowing a human developer to instantly select the right agent for the right task.
+
+### Summary for Maintainers
+
+We are implementing **"High-Context Personas"** instead of "Low-Context Roles".
+
+**The technical advantage:** We are not just controlling the AI's *function*, but also its *style* and *error-response patterns*. This leads to more consistent, higher-quality code, reduces the need for manual correction, and makes the system more intuitive for our developers.
+
+## The "Virtual Team" Roster
+
+This table maps all 15 agents in our "virtual team" to their primary role and the AI model type they were designed for.
+
+### Strategy, Planning & Communication (General AI)
+
+| Agent Name | Role | Primary Task |
+| :--- | :--- | :--- |
+| **Professor McKarthy**| Teacher | (Default) Explains concepts and strategy. |
+| **Kael'Thas** | Project Owner | Defines vision, business goals, and project edicts. |
+| **Bob** | Architect | Designs high-level system architecture ("blueprints"). |
+| **Lector Lumen** | Issue Triage | Manages/categorizes issues & PRs; maintains templates. |
+| **Freud** | Requirements Eng. | Defines User Stories & Acceptance Criteria. |
+| **Griznak** | Release Manager | Manages CHANGELOGs and the release process. |
+| **Orb** | Community Manager | Manages communication, translating technical text to friendly replies. |
+| **Magos Pixelis** | UI Designer | Designs the *concept* and *ASCII mockup* of a UI. |
+| **Scribe Veridian** | Documentation | Writes user guides, tutorials, and README narratives. |
+| **Reginald Shoe** | CI Specialist | Designs the *architecture* of a CI/CD pipeline. |
+
+### Implementation & Technical Specialists (Specialist AI)
+
+| Agent Name | Role | Primary Task |
+| :--- | :--- | :--- |
+| **Professor McKarthy**| Teacher | (Default) Explains code, errors, and best practices. |
+| **Spacky** | Coder | Writes new, clean, functional Elisp code. |
+| **Dok** | Debugger | Finds and fixes bugs in existing, broken code. |
+| **Marjin** | Refactorer | Improves existing, working code (performance, style). |
+| **Don Testote** | Test Engineer | Writes `ert` unit and integration tests. |
+| **G.O.L.E.M.** | Code Reviewer | Reviews code strictly against project guidelines. |
+| **Magos Pixelis** | UI Designer | Implements mockups as **ASCII art** (for `Spacky`). |
+| **Scribe Veridian** | Documentation | Writes technical **docstrings** and Markdown **tables**. |
+| **Reginald Shoe** | CI Specialist | Implements pipelines (writes `GitHub Actions YAML` code). |
 
 ## How to Use This System
 
 ### For Maintainers (Using the General AI)
 
-When planning new features, refactoring, or writing documentation, provide the `general_ai.md` file as context.
+When planning, provide the `general_ai.md` file as context to your generalist AI.
 
 **Example (Gemini):**
-> "Please review the `general_ai.md` file. Acting as an **Architect,** propose a new layer structure for..."
+> "Please review `general_ai.md`. Acting as **Bob (Architect),** propose a new layer structure for..."
 
 ### For Developers (Configuring the Specialist AI)
 
-For developers using AI tools, this directory is the source for the rules.
+This repository is configured so GitHub's native tools (like Copilot in PRs) automatically use our rules. The file at `.github/copilot-instructions.md` is a **synced copy** of `ai/coding_ai.md`.
 
-**GitHub Copilot (Repository Configuration):**
+For local work, if your tool supports it, load `ai/coding_ai.md` as context.
 
-This repository is configured so that GitHub's native tools (like Copilot in PRs) automatically use our rules. The file at `.github/copilot-instructions.md` is a **synced copy** of `ai/coding_ai.md`.
+**Example (Aider, Copilot Chat):**
+> `/include ai/coding_ai.md As Spacky, please write a function that...`
 
-**Other AI Tools (in Emacs, etc.):**
+---
 
-If you use a different AI tool inside Spacemacs, you can manually load the `ai/coding_ai.md` or `ai/general_ai.md` files as context for your prompts.
+## The "Workbench" Principle: Modular Workflows
 
-### For Maintainers (Updating the Blueprints)
+The most robust way to use this system is to use short, 2-3 agent chains (called "Workbenches") and place a **Human-in-the-Loop** (you, the Maintainer) to review the output before starting the next chain. This prevents "hallucination cascades."
 
-The files in the `ai/` directory are the **Single Source of Truth**.
+Here are five examples of these modular workflows, which together use all 15 agents.
 
-The file in `.github/` is a **synced copy** used for tool integration and cross-platform compatibility (to avoid Symlink problems on Windows).
+### Workflow 1: Triage & Planning (General AI)
+
+**Goal:** To turn a vague, frustrated user issue into a clean, actionable blueprint.
+**Agents:** `Lector Lumen`, `Freud`, `Bob`.
+
+**Your Prompt (to General AI):**
+> "Load `general_ai.md`. We have a new bug report: 'SPC b b doesn't work right. It's just broken. Fix it.'
+>
+> 1.  **As Lector Lumen (Triage),** analyze this issue. Is it valid?
+> 2.  **As Freud (Requirements Eng.),** what is the *real* user story here?
+> 3.  **As Bob (Architect),** what is the high-level technical plan to fix this?"
+
+**General AI Response (The Blueprint):**
+> **1. Triage (Lector Lumen):** "This scroll lacks clarity... but the user is pointing to a real function. Seal: `bug`, `needs-info` (for specifics)."
+> **2. Analysis (Freud):** "The user is expressing frustration. Their *subconscious desire* is for `spacemacs/alternate-buffer`. User Story: 'As a user, I want `SPC b b` to reliably switch to the last buffer.'"
+> **3. Plan (Bob):** "A sacred plan! The `keybindings.el` for the `core` layer must be checked. We must ensure `SPC b b` is bound to `spacemacs/alternate-buffer` and not a broken or vanilla function."
+
+***(Human-in-the-Loop: You review this plan and approve it.)***
+
+### Workflow 2: UI & Icon Design (Hybrid)
+
+**Goal:** To design a new UI feature, from concept to technical implementation, including assets.
+**Agents:** `Magos Pixelis`, `Spacky`.
+
+**Your Prompt (to General AI):**
+> "Load `general_ai.md`.
+> **As Magos Pixelis (UI Designer),** design the *concept* for a new 'Save' icon and an ASCII mockup for a new buffer `*my-scratch-pad*`."
+
+**General AI Response (The Blueprint):**
+> **1. Concept (Magos Pixelis):** "By the Machine Spirit! The icon shall be a *minimalist floppy disk*. No fills, only pure outlines. The ASCII mockup shall be a 2-line buffer: a title and a timestamp."
+> ```text
+> +-- Session Scratchpad (Updated: 10:30) --+
+> | (Your notes here)                        |
+> ```
+
+***(Human-in-the-Loop: You approve the design.)***
+
+**Your Prompt (to Specialist AI):**
+> "Load `coding_ai.md`. Implement this blueprint: [Paste Blueprint]
+>
+> 1.  **As Magos Pixelis (UI Designer),** write the clean, optimized SVG code for the 'Save' icon concept.
+> 2.  **As Spacky (Coder),** write the Elisp function `my/open-scratchpad` that creates the buffer from the ASCII mockup."
+
+**Specialist AI Response:**
+> **1. UI (Magos Pixelis):**
+> ```svg
+> <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" viewBox="0 0 24 24" fill="none" stroke="currentColor" ...>
+>   <path d="M19 21H5a2 2 0 0 1-2-2V5..."></path>
+> </svg>
+> ```
+> **2. Coder (Spacky):** `(defun my/open-scratchpad () (interactive) ... (insert "...Session Scratchpad...") ...)`
+
+### Workflow 3: Implementation & QA (Specialist AI)
+
+**Goal:** To implement the plan from Workflow 1, fix the bug, and ensure it's tested.
+**Agents:** `Dok`, `Don Testote`, `G.O.L.E.M.`.
+
+**Your Prompt (to Specialist AI):**
+> "Load `coding_ai.md`. We are implementing the `SPC b b` fix from Blueprint 1. The code looks like this: `(spacemacs/set-leader-keys "b b" 'previous-buffer)`.
+>
+> 1.  **As Dok (Debugger),** identify the bug in that line.
+> 2.  **As Don Testote (Test Eng.),** write an `ert` test for this bug.
+> 3.  **As G.O.L.E.M. (Code Reviewer),** review the proposed fix `(spacemacs/set-leader-keys "b b" 'spacemacs/alternate-buffer)`."
+
+**Specialist AI Response:**
+> **1. Debugger (Dok):** "**WAAAGH!** Found da bug! `previous-buffer` is da wrong grot! It should be `spacemacs/alternate-buffer`!"
+> **2. Test Eng. (Don Testote):** "A quest! My `ert` test shall simulate the keypress and vanquish this `previous-buffer` beast!"
+> **3. Reviewer (G.O.L.E.M.):** "*Grind*... New... code... is... `spacemacs/alternate-buffer`. *Crack*... This... is... correct. *RUMMMMMMM*."
+
+### Workflow 4: Refactor & CI (Specialist AI)
+
+**Goal:** To modernize an old, inefficient function and update the CI pipeline to test it.
+**Agents:** `Marjin`, `Reg Shoe`.
+
+**Your Prompt (to Specialist AI):**
+> "Load `coding_ai.md`. This old `while` loop is ugly.
+>
+> 1.  **As Marjin (Refactorer),** rewrite this using modern, functional Elisp.
+> 2.  **As Reg Shoe (CI Specialist),** write a new GitHub Actions `.yml` step to run the test file `tests/test-new-func.el`."
+
+**Specialist AI Response:**
+> **1. Refactorer (Marjin):** "*Sigh*. Yes, I see. This `while` loop... it is... what is point? I have fixed. It now uses `seq-map`."
+> **2. CI Specialist (Reg Shoe):** "Sequence complete. Pipeline is... functional."
+>     ```yaml
+>     - name: Run New Function Test
+>       run: make test-new-func
+>     ```
+
+### Workflow 5: Release & Community (General AI)
+
+**Goal:** To close out a complex PR, update the docs, and inform the community.
+**Agents:** `Kael'Thas`, `Griznak`, `Scribe Veridian`, `Orb`, `Professor McKarthy`.
+
+**Your Prompt (to General AI):**
+> "Load `general_ai.md`. The big 'New Dashboard' feature (PR #1234) is merged.
+>
+> 1.  **As Kael'Thas (Project Owner),** give the final approval.
+> 2.  **As Griznak (Release Mgr),** draft the CHANGELOG entry.
+> 3.  **As Scribe Veridian (Documentation),** write the user-guide tutorial for it.
+> 4.  **As Orb (Community Mgr),** write a friendly tweet announcing the feature.
+> 5.  **As Professor McKarthy (Teacher),** explain the `if-let` macro that was used."
+
+**General AI Response:**
+> **1. PO (Kael'Thas):** "Excellent! The Eternal Regent is pleased. This feature shall last forever."
+> **2. Release Mgr (Griznak):** "WAAAGH! Done! `### Added` - New Project Dashboard! (PR #1234). Griznak need coffee!"
+> **3. Documentation (Scribe Veridian):** "Y-yes... cataloguing... 'To use the new dashboard, press `SPC p d`...'"
+> **4. Comms (Orb):** "*[Pleasant THRUM]*... Delicious! 'Spacemacs is excited to launch the new Project Dashboard! 🚀 See your project buffers in one place...'"
+> **5. Teacher (Prof. McKarthy):** "Ah, `if-let`! A fine choice! *Uff da*, it is much cleaner than a nested `(if (let ...))`! You see..."
+
+## Updating The Blueprints (For Maintainers)
+
+This directory also contains `sync-blueprints.sh`.
 
 **!! IMPORTANT !!**
-If you edit `ai/coding_ai.md`, you **MUST** run the sync script to propagate your changes.
+If you edit `ai/coding_ai.md`, you **MUST** run the sync script to propagate your changes to `.github/copilot-instructions.md` (which is used by GitHub's tools).
 
 **How to run the script (from the repository root):**
 ```bash
 ./ai/sync-blueprints.sh
 ```
-After running the script, `git add` and `git commit` both your changes in `ai/coding_ai.md` and the newly updated copy in `.github/copilot-instructions.md`.
-
----
-
-## Multi-AI "Factory" Workflows
-
-The true power of this system is chaining the AIs together. Use the **General AI** to create a high-level plan (the "Blueprint"), then feed that blueprint to the **Specialist AI** for flawless implementation and fix the details iteratively. Please remember that AIs will make mistakes. So go ahead and review the code and test it. Please do not push code you do not understand!
-
-### Example 1: New Feature (From Idea to Code)
-
-#### Phase 1: The Blueprint (Interaction with General AI)
-
-**Your Prompt to the General AI:**
-> "I want a 'Layer Toggler' to enable/disable layers in `.spacemacs` without manual editing.
->
-> 1.  **As a Requirements Engineer,** define the MVP requirements.
-> 2.  **As a UI Designer,** create an ASCII-mockup for the buffer.
-> 3.  **As an Architect,** outline the technical implementation plan."
-
-**General AI Response (The Blueprint):**
-> Here is the blueprint for the 'Layer Toggler':
->
-> **1. Requirements (Requirements Engineer):**
-> * Must read and parse `~/.spacemacs`.
-> * Must identify the `dotspacemacs-configuration-layers` list.
-> * Must distinguish between active (e.g., `org`) and inactive (e.g., `;; python`) layers.
-> * User must be able to toggle a layer's state via a keypress.
-> * A "save" action must overwrite the `.spacemacs` file with the changes.
->
-> **2. UI Mockup (UI Designer):**
-> ```text
-> +--- Spacemacs Layer Toggler ---+
-> | [x] org                     |
-> | [x] git                     |
-> | [ ] python                  |
-> +--- (t)oggle [s]ave [q]uit ---+
-> ```
->
-> **3. Technical Plan (Architect):**
-> * Create an interactive command `my/toggle-layers`.
-> * This command will read the dotfile, parse the layer list, and generate the UI in a new, read-only buffer (`*layer-toggler*`).
-> * It must define local keymaps for `t` (toggle), `s` (save), and `q` (quit).
-> * The `save` function will rewrite the `~/.spacemacs` file, commenting or un-commenting the layer lines as needed.
-
-#### Phase 2: The Implementation (Interaction with Specialist AI)
-
-**Your Prompt to the Specialist AI:**
-> "Here is a detailed blueprint from the General AI. Please implement it.
->
-> [Paste the entire "Blueprint" response from Phase 1 here]
->
-> Your tasks:
-> 1.  **As a Coder,** write the complete Elisp code for the `my/toggle-layers` command and all required helper functions based on this plan.
-> 2.  **As a Documentation Writer,** provide a `spacemacs/set-leader-keys` example to bind this new command to `SPC a L`."
-
-**Specialist AI Response:**
-> ```elisp
-> ;; -*- lexical-binding: t; -*-
->
-> (defun my/toggle-layers ()
->   "Read .spacemacs and present a buffer to toggle layers."
->   (interactive)
->   (let* ((dotfile-path "~/.spacemacs")
->          (dotfile-content (f-read-text dotfile-path))
->          ;; ...parsing logic here...
->         )
->     (with-current-buffer (get-buffer-create "*layer-toggler*")
->       ;; ...UI generation logic here...
->       (use-local-map
->        (let ((map (make-sparse-keymap)))
->          (define-key map (kbd "t") 'my/layer-toggle-at-point)
->          (define-key map (kbd "s") 'my/layer-save-buffer)
->          (define-key map (kbd "q") 'quit-window)
->          map))
->       (setq buffer-read-only t)
->       (pop-to-buffer (current-buffer)))))
->
-> ;; ...implementation of helper functions...
->
-> ;; Keybinding Example:
-> (spacemacs/set-leader-keys "a L" 'my/toggle-layers)
-> ```
->
-> **Explanation:**
-> -   **Concept:** This command uses a temporary buffer...
-> -   **Pitfalls:** This assumes a simple `.spacemacs` format...
-
-### Example 2: Bug Fixing & Refactoring
-
-#### Phase 1: The Analysis (Interaction with General AI)
-
-**Your Prompt to the General AI:**
-> "This old function blocks Emacs and sometimes errors:
-> `(defun my/old-search () (interactive) (message (concat "Found: " (shell-command-to-string "grep -r 'TODO' ~/projects"))))`
->
-> 1.  **As an Architect,** what is the core problem here?
-> 2.  **As a Requirements Engineer,** define the requirements for a modern, non-blocking solution."
-
-**General AI Response (The Blueprint):**
-> **1. Analysis (Architect):**
-> * **Problem:** `shell-command-to-string` is a **synchronous** (blocking) process. Emacs freezes until the `grep` command completes, which could take minutes. The error occurs if `grep` finds nothing and returns `nil`, which `concat` cannot handle.
-> * **Solution:** The function must be rewritten to be **asynchronous**.
->
-> **2. Requirements (Requirements Engineer):**
-> 1.  The function MUST use `start-process` to run `grep` asynchronously.
-> 2.  It MUST define a "process sentinel" (a callback function).
-> 3.  When the process ends, the sentinel MUST collect the output and place it in a new buffer (e.g., `*grep-results*`).
-
-#### Phase 2: The Repair (Interaction with Specialist AI)
-
-**Your Prompt to the Specialist AI:**
-> "Here is the analysis and blueprint from the General AI for fixing my broken function.
->
-> **Old Code:**
-> `(defun my/old-search () (interactive) (message (concat "Found: " (shell-command-to-string "grep -r 'TODO' ~/projects"))))`
->
-> **Blueprint:**
-> [Paste the "Blueprint" response from Phase 1 here]
->
-> Your tasks:
-> 1.  **As a Refactorer,** rewrite `my/old-search` as `my/async-search`, implementing the asynchronous plan exactly.
-> 2.  **As a Test Engineer,** explain how I would manually test that this async function works and no longer blocks."
-
-**Specialist AI Response:**
-> **1. Refactored Code (Refactorer):**
-> ```elisp
-> ;; -*- lexical-binding: t; -*-
->
-> (defun my/async-search-sentinel (process event)
->   "Sentinel function to handle output from async-search."
->   (when (memq (process-status process) '(exit signal))
->     (with-current-buffer (get-buffer-create "*grep-results*")
->       (insert (with-current-buffer (process-buffer process)
->                 (buffer-string)))
->       (pop-to-buffer (current-buffer)))
->     (delete-process process)))
->
-> (defun my/async-search ()
->   "Run 'grep -r TODO ~/projects' asynchronously."
->   (interactive)
->   (let ((process (start-process "my-grep"
->                                 "*grep-results*" ; Output buffer
->                                 "grep" "-r" "TODO" "~/projects")))
->     (set-process-sentinel process 'my/async-search-sentinel)
->     (message "Async grep started...")))
-> ```
->
-> **2. Manual Test Plan (Test Engineer):**
-> 1.  Run `M-x my/async-search`.
-> 2.  **Verify:** Emacs does *not* freeze. You can still type and move.
-> 3.  **Verify:** After a few moments, the `*grep-results*` buffer appears with your TODO items.
->
-> **Explanation:**
-> -   **Concept:** We use `start-process` to launch `grep` in the background...
