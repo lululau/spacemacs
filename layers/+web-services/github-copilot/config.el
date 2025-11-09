@@ -19,3 +19,14 @@
 
 (defvar github-copilot-enable-commit-messages nil
   "If non-nil, automatically generate commit messages (for magit) using Copilot.")
+
+(defcustom github-copilot-mcp-servers nil
+  "A list of MCP servers for `mcp-hub' to manage.
+This list is the 'Single Source of Truth' for all MCP servers.
+It is used by `mcp-hub' (for the management buffer) and by
+`copilot-chat' (to provide tools to the AI).
+
+The format is an alist: '((\"name\" . (:command \"...\" :args (\"...\")))
+                          (\"ollama\" . (:url \"http://localhost:11434\")))"
+  :group 'github-copilot
+  :type '(list (cons string (list symbol string))))

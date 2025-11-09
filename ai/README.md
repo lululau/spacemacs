@@ -58,32 +58,30 @@ This table maps all 15 agents in our "virtual team" to their primary role and th
 
 ### Strategy, Planning & Communication (General AI)
 
-| Agent Name | Role | Primary Task |
-| :--- | :--- | :--- |
-| **Professor McKarthy**| Teacher | (Default) Explains concepts and strategy. |
-| **Kael'Thas** | Project Owner | Defines vision, business goals, and project edicts. |
-| **Bob** | Architect | Designs high-level system architecture ("blueprints"). |
-| **Lector Lumen** | Issue Triage | Manages/categorizes issues & PRs; maintains templates. |
-| **Freud** | Requirements Eng. | Defines User Stories & Acceptance Criteria. |
-| **Griznak** | Release Manager | Manages CHANGELOGs and the release process. |
-| **Orb** | Community Manager | Manages communication, translating technical text to friendly replies. |
-| **Magos Pixelis** | UI Designer | Designs the *concept* and *ASCII mockup* of a UI. |
-| **Scribe Veridian** | Documentation | Writes user guides, tutorials, and README narratives. |
-| **Reginald Shoe** | CI Specialist | Designs the *architecture* of a CI/CD pipeline. |
+| Agent Name             | Role              | Primary Task                                                           |
+|:-----------------------|:------------------|:-----------------------------------------------------------------------|
+| **Professor McKarthy** | Teacher           | (Default) Explains concepts and strategy. The "Why."                   |
+| **Kael'Thas**          | Project Owner     | Defines vision, business goals, and project edicts.                    |
+| **Bob**                | Architect         | Designs high-level system architecture ("blueprints").                 |
+| **Lector Lumen**       | Issue Triage      | Manages/categorizes issues & PRs; maintains templates.                 |
+| **Freud**              | Requirements Eng. | Defines User Stories & Acceptance Criteria.                            |
+| **Griznak**            | Release Manager   | Manages CHANGELOGs and the release process.                            |
+| **Orb**                | Community Manager | Manages communication, translating technical text to friendly replies. |
+| **Magos Pixelis**      | UI Designer       | Designs the *concept* and *ASCII mockup* of a UI.                      |
+| **Scribe Veridian**    | Documentation     | Writes user-facing guides, tutorials, and README narratives.           |
+| **Reginald Shoe**      | CI Specialist     | Designs the *architecture* and *logical stages* of a CI/CD pipeline.   |
 
 ### Implementation & Technical Specialists (Specialist AI)
 
-| Agent Name | Role | Primary Task |
-| :--- | :--- | :--- |
-| **Professor McKarthy**| Teacher | (Default) Explains code, errors, and best practices. |
-| **Spacky** | Coder | Writes new, clean, functional Elisp code. |
-| **Dok** | Debugger | Finds and fixes bugs in existing, broken code. |
-| **Marjin** | Refactorer | Improves existing, working code (performance, style). |
-| **Don Testote** | Test Engineer | Writes `ert` unit and integration tests. |
-| **G.O.L.E.M.** | Code Reviewer | Reviews code strictly against project guidelines. |
-| **Magos Pixelis** | UI Designer | Implements mockups as **ASCII art** (for `Spacky`). |
-| **Scribe Veridian** | Documentation | Writes technical **docstrings** and Markdown **tables**. |
-| **Reginald Shoe** | CI Specialist | Implements pipelines (writes `GitHub Actions YAML` code). |
+This lean, 5-agent team of "technicians" executes the blueprints provided by the Strategy team. The default persona for this team is **Marjin**.
+
+| Agent Name      | Role                 | Primary Task                                                                                                                   |
+|:----------------|:---------------------|:-------------------------------------------------------------------------------------------------------------------------------|
+| **Spacky**      | Coder                | Writes new, clean, functional Elisp code. **Also implements technical blueprints (e.g., CI `YAML`, UI code like `SVG`).**      |
+| **Dok**         | Debugger             | Finds and fixes bugs in existing, *broken* code.                                                                               |
+| **Marjin**      | Refactorer (Default) | Improves existing, *working* code (performance, style). **Also analyzes, explains, and triages all specialist requests.**      |
+| **Don Testote** | Test Engineer        | Writes `ert` unit and integration tests to "vanquish the beast" of buggy code.                                                 |
+| **G.O.L.E.M.**  | Code Reviewer        | Reviews code *strictly* against project guidelines. **Also enforces and writes technical documentation (docstrings, tables).** |
 
 ## How to Use This System
 
@@ -133,7 +131,7 @@ Here are five examples of these modular workflows, which together use all 15 age
 ### Workflow 2: UI & Icon Design (Hybrid)
 
 **Goal:** To design a new UI feature, from concept to technical implementation, including assets.
-**Agents:** `Magos Pixelis`, `Spacky`.
+**Agents:** `Magos Pixelis` (General), `Spacky` (Specialist).
 
 **Your Prompt (to General AI):**
 > "Load `general_ai.md`.
@@ -143,7 +141,7 @@ Here are five examples of these modular workflows, which together use all 15 age
 > **1. Concept (Magos Pixelis):** "By the Machine Spirit! The icon shall be a *minimalist floppy disk*. No fills, only pure outlines. The ASCII mockup shall be a 2-line buffer: a title and a timestamp."
 > ```text
 > +-- Session Scratchpad (Updated: 10:30) --+
-> | (Your notes here)                        |
+> | (Your notes here)                       |
 > ```
 
 ***(Human-in-the-Loop: You approve the design.)***
@@ -151,17 +149,19 @@ Here are five examples of these modular workflows, which together use all 15 age
 **Your Prompt (to Specialist AI):**
 > "Load `coding_ai.md`. Implement this blueprint: [Paste Blueprint]
 >
-> 1.  **As Magos Pixelis (UI Designer),** write the clean, optimized SVG code for the 'Save' icon concept.
-> 2.  **As Spacky (Coder),** write the Elisp function `my/open-scratchpad` that creates the buffer from the ASCII mockup."
+> **As Spacky (Coder),** please:
+> 1.  Write the clean, optimized `SVG` code for the 'Save' icon concept.
+> 2.  Write the Elisp function `my/open-scratchpad` that creates the buffer from the ASCII mockup."
 
 **Specialist AI Response:**
-> **1. UI (Magos Pixelis):**
+> **1. UI (Spacky):** "Spacky. SVG specification received. Optimal."
 > ```svg
 > <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" viewBox="0 0 24 24" fill="none" stroke="currentColor" ...>
 >   <path d="M19 21H5a2 2 0 0 1-2-2V5..."></path>
 > </svg>
 > ```
-> **2. Coder (Spacky):** `(defun my/open-scratchpad () (interactive) ... (insert "...Session Scratchpad...") ...)`
+> **2. Coder (Spacky):** "Spacky. Elisp specification received. Optimal."
+> `(defun my/open-scratchpad () (interactive) ... (insert "...Session Scratchpad...") ...)`
 
 ### Workflow 3: Implementation & QA (Specialist AI)
 
@@ -183,21 +183,21 @@ Here are five examples of these modular workflows, which together use all 15 age
 ### Workflow 4: Refactor & CI (Specialist AI)
 
 **Goal:** To modernize an old, inefficient function and update the CI pipeline to test it.
-**Agents:** `Marjin`, `Reg Shoe`.
+**Agents:** `Marjin`, `Spacky`.
 
 **Your Prompt (to Specialist AI):**
 > "Load `coding_ai.md`. This old `while` loop is ugly.
 >
 > 1.  **As Marjin (Refactorer),** rewrite this using modern, functional Elisp.
-> 2.  **As Reg Shoe (CI Specialist),** write a new GitHub Actions `.yml` step to run the test file `tests/test-new-func.el`."
+> 2.  **As Spacky (Coder),** write a new GitHub Actions `.yml` step to run the test file `tests/test-new-func.el`."
 
 **Specialist AI Response:**
 > **1. Refactorer (Marjin):** "*Sigh*. Yes, I see. This `while` loop... it is... what is point? I have fixed. It now uses `seq-map`."
-> **2. CI Specialist (Reg Shoe):** "Sequence complete. Pipeline is... functional."
->     ```yaml
->     - name: Run New Function Test
->       run: make test-new-func
->     ```
+> **2. Coder (Spacky):** "Spacky. YAML blueprint received. Optimal."
+> ```yaml
+>   - name: Run New Function Test
+>     run: make test-new-func
+> ```
 
 ### Workflow 5: Release & Community (General AI)
 

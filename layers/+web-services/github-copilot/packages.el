@@ -15,24 +15,25 @@
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
+;; GNU General Public License for all details.
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 (defconst github-copilot-packages
-  '((copilot)
-    (copilot-chat)))
+  '(copilot       ;; For inline code completion
+    copilot-chat  ;; The "Cathedral" (Chat UI)
+    mcp))         ;; The "ToolShed" (mcp-hub & foundation)
 
 (defun github-copilot/init-copilot ()
-  "Initialize the `copilot' package and set up keybindings."
+  "Initialize the `copilot' package (inline suggestions)."
   (use-package copilot
     :hook (prog-mode . copilot-mode)
+    :defer t
     :custom
     (copilot-enable-predicates '(spacemacs//copilot-enable-predicate
                                  copilot--buffer-changed))
-    :defer t
     :config
     (define-key copilot-completion-map (kbd "C-M-<tab>") 'spacemacs/github-copilot-next-completion)
     (define-key copilot-completion-map (kbd "C-M-<iso-lefttab>") 'spacemacs/github-copilot-previous-completion)
@@ -40,23 +41,47 @@
     (define-key copilot-completion-map (kbd "C-M-S-<return>") 'copilot-accept-completion-by-word)))
 
 (defun github-copilot/init-copilot-chat ()
-  "Initialize the `copilot-chat' package and set up keybindings."
+  "Initialize the `copilot-chat' package (The Cathedral).
+This is the main chat UI which will *manage* mcp tools."
   (use-package copilot-chat
     :defer t
+    :after mcp
     :init
     ;; Provide our transient state in the AI menu
     (spacemacs/declare-prefix "$" "AI")
     (spacemacs/set-leader-keys "$c" 'copilot-chat-transient)
+
+    :config
+    (setq copilot-chat-mcp-servers (mapcar #'car github-copilot-mcp-servers))
+
+    ;; Setup Magit integration if enabled
     (when github-copilot-enable-commit-messages
       (add-hook 'git-commit-setup-hook
                 #'copilot-chat-insert-commit-message))
-    :config
-    ;; Make sure that standard ,, works as confirm in the chat window
+
+    ;; Keybindings for the chat prompt
     (evil-define-key 'normal copilot-chat-prompt-mode-map ",," #'copilot-chat-prompt-send)
     (evil-define-key 'normal copilot-chat-prompt-mode-map ",a" #'copilot-chat-kill-instance)
     (evil-define-key 'normal copilot-chat-prompt-mode-map ",k" #'copilot-chat-kill-instance)
-
-    ;; And don't forget to provide an alternative for holy mode users
     (define-key copilot-chat-prompt-mode-map (kbd "C-c C-c") #'copilot-chat-prompt-send)
     (define-key copilot-chat-prompt-mode-map (kbd "C-c C-a") #'copilot-chat-kill-instance)
     (define-key copilot-chat-prompt-mode-map (kbd "C-c C-k") #'copilot-chat-kill-instance)))
+
+(defun github-copilot/init-mcp ()
+  "Initialize the `mcp' package (The Sacred ToolShed).
+This provides the `mcp-hub' for managing external servers
+and *programmatically* sets up the default tools."
+  (use-package mcp
+    :defer t
+    :config
+    ;; We *always* set the hub's list from our variable.
+    ;; This works for *both* our defaults AND the user's custom list.
+    (setq mcp-hub-servers github-copilot-mcp-servers)
+    )
+
+  (use-package mcp-hub
+    :defer t
+    :after mcp ;; The hub *must* be built AFTER the mcp foundation!
+    :init
+    (spacemacs/set-leader-keys "$m" 'mcp-hub)
+    ))

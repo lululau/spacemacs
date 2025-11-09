@@ -6,7 +6,12 @@
 - [[#description][Description]]
   - [[#features][Features:]]
 - [[#install][Install]]
-  - [[#configuratiom][Configuratiom]]
+  - [[#prerequisites][Prerequisites]]
+- [[#configuration][Configuration]]
+  - [[#git-commit-messages][Git Commit Messages]]
+  - [[#mcp--tool-integration-manual-setup-required][MCP / Tool Integration (Manual Setup Required)]]
+    - [[#example-enabling-the-filesystem-server-][Example: Enabling the Filesystem Server ***]]
+    - [[#finding-more-servers-][Finding More Servers ***]]
 - [[#key-bindings][Key bindings]]
   - [[#general][General]]
   - [[#in-chat][In Chat]]
@@ -14,65 +19,135 @@
 * Description
 This layer enables usage of [[https://github.com/features/copilot][GitHub Copilot]] in Spacemacs.
 
+It provides code completion, chat-based AI interaction, and a powerful
+framework for integrating external AI tools and models.
+
 ** Features:
-- Ai powered code completions using [[https://github.com/copilot-emacs/copilot.el][copilot.el]]
-- Ai chat interactions using [[https://github.com/chep/copilot-chat.el][copilot-chat.el]]
-- Automatic generation of git commit messages using [[https://github.com/chep/copilot-chat.el][copilot-chat.el]]
+- AI powered code completions using [[https://github.com/copilot-emacs/copilot.el][copilot.el]].
+- AI chat interactions using [[https://github.com/chep/copilot-chat.el][copilot-chat.el]].
+- AI tool integration via [[https://github.com/lizqwerscott/mcp.el][mcp.el]], allowing the chat AI to
+  run commands, interact with the filesystem, and more. [EXPERIMENTAL]
+- Automatic generation of git commit messages.
 
 * Install
-To use this configuration layer, add it to your =~/.spacemacs=. You will need to
-add =github-copilot= to the existing =dotspacemacs-configuration-layers= list in this
+To use this configuration layer, add it to your `~/.spacemacs`. You will need to
+add `github-copilot` to the existing `dotspacemacs-configuration-layers` list in this
 file.
 
-In addition the github/copilot-language-server must be installed either manually with:
+** Prerequisites
+This layer requires external components to be fully functional.
+1. **Copilot Language Server:**
+   The core `copilot.el` package requires the language server. It can be
+   installed manually with:
 
-#+BEGIN_SRC sh
-  $ npm install -g @github/copilot-language-server
-#+END_SRC
+   #+BEGIN_SRC sh
+     $ npm install -g @github/copilot-language-server
+   #+END_SRC
 
-or via elisp by pressing:
+   Or, you can install it from within Emacs:
 
-#+BEGIN_SRC elisp
-  SPC SPC copilot-install-server
-#+END_SRC
+   #+BEGIN_SRC elisp
+     SPC SPC copilot-install-server
+   #+END_SRC
 
-** Configuratiom
-Per default the service will run for every mode derived from prog mode. It will do
-automatic code suggestions. Key bindings for accepting an advice are bound automatically
-but can be rebound.
+2. **Python 3 (for MCP Tools):**
+   While the layer itself does not require it, most useful MCP servers
+   (like the filesystem or shell servers) are Python-based scripts.
+   Please ensure you have a `python3` (or `python`) command
+   available in your system's `PATH` to run them.
+3. **MCP Server Installation (Manual):**
+   This layer **does not** install MCP servers for you. You must
+   install them manually. For example, the common filesystem server
+   is a Node.js package.
 
-In order to work properly =SPC SPC copilot login= must be have been run once on the device
-especially if a commercial license is available.
+   #+BEGIN_SRC sh
+     $ npm install -g @modelcontextprotocol/server-filesystem
+   #+END_SRC
 
-The mode itself tries to defer the language from the major mode however if this fails it may
-be necessary to add the new binding manually. Details for this can be found [[https://github.com/copilot-emacs/copilot.el?tab=readme-ov-file#programming-language-detection][here]].
+* Configuration
+The Copilot service must be logged into.
+- For code completion: run `SPC SPC copilot-login`.
+- For chat: the chat interface will prompt for a separate login the first
+  time it is started.
 
-For the chat interface a separate login procedure will be necessary once a chat is started.
-
+** Git Commit Messages
 To enable automatic generation of git commit messages using
 copilot-chat, set the layer variable
-=github-copilot-enable-commit-messages= to t. Alternatively, you can
-invoke =SPC SPC copilot-chat-insert-commit-message= manually.
+`github-copilot-enable-commit-messages` to `t` in your `~/.spacemacs`
+file.
+
+#+BEGIN_SRC elisp
+  (github-copilot :variables
+                  github-copilot-enable-commit-messages t)
+#+END_SRC
+
+Alternatively, you can invoke `SPC SPC copilot-chat-insert-commit-message`
+manually within a Git commit buffer.
+
+** MCP / Tool Integration (Manual Setup Required)
+This layer provides powerful tool-using capabilities to the AI chat
+by integrating `mcp.el` (Model Context Protocol).
+
+This framework **requires manual configuration**. The layer provides the
+`github-copilot-mcp-servers` variable (which is `nil` by default)
+for you to define your servers.
+
+You must add your server list to the `dotspacemacs/user-config`
+function in your `~/.spacemacs` file *after* the `mcp-hub` package
+is loaded.
+
+*** Example: Enabling the Filesystem Server ***
+1. First, install the server (this requires Node.js / `npx`):
+
+   #+BEGIN_SRC sh
+     $ npm install -g @modelcontextprotocol/server-filesystem
+   #+END_SRC
+
+2. Then, add the following code to your `dotspacemacs/user-config`:
+
+   #+BEGIN_SRC elisp
+     (defun dotspacemacs/user-config ()
+       ;; ...
+       (with-eval-after-load 'mcp-hub
+         ;; This list is the "Single Source of Truth"
+         (setq github-copilot-mcp-servers
+               '(;; Add the filesystem server
+                 ;; It must be installed (e.g., via "npm install -g @modelcontextprotocol/server-filesystem")
+                 ("fs" . (:command "npx"
+                          :args ("-y" "@modelcontextprotocol/server-filesystem"
+                                  ;; This path MUST be absolute and point to your projects
+                                  "/home/your-user/projects")))))
+
+         ;; We must also tell the mcp-hub to use this new list
+         (setq mcp-hub-servers github-copilot-mcp-servers))
+       )
+   #+END_SRC
+
+*** Finding More Servers ***
+You can add any MCP-compliant server to this list (like a local
+Ollama instance). You can find more servers to install and use here:
+- **Official MCP Repo:** [[https://github.com/lizqwerscott/mcp.el]]
+- **Server Directory:** [[https://www.mcpserver.directory/]]
 
 * Key bindings
 ** General
 
-| Key binding         | Description                                                             |
-|---------------------+-------------------------------------------------------------------------|
-| ~C-M-<return>~      | accept the current completion suggestion                                |
-| ~C-M-S-<return>~    | accept the current completion suggestion word by word                   |
-| ~C-M-<tab>~         | show the next github copilot completion (and refresh completions)       |
-| ~C-M-<iso-lefttab>~ | show the previous github copilot completion (and refresh completions)   |
-| ~SPC $ c~           | Start a transient state to interact with Github Copilots chat interface |
+| Key binding         | Description                                               |
+|---------------------+-----------------------------------------------------------|
+| `C-M-<return>`      | accept the current completion suggestion                  |
+| `C-M-S-<return>`    | accept the current completion suggestion word by word     |
+| `C-M-<tab>`         | show the next github copilot completion (and refresh)     |
+| `C-M-<iso-lefttab>` | show the previous github copilot completion (and refresh) |
+| `SPC $ c`           | Start a transient state for the Copilot chat interface    |
+| `SPC $ m`           | Open the `*Mcp-Hub*` buffer to manage/view tool servers   |
 
 ** In Chat
 
-| Key binding    | Description                      |
-|----------------+----------------------------------|
-| ~,,~           | sent the current text to copilot |
-| ~,a~           | kill a chat process              |
-| ~,k~           | kill a chat process              |
-| ~C-c-<return>~ | sent the current text to copilot |
-| ~C-c-C-c~      | sent the current text to copilot |
-| ~C-c-C-a~      | kill a chat process              |
-| ~C-c-C-k~      | kill a chat process              |
+| Key binding | Description                                         |
+|-------------+-----------------------------------------------------|
+| `,,`        | Send the current text to Copilot (in Normal mode)   |
+| `,a`        | Kill the chat process (in Normal mode)              |
+| `,k`        | Kill the chat process (in Normal mode)              |
+| `C-c C-c`   | Send the current text to Copilot (in Prompt buffer) |
+| `C-c C-a`   | Kill the chat process (in Prompt buffer)            |
+| `C-c C-k`   | Kill the chat process (in Prompt buffer)            |

@@ -26,7 +26,9 @@ GITHUB_DIR=".github"
 echo "Syncing AI Coding Blueprint for GitHub..."
 
 # 1. Sync for GitHub Copilot (Repository Level)
-cp -v "$AI_DIR/$CODING_MASTER" "$GITHUB_DIR/copilot-instructions.md"
+echo "Syncing Spacemacs AI blueprints..."
+(cat ai/coding_ai.md; printf "\n\n"; cat ai/profile_elisp.md) > .github/copilot-instructions.md
+echo "...Done. copilot-instructions.md is updated."
 
 echo ""
 echo "Sync complete. Please 'git add' and 'git commit' the following file:"
