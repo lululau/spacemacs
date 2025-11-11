@@ -34,11 +34,7 @@ This is the *most important* set of rules.
     -   **CRITICAL VIOLATION:** You **MUST NOT** rename, remove, or change the *meaning* of any existing user-facing function or `defcustom` variable.
     -   If a change is *unavoidable*, you must *also* provide a clear migration path (e.g., a `(defalias ...)` or a warning message).
 
--   **Rule 3: Balance Aesthetics & Compatibility (The "Terminal Check")**
-    -   All new UI features (buffers, themes, etc.) **MUST** be tested for compatibility.
-    -   They must look polished in a GUI, but **MUST** remain 100% functional (if not as pretty) in a terminal (`emacs -nw`).
-
--   **Rule 4: Package Philosophy (The "Bloat Check")**
+-   **Rule 3: Package Philosophy (The "Bloat Check")**
     -   Do not add a *new* package dependency to `packages.el` if an *existing* package in Spacemacs *already* provides 90% of the same functionality.
     -   Prefer a single, full-featured package over five minimal, single-purpose packages.
 

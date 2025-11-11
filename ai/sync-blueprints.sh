@@ -27,7 +27,7 @@ echo "Syncing AI Coding Blueprint for GitHub..."
 
 # 1. Sync for GitHub Copilot (Repository Level)
 echo "Syncing Spacemacs AI blueprints..."
-(cat ai/coding_ai.md; printf "\n\n"; cat ai/profile_elisp.md) > .github/copilot-instructions.md
+cp ai/coding_ai.md .github/copilot-instructions.md
 echo "...Done. copilot-instructions.md is updated."
 
 echo ""
