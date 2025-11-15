@@ -12,7 +12,6 @@
   - [[#setup-feeds][Setup feeds]]
     - [[#with-org][With Org]]
     - [[#manually][Manually]]
-  - [[#server][Server]]
   - [[#elfeed-goodies][Elfeed goodies]]
 - [[#key-bindings][Key bindings]]
 - [[#troubleshooting][Troubleshooting]]
@@ -25,7 +24,6 @@ This layer integrates a web feed reader into spacemacs.
 ** Features:
 - Support for reading RSS and Atom feeds directly within emacs via [[https://github.com/skeeto/elfeed][Elfeed]].
 - Support for managing feeds via org files supplied by [[https://github.com/remyhonig/elfeed-org][elfeed-org]].
-- Support for displaying feed database content in the browser via [[https://github.com/skeeto/elfeed#web-interface][web interface]].
 
 * Install
 ** Layer
@@ -83,18 +81,6 @@ in your =.spacemacs= file.
 Check documentation for =elfeed-feeds= for more information about this variable
 (~SPC h d v elfeed-feeds RET~).
 
-** Server
-Elfeed comes with a simple [[https://github.com/skeeto/elfeed#web-interface][web interface]] to browse its database. You can manually
-start it by calling =elfeed-web-start= or by setting =elfeed-enable-web-interface=
-to =t= which will start the web automatically when Emacs starts.
-
-By default web interface is available on [[http://localhost:8080/elfeed/][localhost:8080/elfeed]]. You can change
-the default port by changing the value of =httpd-port=.
-
-#+BEGIN_SRC emacs-lisp
-  (elfeed :variables elfeed-enable-web-interface t)
-#+END_SRC
-
 ** Elfeed goodies
 Elfeed layer loads a set of useful helper functions and bindings to improve your elfeed experience.
 Normally these should help you however there are some workflows where these may rather hinder you.
@@ -120,8 +106,6 @@ Use =SPC ?= to discover major-mode key bindings.
 | ~gu~        | unjam elfeed if it is slow due to slow connection |
 | ~o~         | load OPML                                         |
 | ~q~         | quit main window, or item view buffer.            |
-| ~w~         | start web server                                  |
-| ~W~         | stop web server                                   |
 
 In =elfeed-show= mode, you can use the following bindings:
 
