@@ -2566,23 +2566,24 @@ Return nil if MODE does not appear in `auto-mode-alist'."
           (float-time (time-subtract (current-time) emacs-start-time))))
   (let ((stats (configuration-layer/configured-packages-stats
                 configuration-layer--used-packages)))
-    (spacemacs-buffer/insert-page-break)
     (with-current-buffer (get-buffer-create spacemacs-buffer-name)
-      (let ((buffer-read-only nil))
-        (spacemacs-buffer/append
-         ;; The messsage should less than 76 characters for tty frame
-         (format "\n%s packages loaded in %.3fs (%s)"
-                 (cadr (assq 'total stats))
-                 configuration-layer--spacemacs-startup-time
-                 (string-join
-                  (mapcar (lambda (key) (format "%s %s" key (cadr (assq key stats))))
-                          (delq 'total (mapcar #'car stats)))
-                  ", ")))
-        (spacemacs-buffer//center-line)
-        (spacemacs-buffer/append (format "\n(%.3f seconds spent in your user-config)"
-                                         dotspacemacs--user-config-elapsed-time))
-        (spacemacs-buffer//center-line)
-        (insert "\n")))))
+      (save-excursion
+        (spacemacs-buffer/insert-page-break)
+        (let ((buffer-read-only nil))
+          (spacemacs-buffer/append
+           ;; The messsage should less than 76 characters for tty frame
+           (format "\n%s packages loaded in %.3fs (%s)"
+                   (cadr (assq 'total stats))
+                   configuration-layer--spacemacs-startup-time
+                   (string-join
+                    (mapcar (lambda (key) (format "%s %s" key (cadr (assq key stats))))
+                            (delq 'total (mapcar #'car stats)))
+                    ", ")))
+          (spacemacs-buffer//center-line)
+          (spacemacs-buffer/append (format "\n(%.3f seconds spent in your user-config)"
+                                           dotspacemacs--user-config-elapsed-time))
+          (spacemacs-buffer//center-line)
+          (insert "\n"))))))
 
 (defun configuration-layer//get-indexed-elpa-package-names ()
   "Return a list of all ELPA packages in indexed packages and dependencies."
