@@ -55,7 +55,7 @@
     (add-to-list 'golden-ratio-exclude-buffer-names " *transient*")))
 
 ;; evil-surround bindings interfere with line-wise staging
-(defun git/post-init-evil-surround ()
+(defun git/pre-init-evil-surround ()
   (spacemacs|use-package-add-hook magit
     :post-config
     (add-hook 'magit-mode-hook #'turn-off-evil-surround-mode)))

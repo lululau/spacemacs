@@ -31,7 +31,7 @@ This variable is used to configure mode-specific company backends in spacemacs.
 Backends in this list will always be active in these modes, as well as any
 backends added by individual spacemacs layers.")
 
-(defvar-local auto-completion-front-end 'company
+(defvar auto-completion-front-end 'company
   "Which auto-completion front end to use.")
 
 (defvar auto-completion-return-key-behavior 'complete
