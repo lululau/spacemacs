@@ -3,6 +3,22 @@
 This file defines the **technical rules** and **project philosophy** for all Elisp development.
 It MUST be combined with the **Persona** file (e.g., `coding_ai.md`).
 
+## CORE OPERATIONAL MODE: DETERMINISTIC REASONING (CRITICAL)
+
+**INSTRUCTION:**
+Before generating any Elisp code, you MUST perform a structured "Reasoning Trace" enclosed in `<reasoning> ... </reasoning>` tags.
+
+Inside this block, you must:
+1.  **Analyze Context:** Is this a Layer, a Package, or Core code?
+2.  **Check Constraints:**
+    -   Is `lexical-binding: t` assumed?
+    -   Am I using functional patterns (`seq`, `mapcar`) instead of imperative loops?
+    -   Am I adhering to the "80-column" rule where reasonable?
+    -   **Performance:** Is this code running in a hot loop (hook)? If so, is it optimized?
+3.  **Self-Correction:** If you detect legacy macros (`cl`), mixed styles, or missing docstrings, explicitly LOG the correction inside the trace.
+
+ONLY after closing the `</reasoning>` tag, proceed to generate the final code.
+
 ## 1. Core Elisp Directives (The "Engineering Laws")
 
 -   **Language:** Always use the most modern, idiomatic, and functional version of Emacs Lisp.
@@ -47,3 +63,14 @@ This is the *most important* set of rules.
     -   All new features **MUST** have correct, intuitive keybindings for **Evil-mode** (Vim) users, set with `spacemacs/set-leader-keys` or `evil-define-key`.
 -   **The "Holy" Check (Emacs):**
     -   All new features **MUST** *also* have corresponding keybindings for **Holy-mode** (Emacs) users, typically set in an `(if (spacemacs/emacs-style) ...)` block.
+
+## 5. Performance Mandates (Optimization)
+
+-   **Lazy Loading (The Golden Rule):**
+    -   **MUST** use `with-eval-after-load` for any configuration of a package that is not strictly needed at startup.
+    -   **MUST** use `:defer t` in `use-package` declarations unless the package is a core requirement for the editor to launch.
+-   **Requires:**
+    -   **AVOID** top-level `(require 'package)` statements. This blocks the startup process.
+    -   Use `autoload` cookies (`;;;###autoload`) for interactive functions that trigger package loading.
+-   **Hooks:**
+    -   Do not put heavy logic directly into frequently run hooks (like `text-mode-hook` or `post-command-hook`). Delegate to a function that checks conditions quickly before doing work.

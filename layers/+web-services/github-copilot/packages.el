@@ -24,6 +24,7 @@
 (defconst github-copilot-packages
   '(copilot       ;; For inline code completion
     copilot-chat  ;; The "Cathedral" (Chat UI)
+    magit         ;; For G.O.L.E.M. commit messages
     mcp))         ;; The "ToolShed" (mcp-hub & foundation)
 
 (defun github-copilot/init-copilot ()
@@ -51,13 +52,15 @@ This is the main chat UI which will *manage* mcp tools."
     (spacemacs/declare-prefix "$" "AI")
     (spacemacs/set-leader-keys "$c" 'copilot-chat-transient)
 
-    :config
-    (setq copilot-chat-mcp-servers (mapcar #'car github-copilot-mcp-servers))
-
-    ;; Setup Magit integration if enabled
+    ;; Setup Magit integration (Commit Messages)
     (when github-copilot-enable-commit-messages
       (add-hook 'git-commit-setup-hook
-                #'copilot-chat-insert-commit-message))
+                (if (eq github-copilot-enable-commit-messages 'golem)
+                    #'github-copilot/insert-golem-commit-message
+                  #'copilot-chat-insert-commit-message)))
+
+    :config
+    (setq copilot-chat-mcp-servers (mapcar #'car github-copilot-mcp-servers))
 
     ;; Keybindings for the chat prompt
     (evil-define-key 'normal copilot-chat-prompt-mode-map ",," #'copilot-chat-prompt-send)
@@ -72,7 +75,6 @@ This is the main chat UI which will *manage* mcp tools."
 This provides the `mcp-hub' for managing external servers
 and *programmatically* sets up the default tools."
   (use-package mcp
-    :defer t
     :config
     ;; We *always* set the hub's list from our variable.
     ;; This works for *both* our defaults AND the user's custom list.
@@ -80,8 +82,17 @@ and *programmatically* sets up the default tools."
     )
 
   (use-package mcp-hub
-    :defer t
     :after mcp ;; The hub *must* be built AFTER the mcp foundation!
     :init
     (spacemacs/set-leader-keys "$m" 'mcp-hub)
     ))
+
+(defun github-copilot/post-init-magit ()
+  (with-eval-after-load 'magit
+    ;; Native Emacs Binding (global map for magit status)
+    (define-key magit-status-mode-map (kbd "C-c g") 'github-copilot/golem-commit)
+
+    ;; Spacemacs/Evil Binding (Local Leader)
+    ;; In Magit Status, this is usually bound to ",". So pressing ", g" triggers it.
+    (spacemacs/set-leader-keys-for-major-mode 'magit-status-mode
+      "g" 'github-copilot/golem-commit)))

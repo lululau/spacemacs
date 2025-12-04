@@ -9,6 +9,8 @@
   - [[#prerequisites][Prerequisites]]
 - [[#configuration][Configuration]]
   - [[#git-commit-messages][Git Commit Messages]]
+    - [[#the-golem-standard-preferred][The G.O.L.E.M. Standard (Preferred)]]
+    - [[#standard-copilot-style][Standard Copilot Style]]
   - [[#mcp--tool-integration-manual-setup-required][MCP / Tool Integration (Manual Setup Required)]]
     - [[#example-enabling-the-filesystem-server-][Example: Enabling the Filesystem Server ***]]
     - [[#finding-more-servers-][Finding More Servers ***]]
@@ -50,11 +52,12 @@ This layer requires external components to be fully functional.
      SPC SPC copilot-install-server
    #+END_SRC
 
-2. **Python 3 (for MCP Tools):**
-   While the layer itself does not require it, most useful MCP servers
-   (like the filesystem or shell servers) are Python-based scripts.
-   Please ensure you have a `python3` (or `python`) command
-   available in your system's `PATH` to run them.
+2. **Runtime Environments (Python & Node.js):**
+   This layer acts as a client. The actual tools (MCP Servers) run externally.
+   - **Node.js:** Required for the official filesystem server and many web-based tools (install via `npm`).
+   - **Python 3:** Required for many system administration and local scripting tools.
+   Please ensure both `node` (and `npm`) and `python3` are available in your system's `PATH`.
+
 3. **MCP Server Installation (Manual):**
    This layer **does not** install MCP servers for you. You must
    install them manually. For example, the common filesystem server
@@ -71,10 +74,28 @@ The Copilot service must be logged into.
   time it is started.
 
 ** Git Commit Messages
-To enable automatic generation of git commit messages using
-copilot-chat, set the layer variable
-`github-copilot-enable-commit-messages` to `t` in your `~/.spacemacs`
-file.
+This layer can automatically generate commit messages for you when opening
+a commit buffer (e.g., via Magit). You can choose between two styles by
+setting the `github-copilot-enable-commit-messages` variable.
+
+*** The G.O.L.E.M. Standard (Preferred)
+For Spacemacs development, we strongly recommend the **G.O.L.E.M.** style.
+This invokes the "Guardian Of Legacy Elisp Manifestations" persona, which enforces
+the strict **Tim Pope** standard:
+- Imperative mood ("Fix bug" not "Fixed bug").
+- 50-character subject line limit.
+- 72-character body wrap.
+
+Set the variable to ='golem= to enable this mode:
+
+#+BEGIN_SRC elisp
+  (github-copilot :variables
+                  github-copilot-enable-commit-messages 'golem)
+#+END_SRC
+
+*** Standard Copilot Style
+If you prefer the default, conversational style of GitHub Copilot, set the
+variable to =t=.
 
 #+BEGIN_SRC elisp
   (github-copilot :variables
@@ -115,8 +136,8 @@ is loaded.
                  ;; It must be installed (e.g., via "npm install -g @modelcontextprotocol/server-filesystem")
                  ("fs" . (:command "npx"
                           :args ("-y" "@modelcontextprotocol/server-filesystem"
-                                  ;; This path MUST be absolute and point to your projects
-                                  "/home/your-user/projects")))))
+                                 ;; This path MUST be absolute and point to your projects
+                                 "/home/your-user/projects")))))
 
          ;; We must also tell the mcp-hub to use this new list
          (setq mcp-hub-servers github-copilot-mcp-servers))

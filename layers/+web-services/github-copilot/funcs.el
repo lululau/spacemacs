@@ -43,3 +43,22 @@ if necessary triggering a `copilot-complete' command beforehand."
   (interactive)
   (copilot-complete)
   (copilot-previous-completion))
+
+(defun github-copilot/golem-commit ()
+  "Ask G.O.L.E.M. to write the commit message based on the staged diff.
+Requires `copilot-chat' to be installed and active."
+  (interactive)
+  (let ((diff (shell-command-to-string "git diff --cached")))
+    (if (string-empty-p diff)
+        (message "G.O.L.E.M.: *Grind*... Nothing to commit. Diff is empty.")
+      (copilot-chat-ask
+       (format "As @golem, write a strict commit message for this diff adhering to the Tim Pope standard defined in @ai/profile_doc.md:\n\n%s" diff)
+       "G.O.L.E.M. Commit"))))
+
+(defun github-copilot/insert-golem-commit-message ()
+  "Insert a G.O.L.E.M. style commit message into the buffer (for Hooks).
+This works by temporarily overriding the system prompt of `copilot-chat-insert-commit-message'."
+  (interactive)
+  (let ((copilot-chat-prompt-commit-message
+         "As @golem, write a strict commit message for the diff adhering to the Tim Pope standard defined in @ai/profile_doc.md. Only output the message content, no conversational filler."))
+    (copilot-chat-insert-commit-message)))

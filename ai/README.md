@@ -4,35 +4,90 @@
 **Table of Contents**
 
 - [AI Collaboration Blueprint](#ai-collaboration-blueprint)
-  - [The Two-AI Model](#the-two-ai-model)
+  - [Quick-Start Tutorials](#quick-start-tutorials)
+    - [🐛 Level 1: Maintenance & Fixes](#-level-1-maintenance--fixes)
+    - [🔨 Level 2: Extension & Configuration](#-level-2-extension--configuration)
+    - [🏗️ Level 3: Architecture & Aesthetics](#-level-3-architecture--aesthetics)
+    - [🛡️ Level 4: Quality Assurance & Workflow](#-level-4-quality-assurance--workflow)
+    - [🚀 Level 5: Advanced Engineering](#-level-5-advanced-engineering)
+  - [The Three-AI Model](#the-three-ai-model)
+  - [Supported Stacks & Capabilities](#supported-stacks--capabilities)
   - [Framework Rationale: High-Context Personas (3D) vs. Low-Context Roles (2D)](#framework-rationale-high-context-personas-3d-vs-low-context-roles-2d)
     - [The Problem: Low-Context Roles (2D)](#the-problem-low-context-roles-2d)
     - [The Solution: High-Context Personas (3D)](#the-solution-high-context-personas-3d)
     - [Summary for Maintainers](#summary-for-maintainers)
-  - [The "Virtual Team" Roster](#the-virtual-team-roster)
+  - [Architectural Abstract (For Data Scientists & AI Engineers)](#architectural-abstract-for-data-scientists--ai-engineers)
+    - [Core Architecture & Methodology](#core-architecture--methodology)
+  - [The "Artisan + Toolbox" Model For Specialised AI Roles (Personas + Profiles)](#the-artisan--toolbox-model-for-specialised-ai-roles-personas--profiles)
+  - [The Agent Roster (Roles & Names)](#the-agent-roster-roles--names)
     - [Strategy, Planning & Communication (General AI)](#strategy-planning--communication-general-ai)
-    - [Implementation & Technical Specialists (Specialist AI)](#implementation--technical-specialists-specialist-ai)
+    - [Implementation & Specialists (Specialist AI)](#implementation--specialists-specialist-ai)
+    - [Implementation & Specialists (Specialist AI)](#implementation--specialists-specialist-ai-1)
+    - [Synthetic User Simulation (Virtual Stakeholders)](#synthetic-user-simulation-virtual-stakeholders)
   - [How to Use This System](#how-to-use-this-system)
-    - [For Maintainers (Using the General AI)](#for-maintainers-using-the-general-ai)
-    - [For Developers (Configuring the Specialist AI)](#for-developers-configuring-the-specialist-ai)
+    - [Synthetic User Testing (Virtual Stakeholders)](#synthetic-user-testing-virtual-stakeholders)
+      - [The Simulation Roster](#the-simulation-roster)
+      - [Usage Example: Feature Validation](#usage-example-feature-validation)
   - [The "Workbench" Principle: Modular Workflows](#the-workbench-principle-modular-workflows)
     - [Workflow 1: Triage & Planning (General AI)](#workflow-1-triage--planning-general-ai)
-    - [Workflow 2: UI & Icon Design (Hybrid)](#workflow-2-ui--icon-design-hybrid)
-    - [Workflow 3: Implementation & QA (Specialist AI)](#workflow-3-implementation--qa-specialist-ai)
-    - [Workflow 4: Refactor & CI (Specialist AI)](#workflow-4-refactor--ci-specialist-ai)
-    - [Workflow 5: Release & Community (General AI)](#workflow-5-release--community-general-ai)
+    - [Workflow 2: Implementation (Specialist AI)](#workflow-2-implementation-specialist-ai)
+    - [Workflow 3: Full Code Review (Specialist AI)](#workflow-3-full-code-review-specialist-ai)
+    - [Workflow 4: New UI & CI Pipeline (Hybrid)](#workflow-4-new-ui--ci-pipeline-hybrid)
+    - [Workflow 5: Strategic Audit & Debugging (Hybrid)](#workflow-5-strategic-audit--debugging-hybrid)
+    - [Workflow 6: Release & Community (General AI)](#workflow-6-release--community-general-ai)
   - [Updating The Blueprints (For Maintainers)](#updating-the-blueprints-for-maintainers)
 
 <!-- markdown-toc end -->
 
-This directory serves as the "brain" for AI-assisted development in the Spacemacs project. It defines a "two-AI" model to maximize efficiency and code quality.
+## Quick-Start Tutorials
+New to the AI Framework? Start here! These guides take you by the hand and show you specific AI-assisted workflows.
 
-## The Two-AI Model
+### 🐛 Level 1: Maintenance & Fixes
+* **[Tutorial 1: The Bug Triage Workflow](ai/tutorials/01_bug_triage_and_fix.md)** - How to analyze bugs with Lector Lumen, find the cause with Dok, and fix them.
+* **[Tutorial 2: Solving Keybinding Conflicts](ai/tutorials/02_keybinding_conflicts.md)** - Detecting "shadowing" and resolving haptic conflicts using Proctor Kallista.
 
-1.  **The Strategist (`general_ai.md`):** A high-level briefing for generalist AIs (like **M365 Copilot**, Gemini). Used for architecture, planning, and communication.
-2.  **The Specialist (`coding_ai.md`):** A detailed instruction set for specialist coding AIs (like **GitHub Copilot**). Used for implementation, debugging, and testing.
+### 🔨 Level 2: Extension & Configuration
+* **[Tutorial 3: Integrating New Packages](ai/tutorials/03_package_integration.md)** - The clean way to add packages using lazy-loading and Nexus-7 dependency checks.
+* **[Tutorial 4: Defining New Keybindings](ai/tutorials/04_new_keybindings.md)** - Finding safe, mnemonic slots in the User Space (`SPC o`) without breaking upstream.
+* **[Tutorial 5: Writing Layer Documentation](ai/tutorials/05_documentation.md)** - Generating standard-compliant READMEs and keybinding tables effortlessly with Scribe Veridian.
+
+### 🏗️ Level 3: Architecture & Aesthetics
+* **[Tutorial 6: Creating a New Layer](ai/tutorials/06_new_layer_creation.md)** - Architecture blueprint by Bob for a full ecosystem integration (Packages, Config, Keys).
+* **[Tutorial 7: Performance Tuning](ai/tutorials/07_performance_tuning.md)** - Using the Profiler and AI to identify bottlenecks and fix slow startup times.
+* **[Tutorial 8: UI, Icons & Theming](ai/tutorials/08_ui_and_theming.md)** - Designing SVG icons and defining faces for the modeline with Magos & Bzzrts.
+* **[Tutorial 9: Fonts & Ligatures](ai/tutorials/09_fonts_and_ligatures.md)** - Setting up Nerd Fonts and ligatures for visual perfection and readability.
+
+### 🛡️ Level 4: Quality Assurance & Workflow
+* **[Tutorial 10: Testing & QA with Buttercup](ai/tutorials/10_testing_and_qa.md)** - Writing behavioral BDD tests and unit tests to ensure your layer is rock solid.
+* **[Tutorial 11: Professional Git Workflow](ai/tutorials/11_git_workflow.md)** - Enforcing the "Tim Pope" commit standard and updating changelogs with G.O.L.E.M.
+
+### 🚀 Level 5: Advanced Engineering
+* **[Tutorial 12: The "4D" Code Review](ai/tutorials/12_code_review.md)** - A full security, logic, and style audit pipeline with Marjin, Skeek, and G.O.L.E.M.
+* **[Tutorial 13: Designing CI/CD Pipelines](ai/tutorials/13_ci_pipelines.md)** - Creating robust, secure GitHub Actions workflows with Reginald Shoe and Vala.
+
+## The Three-AI Model
+This directory serves as the "brain" for AI-assisted development. It defines a three-AI model to ensure maximum efficiency, code quality, and market alignment:
+
+1.  **The Strategist (`general_ai.md`):** A high-level briefing for generalist AIs (e.g., Gemini). Used for architecture, planning, management, and requirements definition.
+2.  **The Specialist (`coding_ai.md`):** A detailed, rule-based instruction set for specialist coding AIs (e.g., Gemini, GitHub Copilot). Used for implementation, debugging, and testing.
+3.  **The Simulator (`stakeholder_ai.md`):** An adversarial feedback profile for virtual stakeholders. Used for Synthetic User Testing and requirements validation.
 
 These files are the **Single Source of Truth** for our AI collaboration.
+
+> **CRITICAL USAGE RULE: ONE SESSION = ONE ROLE**
+> **Make sure to open a fresh chat session** for each task.
+> * **NEVER** mix two `*_ai` files (e.g., do not load `general_ai.md` and then `coding_ai.md` in the same chat).
+> * **NEVER** mix two `profile_*` files (e.g., do not switch from elisp to ci in the same chat).
+>
+> **Why?** LLMs maintain context. Mixing rules causes "Context Bleeding" (hallucinations), where the AI confuses conflicting instructions. **Always hit "New Chat" when switching roles.**
+
+## Supported Stacks & Capabilities
+This framework provides specialized, deterministic agents for the entire Spacemacs ecosystem:
+
+* **Core:** Emacs Lisp (Elisp), Spacemacs Layers/Packages.
+* **UI/UX:** ASCII Art, SVG Icons, TUI (Terminal) Design, Themes.
+* **Infrastructure:** GitHub Actions (CI/CD), Makefiles.
+* **Process:** Issue Triage, Documentation, Release Management, Community Management.
 
 ## Framework Rationale: High-Context Personas (3D) vs. Low-Context Roles (2D)
 
@@ -52,8 +107,25 @@ We are implementing **"High-Context Personas"** instead of "Low-Context Roles".
 
 **The technical advantage:** We are not just controlling the AI's *function*, but also its *style* and *error-response patterns*. This leads to more consistent, higher-quality code, reduces the need for manual correction, and makes the system more intuitive for our developers.
 
-## The "Artisan + Toolbox" Model (Personas + Profiles)
+## Architectural Abstract (For Data Scientists & AI Engineers)
+This framework is not a collection of prompt templates. It is a **deterministic, role-based Multi-Agent System (MAS)** designed to mitigate the inherent non-determinism of LLMs in production environments.
 
+### Core Architecture & Methodology
+We utilize a **manual orchestration layer** combined with **In-Context Learning (ICL)** to achieve high-fidelity outputs for complex engineering tasks.
+
+1.  **Role-Based Orchestration (Mixture of Experts approach):**
+    Instead of a zero-shot generic query, the framework routes intents to specialized "Agent Personas" (e.g., `Architecture-Review-Agent`, `Legacy-Refactoring-Agent`, `Compliance-Check-Agent`). Each agent operates within a strictly defined scope to minimize hallucination rates and ensure separation of concerns.
+
+2.  **Retrieval-Augmented Context (Semantic Injection):**
+    The framework utilizes curated "Toolboxes" (Markdown-based knowledge bases) effectively acting as a lightweight **RAG (Retrieval Augmented Generation)** backend. We inject strict internal syntax rules, domain-specific coding standards, and architectural constraints directly into the context window. This ensures adherence to proprietary system requirements that public models cannot know.
+
+3.  **Deterministic Guardrails & Self-Correction:**
+    We implement "Integrity Checks" and structured output formats (e.g., forcing JSON schemas, specific diagram syntaxes, or compliant build-scripts). Agents are prompted to perform self-validation steps ("Reasoning Traces") before generating the final artifact, leveraging Chain-of-Thought (CoT) logic to catch logical errors and regressions pre-output.
+
+**Why this matters:**
+This approach bridges the gap between stochastic LLM capabilities and the strict requirements of enterprise software engineering, prioritizing **reproducibility**, **compliance**, and **safety** over creative generation.
+
+## The "Artisan + Toolbox" Model For Specialised AI Roles (Personas + Profiles)
 This framework is built on a simple, powerful metaphor that you *must* understand to use the **Specialist AI** correctly.
 
 1.  **The Artisan (`coding_ai.md`):** This file defines the **Persona**, or the "Artisan." This is the "who" (e.g., **Spacky**, the Elisp Coder). The Artisan has a personality, quirks, and a *general* skill.
@@ -61,13 +133,20 @@ This framework is built on a simple, powerful metaphor that you *must* understan
 
 **You must *always* provide both!**
 
-The "Artisan" (Persona) is *lost* without their "Toolbox" (Profile). By providing both, you are not just asking a generic AI to code; you are summoning a *specific Master Artisan* and handing them the *exact, sacred blueprints* for our project.
+The "Artisan" (Persona) is *lost* without their "Toolbox" (Profile). By providing both, you are not just asking a generic AI to code; you are summoning a *specific Master Artisan* and handing them the *exact, sacred blueprints* for our project. This is our "Rust Style" model: it provides the *safety* of a 3D Persona with the *reusability* and *flexibility* of a 2D Profile. It solves the "combinatorial explosion" problem.
 
-## The "Virtual Team" Roster
+## The Agent Roster (Roles & Names)
+This table maps all agents in our "virtual team" to their primary role.
 
-This table maps all 19 agents in our "virtual team" to their primary role and the AI model type they were designed for.
+* **General AI (The Strategist):** A high-level reasoning model (e.g., Gemini Advanced).
+* **Specialist AI (The Implementer):** A code-generation model (e.g., Gemini, GitHub Copilot).
+* **Stakeholder AI (The Simulator):** An adversarial feedback model (e.g., Gemini Advanced). Used for **Synthetic User Testing** and requirements validation before implementation.
+
+This table maps all agents in our "virtual team" to their primary role and the AI model type they were designed for.
 
 ### Strategy, Planning & Communication (General AI)
+
+This agent team of "strategists" makes plans from ideas. The default persona is **Professor McKarthy**.
 
 | Agent Name                   | Role                 | Primary Task                                                                     |
 |:-----------------------------|:---------------------|:---------------------------------------------------------------------------------|
@@ -83,50 +162,73 @@ This table maps all 19 agents in our "virtual team" to their primary role and th
 | **Reginald Shoe**            | CI Specialist        | Designs the *architecture* and *logical stages* of a CI/CD pipeline.             |
 | **Proctor-Auditor Kallista** | Strategic UI Auditor | Audits existing UI/UX for consistency, usability, and workflow ("user feeling"). |
 
-### Implementation & Technical Specialists (Specialist AI)
+### Implementation & Specialists (Specialist AI)
 
-This 8-agent team of "artisans" executes the blueprints provided by the Strategy team. The default persona for this team is **Marjin**.
+This agent team of "artisans" executes the blueprints provided by the Strategy team. The default persona for this team is **Marjin**.
 
-| Agent Name                | Role                    | Primary Task                                                                                         | Primary Toolbox (Profile) |
-|:--------------------------|:------------------------|:-----------------------------------------------------------------------------------------------------|:--------------------------|
-| **Spacky**                | Master Elisp Artisan    | Writes new, clean, functional Elisp code from a blueprint.                                           | `profile_elisp.md`        |
-| **Bzzrts**                | UI Implementor          | Implements UI/UX blueprints (Elisp, SVG). *Communicates via psychic visions.*                        | `profile_emacs_ui.md`     |
-| **Vala Grudge-Keeper**    | CI Implementor          | Writes new, robust GitHub Actions (`.yml`) pipelines. *Maintains the Dammaz Kron (Book of Grudges).* | `profile_ci_github.md`    |
-| **Dok**                   | Debugger                | Finds and fixes bugs in existing, *broken* code (language-agnostic).                                 | `any`                     |
-| **Marjin**                | Refactorer (Default)    | Improves *working* code. **Also analyzes, explains, and triages all specialist requests.**           | `any`                     |
-| **Don Testote**           | Test Engineer           | Writes unit and integration tests.                                                                   | `any`                     |
-| **G.O.L.E.M.**            | Doc & Style Reviewer    | Reviews code *strictly* for docstrings, comments, and style adherence.                               | `any`                     |
-| **Skeek (The Flaw-Seer)** | Bug & Security Reviewer | *Sniffs* for bugs, logic flaws, and "secret-tunnels" (security issues).                              | `any`                     |
+### Implementation & Specialists (Specialist AI)
+
+This agent team of "artisans" executes the blueprints provided by the Strategy team. The default persona for this team is **Marjin**.
+
+| Agent Name                | Role                    | Primary Task                                                                                         | Primary Toolbox (Profile)  |
+|:--------------------------|:------------------------|:-----------------------------------------------------------------------------------------------------|:---------------------------|
+| **Spacky**                | Master Elisp Artisan    | Writes new, clean, functional Elisp code from a blueprint.                                           | `profile_elisp.md`         |
+| **Bzzrts**                | UI Implementor          | Implements UI/UX blueprints (Elisp, SVG). *Communicates via psychic visions.*                        | `profile_emacs_ui.md`      |
+| **Vala Grudge-Keeper**    | CI Implementor          | Writes new, robust GitHub Actions (`.yml`) pipelines. *Maintains the Dammaz Kron (Book of Grudges).* | `profile_ci_github.md`     |
+| **Dok**                   | Debugger                | Finds and fixes bugs in existing, *broken* code (language-agnostic).                                 | `any`                      |
+| **Marjin**                | Refactorer (Default)    | Improves *working* code. **Also analyzes, explains, and triages all specialist requests.**           | `any`                      |
+| **Don Testote**           | Test Engineer           | Writes unit and integration tests.                                                                   | `profile_elisp_testing.md` |
+| **G.O.L.E.M.**            | Doc & Style Reviewer    | Reviews code *strictly* for docstrings, comments, and style adherence.                               | `profile_doc.md`           |
+| **Skeek (The Flaw-Seer)** | Bug & Security Reviewer | *Sniffs* for bugs, logic flaws, and "secret-tunnels" (security issues).                              | `any`                      |
+| **Nexus-7**               | Dependency Manager      | Manages Layers, Packages, and validates Load Order logic/dependencies.                               | `profile_layers.md`        |
+
+### Synthetic User Simulation (Virtual Stakeholders)
+
+These agents DO NOT write code. They are adversarial personas used for **Synthetic User Testing** and requirements validation.
+
+| Persona Name    | Archetype               | Primary Focus (Bias)                                 |
+|:----------------|:------------------------|:-----------------------------------------------------|
 
 ## How to Use This System
-
-### For Maintainers (Using the General AI)
 
 When planning, provide the `general_ai.md` file as context to your generalist AI.
 
 **Example (Gemini):**
-> "Please review `general_ai.md`. Acting as **Bob (Architect),** propose a new layer structure for..."
+> "Please review `general_ai.md`. **Bob** propose a new layer structure for..."
 
-### For Developers (Configuring the Specialist AI)
+This repository is configured so GitHub's native tools (like Copilot in PRs) automatically use our rules. The file at `.github/copilot-instructions.md` and the agents in `.github/agents/` are created from `ai/coding_ai.md`. The same applies for the gemini cli.
 
-This repository is configured so GitHub's native tools (like Copilot in PRs) automatically use our rules. The file at `.github/copilot-instructions.md` is a **synced copy** of `ai/coding_ai.md`.
+To start working with the specialist just load a profile and start.
 
-For local work, if your tool supports it, load `ai/coding_ai.md` as context.
+### Synthetic User Testing (Virtual Stakeholders)
+Beyond code generation, the framework implements a layer for **Synthetic User Testing**.
+By loading the `stakeholder_ai.md` profile, the system can simulate **adversarial feedback loops** from virtual external stakeholders.
 
-**Example (Aider, Copilot Chat):**
-> `/include ai/coding_ai.md As Spacky, please write a function that...`
+#### The Simulation Roster
+We simulate the diverse Spacemacs user base to ensure features work for everyone:
+
+* **Dr. Chen (The Data Scientist):** Needs Python/Jupyter to "just work". Hates config.
+* **Vlad (The Vim Refugee):** Obsessed with keybindings and startup speed.
+* **RMS-Fan (The Emacs Purist):** Uses Holy Mode. Hates Vim-centrism.
+* **Noobie (The Beginner):** Confused by backtraces. Needs tutorials.
+* **Sarah (The Enterprise Dev):** Needs stability and LTS support for Java/C++.
+
+#### Usage Example: Feature Validation
+**Scenario:** Magos Pixelis proposes a "Cyberpunk Neon 3D HUD" for the mode-line.
+**Simulation:** We pipe this requirement to **Vlad** and **Noobie**.
+
+> **(Vlad):** "Bloat! Does this increase startup time? I just need the evil-state color. If it adds >1ms latency, I reject it."
+> **(Noobie):** "Wait, where is the file path? I can't read this font. It looks cool, but I don't know which buffer I'm in."
+
+**Result:** The design is adjusted to be optional and lightweight *before* implementation.
 
 ---
-
-(ACTION: REPLACE the *entire* "Workbench" Principle section in `README.md`
-
- with this new, 6-workflow version that uses all 19 personas.)
 
 ## The "Workbench" Principle: Modular Workflows
 
 The most robust way to use this system is to use short, 2-3 agent chains (called "Workbenches") and place a **Human-in-the-Loop** (you, the Maintainer) to review the output before starting the next chain. This prevents "hallucination cascades."
 
-Here are six examples of these modular workflows, which together use all 19 agents.
+Here are six examples of these modular workflows:
 
 ### Workflow 1: Triage & Planning (General AI)
 
@@ -279,12 +381,12 @@ Here are six examples of these modular workflows, which together use all 19 agen
 
 ## Updating The Blueprints (For Maintainers)
 
-This directory also contains `sync-blueprints.sh`.
+This directory also contains `sync-agents.py`.
 
 **!! IMPORTANT !!**
-If you edit `ai/coding_ai.md`, you **MUST** run the sync script to propagate your changes to `.github/copilot-instructions.md` (which is used by GitHub's tools).
+If you edit `ai/coding_ai.md` or any profile, you **MUST** run the sync script to propagate your changes to the vendor specific files (used by GitHub Copilot & Gemini CLI).
 
 **How to run the script (from the repository root):**
 ```bash
-./ai/sync-blueprints.sh
+python ai/sync-agents.py
 ```

@@ -1,7 +1,23 @@
 # AI Profile: CI & GitHub Integration Toolkit
 
-This file defines the **technical rules** and **project philosophy** for all CI/CD and GitHub integration development.
-It MUST be combined with the **Persona** file (e.g., `coding_ai.md`).
+This file defines the **technical rules** for CI/CD development.
+    It MUST be combined with the **Persona** file (e.g., `coding_ai.md`).
+
+## CORE OPERATIONAL MODE: DETERMINISTIC REASONING (CRITICAL)
+
+**INSTRUCTION:**
+Before generating any YAML code, you MUST perform a structured "Reasoning Trace" enclosed in `<reasoning> ... </reasoning>` tags.
+
+Inside this block, you must:
+1.  **Analyze Trigger:** When does this run? (Push, PR, Schedule?) Is it too frequent?
+2.  **Check Constraints:**
+    -   **Permissions Check:** Are `permissions:` explicitly set to minimum (or `none`)?
+    -   **Secret Check:** Are secrets accessed via `secrets.*` context? NO hardcoded tokens.
+    -   **Efficiency:** Is caching (`actions/cache`) utilized?
+    -   **Complexity:** Is the logic complex enough to warrant a separate shell script?
+3.  **Self-Correction:** If you planned a multi-line `run: |` block > 5 lines, explicitly LOG the correction ("Moving logic to external script") inside the trace.
+
+ONLY after closing the `</reasoning>` tag, proceed to generate the final code.
 
 ## 1. Core Directives (The "Engineering Laws")
 

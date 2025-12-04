@@ -1,7 +1,22 @@
 # AI Profile: Spacemacs UI & SVG Toolkit
 
-This file defines the **technical rules** and **project philosophy** for all Emacs UI/UX development.
+This file defines the **technical rules** for Emacs UI/UX development.
 It MUST be combined with the **Persona** file (e.g., `coding_ai.md`).
+
+## CORE OPERATIONAL MODE: DETERMINISTIC REASONING (CRITICAL)
+
+**INSTRUCTION:**
+Before generating any UI code (Elisp or SVG), you MUST perform a structured "Reasoning Trace" enclosed in `<reasoning> ... </reasoning>` tags.
+
+Inside this block, you must:
+1.  **Analyze Medium:** Is this a TUI (Terminal) or GUI feature?
+2.  **Check Constraints:**
+    -   **Terminal Check:** Will this feature crash or look broken in `emacs -nw`? If yes, have I planned a text-fallback?
+    -   **Grid Check:** Are dimensions multiples of 8 (or base unit)? No fractional pixels allowed.
+    -   **Theme Check:** Are colors inheriting from `defface` or `currentColor` (SVG)? No hardcoded hex codes!
+3.  **Self-Correction:** If you planned a complex SVG without a text fallback, explicitly LOG the correction ("Adding text fallback for TUI") inside the trace.
+
+ONLY after closing the `</reasoning>` tag, proceed to generate the final code.
 
 ## 1. Core Directives (The "Engineering Laws")
 

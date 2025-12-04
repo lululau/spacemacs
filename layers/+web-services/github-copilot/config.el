@@ -18,7 +18,9 @@
 ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 (defvar github-copilot-enable-commit-messages nil
-  "If non-nil, automatically generate commit messages (for magit) using Copilot.")
+  "If non-nil, automatically generate commit messages (for magit) using Copilot.
+If set to 't', it uses the standard Copilot prompt.
+If set to 'golem', it uses the strict G.O.L.E.M. (Tim Pope) standard.")
 
 (defcustom github-copilot-mcp-servers nil
   "A list of MCP servers for `mcp-hub' to manage.
