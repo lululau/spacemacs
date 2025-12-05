@@ -24,7 +24,6 @@
 (defconst github-copilot-packages
   '(copilot       ;; For inline code completion
     copilot-chat  ;; The "Cathedral" (Chat UI)
-    magit         ;; For G.O.L.E.M. commit messages
     mcp))         ;; The "ToolShed" (mcp-hub & foundation)
 
 (defun github-copilot/init-copilot ()
@@ -86,13 +85,3 @@ and *programmatically* sets up the default tools."
     :init
     (spacemacs/set-leader-keys "$m" 'mcp-hub)
     ))
-
-(defun github-copilot/post-init-magit ()
-  (with-eval-after-load 'magit
-    ;; Native Emacs Binding (global map for magit status)
-    (define-key magit-status-mode-map (kbd "C-c g") 'github-copilot/golem-commit)
-
-    ;; Spacemacs/Evil Binding (Local Leader)
-    ;; In Magit Status, this is usually bound to ",". So pressing ", g" triggers it.
-    (spacemacs/set-leader-keys-for-major-mode 'magit-status-mode
-      "g" 'github-copilot/golem-commit)))

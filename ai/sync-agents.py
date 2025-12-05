@@ -134,7 +134,7 @@ TOOLBOX (AUTO-LOADED):
             toolbox_section = """
 ---
 TOOLBOX:
-(No profile loaded automatically. If you need code, please ensure the user provided the context or load a profile manually via !{cat ai/profile_NAME.md}.)
+(No profile loaded automatically. To perform technical tasks, you generally need a profile. Ask the user to load one.)
 """
 
         prompt_text = f"""

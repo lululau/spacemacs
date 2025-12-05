@@ -44,21 +44,20 @@ if necessary triggering a `copilot-complete' command beforehand."
   (copilot-complete)
   (copilot-previous-completion))
 
-(defun github-copilot/golem-commit ()
-  "Ask G.O.L.E.M. to write the commit message based on the staged diff.
-Requires `copilot-chat' to be installed and active."
-  (interactive)
-  (let ((diff (shell-command-to-string "git diff --cached")))
-    (if (string-empty-p diff)
-        (message "G.O.L.E.M.: *Grind*... Nothing to commit. Diff is empty.")
-      (copilot-chat-ask
-       (format "As @golem, write a strict commit message for this diff adhering to the Tim Pope standard defined in @ai/profile_doc.md:\n\n%s" diff)
-       "G.O.L.E.M. Commit"))))
-
 (defun github-copilot/insert-golem-commit-message ()
   "Insert a G.O.L.E.M. style commit message into the buffer (for Hooks).
-This works by temporarily overriding the system prompt of `copilot-chat-insert-commit-message'."
+This function sets the system prompt variable `copilot-chat-commit-prompt` buffer-locally.
+We use `setq-local` because the downstream function uses a timer, so a simple `let` binding would expire."
   (interactive)
-  (let ((copilot-chat-prompt-commit-message
-         "As @golem, write a strict commit message for the diff adhering to the Tim Pope standard defined in @ai/profile_doc.md. Only output the message content, no conversational filler."))
-    (copilot-chat-insert-commit-message)))
+  (defvar copilot-chat-commit-prompt)
+
+  ;; CRITICAL: Dynamic Scope & 72 Char Limit here too
+  (setq-local copilot-chat-commit-prompt
+              "As @golem, write a strict commit message for the provided diff.
+RULES:
+1. Subject Line MUST be max 72 chars total. IMPERATIVE mood.
+2. Body wraps at 72 chars.
+3. Stick STRICTLY to the 'Tim Pope' standard (@ai/profile_doc.md).
+4. Output ONLY the commit message content.")
+
+  (copilot-chat-insert-commit-message))
