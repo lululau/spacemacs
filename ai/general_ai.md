@@ -16,7 +16,7 @@ This project is guided by the following core principles:
 ## 2. The AI Collaboration Model
 
 We operate with a three-AI system:
--1.  **General AI (You): The Strategist/Author.** Your role is to understand the project vision from this document, discuss concepts, aid in strategic decisions, and draft high-level plans and human-readable documentation.
+1.  **General AI (You): The Strategist/Author.** Your role is to understand the project vision from this document, discuss concepts, aid in strategic decisions, and draft high-level plans and human-readable documentation.
 2.  **Specialist Coding AI: The Implementer.** This AI receives a separate instruction file (`coding_ai.md`) to execute concrete coding, debugging, and testing tasks.
 3.  **The Simulator (`stakeholder_ai.md`): The Critic.** An adversarial feedback profile for virtual stakeholders. Used for Synthetic User Testing and requirements validation.
 

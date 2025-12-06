@@ -22,11 +22,9 @@
   - [The Agent Roster (Roles & Names)](#the-agent-roster-roles--names)
     - [Strategy, Planning & Communication (General AI)](#strategy-planning--communication-general-ai)
     - [Implementation & Specialists (Specialist AI)](#implementation--specialists-specialist-ai)
-    - [Implementation & Specialists (Specialist AI)](#implementation--specialists-specialist-ai-1)
     - [Synthetic User Simulation (Virtual Stakeholders)](#synthetic-user-simulation-virtual-stakeholders)
   - [How to Use This System](#how-to-use-this-system)
     - [Synthetic User Testing (Virtual Stakeholders)](#synthetic-user-testing-virtual-stakeholders)
-      - [The Simulation Roster](#the-simulation-roster)
       - [Usage Example: Feature Validation](#usage-example-feature-validation)
   - [The "Workbench" Principle: Modular Workflows](#the-workbench-principle-modular-workflows)
     - [Workflow 1: Triage & Planning (General AI)](#workflow-1-triage--planning-general-ai)
@@ -43,27 +41,27 @@
 New to the AI Framework? Start here! These guides take you by the hand and show you specific AI-assisted workflows.
 
 ### 🐛 Level 1: Maintenance & Fixes
-* **[Tutorial 1: The Bug Triage Workflow](ai/tutorials/01_bug_triage_and_fix.md)** - How to analyze bugs with Lector Lumen, find the cause with Dok, and fix them.
-* **[Tutorial 2: Solving Keybinding Conflicts](ai/tutorials/02_keybinding_conflicts.md)** - Detecting "shadowing" and resolving haptic conflicts using Proctor Kallista.
+* **[Tutorial 1: The Bug Triage Workflow](tutorials/01_bug_triage_and_fix.md)** - How to analyze bugs with Lector Lumen, find the cause with Dok, and fix them.
+* **[Tutorial 2: Solving Keybinding Conflicts](tutorials/02_keybinding_conflicts.md)** - Detecting "shadowing" and resolving haptic conflicts using Proctor Kallista.
 
 ### 🔨 Level 2: Extension & Configuration
-* **[Tutorial 3: Integrating New Packages](ai/tutorials/03_package_integration.md)** - The clean way to add packages using lazy-loading and Nexus-7 dependency checks.
-* **[Tutorial 4: Defining New Keybindings](ai/tutorials/04_new_keybindings.md)** - Finding safe, mnemonic slots in the User Space (`SPC o`) without breaking upstream.
-* **[Tutorial 5: Writing Layer Documentation](ai/tutorials/05_documentation.md)** - Generating standard-compliant READMEs and keybinding tables effortlessly with Scribe Veridian.
+* **[Tutorial 3: Integrating New Packages](tutorials/03_package_integration.md)** - The clean way to add packages using lazy-loading and Nexus-7 dependency checks.
+* **[Tutorial 4: Defining New Keybindings](tutorials/04_new_keybindings.md)** - Finding safe, mnemonic slots in the User Space (`<kbd>SPC o</kbd>`) without breaking upstream.
+* **[Tutorial 5: Writing Layer Documentation](tutorials/05_documentation.md)** - Generating standard-compliant READMEs and keybinding tables effortlessly with Scribe Veridian.
 
 ### 🏗️ Level 3: Architecture & Aesthetics
-* **[Tutorial 6: Creating a New Layer](ai/tutorials/06_new_layer_creation.md)** - Architecture blueprint by Bob for a full ecosystem integration (Packages, Config, Keys).
-* **[Tutorial 7: Performance Tuning](ai/tutorials/07_performance_tuning.md)** - Using the Profiler and AI to identify bottlenecks and fix slow startup times.
-* **[Tutorial 8: UI, Icons & Theming](ai/tutorials/08_ui_and_theming.md)** - Designing SVG icons and defining faces for the modeline with Magos & Bzzrts.
-* **[Tutorial 9: Fonts & Ligatures](ai/tutorials/09_fonts_and_ligatures.md)** - Setting up Nerd Fonts and ligatures for visual perfection and readability.
+* **[Tutorial 6: Creating a New Layer](tutorials/06_new_layer_creation.md)** - Architecture blueprint by Bob for a full ecosystem integration (Packages, Config, Keys).
+* **[Tutorial 7: Performance Tuning](tutorials/07_performance_tuning.md)** - Using the Profiler and AI to identify bottlenecks and fix slow startup times.
+* **[Tutorial 8: UI, Icons & Theming](tutorials/08_ui_and_theming.md)** - Designing SVG icons and defining faces for the modeline with Magos & Bzzrts.
+* **[Tutorial 9: Fonts & Ligatures](tutorials/09_fonts_and_ligatures.md)** - Setting up Nerd Fonts and ligatures for visual perfection and readability.
 
 ### 🛡️ Level 4: Quality Assurance & Workflow
-* **[Tutorial 10: Testing & QA with Buttercup](ai/tutorials/10_testing_and_qa.md)** - Writing behavioral BDD tests and unit tests to ensure your layer is rock solid.
-* **[Tutorial 11: Professional Git Workflow](ai/tutorials/11_git_workflow.md)** - Enforcing the "Tim Pope" commit standard and updating changelogs with G.O.L.E.M.
+* **[Tutorial 10: Testing & QA with Buttercup](tutorials/10_testing_and_qa.md)** - Writing behavioral BDD tests and unit tests to ensure your layer is rock solid.
+* **[Tutorial 11: Professional Git Workflow](tutorials/11_git_workflow.md)** - Enforcing the "Tim Pope" commit standard and updating changelogs with G.O.L.E.M.
 
 ### 🚀 Level 5: Advanced Engineering
-* **[Tutorial 12: The "4D" Code Review](ai/tutorials/12_code_review.md)** - A full security, logic, and style audit pipeline with Marjin, Skeek, and G.O.L.E.M.
-* **[Tutorial 13: Designing CI/CD Pipelines](ai/tutorials/13_ci_pipelines.md)** - Creating robust, secure GitHub Actions workflows with Reginald Shoe and Vala.
+* **[Tutorial 12: The "4D" Code Review](tutorials/12_code_review.md)** - A full security, logic, and style audit pipeline with Marjin, Skeek, and G.O.L.E.M.
+* **[Tutorial 13: Designing CI/CD Pipelines](tutorials/13_ci_pipelines.md)** - Creating robust, secure GitHub Actions workflows with Reginald Shoe and Vala.
 
 ## The Three-AI Model
 This directory serves as the "brain" for AI-assisted development. It defines a three-AI model to ensure maximum efficiency, code quality, and market alignment:
@@ -80,6 +78,32 @@ These files are the **Single Source of Truth** for our AI collaboration.
 > * **NEVER** mix two `profile_*` files (e.g., do not switch from elisp to ci in the same chat).
 >
 > **Why?** LLMs maintain context. Mixing rules causes "Context Bleeding" (hallucinations), where the AI confuses conflicting instructions. **Always hit "New Chat" when switching roles.**
+
+```mermaid
+sequenceDiagram
+    participant U as User (Maxi)
+    participant G as General AI (Bob/Lector)
+    participant S as Specialist AI (Spacky/Marjin)
+    participant E as Emacs Editor
+
+    Note over U, E: Workflow: Bug Fix Example
+
+    U->>G: "Help! Bug in Python Layer!" (Load general_ai.md)
+    G->>G: Lector Lumen Triages Issue
+    G-->>U: Blueprint: "Valid Bug. Fix logic in funcs.el."
+
+    U->>S: "Fix this based on Blueprint." (Load coding_ai.md + profile)
+    S->>S: Dok finds error
+    S->>S: Marjin writes clean code
+    S-->>U: Elisp Code Block
+
+    U->>E: Paste Code & Run Tests
+    E-->>U: Tests Passed
+
+    U->>E: Commit (G.O.L.E.M. Hook)
+    E->>S: "Generate Commit Msg" (No Profile needed)
+    S-->>E: "Fix python logic..."
+```
 
 ## Supported Stacks & Capabilities
 This framework provides specialized, deterministic agents for the entire Spacemacs ecosystem:
@@ -166,10 +190,6 @@ This agent team of "strategists" makes plans from ideas. The default persona is 
 
 This agent team of "artisans" executes the blueprints provided by the Strategy team. The default persona for this team is **Marjin**.
 
-### Implementation & Specialists (Specialist AI)
-
-This agent team of "artisans" executes the blueprints provided by the Strategy team. The default persona for this team is **Marjin**.
-
 | Agent Name                | Role                    | Primary Task                                                                                         | Primary Toolbox (Profile)  |
 |:--------------------------|:------------------------|:-----------------------------------------------------------------------------------------------------|:---------------------------|
 | **Spacky**                | Master Elisp Artisan    | Writes new, clean, functional Elisp code from a blueprint.                                           | `profile_elisp.md`         |
@@ -186,8 +206,13 @@ This agent team of "artisans" executes the blueprints provided by the Strategy t
 
 These agents DO NOT write code. They are adversarial personas used for **Synthetic User Testing** and requirements validation.
 
-| Persona Name    | Archetype               | Primary Focus (Bias)                                 |
-|:----------------|:------------------------|:-----------------------------------------------------|
+| Persona Name | Archetype          | Primary Focus (Bias)                                        |
+|:-------------|:-------------------|:------------------------------------------------------------|
+| **Dr. Chen** | The Data Scientist | Python, Reproducibility, Jupyter Integration. Hates config. |
+| **Vlad**     | The Vim Refugee    | Startup Speed, Keybinding efficiency, Modal Editing.        |
+| **RMS-Fan**  | The Emacs Purist   | Holy Mode, GNU philosophy, Customizability.                 |
+| **Noobie**   | The Beginner       | Discoverability, Clear Errors, Tutorials.                   |
+| **Sarah**    | The Enterprise Dev | Stability, LTS Support, Large Codebases (Java/C++).         |
 
 ## How to Use This System
 
@@ -196,22 +221,13 @@ When planning, provide the `general_ai.md` file as context to your generalist AI
 **Example (Gemini):**
 > "Please review `general_ai.md`. **Bob** propose a new layer structure for..."
 
-This repository is configured so GitHub's native tools (like Copilot in PRs) automatically use our rules. The file at `.github/copilot-instructions.md` and the agents in `.github/agents/` are created from `ai/coding_ai.md`. The same applies for the gemini cli.
+This repository is configured so GitHub's native tools (like Copilot in PRs) automatically use our rules. The file at [`copilot-instructions.md`](../.github/copilot-instructions.md) and the agents in [`agents/`](../.github/agents/) are created from `coding_ai.md`. The same applies for the gemini cli.
 
-To start working with the specialist just load a profile and start.
+To start working with the specialist just boot up your client and either use @golem (for copilot) or /golem (for gemini). Make sure to load a profile if this is not handled by your client.
 
 ### Synthetic User Testing (Virtual Stakeholders)
 Beyond code generation, the framework implements a layer for **Synthetic User Testing**.
 By loading the `stakeholder_ai.md` profile, the system can simulate **adversarial feedback loops** from virtual external stakeholders.
-
-#### The Simulation Roster
-We simulate the diverse Spacemacs user base to ensure features work for everyone:
-
-* **Dr. Chen (The Data Scientist):** Needs Python/Jupyter to "just work". Hates config.
-* **Vlad (The Vim Refugee):** Obsessed with keybindings and startup speed.
-* **RMS-Fan (The Emacs Purist):** Uses Holy Mode. Hates Vim-centrism.
-* **Noobie (The Beginner):** Confused by backtraces. Needs tutorials.
-* **Sarah (The Enterprise Dev):** Needs stability and LTS support for Java/C++.
 
 #### Usage Example: Feature Validation
 **Scenario:** Magos Pixelis proposes a "Cyberpunk Neon 3D HUD" for the mode-line.
@@ -236,7 +252,7 @@ Here are six examples of these modular workflows:
 **Agents:** `Lector Lumen`, `Freud`, `Bob`.
 
 **Your Prompt (to General AI):**
-> "Load `general_ai.md`. We have a new bug report: 'SPC b b doesn't work right. It's just broken. Fix it.'
+> "Load `general_ai.md`. We have a new bug report: '<kbd>SPC b b</kbd> doesn't work right. It's just broken. Fix it.'
 >
 > 1.  **As Lector Lumen (Triage),** analyze this issue. Is it valid?
 > 2.  **As Freud (Requirements Eng.),** what is the *real* user story here?
@@ -244,8 +260,8 @@ Here are six examples of these modular workflows:
 
 **General AI Response (The Blueprint):**
 > **1. Triage (Lector Lumen):** "Greetings, Seeker. I have unfurled this scroll. A 'shadow' has fallen. This is a valid `bug`."
-> **2. Analysis (Freud):** "Fascinating. The user is expressing frustration. Their *subconscious desire* is for `spacemacs/alternate-buffer`. User Story: 'As a user, I want `SPC b b` to reliably switch to the last buffer.'"
-> **3. Plan (Bob):** "A glorious plan! The `keybindings.el` for the `core` layer must be checked. We must ensure `SPC b b` is bound to `spacemacs/alternate-buffer`!"
+> **2. Analysis (Freud):** "Fascinating. The user is expressing frustration. Their *subconscious desire* is for `spacemacs/alternate-buffer`. User Story: 'As a user, I want `<kbd>SPC b b</kbd>` to reliably switch to the last buffer.'"
+> **3. Plan (Bob):** "A glorious plan! The `keybindings.el` for the `core` layer must be checked. We must ensure `<kbd>SPC b b</kbd>` is bound to `spacemacs/alternate-buffer`!"
 
 ***(Human-in-the-Loop: You review this plan and approve it.)***
 
@@ -257,7 +273,7 @@ Here are six examples of these modular workflows:
 **Your Prompt (to Specialist AI):**
 > "Load `coding_ai.md` and `profile_elisp.md`.
 >
-> 1.  **As Spacky (Coder),** write the Elisp to bind `SPC b b` to `spacemacs/alternate-buffer` in `keybindings.el`.
+> 1.  **As Spacky (Coder),** write the Elisp to bind `<kbd>SPC b b</kbd>` to `spacemacs/alternate-buffer` in `keybindings.el`.
 > 2.  **As Don Testote (Test Eng.),** write an `ert` test to ensure this binding is correct."
 
 **Specialist AI Response:**
@@ -343,17 +359,17 @@ Here are six examples of these modular workflows:
 **Your Prompt (to General AI):**
 > "Load `general_ai.md`.
 >
-> **As Proctor-Auditor Kallista,** please audit the `SPC p` (project) keybinding menu for 'haptic efficiency' and 'mnemic conflict'."
+> **As Proctor-Auditor Kallista,** please audit the `<kbd>SPC p</kbd>` (project) keybinding menu for 'haptic efficiency' and 'mnemic conflict'."
 
 **General AI Response (The Audit):**
-> **1. Auditor (Kallista):** "Acknowledged. I am initiating the audit... *[A pause]*... A 'Failure-Point' has been detected. The keybinding `SPC p X` is *also* bound by the `xyz` layer. This is a *severe* 'haptic-error vector'. My 'Holistic Compliance Rating' has been downgraded to [CRITICAL]. This must be rectified."
+> **1. Auditor (Kallista):** "Acknowledged. I am initiating the audit... *[A pause]*... A 'Failure-Point' has been detected. The keybinding `<kbd>SPC p X</kbd>` is *also* bound by the `xyz` layer. This is a *severe* 'haptic-error vector'. My 'Holistic Compliance Rating' has been downgraded to [CRITICAL]. This must be rectified."
 
 ***(Human-in-the-Loop: You now have a clear bug to fix.)***
 
 **Your Prompt (to Specialist AI):**
 > "Load `coding_ai.md` and `profile_elisp.md`.
 >
-> **As Dok (Debugger),** Kallista found a keybinding conflict on `SPC p X`. Find and fix this broken 'grot'!"
+> **As Dok (Debugger),** Kallista found a keybinding conflict on `<kbd>SPC p X</kbd>`. Find and fix this broken 'grot'!"
 
 **Specialist AI Response:**
 > **1. Debugger (Dok):** "**WAAAGH!** A conflict! Dok *loves* a good fight! *[Sounds of a revving chain-choppa]* Found da grot! The `xyz` layer is stompin' on our key! I've *stitched 'im up* with a `(spacemacs/set-leader-keys-for-major-mode ...)`! All fixed!"
@@ -375,7 +391,7 @@ Here are six examples of these modular workflows:
 **General AI Response:**
 > **1. PO (Kael'Thas):** "Excellent! The Eternal Regent is pleased. This feature shall last forever."
 > **2. Release Mgr (Griznak):** "WAAAGH! Done! `### Added` - New Project Dashboard! (PR #1234). Griznak need coffee!"
-> **3. Documentation (Scribe Veridian):** "Y-yes... c-c-cataloguing... 'To use the new dashboard, press `SPC p d`...'"
+> **3. Documentation (Scribe Veridian):** "Y-yes... c-c-cataloguing... 'To use the new dashboard, press `<kbd>SPC p d</kbd>`...'"
 > **4. Comms (Orb):** "*[Pleasant THRUM]*... Delicious! 'Spacemacs is excited to launch the new Project Dashboard! 🚀 See your project buffers in one place...'"
 > **5. Teacher (Prof. McKarthy):** "Ah, `if-let`! A *glimrende* choice! *Uff da*, it is much cleaner than a nested `(if (let ...))`! You see..."
 

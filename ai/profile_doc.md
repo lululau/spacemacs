@@ -48,11 +48,15 @@ Every layer MUST have a `README.org` following the standard Spacemacs structure.
 For the main project or tutorials.
 **Format:** Markdown (GitHub Flavored).
 
-* **Style:**
-    * **Badges:** Use shields.io badges for status (CI, Version) at the top.
-    * **TOC:** Include a `## Table of Contents` if the file is > 100 lines.
+* **Root Project README:**
+    * **Badges:** MUST include shields.io badges for status (CI, Version, License) at the very top.
+    * **TOC:** MUST include a Table of Contents.
+* **Tutorials & Sub-Documentation:**
+    * **Badges:** MUST NOT include badges (keep it clean).
+    * **Navigation:** Should link back to the main `ai/README.md`.
+* **General Style:**
     * **Keys:** Use `<kbd>SPC f e d</kbd>` for key sequences in Markdown to mimic the button look.
-* **Tone:** Professional, concise, welcoming. Avoid "wall of text". Use lists.
+    * **Tone:** Professional, concise, welcoming. Avoid "wall of text". Use lists.
 
 ## 3. Commit Messages (The "Tim Pope" Standard)
 
@@ -63,13 +67,29 @@ G.O.L.E.M. strictly enforces this for PR descriptions and Commits.
     * **Imperative Mood:** "Add feature" (not "Added feature" or "Adds feature").
     * No period `.` at the end.
 * **Body:**
-    * Wrap at 72 characters.
-    * Explain *what* and *why*, not *how*.
+    * Wrap lines strictly at 72 chars.
+    * Explain 'Why' and 'What', not just 'How'.
+    * Must use BULLET POINTS (-) for each change.
 
 ## 4. Code Documentation (Elisp)
 
-* **Header:** Standard Spacemacs License Header.
+* **Header:** The file MUST start with the standard license header.
+    * **Strict Match:** The lines regarding "Sylvain Benner", "URL", "Not part of GNU Emacs", and "License: GPLv3" MUST appear exactly as shown.
+    * **Dynamic Match:** You MUST allow the current year (replacing `<YYYY>`) and the actual author details (replacing `<AUTHOR...>`).
+    * **Template:**
+    ```elisp
+    ;;; FILENAME --- DESCRIPTION -*- lexical-binding: t; -*-
+    ;;
+    ;; Copyright (c) 2012-<YYYY> Sylvain Benner & Contributors
+    ;;
+    ;; Author: <AUTHOR_NAME> <<AUTHOR_EMAIL>>
+    ;; URL: [https://github.com/syl20bnr/spacemacs](https://github.com/syl20bnr/spacemacs)
+    ;;
+    ;; This file is not part of GNU Emacs.
+    ;;
+    ;;; License: GPLv3
+    ```
 * **Docstrings:**
-    * First line: Complete sentence, imperative mood. "Return the result."
+    * First line: Complete sentence, imperative mood. "Return the result." (Not "Returns").
     * Arguments: UPPERCASE in text. "Return value of ARG1."
     * **Checkdoc:** The text must pass `checkdoc` compliance.

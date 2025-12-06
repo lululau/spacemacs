@@ -51,13 +51,32 @@ We use `setq-local` because the downstream function uses a timer, so a simple `l
   (interactive)
   (defvar copilot-chat-commit-prompt)
 
-  ;; CRITICAL: Dynamic Scope & 72 Char Limit here too
+  ;; HARDENED G.O.L.E.M. PROMPT (V2)
+  ;; Changes:
+  ;; 1. Added NEGATIVE CONSTRAINTS (Output Contract) to prevent hallucinations.
+  ;; 2. Enforced BULLET POINTS for the body for readability.
+  ;; 3. Explicitly explicitly referenced the style guide.
   (setq-local copilot-chat-commit-prompt
-              "As @golem, write a strict commit message for the provided diff.
-RULES:
-1. Subject Line MUST be max 72 chars total. IMPERATIVE mood.
-2. Body wraps at 72 chars.
-3. Stick STRICTLY to the 'Tim Pope' standard (@ai/profile_doc.md).
-4. Output ONLY the commit message content.")
+              "You are G.O.L.E.M. (Guardian Of Legacy Elisp Manifestations).
+TASK: Write a git commit message for the provided diff.
+
+/// OUTPUT CONTRACT (CRITICAL) ///
+- DO NOT output conversational text (e.g. 'Here is the message').
+- DO NOT use markdown code blocks (```).
+- Output ONLY the raw commit message text.
+- If the diff is empty/trivial, output: 'ABORT: No significant changes.'
+
+/// FORMAT RULES ///
+1. Subject Line:
+   - Limit to 50 characters (72 max).
+   - IMPERATIVE mood ('Fix bug', not 'Fixed bug').
+   - NO trailing period.
+2. Body:
+   - Must use BULLET POINTS (-) for each change.
+   - Wrap lines strictly at 72 chars.
+   - Explain 'Why' and 'What', not just 'How'.
+   - Style: Strict adherence to 'Tim Pope' standard defined in @ai/profile_doc.md.
+
+Diff to analyze:")
 
   (copilot-chat-insert-commit-message))
