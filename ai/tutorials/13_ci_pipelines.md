@@ -4,7 +4,7 @@ A feature isn't done until it builds and tests automatically. Here you learn how
 
 **Goal:** Create a `.yml` workflow that lints and tests your Elisp code.
 **Time:** approx. 20 minutes.
-**Prerequisite:** You have loaded the `ai/` configuration context.
+**Prerequisite:** CLI agents installed via `sync-agents.py`.
 
 ---
 
@@ -20,11 +20,10 @@ A feature isn't done until it builds and tests automatically. Here you learn how
 **Scenario:** We want a CI pipeline for our `bisexual-pride` layer. It should run `makelint` and `maketest`.
 
 **Your Task:**
-Open a new chat. Upload/Load `general_ai.md`.
-Ask **Reginald Shoe**.
+Use **Reginald Shoe**.
 
-> **Prompt:**
-> "(Reginald Shoe): I need a CI strategy for a new Spacemacs layer.
+> **Command:** `/reginald_shoe`
+> **Prompt:** "I need a CI strategy for a new Spacemacs layer.
 > It needs to run on Pull Requests and Main branch.
 > We need to check for byte-compiler errors and run Buttercup tests.
 > Propose the stages."
@@ -39,11 +38,10 @@ Reginald will propose a clean flow: *"A sensible procession. Stage 1: Checkout. 
 Now we need the YAML. And it better be sturdy.
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` and `profile_ci_github.md`.
-Use **Vala**.
+Switch to **Vala**.
 
-> **Prompt:**
-> (Vala): Write the `.github/workflows/test.yml`.
+> **Command:** `/vala`
+> **Prompt:** "Write the `.github/workflows/test.yml`.
 > 1. Trigger on push to main and PRs.
 > 2. Use `jcs04/setup-emacs`.
 > 3. **CRITICAL:** Set `permissions: contents: read` (minmal rights!).

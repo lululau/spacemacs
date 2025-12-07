@@ -32,3 +32,13 @@ The format is an alist: '((\"name\" . (:command \"...\" :args (\"...\")))
                           (\"ollama\" . (:url \"http://localhost:11434\")))"
   :group 'github-copilot
   :type '(list (cons string (list symbol string))))
+
+(defconst github-copilot--golem-jokes
+  '("# *Grind*... Assessing structural integrity..."
+    "# *Crack*... Parsing shards of logic..."
+    "# *Rumble*... Carving history into stone..."
+    "# *Krrzt*... Measuring compliance levels..."
+    "# *Thud*... Adding weight to the repository..."
+    "# *Rumble*... I prefer granite, but this will do...")
+  "A collection of short G.O.L.E.M. status messages.
+Must contain %s to display the model name (or handle the format arg).")

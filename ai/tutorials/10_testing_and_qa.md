@@ -4,7 +4,7 @@ Code that isn't tested is broken. This tutorial shows you how to generate modern
 
 **Goal:** Write a `tests.el` file that verifies logic, keybindings, and user behavior using `describe` and `it` blocks.
 **Time:** approx. 20 minutes.
-**Prerequisite:** You have loaded the `ai/` configuration context.
+**Prerequisite:** CLI agents installed via `sync-agents.py`.
 
 ---
 
@@ -20,11 +20,10 @@ Code that isn't tested is broken. This tutorial shows you how to generate modern
 **Scenario:** You have a function `bisexual-pride/next-color` and want to ensure the color cycle logic is correct.
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` AND `profile_elisp_testing.md`.
 Use **Don Testote**.
 
-> **Prompt:**
-> (Don Testote): I need a Buttercup spec for the function `bisexual-pride/next-color`.
+> **Command:** `/don_testote`
+> **Prompt:** "I need a Buttercup spec for the function `bisexual-pride/next-color`.
 > Logic: It should cycle (Pink -> Purple -> Blue -> Pink).
 > Write a `describe` block with multiple `it` clauses asserting the return values."
 
@@ -47,10 +46,9 @@ Don Testote writes a clean BDD test:
 Does `SPC o b` actually point to the right command?
 
 **Your Task:**
-Stay with **Don Testote**. Ensure `profile_elisp_testing.md` is active.
+Stay with **Don Testote**.
 
-> **Prompt:**
-> "(Don Testote): Generate a test to verify that `SPC o b` is correctly bound to `bisexual-pride/toggle` in the `spacemacs-default-map`.
+> **Prompt:** "Generate a test to verify that `SPC o b` is correctly bound to `bisexual-pride/toggle` in the `spacemacs-default-map`.
 > Use `lookup-key` inside an `it` block."
 
 **Result:**
@@ -72,8 +70,7 @@ Now the "Real World" test. We simulate a user typing and checking the buffer sta
 **Your Task:**
 Stay with **Don Testote**.
 
-> **Prompt:**
-> "(Don Testote): I need an integration test.
+> **Prompt:** "I need an integration test.
 > Scenario:
 > 1. Create a temp buffer with `bi-mode` active.
 > 2. Insert text 'Hello'.
@@ -101,8 +98,7 @@ Don Testote writes a robust scenario:
 **Your Task:**
 Ask **Don Testote** how to execute this.
 
-> **Prompt:**
-> "(Don Testote): How do I run these Buttercup tests interactively?"
+> **Prompt:** "How do I run these Buttercup tests interactively?"
 
 **Result:**
 *"Open the file and run `M-x buttercup-run-at-point` for a single test, or `SPC m t b` (if configured) to run the whole suite."*

@@ -4,7 +4,7 @@ A good font makes code readable, a Nerd Font makes it pretty, and ligatures make
 
 **Goal:** Install a Nerd Font (e.g., JetBrains Mono), set it as default, and enable ligatures.
 **Time:** approx. 15 minutes.
-**Prerequisite:** You have loaded the `ai/` configuration context.
+**Prerequisite:** CLI agents installed via `sync-agents.py`.
 
 ---
 
@@ -20,11 +20,10 @@ A good font makes code readable, a Nerd Font makes it pretty, and ligatures make
 **Scenario:** You want to switch from the default "Source Code Pro" to "JetBrains Mono" or "Fira Code" to get that modern look.
 
 **Your Task:**
-Open a new chat. Upload/Load `general_ai.md`.
-Ask **Magos Pixelis**.
+Use **Magos Pixelis**.
 
-> **Prompt:**
-> "(Magos Pixelis): I want to change the editor font.
+> **Command:** `/magos`
+> **Prompt:** "I want to change the editor font.
 > 1. Which font do you recommend for high readability and 'tech aesthetics'?
 > 2. What is the optimal size for a 1440p monitor according to the Grid?"
 
@@ -38,12 +37,10 @@ Magos will rave: *"The Omnissiah favors **JetBrains Mono**. It has distinct glyp
 The font is defined centrally in `init.el` (or `.spacemacs`).
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` and `profile_elisp.md`.
-Use **Spacky**.
+Switch to **Spacky**.
 
-> **Prompt:**
-> "Load `profile_elisp.md`.
-> (Spacky): Change the default font to 'JetBrains Mono', size 14, weight 'normal'.
+> **Command:** `/spacky`
+> **Prompt:** "Change the default font to 'JetBrains Mono', size 14, weight 'normal'.
 > Where do I put this in `.spacemacs`?"
 
 **Result:**
@@ -65,8 +62,7 @@ We want `->` to appear as a single arrow glyph. Spacemacs has a dedicated layer 
 **Your Task:**
 Stay with **Spacky**.
 
-> **Prompt:**
-> "(Spacky): I want to enable ligatures for this font.
+> **Prompt:** "I want to enable ligatures for this font.
 > 1. How do I enable the `ligatures` layer in `dotspacemacs-configuration-layers`?
 > 2. How do I configure it to support 'JetBrains Mono'?"
 

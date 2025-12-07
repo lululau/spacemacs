@@ -5,7 +5,7 @@ This tutorial shows you how to create professional documentation effortlessly.
 
 **Goal:** Create a `README.org` (or `.md`) for your layer, including perfect keybinding tables.
 **Time:** approx. 10 minutes.
-**Prerequisite:** You have loaded the `ai/` configuration context.
+**Prerequisite:** CLI agents installed via `sync-agents.py`.
 
 ---
 
@@ -21,11 +21,10 @@ This tutorial shows you how to create professional documentation effortlessly.
 **Scenario:** You finished the `bisexual-pride` layer. Now the world needs to know what it does.
 
 **Your Task:**
-Open a new chat. Upload/Load `general_ai.md`.
 Use **Scribe Veridian**.
 
-> **Prompt:**
-> "(Scribe Veridian): I need a README for my new layer `bisexual-pride`.
+> **Command:** `/scribe`
+> **Prompt:** "I need a README for my new layer `bisexual-pride`.
 > Features:
 > 1. Adds a bi-flag banner to the home buffer.
 > 2. Sets the theme to purple/pink/blue.
@@ -45,8 +44,7 @@ Spacemacs documentation requires specific table formatting. Doing this by hand i
 **Your Task:**
 Stay with **Scribe Veridian**.
 
-> **Prompt:**
-> "(Scribe Veridian): Create the Keybindings table for this layer in Org-mode format.
+> **Prompt:** "Create the Keybindings table for this layer in Org-mode format.
 > - `SPC o b` : Toggle Pride Mode
 > - `SPC o B` : Cycle Color Palette"
 
@@ -67,11 +65,10 @@ He generates the perfectly formatted table:
 Before committing, the Guardian must inspect the work. Spacemacs requires specific headers.
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` and `profile_doc.md`.
-Use **G.O.L.E.M.**.
+Switch to **G.O.L.E.M.**.
 
-> **Prompt:**
-> "(G.O.L.E.M.): Review this README draft. Does it comply with the 'Document Statutes'? Are the headers correct?"
+> **Command:** `/golem`
+> **Prompt:** "Review this README draft. Does it comply with the 'Document Statutes'? Are the headers correct?"
 
 **Result:**
 G.O.L.E.M. will complain (or praise):

@@ -4,7 +4,7 @@ You found a cool package on MELPA (e.g., a new linter or theme) and want to inte
 
 **Goal:** Correctly register, install, and lazy-load a package.
 **Time:** approx. 20 minutes.
-**Prerequisite:** You have loaded the `ai/` configuration context.
+**Prerequisite:** CLI agents installed via `sync-agents.py`.
 
 ---
 
@@ -22,11 +22,10 @@ You found a cool package on MELPA (e.g., a new linter or theme) and want to inte
 **Common Mistake:** Throwing code into `config.el`. This breaks the Spacemacs architecture.
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` and `profile_layers.md`.
-Ask **Nexus-7**.
+Use **Nexus-7**.
 
-> **Prompt:**
-> (Nexus-7): I want to add `bi-mode` to the `bisexual-pride` layer.
+> **Command:** `/nexus`
+> **Prompt:** "I want to add `bi-mode` to the `bisexual-pride` layer.
 > 1. Check the 'Nexus Rules'. Does this layer OWN the package (init) or MODIFY it (post-init)? (Assume no other layer uses it).
 > 2. Where do I declare it in the file structure?"
 
@@ -42,8 +41,7 @@ Spacemacs only installs packages that are explicitly listed in the `<layer>-pack
 **Your Task:**
 Stay with **Nexus-7**.
 
-> **Prompt:**
-> "(Nexus-7): Please update the `packages.el` list for this layer to include `bi-mode`."
+> **Prompt:** "Please update the `packages.el` list for this layer to include `bi-mode`."
 
 **Result:**
 He provides the clean code snippet for the `defconst` list.
@@ -63,11 +61,10 @@ He provides the clean code snippet for the `defconst` list.
 This is the most critical part: The `init-bi-mode` function. Spacemacs prioritizes performance. We must NOT load the package before the user actually needs it.
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` and `profile_elisp.md`.
-Use **Spacky**.
+Switch to **Spacky**.
 
-> **Prompt:**
-> (Spacky): Write the `init-bi-mode` function.
+> **Command:** `/spacky`
+> **Prompt:** "Write the `init-bi-mode` function.
 > Requirements:
 > 1. Use `use-package`.
 > 2. It MUST be lazy-loaded (`:defer t`).
@@ -90,11 +87,10 @@ Spacky executes his **Reasoning Trace** (Check: Did I use `:defer t`?) and retur
 Sometimes a package needs a variable to be set *before* it is even loaded (e.g., to disable a default behavior).
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` and `profile_layers.md`.
-Ask **Nexus-7** if this applies.
+Switch back to **Nexus-7**.
 
-> **Prompt:**
-> "(Nexus-7): Does this package require any pre-load variables in `layers.el` according to best practices?"
+> **Command:** `/nexus`
+> **Prompt:** "Does this package require any pre-load variables in `layers.el` according to best practices?"
 
 **Result:**
 Usually: *"Negative. Keep `layers.el` clean unless strictly necessary for ordering."*

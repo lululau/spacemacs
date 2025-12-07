@@ -4,7 +4,7 @@ You want to integrate a group of packages (e.g., for a new language or tool) cle
 
 **Goal:** Create a local layer that bundles packages, configuration, and keybindings.
 **Time:** approx. 30–45 minutes.
-**Prerequisite:** You have loaded the `ai/` configuration context.
+**Prerequisite:** CLI agents installed via `sync-agents.py`.
 
 ---
 
@@ -22,10 +22,10 @@ You want to integrate a group of packages (e.g., for a new language or tool) cle
 **Scenario:** We want to build a layer for **Obsidian** (Note-taking app integration).
 
 **Your Task:**
-Open a new chat. Upload/Load `general_ai.md`. Ask **Bob**.
+Use **Bob**.
 
-> **Prompt:**
-> "(Bob): I want to create a new layer for Obsidian integration.
+> **Command:** `/bob`
+> **Prompt:** "I want to create a new layer for Obsidian integration.
 > 1. Should this go into `+tools` or `+writing`?
 > 2. What is the standard file structure I need?
 > 3. Which packages should be core (owned) vs. optional?"
@@ -40,11 +40,10 @@ Bob will say: *"A glorious addition! Place it in `layers/+tools/obsidian`. You n
 Now we create the files.
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` and `profile_layers.md`. Ask **Nexus-7**.
+Switch to **Nexus-7**.
 
-> **Prompt:**
-> "Load `profile_layers.md`.
-> (Nexus-7): Generate the folder structure command (mkdir/touch) for the `obsidian` layer in `private/`.
+> **Command:** `/nexus`
+> **Prompt:** "Generate the folder structure command (mkdir/touch) for the `obsidian` layer in `private/`.
 > Also, write the content for `layers.el` (declare dependencies if needed)."
 
 **Result:**
@@ -62,11 +61,10 @@ touch layers/+tools/obsidian/{layers.el,packages.el,funcs.el,config.el,keybindin
 The heart of the layer. Here we define how packages load.
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` and `profile_elisp.md`.
-Ask **Spacky**.
+Switch to **Spacky**.
 
-> **Prompt:**
-> (Spacky): Write the `packages.el` for the obsidian layer.
+> **Command:** `/spacky`
+> **Prompt:** "Write the `packages.el` for the obsidian layer.
 > 1. Define the package list (`defconst`).
 > 2. Write `init-obsidian` using `use-package` and `:defer t`.
 > 3. Ensure it loads only on markdown files or via command."
@@ -83,8 +81,8 @@ A layer needs Leader Keys.
 **Your Task:**
 Ask **Spacky** (or consult **Kallista** regarding placement).
 
-> **Prompt:**
-> "(Spacky): Now implementing `keybindings.el`.
+> **Command:** `/spacky`
+> **Prompt:** "Now implementing `keybindings.el`.
 > Bind the main Obsidian menu to a logical key under `SPC a` (apps) or `SPC m` (major mode). Use `spacemacs/set-leader-keys`."
 
 **Result:**

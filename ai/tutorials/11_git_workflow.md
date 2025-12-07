@@ -4,7 +4,7 @@ A clean Git history is as important as clean code. This tutorial shows you how t
 
 **Goal:** Write a commit message that adheres to the "Tim Pope Standard" (Imperative, 50/72 wrapping) and update `CHANGELOG.md`.
 **Time:** approx. 10 minutes.
-**Prerequisite:** You have loaded the `ai/` configuration context.
+**Prerequisite:** CLI agents installed via `sync-agents.py`.
 
 ---
 
@@ -20,11 +20,10 @@ A clean Git history is as important as clean code. This tutorial shows you how t
 **Scenario:** You have modified `ai/sync-agents.py` to support path detection. You are tired and don't know how to summarize it.
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` AND `profile_doc.md`.
 Use **G.O.L.E.M.**.
 
-> **Prompt:**
-> (G.O.L.E.M.): I have modified `sync-agents.py`.
+> **Command:** `/golem`
+> **Prompt:** "I have modified `sync-agents.py`.
 > Changes:
 > 1. It now finds `coding_ai.md` relative to the script location.
 > 2. It now puts profiles directly in `ai/` instead of `ai/profiles/`.
@@ -54,8 +53,7 @@ This prevents FileNotFoundError when running outside the ai/ directory.
 **Your Task:**
 Stay with **G.O.L.E.M.**
 
-> **Prompt:**
-> "(G.O.L.E.M.): Critique this commit message: 'Fixed the bug with the paths and updated python script.'
+> **Prompt:** "Critique this commit message: 'Fixed the bug with the paths and updated python script.'
 > Rewrite it if it violates the Statutes."
 
 **Result:**
@@ -70,11 +68,10 @@ Stay with **G.O.L.E.M.**
 If the change is visible to the user (e.g., a new feature), it belongs in `CHANGELOG.md`.
 
 **Your Task:**
-Open a new chat. Upload/Load `general_ai.md`.
-Use **Griznak** (The Release Manager).
+Switch to **Griznak**.
 
-> **Prompt:**
-> "(Griznak): Create a one-line entry for `CHANGELOG.md` under the 'Unreleased' section for this change.
+> **Command:** `/griznak`
+> **Prompt:** "Create a one-line entry for `CHANGELOG.md` under the 'Unreleased' section for this change.
 > Format: `[Layer/File] Description (PR#)`"
 
 **Result:**
@@ -103,7 +100,6 @@ Enable the **G.O.L.E.M. mode** in your `.spacemacs` configuration layers list:
 2.  Stage your changes (`s`).
 3.  Start the commit (`c c`).
 4.  **Watch Magic:** G.O.L.E.M. will automatically analyze the diff and insert a compliant message into the buffer.
-5.  *Optional:* You can also trigger it manually in Magit with `, g` (Evil) or `C-c g` (Holy).
 
 ---
 

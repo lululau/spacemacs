@@ -4,7 +4,7 @@ This tutorial guides you through the process of efficiently handling a Spacemacs
 
 **Goal:** Understand, reproduce, fix, and cleanly commit a bug fix.
 **Time:** approx. 15–30 minutes (depending on the bug).
-**Prerequisite:** You have loaded the `ai/` configuration context.
+**Prerequisite:** CLI agents installed via `sync-agents.py`.
 
 ---
 
@@ -22,11 +22,10 @@ This tutorial guides you through the process of efficiently handling a Spacemacs
 **Scenario:** A user reports an issue: *"Spacemacs crashes when opening Python files with lsp."*
 
 **Your Task:**
-Open a new chat. Upload/Load `general_ai.md`.
 Use **Lector Lumen** to assess the issue.
 
-> **Prompt:**
-> "(Lector Lumen): A user reports a crash in the Python layer when using LSP. Here is the provided stack trace: `[paste trace here]`.
+> **Command:** `/lector`
+> **Prompt:** "A user reports a crash in the Python layer when using LSP. Here is the provided stack trace: `[paste trace here]`.
 > 1. Is this a valid bug or likely a user configuration error?
 > 2. Are we missing crucial information (e.g., Emacs version, OS)?"
 
@@ -40,14 +39,13 @@ Lector Lumen will analyze the trace. He might say: *"The trace shows `void-funct
 Assume the issue is valid. It is a real code error in the layer.
 
 **Your Task:**
-Open a new chat (**Session Hygiene!**). Upload/Load `coding_ai.md`. Additionally upload/load `profile_elisp.md` (**IMPORTANT** for the rules!).
-Use **Dok** to find the culprit.
+Switch to **Dok** to find the culprit.
 
-> **Prompt:**
-> "(Dok): Here is the backtrace: `void-function: python-shell-send-buffer`. Which file in the `layers/+lang/python` directory is likely causing this, and why?"
+> **Command:** `/dok`
+> **Prompt:** "Here is the backtrace: `void-function: python-shell-send-buffer`. Which file in the `layers/+lang/python` directory is likely causing this, and why?"
 
 **Result:**
-Dok will (enthusiastically) find the error: *"W```GH! Dat function is dead! It was removed in Emacs 29! Look at `funcs.el`, line 45!"*
+Dok will (enthusiastically) find the error: *"WAAAGH! Dat function is dead! It was removed in Emacs 29! Look at `funcs.el`, line 45!"*
 
 ---
 
@@ -56,11 +54,10 @@ Dok will (enthusiastically) find the error: *"W```GH! Dat function is dead! It w
 You found the spot. The function is deprecated and must be replaced.
 
 **Your Task:**
-Stay in `coding_ai.md`. Additionally upload/load `profile_elisp.md` (**IMPORTANT** for the rules!).
-Use **Marjin** (for modifying existing code).
+Switch to **Marjin** (for modifying existing code).
 
-> **Prompt:**
-> (Marjin): Please fix the deprecated call in `funcs.el`. Replace `python-shell-send-buffer` with the modern `python-shell-send-region` approach. Ensure we maintain backwards compatibility for Emacs 28 if possible."
+> **Command:** `/marjin`
+> **Prompt:** "Please fix the deprecated call in `funcs.el`. Replace `python-shell-send-buffer` with the modern `python-shell-send-region` approach. Ensure we maintain backwards compatibility for Emacs 28 if possible."
 
 **Result:**
 Marjin will:
@@ -81,11 +78,10 @@ Marjin will:
 The fix is ready and tested. Now it needs to be merged.
 
 **Your Task:**
-Open a new chat. Upload/Load `general_ai.md`.
-Use **Scribe Veridian** or **Lector Lumen** to write the PR text.
+Switch to **Lector Lumen** to write the PR text.
 
-> **Prompt:**
-> "(Lector Lumen): Draft a professional PR description for this fix. Reference Issue #1234. Explain that we replaced a deprecated function."
+> **Command:** `/lector`
+> **Prompt:** "Draft a professional PR description for this fix. Reference Issue #1234. Explain that we replaced a deprecated function."
 
 **Result:**
 A cleanly formatted text for GitHub:

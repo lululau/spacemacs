@@ -80,3 +80,48 @@ TASK: Write a git commit message for the provided diff.
 Diff to analyze:")
 
   (copilot-chat-insert-commit-message))
+
+(defun github-copilot/insert-golem-commit-message ()
+  "Insert a G.O.L.E.M. style commit message into the buffer (for Hooks).
+This function sets the system prompt AND the wait message dynamically.
+It picks a random G.O.L.E.M. joke from `github-copilot--golem-jokes`."
+  (interactive)
+
+  ;; Variables must be set buffer local for the timer-based execution.
+  ;; in copilot-chat-insert-commit-message.
+  (defvar copilot-chat-commit-prompt)
+  (defvar copilot-chat-git-wait-message-format)
+  (defvar copilot-chat-git-regenerate-wait-message-format)
+
+  ;; 1. G.O.L.E.M. PROMPT (The Persona)
+  (setq-local copilot-chat-commit-prompt
+              "You are G.O.L.E.M. (Guardian Of Legacy Elisp Manifestations).
+TASK: Write a git commit message for the provided diff.
+
+/// OUTPUT CONTRACT (CRITICAL) ///
+- DO NOT output conversational text (e.g. 'Here is the message').
+- DO NOT use markdown code blocks (```).
+- Output ONLY the raw commit message text.
+- If the diff is empty/trivial, output: 'ABORT: No significant changes.'
+
+/// FORMAT RULES ///
+1. Subject Line:
+   - Limit to 50 characters (72 max).
+   - IMPERATIVE mood ('Fix bug', not 'Fixed bug').
+   - NO trailing period.
+2. Body:
+   - Must use BULLET POINTS (-) for each change.
+   - Wrap lines strictly at 72 chars.
+   - Explain 'Why' and 'What', not just 'How'.
+   - Style: Strict adherence to 'Tim Pope' standard defined in @ai/profile_doc.md.
+
+Diff to analyze:")
+
+  ;; 2. G.O.L.E.M. JOKES (The Randomizer) 🎲
+  (let ((random-joke (nth (random (length github-copilot--golem-jokes))
+                          github-copilot--golem-jokes)))
+    (setq-local copilot-chat-git-wait-message-format random-joke)
+    (setq-local copilot-chat-git-regenerate-wait-message-format random-joke))
+
+  ;; 3. EXECUTE
+  (copilot-chat-insert-commit-message))

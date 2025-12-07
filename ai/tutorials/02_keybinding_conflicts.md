@@ -4,7 +4,7 @@ In Spacemacs, many layers often compete for the same keys. This tutorial shows y
 
 **Goal:** Identify a conflict and repair the keybinding according to Spacemacs conventions.
 **Time:** approx. 10–15 minutes.
-**Prerequisite:** You have loaded the `ai/` configuration context.
+**Prerequisite:** CLI agents installed via `sync-agents.py`.
 
 ---
 
@@ -21,11 +21,10 @@ In Spacemacs, many layers often compete for the same keys. This tutorial shows y
 **Scenario:** A user reports: *"In `python-mode`, `SPC m t` runs `transpose-chars` instead of `python-test`!"*
 
 **Your Task:**
-Open a new chat. Upload/Load `general_ai.md`.
 Use **Kallista** to investigate the hierarchy.
 
-> **Prompt:**
-> "(Kallista): A user reports a 'Haptic Conflict'. In Python buffers, `SPC m t` is shadowed by a global binding.
+> **Command:** `/kallista`
+> **Prompt:** "A user reports a 'Haptic Conflict'. In Python buffers, `SPC m t` is shadowed by a global binding.
 > 1. Which layer is likely causing this 'Procedural Drift'?
 > 2. What is the standard Spacemacs convention for test bindings?"
 
@@ -42,8 +41,7 @@ We must decide: Do we use `spacemacs/set-leader-keys-for-major-mode` (specific) 
 **Your Task:**
 Stay with **Kallista** (or ask **Bob**).
 
-> **Prompt:**
-> "(Kallista): Should we move the Python test binding to `SPC m T` or force-override the shadowing binding?"
+> **Prompt:** "Should we move the Python test binding to `SPC m T` or force-override the shadowing binding?"
 
 **Result:**
 *"Override is acceptable if it restores the specific Major-Mode workflow. The 'Core Mandate' prioritizes local precision over global generic commands."*
@@ -55,12 +53,10 @@ Stay with **Kallista** (or ask **Bob**).
 Now we code. Common mistake: Using `(define-key ...)` which often breaks Evil states or the leader key map.
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` and `profile_elisp.md`.
-Use **Spacky**.
+Switch to **Spacky**.
 
-> **Prompt:**
-> "Load `profile_elisp.md`.
-> (Spacky): Fix the keybinding conflict in `python/packages.el`.
+> **Command:** `/spacky`
+> **Prompt:** "Fix the keybinding conflict in `python/packages.el`.
 > Bind `python-test-run` explicitly to `SPC m t` (and `, t`) for `python-mode` users. Use the correct Spacemacs macros to ensure it works for both Vim and Emacs styles."
 
 **Result:**

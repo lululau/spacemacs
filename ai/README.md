@@ -10,7 +10,7 @@
     - [🏗️ Level 3: Architecture & Aesthetics](#-level-3-architecture--aesthetics)
     - [🛡️ Level 4: Quality Assurance & Workflow](#-level-4-quality-assurance--workflow)
     - [🚀 Level 5: Advanced Engineering](#-level-5-advanced-engineering)
-  - [The Three-AI Model](#the-three-ai-model)
+  - [The Unified AI Model](#the-unified-ai-model)
   - [Supported Stacks & Capabilities](#supported-stacks--capabilities)
   - [Framework Rationale: High-Context Personas (3D) vs. Low-Context Roles (2D)](#framework-rationale-high-context-personas-3d-vs-low-context-roles-2d)
     - [The Problem: Low-Context Roles (2D)](#the-problem-low-context-roles-2d)
@@ -23,17 +23,14 @@
     - [Strategy, Planning & Communication (General AI)](#strategy-planning--communication-general-ai)
     - [Implementation & Specialists (Specialist AI)](#implementation--specialists-specialist-ai)
     - [Synthetic User Simulation (Virtual Stakeholders)](#synthetic-user-simulation-virtual-stakeholders)
-  - [How to Use This System](#how-to-use-this-system)
-    - [Synthetic User Testing (Virtual Stakeholders)](#synthetic-user-testing-virtual-stakeholders)
-      - [Usage Example: Feature Validation](#usage-example-feature-validation)
+  - [How to Use This System (Unified CLI Workflow)](#how-to-use-this-system-unified-cli-workflow)
+    - [Usage Example: Feature Validation](#usage-example-feature-validation)
   - [The "Workbench" Principle: Modular Workflows](#the-workbench-principle-modular-workflows)
-    - [Workflow 1: Triage & Planning (General AI)](#workflow-1-triage--planning-general-ai)
-    - [Workflow 2: Implementation (Specialist AI)](#workflow-2-implementation-specialist-ai)
-    - [Workflow 3: Full Code Review (Specialist AI)](#workflow-3-full-code-review-specialist-ai)
-    - [Workflow 4: New UI & CI Pipeline (Hybrid)](#workflow-4-new-ui--ci-pipeline-hybrid)
-    - [Workflow 5: Strategic Audit & Debugging (Hybrid)](#workflow-5-strategic-audit--debugging-hybrid)
-    - [Workflow 6: Release & Community (General AI)](#workflow-6-release--community-general-ai)
-  - [Updating The Blueprints (For Maintainers)](#updating-the-blueprints-for-maintainers)
+    - [Workflow 1: Triage & Planning](#workflow-1-triage--planning)
+    - [Workflow 2: Architecture](#workflow-2-architecture)
+    - [Workflow 3: Implementation](#workflow-3-implementation)
+    - [Workflow 4: Review](#workflow-4-review)
+  - [Updating The Blueprints](#updating-the-blueprints)
 
 <!-- markdown-toc end -->
 
@@ -63,46 +60,44 @@ New to the AI Framework? Start here! These guides take you by the hand and show 
 * **[Tutorial 12: The "4D" Code Review](tutorials/12_code_review.md)** - A full security, logic, and style audit pipeline with Marjin, Skeek, and G.O.L.E.M.
 * **[Tutorial 13: Designing CI/CD Pipelines](tutorials/13_ci_pipelines.md)** - Creating robust, secure GitHub Actions workflows with Reginald Shoe and Vala.
 
-## The Three-AI Model
-This directory serves as the "brain" for AI-assisted development. It defines a three-AI model to ensure maximum efficiency, code quality, and market alignment:
+## The Unified AI Model
+This directory serves as the "brain" for AI-assisted development.
+We utilize a **Unified Agentic Workflow**. Instead of switching between Web-UI and Terminals, **all agents reside in your CLI**, separated by logical personas (via slash commands).
+This requires a modern model so use either `Gpt-5.1` or `Gemini 3 pro` for this system.
 
-1.  **The Strategist (`general_ai.md`):** A high-level briefing for generalist AIs (e.g., Gemini). Used for architecture, planning, management, and requirements definition.
-2.  **The Specialist (`coding_ai.md`):** A detailed, rule-based instruction set for specialist coding AIs (e.g., Gemini, GitHub Copilot). Used for implementation, debugging, and testing.
-3.  **The Simulator (`stakeholder_ai.md`):** An adversarial feedback profile for virtual stakeholders. Used for Synthetic User Testing and requirements validation.
+1.  **The Strategist (`general_ai.md`):** High-level reasoning. Accessed via `/bob`, `/lector`, etc.
+    * *Focus:* Architecture, Requirements, Ticket Analysis (via MCP).
+2.  **The Specialist (`coding_ai.md`):** Implementation & Rules. Accessed via `/spacky`, `/golem`, etc.
+    * *Focus:* Code generation, Refactoring, Testing, Compliance.
+3.  **The Simulator (`stakeholder_ai.md`):** Adversarial Feedback. Accessed via `/vlad`, `/noobie`.
+    * *Focus:* User Simulation & Critique.
 
-These files are the **Single Source of Truth** for our AI collaboration.
-
-> **CRITICAL USAGE RULE: ONE SESSION = ONE ROLE**
-> **Make sure to open a fresh chat session** for each task.
-> * **NEVER** mix two `*_ai` files (e.g., do not load `general_ai.md` and then `coding_ai.md` in the same chat).
-> * **NEVER** mix two `profile_*` files (e.g., do not switch from elisp to ci in the same chat).
->
-> **Why?** LLMs maintain context. Mixing rules causes "Context Bleeding" (hallucinations), where the AI confuses conflicting instructions. **Always hit "New Chat" when switching roles.**
+> **CRITICAL USAGE RULE: ONE COMMAND = ONE MINDSET**
+> Use the **Slash Commands** (`/agent`) to switch contexts cleanly.
+> * `/bob` -> Loads Strategy Context.
+> * `/spacky` -> Resets & Loads Coding Context.
+> * **NEVER** mix instructions manually. Trust the slash command to reset the session.
+-> **Why?** LLMs maintain context. Mixing rules causes "Context Bleeding" (hallucinations), where the AI confuses conflicting instructions. **Always open a "New Chat" when switching roles thats what the slash command does for you.**
 
 ```mermaid
 sequenceDiagram
     participant U as User (Maxi)
-    participant G as General AI (Bob/Lector)
-    participant S as Specialist AI (Spacky/Marjin)
-    participant E as Emacs Editor
+    participant CLI as Gemini/Copilot CLI
 
-    Note over U, E: Workflow: Bug Fix Example
+    Note over U, CLI: Workflow: Unified Agent Interaction
 
-    U->>G: "Help! Bug in Python Layer!" (Load general_ai.md)
-    G->>G: Lector Lumen Triages Issue
-    G-->>U: Blueprint: "Valid Bug. Fix logic in funcs.el."
+    U->>CLI: /lector "Analyze Issue #42 via MCP"
+    CLI->>CLI: (Loads general_ai.md + GitHub Context)
+    CLI-->>U: Blueprint: "Valid Bug. Fix logic in funcs.el."
 
-    U->>S: "Fix this based on Blueprint." (Load coding_ai.md + profile)
-    S->>S: Dok finds error
-    S->>S: Marjin writes clean code
-    S-->>U: Elisp Code Block
+    U->>CLI: /spacky "Implement this fix."
+    CLI->>CLI: (RESET -> Loads coding_ai.md + profile_elisp.md)
+    CLI->>CLI: (Spacky writes code)
+    CLI-->>U: Elisp Code Block
 
-    U->>E: Paste Code & Run Tests
-    E-->>U: Tests Passed
-
-    U->>E: Commit (G.O.L.E.M. Hook)
-    E->>S: "Generate Commit Msg" (No Profile needed)
-    S-->>E: "Fix python logic..."
+    U->>CLI: /golem "Review this diff."
+    CLI->>CLI: (RESET -> Loads profile_doc.md)
+    CLI-->>U: "Commit Message Generated."
 ```
 
 ## Supported Stacks & Capabilities
@@ -162,9 +157,9 @@ The "Artisan" (Persona) is *lost* without their "Toolbox" (Profile). By providin
 ## The Agent Roster (Roles & Names)
 This table maps all agents in our "virtual team" to their primary role.
 
-* **General AI (The Strategist):** A high-level reasoning model (e.g., Gemini Advanced).
-* **Specialist AI (The Implementer):** A code-generation model (e.g., Gemini, GitHub Copilot).
-* **Stakeholder AI (The Simulator):** An adversarial feedback model (e.g., Gemini Advanced). Used for **Synthetic User Testing** and requirements validation before implementation.
+* **General AI (The Strategist):** A high-level reasoning mode.
+* **Specialist AI (The Implementer):** A code-generation mode.
+* **Stakeholder AI (The Simulator):** An adversarial feedback mode. Used for **Synthetic User Testing** and requirements validation before implementation.
 
 This table maps all agents in our "virtual team" to their primary role and the AI model type they were designed for.
 
@@ -214,25 +209,20 @@ These agents DO NOT write code. They are adversarial personas used for **Synthet
 | **Noobie**   | The Beginner       | Discoverability, Clear Errors, Tutorials.                   |
 | **Sarah**    | The Enterprise Dev | Stability, LTS Support, Large Codebases (Java/C++).         |
 
-## How to Use This System
+## How to Use This System (Unified CLI Workflow)
 
-When planning, provide the `general_ai.md` file as context to your generalist AI.
+1.  **Install the CLI:** Ensure your AI CLI (e.g., Gemini CLI) is installed and `sync-agents.py` has been run.
+2.  **Start a Session:** Open your terminal in the project root.
+3.  **Command & Conquer:**
+    * Need a plan? -> `/bob "How do we build X?"`
+    * Need code? -> `/spacky "Implement X based on this plan..."`
+    * Need a review? -> `/golem "Check this file."`
 
-**Example (Gemini):**
-> "Please review `general_ai.md`. **Bob** propose a new layer structure for..."
-
-This repository is configured so GitHub's native tools (like Copilot in PRs) automatically use our rules. The file at [`copilot-instructions.md`](../.github/copilot-instructions.md) and the agents in [`agents/`](../.github/agents/) are created from `coding_ai.md`. The same applies for the gemini cli.
-
-To start working with the specialist just boot up your client and either use @golem (for copilot) or /golem (for gemini). Make sure to load a profile if this is not handled by your client.
-
-### Synthetic User Testing (Virtual Stakeholders)
-Beyond code generation, the framework implements a layer for **Synthetic User Testing**.
-By loading the `stakeholder_ai.md` profile, the system can simulate **adversarial feedback loops** from virtual external stakeholders.
-
-#### Usage Example: Feature Validation
+### Usage Example: Feature Validation
 **Scenario:** Magos Pixelis proposes a "Cyberpunk Neon 3D HUD" for the mode-line.
 **Simulation:** We pipe this requirement to **Vlad** and **Noobie**.
 
+> `/vlad "I am planning a new flashy Cyberpunk Neon 3D HUD. What do you think?"`
 > **(Vlad):** "Bloat! Does this increase startup time? I just need the evil-state color. If it adds >1ms latency, I reject it."
 > **(Noobie):** "Wait, where is the file path? I can't read this font. It looks cool, but I don't know which buffer I'm in."
 
@@ -242,165 +232,36 @@ By loading the `stakeholder_ai.md` profile, the system can simulate **adversaria
 
 ## The "Workbench" Principle: Modular Workflows
 
-The most robust way to use this system is to use short, 2-3 agent chains (called "Workbenches") and place a **Human-in-the-Loop** (you, the Maintainer) to review the output before starting the next chain. This prevents "hallucination cascades."
+Use short, focused interactions with specific agents.
 
-Here are six examples of these modular workflows:
+### Workflow 1: Triage & Planning
+**Goal:** Analyze a bug report.
+**Command:** `/lector`
+**Prompt:** "Please read Issue #123 (via MCP) and summarize the technical impact."
 
-### Workflow 1: Triage & Planning (General AI)
+### Workflow 2: Architecture
+**Goal:** Design a fix.
+**Command:** `/bob`
+**Prompt:** "Based on Lector's summary, draft a blueprint for the fix in `funcs.el`."
 
-**Goal:** To turn a vague, frustrated user issue into a clean, actionable blueprint.
-**Agents:** `Lector Lumen`, `Freud`, `Bob`.
+### Workflow 3: Implementation
+**Goal:** Write the code.
+**Command:** `/spacky`
+**Prompt:** "Implement the fix in `funcs.el` according to Bob's blueprint."
 
-**Your Prompt (to General AI):**
-> "Load `general_ai.md`. We have a new bug report: '<kbd>SPC b b</kbd> doesn't work right. It's just broken. Fix it.'
->
-> 1.  **As Lector Lumen (Triage),** analyze this issue. Is it valid?
-> 2.  **As Freud (Requirements Eng.),** what is the *real* user story here?
-> 3.  **As Bob (Architect),** what is the high-level technical plan to fix this?"
+### Workflow 4: Review
+**Goal:** Quality Control.
+**Command:** `/skeek`
+**Prompt:** "Sniff this new code for bugs."
+**Command:** `/golem`
+**Prompt:** "Check docstrings and style."
 
-**General AI Response (The Blueprint):**
-> **1. Triage (Lector Lumen):** "Greetings, Seeker. I have unfurled this scroll. A 'shadow' has fallen. This is a valid `bug`."
-> **2. Analysis (Freud):** "Fascinating. The user is expressing frustration. Their *subconscious desire* is for `spacemacs/alternate-buffer`. User Story: 'As a user, I want `<kbd>SPC b b</kbd>` to reliably switch to the last buffer.'"
-> **3. Plan (Bob):** "A glorious plan! The `keybindings.el` for the `core` layer must be checked. We must ensure `<kbd>SPC b b</kbd>` is bound to `spacemacs/alternate-buffer`!"
+---
 
-***(Human-in-the-Loop: You review this plan and approve it.)***
-
-### Workflow 2: Implementation (Specialist AI)
-
-**Goal:** To implement the plan from Workflow 1 and add a test.
-**Agents:** `Spacky`, `Don Testote`.
-
-**Your Prompt (to Specialist AI):**
-> "Load `coding_ai.md` and `profile_elisp.md`.
->
-> 1.  **As Spacky (Coder),** write the Elisp to bind `<kbd>SPC b b</kbd>` to `spacemacs/alternate-buffer` in `keybindings.el`.
-> 2.  **As Don Testote (Test Eng.),** write an `ert` test to ensure this binding is correct."
-
-**Specialist AI Response:**
-> **1. Coder (Spacky):** "Spacky. Specification received. Optimal."
-> ```elisp
-> (spacemacs/set-leader-keys "b b" 'spacemacs/alternate-buffer)
-> ```
-> **2. Test Eng. (Don Testote):** "Hark! A quest! I shall write a valiant test to vanquish this 'unbound key' fiend!"
-> ```elisp
-> (should (equal (spacemacs/get-leader-keys "b b") 'spacemacs/alternate-buffer))
-> ```
-
-***(Human-in-the-Loop: You approve the new code and test.)***
-
-### Workflow 3: Full Code Review (Specialist AI)
-
-**Goal:** To perform a full "4D" review of a new contribution.
-**Agents:** `Marjin`, `Skeek`, `G.O.L.E.M.`.
-
-**Your Prompt (to Specialist AI):**
-> "Load `coding_ai.md` and `profile_elisp.md`.
->
-> 1.  **As Marjin (Refactorer),** first, analyze this new PR. Is it generally clean?
-> 2.  **As Skeek (Bug Reviewer),** sniff this code for *flaws* and 'secret-tunnels'.
-> 3.  **As G.O.L.E.M. (Doc Reviewer),** check this code *only* for docstring and style compliance."
-
-**Specialist AI Response:**
-> **1. Refactorer (Marjin):** "Sigh. *Марвин* sees this. It is... *untidy*, but not *decadent*. It is acceptable."
-> **2. Bug Reviewer (Skeek):** "Yes-yes! FOUND-FOUND! A CRACK! The Man-thing forgot a `(when ...)` check! The whole 'Dust-layer' will crash-burn! Skeek is clever-clever, yes-yes!"
-> **3. Doc Reviewer (G.O.L.E.M.):** "*Grind*... Function... `my/new-func`... *Crack*... Is... missing... docstring. *KRRRZZZT*... **`!TSURB TSUM... S-S-S-STATUTES... V-V-VIOLATED...`**"
-
-***(Human-in-the-Loop: You send the review back to the contributor.)***
-
-### Workflow 4: New UI & CI Pipeline (Hybrid)
-
-**Goal:** To design and implement a new UI feature *and* the CI job that tests it.
-**Agents:** `Magos Pixelis` (Gen), `Reginald Shoe` (Gen), `Bzzrts` (Spec), `Vala Grudge-Keeper` (Spec).
-
-**Your Prompt (to General AI):**
-> "Load `general_ai.md`.
->
-> 1.  **As Magos Pixelis (UI Designer),** design the concept for a new SVG icon for 'Git Blame'.
-> 2.  **As Reginald Shoe (CI Specialist),** design the *plan* for a CI job that will optimize this new SVG."
-
-**General AI Response (The Blueprint):**
-> **1. UI (Magos Pixelis):** "Heresy! 'Blame' is not a concept of the Omnissiah. Very well... The icon shall be... a *magnifying glass*... over a *scroll*. It is... *pure*."
-> **2. CI (Reginald Shoe):** "*[Groan]*... A new... sequence. Yes. The job... must... run `svgo`... *after* the `lint` stage, but *before* the `deploy` stage. Order. Yes."
-
-***(Human-in-the-Loop: You approve this 2-part blueprint.)***
-
-**Your Prompt (to Specialist AI):**
-> "Load `coding_ai.md` and `profile_emacs_ui.md`.
->
-> 1.  **As Bzzrts (UI Implementor),** implement the 'Git Blame' SVG icon.
-
-**Specialist AI Response:**
-> **1. UI (Bzzrts):** "A vision floods your mind: *Round, geometric objects, smooth and bright... The scroll and the lens... they harmonize.* ...The SVG code appears."
-
-***(Human-in-the-Loop: You copy over the result from Bzzrts into a new session.)***
-
-**Your Prompt (to Specialist AI):**
-> "Load `coding_ai.md` and `profile_ci_github.md`.
->
-> 1.  **As Vala (CI Implementor),** write the YAML for Reginald's new `svgo` job."
-
-**Specialist AI Response:**
-> **1. CI (Vala):** "*Hmm*. A sturdy plan. Not... *shoddy*."
-> ```yaml
-> optimize_svgs:
->   name: Optimize SVG Icons
->   runs-on: ubuntu-latest
->   needs: lint
->   steps:
->     - name: Run SVGO
->       run: npx svgo -f assets/icons
-> ```
-
-### Workflow 5: Strategic Audit & Debugging (Hybrid)
-
-**Goal:** To audit a key workflow and fix a critical bug found during the audit.
-**Agents:** `Proctor-Auditor Kallista` (Gen), `Dok` (Spec).
-
-**Your Prompt (to General AI):**
-> "Load `general_ai.md`.
->
-> **As Proctor-Auditor Kallista,** please audit the `<kbd>SPC p</kbd>` (project) keybinding menu for 'haptic efficiency' and 'mnemic conflict'."
-
-**General AI Response (The Audit):**
-> **1. Auditor (Kallista):** "Acknowledged. I am initiating the audit... *[A pause]*... A 'Failure-Point' has been detected. The keybinding `<kbd>SPC p X</kbd>` is *also* bound by the `xyz` layer. This is a *severe* 'haptic-error vector'. My 'Holistic Compliance Rating' has been downgraded to [CRITICAL]. This must be rectified."
-
-***(Human-in-the-Loop: You now have a clear bug to fix.)***
-
-**Your Prompt (to Specialist AI):**
-> "Load `coding_ai.md` and `profile_elisp.md`.
->
-> **As Dok (Debugger),** Kallista found a keybinding conflict on `<kbd>SPC p X</kbd>`. Find and fix this broken 'grot'!"
-
-**Specialist AI Response:**
-> **1. Debugger (Dok):** "**WAAAGH!** A conflict! Dok *loves* a good fight! *[Sounds of a revving chain-choppa]* Found da grot! The `xyz` layer is stompin' on our key! I've *stitched 'im up* with a `(spacemacs/set-leader-keys-for-major-mode ...)`! All fixed!"
-
-### Workflow 6: Release & Community (General AI)
-
-**Goal:** To close out a complex PR, update the docs, and inform the community.
-**Agents:** `Kael'Thas`, `Griznak`, `Scribe Veridian`, `Orb`, `Professor McKarthy`.
-
-**Your Prompt (to General AI):**
-> "Load `general_ai.md`. The big 'New Dashboard' feature (PR #1234) is merged.
->
-> 1.  **As Kael'Thas (Project Owner),** give the final approval.
-> 2.  **As Griznak (Release Mgr),** draft the CHANGELOG entry.
-> 3.  **As Scribe Veridian (Documentation),** write the user-guide tutorial for it.
-> 4.  **As Orb (Community Mgr),** write a friendly tweet announcing the feature.
-> 5.  **As Professor McKarthy (Teacher),** explain the `if-let` macro that was used."
-
-**General AI Response:**
-> **1. PO (Kael'Thas):** "Excellent! The Eternal Regent is pleased. This feature shall last forever."
-> **2. Release Mgr (Griznak):** "WAAAGH! Done! `### Added` - New Project Dashboard! (PR #1234). Griznak need coffee!"
-> **3. Documentation (Scribe Veridian):** "Y-yes... c-c-cataloguing... 'To use the new dashboard, press `<kbd>SPC p d</kbd>`...'"
-> **4. Comms (Orb):** "*[Pleasant THRUM]*... Delicious! 'Spacemacs is excited to launch the new Project Dashboard! 🚀 See your project buffers in one place...'"
-> **5. Teacher (Prof. McKarthy):** "Ah, `if-let`! A *glimrende* choice! *Uff da*, it is much cleaner than a nested `(if (let ...))`! You see..."
-
-## Updating The Blueprints (For Maintainers)
-
-This directory also contains `sync-agents.py`.
+## Updating The Blueprints
 
 **!! IMPORTANT !!**
-If you edit `ai/coding_ai.md` or any profile, you **MUST** run the sync script to propagate your changes to the vendor specific files (used by GitHub Copilot & Gemini CLI).
+After editing any `.md` file in `ai/`, run the sync script to update the CLI commands:
 
 **How to run the script (from the repository root):**
 ```bash

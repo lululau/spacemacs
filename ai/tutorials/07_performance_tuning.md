@@ -4,7 +4,7 @@ Spacemacs is powerful, but with many layers, startup time can suffer. This tutor
 
 **Goal:** Analyze startup time, identify "Heavy Loaders," and optimize lazy-loading.
 **Time:** approx. 20–30 minutes.
-**Prerequisite:** You have loaded the `ai/` configuration context.
+**Prerequisite:** CLI agents installed via `sync-agents.py`.
 
 ---
 
@@ -26,11 +26,10 @@ Before optimizing, we must measure. Spacemacs has a built-in profiler.
 4.  Copy the report (Text).
 
 **Your Task (with AI):**
-Open a new chat. Upload/Load `coding_ai.md` and `profile_layers.md`.
-Ask **Nexus-7**.
+Use **Nexus-7**.
 
-> **Prompt:**
-> "(Nexus-7): I have a performance issue. Here is the profiler report: `[paste report]`.
+> **Command:** `/nexus`
+> **Prompt:** "I have a performance issue. Here is the profiler report: `[paste report]`.
 > 1. Which function or package is consuming the most CPU/Memory?
 > 2. Is this a 'Garbage Collection' issue or a 'Blocker' issue?"
 
@@ -44,11 +43,10 @@ Nexus-7 will analyze: *"Analysis complete. The package `super-heavy-mode` is tak
 We now know: `super-heavy-mode` loads too early. We must defer it.
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` and `profile_elisp.md`.
-Ask **Marjin** to refactor code.
+Switch to **Marjin**.
 
-> **Prompt:**
-> (Marjin): Please refactor the configuration for `super-heavy-mode`.
+> **Command:** `/marjin`
+> **Prompt:** "Please refactor the configuration for `super-heavy-mode`.
 > Currently it is: `(use-package super-heavy-mode :config (super-heavy-start))`.
 > Change it to use `:defer t` and only load when I press `SPC o h`."
 
@@ -70,10 +68,10 @@ Marjin (sighing, but efficient) writes the optimized `use-package` block using `
 Often, slow functions hide in hooks (e.g., `prog-mode-hook`), running for *every* file you open.
 
 **Your Task:**
-Ask **Nexus-7** for a risk assessment.
+Switch back to **Nexus-7**.
 
-> **Prompt:**
-> "(Nexus-7): I want to add `flycheck-mode` to `prog-mode-hook`.
+> **Command:** `/nexus`
+> **Prompt:** "I want to add `flycheck-mode` to `prog-mode-hook`.
 > Calculate the impact. Will this slow down opening large files?"
 
 **Result:**

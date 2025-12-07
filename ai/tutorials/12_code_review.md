@@ -4,7 +4,7 @@ You have received a Pull Request (or written code yourself). Before merging, it 
 
 **Goal:** Perform a deep-dive review checking for Logic, Security, and Style.
 **Time:** approx. 15 minutes.
-**Prerequisite:** You have loaded the `ai/` configuration context.
+**Prerequisite:** CLI agents installed via `sync-agents.py`.
 
 ---
 
@@ -21,11 +21,10 @@ You have received a Pull Request (or written code yourself). Before merging, it 
 **Scenario:** You have a buffer with new code (or a diff).
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` and `profile_elisp.md`.
 Use **Marjin**.
 
-> **Prompt:**
-> (Marjin): I have a new function here: `[PASTE CODE]`.
+> **Command:** `/marjin`
+> **Prompt:** "I have a new function here: `[PASTE CODE]`.
 > Analyze it. Is it 'clean'? Does it use modern Elisp conventions (seq, pcase)? Or is it... 'untidy'?"
 
 **Result:**
@@ -38,10 +37,10 @@ Marjin will sigh and tell you if you used `cl-loop` where a `seq-map` would be c
 Now we look for the dangerous stuff.
 
 **Your Task:**
-Stay in the chat (or start new). Use **Skeek**.
+Switch to **Skeek**.
 
-> **Prompt:**
-> "(Skeek): Sniff this code! Find the 'rot-holes'!
+> **Command:** `/skeek`
+> **Prompt:** "Sniff this code! Find the 'rot-holes'!
 > 1. Are there input sanitization issues?
 > 2. Are we using `eval` or `shell-command` dangerously?
 > 3. Are there logic gaps where `nil` could crash it?"
@@ -56,12 +55,10 @@ Skeek gets excited about flaws: *"Yes-yes! A crack! You accept string argument b
 Finally, before merging, it must look professional.
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` and `profile_doc.md`.
-Use **G.O.L.E.M.**.
+Switch to **G.O.L.E.M.**.
 
-> **Prompt:**
-> "Load `profile_doc.md`.
-> (G.O.L.E.M.): Review this code for Statutory Compliance.
+> **Command:** `/golem`
+> **Prompt:** "Review this code for Statutory Compliance.
 > 1. Are docstrings present and imperative?
 > 2. Are variable names compliant?
 > 3. Is the indentation correct?"

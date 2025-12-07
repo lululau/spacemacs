@@ -4,7 +4,7 @@ Spacemacs is famous for its aesthetics. This tutorial shows you how to design ne
 
 **Goal:** Design and implement a new UI element (e.g., a status icon).
 **Time:** approx. 30 minutes.
-**Prerequisite:** You have loaded the `ai/` configuration context.
+**Prerequisite:** CLI agents installed via `sync-agents.py`.
 
 ---
 
@@ -20,11 +20,10 @@ Spacemacs is famous for its aesthetics. This tutorial shows you how to design ne
 **Scenario:** We want a "Privacy Mode" icon in the modeline.
 
 **Your Task:**
-Open a new chat. Upload/Load `general_ai.md`.
-Ask **Magos Pixelis**.
+Use **Magos Pixelis**.
 
-> **Prompt:**
-> "(Magos Pixelis): I need a concept for a 'Privacy Mode' icon in the modeline.
+> **Command:** `/magos`
+> **Prompt:** "I need a concept for a 'Privacy Mode' icon in the modeline.
 > 1. It must follow the 'Sacred 8-Pixel Grid'.
 > 2. What should it look like in GUI (SVG)?
 > 3. What is the text-fallback for Terminal (`-nw`)?"
@@ -41,12 +40,10 @@ Magos will (fanatically) answer: *"The Grid demands purity!
 We need the SVG code. Important: It must use `currentColor` so it automatically adapts to light and dark themes.
 
 **Your Task:**
-Open a new chat. Upload/Load `coding_ai.md` and `profile_emacs_ui.md`.
-Use **Bzzrts**.
+Switch to **Bzzrts**.
 
-> **Prompt:**
-> "Load `profile_emacs_ui.md`.
-> (Bzzrts): Receive the vision of the 'Privacy Shield' icon.
+> **Command:** `/bzzrts`
+> **Prompt:** "Receive the vision of the 'Privacy Shield' icon.
 > Generate the Elisp code to define this SVG image using `create-image`.
 > **CRITICAL:** Use `fill='currentColor'` and ensure a valid `viewBox`."
 
@@ -68,8 +65,7 @@ An icon often needs color (e.g., Green for "Active"). We must NOT hardcode Hex c
 **Your Task:**
 Stay with **Bzzrts**.
 
-> **Prompt:**
-> "(Bzzrts): Define a face `my-privacy-face`.
+> **Prompt:** "Define a face `my-privacy-face`.
 > It should inherit from `success` (green) by default, but be bold.
 > Explain why inheriting is better than hardcoding colors."
 
@@ -85,8 +81,7 @@ Now we assemble it all into the modeline.
 **Your Task:**
 Ask **Bzzrts** for the logic.
 
-> **Prompt:**
-> "(Bzzrts): Write a function `my-privacy-segment` that returns:
+> **Prompt:** "Write a function `my-privacy-segment` that returns:
 > - The SVG icon (propertized with our face) if in GUI.
 > - The text `[P]` if in Terminal.
 > Use `(display-graphic-p)` to check."

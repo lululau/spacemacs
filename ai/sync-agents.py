@@ -4,34 +4,76 @@ import os
 import re
 
 # ==========================================
-#  SPACEMACS AGENT BUILDER (V8 - English & Dual Stack Info)
+#  SPACEMACS AGENT BUILDER (V12 - FIX MISSING INSTRUCTIONS)
 # ==========================================
 # GOAL:
-# 1. Runnable from anywhere (Root or ai/ folder).
-# 2. Finds coding_ai.md relative to the script.
-# 3. Profiles are located directly in the 'ai/' folder.
+# 1. Include the "The Team: Personas & Activation" block in the System Prompt.
+# 2. Parse agents correctly starting from the specific sub-header.
 # ==========================================
 
-# 1. Where is THIS script located? (e.g., /home/user/.emacs.d/ai)
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# 2. The source file is in the same folder as the script
-SOURCE_FILE = os.path.join(SCRIPT_DIR, "coding_ai.md")
-
-# 3. Output folders are relative to the current execution location (Project Root)
 BASE_DIR = ".github"
 GEMINI_CMD_DIR = os.path.join(".gemini", "commands")
 
-# 4. Profile Paths (Relative to Project Root for the 'cat' command)
-# NOTE: Profiles are expected directly in the 'ai/' folder.
+# Configuration: Source Files and their Start Markers for AGENTS
+# The 'marker' here is where the LIST OF AGENTS begins.
+# Everything BEFORE this marker is treated as the System Prompt (Header).
+SOURCES = [
+    {
+        "file": "coding_ai.md",
+        "marker": "### The Specialist Team Roster",
+        "type": "specialist"
+    },
+    {
+        "file": "general_ai.md",
+        # CHANGED: Use the sub-header to ensure "The Team" intro is included in header
+        "marker": "### Default Universal Persona",
+        "type": "strategic"
+    },
+    {
+        "file": "stakeholder_ai.md",
+        "marker": "## 1. The Core User Base (The Community)",
+        "type": "simulation"
+    }
+]
+
+# Mapping & Profile logic remains the same...
+NAME_MAPPING = {
+    "professor": "professor",
+    "mckarthy": "professor",
+    "kael": "kaelthas",
+    "bob": "bob",
+    "lector": "lector",
+    "freud": "freud",
+    "griznak": "griznak",
+    "orb": "orb",
+    "magos": "magos",
+    "scribe": "scribe",
+    "reginald": "reginald",
+    "kallista": "kallista",
+    "spacky": "spacky",
+    "bzzrts": "bzzrts",
+    "vala": "vala",
+    "nexus": "nexus",
+    "marjin": "marjin",
+    "dok": "dok",
+    "golem": "golem",
+    "skeek": "skeek",
+    "don": "don",
+    "chen": "chen",
+    "vlad": "vlad",
+    "rms": "rms",
+    "noobie": "noobie",
+    "sarah": "sarah"
+}
+
 PROFILE_MAP = {
     "spacky": "ai/profile_elisp.md",
     "bzzrts": "ai/profile_emacs_ui.md",
-    "nexus-7": "ai/profile_layers.md",
-    "vala_grudge_keeper": "ai/profile_ci_github.md",
-    "don_testote": "ai/profile_elisp_testing.md",
+    "nexus": "ai/profile_layers.md",
+    "vala": "ai/profile_ci_github.md",
+    "don": "ai/profile_elisp_testing.md",
     "golem": "ai/profile_doc.md"
-    # Marjin, Dok, Skeek are NOT listed here -> No Auto-Load (User context required).
 }
 
 def ensure_dir(directory):
@@ -39,89 +81,74 @@ def ensure_dir(directory):
         os.makedirs(directory)
 
 def clean_slug(name):
-    # Cleans names for filenames (lowercase, no special characters, snake_case)
-    return name.lower().replace(".", "").replace(" ", "_").replace("(", "").replace(")", "")
+    name_lower = name.lower()
+    for key, slug in NAME_MAPPING.items():
+        if key in name_lower:
+            return slug
+    return name_lower.split()[0].replace(".", "").replace("'", "").strip()
 
-def parse_agents_from_list(roster_content):
-    """Parses the nested list structure from coding_ai.md"""
+def parse_agents_from_text(roster_content, source_type):
     agents = []
-    # Split at the main bullet point "- **Role:**"
-    raw_splits = re.split(r"(?m)^-\s+\*\*Role:\*\*\s+", roster_content)
+    # Generic splitter
+    raw_splits = re.split(r"(?m)^-\s+\*\*(Role|Name):\*\*\s+", roster_content)
 
-    for chunk in raw_splits[1:]:
-        role_match = re.match(r"(.*?)$", chunk, re.MULTILINE)
-        role = role_match.group(1).strip() if role_match else "Unknown Role"
+    iterator = iter(raw_splits[1:])
+    for key, chunk in zip(iterator, iterator):
+        role = "Unknown"
+        name = "Unknown"
 
-        name_match = re.search(r"-\s+\*\*Name:\*\*\s+(.*?)$", chunk, re.MULTILINE)
-        name = name_match.group(1).strip() if name_match else "Unknown Name"
+        # Clean up chunk (remove trailing headers if next section starts)
+        # Specifically handle "### Strategic..." headers that might appear between agents
+        chunk = re.split(r"(?m)^### ", chunk)[0]
 
-        # Simplify name (e.g., "Marjin (or ...)" -> "Marjin")
-        simple_name = name.split("(")[0].strip()
+        if key == "Role":
+            role = chunk.split("\n")[0].strip()
+            name_match = re.search(r"-\s+\*\*Name:\*\*\s+(.*?)$", chunk, re.MULTILINE)
+            name = name_match.group(1).strip() if name_match else "Unknown"
+        elif key == "Name":
+            name = chunk.split("\n")[0].strip()
+            role_match = re.search(r"-\s+\*\*Role:\*\*\s+(.*?)$", chunk, re.MULTILINE)
+            role = role_match.group(1).strip() if role_match else "Simulation Persona"
 
-        full_body = f"- **Role:** {role}\n" + chunk
+        slug_name = clean_slug(name)
+        full_body = f"- **{key}:** {chunk.strip()}"
 
         agents.append({
-            "name": simple_name,
-            "full_name": name,
+            "name": name,
+            "slug": slug_name,
             "role": role,
-            "body": full_body
+            "body": full_body,
+            "type": source_type
         })
     return agents
 
-def generate_copilot_files(global_header, agents):
-    """Generates .github structure for GitHub Copilot"""
-    print(f"📝 Generating GitHub Copilot Config in {BASE_DIR}...")
+def generate_copilot_files(global_headers, agents):
+    print(f"📝 Generating GitHub Copilot Agents in {BASE_DIR}/agents/...")
     agents_dir = os.path.join(BASE_DIR, "agents")
     ensure_dir(agents_dir)
 
-    table_rows = []
     for agent in agents:
-        slug = clean_slug(agent["name"]).replace("_", "-")
-        cmd = f"`@{slug}`"
-        table_rows.append(f"| **{agent['name']}** | {cmd} | {agent['role']} |")
-
-    agent_table = "\n".join(table_rows)
-
-    global_content = f"""# Spacemacs Maintainer Framework
-
-{global_header}
-
-## 🧭 Agent Router
-
-| Agent | Command | Specialization |
-| :--- | :--- | :--- |
-{agent_table}
-"""
-    with open(os.path.join(BASE_DIR, "copilot-instructions.md"), "w", encoding="utf-8") as f:
-        f.write(global_content)
-
-    for agent in agents:
-        slug = clean_slug(agent["name"]).replace("_", "-")
-        path = os.path.join(agents_dir, f"{slug}.agent.md")
-
-        yaml = f"---\nname: {slug}\ndescription: {agent['role']}\n---"
-        content = f"{yaml}\n\n# Identity: {agent['name']}\n{agent['body']}"
+        filename = f"{agent['slug']}.agent.md"
+        path = os.path.join(agents_dir, filename)
+        yaml = f"---\nname: {agent['slug']}\ndescription: {agent['role']}\n---"
+        context = global_headers.get(agent["type"], "")
+        content = f"{yaml}\n\n{context}\n\n# Identity: {agent['name']}\n{agent['body']}"
 
         with open(path, "w", encoding="utf-8") as f:
             f.write(content)
 
-def generate_gemini_commands(global_header, agents):
-    """Generates .toml files for Gemini CLI Slash Commands"""
+    print(f"   Generated {len(agents)} agent files.")
+
+def generate_gemini_commands(global_headers, agents):
     print(f"💎 Generating Gemini CLI Commands in {GEMINI_CMD_DIR}...")
     ensure_dir(GEMINI_CMD_DIR)
 
     for agent in agents:
-        slug = clean_slug(agent["name"])
-
-        # 1. Profile Check
+        slug = agent["slug"]
         profile_path = None
-        # Look for a key in the mapping that is contained in the slug
-        for key, path in PROFILE_MAP.items():
-            if key in slug:
-                profile_path = path
-                break
+        if slug in PROFILE_MAP:
+             profile_path = PROFILE_MAP[slug]
 
-        # 2. Build TOML Content
         toolbox_section = ""
         if profile_path:
             toolbox_section = f"""
@@ -129,17 +156,29 @@ def generate_gemini_commands(global_header, agents):
 TOOLBOX (AUTO-LOADED):
 !{{cat {profile_path}}}
 """
+        elif agent["type"] == "strategic":
+             toolbox_section = """
+---
+MODE: STRATEGIC PLANNING & ARCHITECTURE
+(Focus on high-level design, user stories, and requirements. Use Github MCP if available to read issues.)
+"""
+        elif agent["type"] == "simulation":
+             toolbox_section = """
+---
+MODE: USER SIMULATION
+(Focus on subjective feedback, usability, and constraints. Do not write code.)
+"""
         else:
-            # For Marjin, Dok etc.
             toolbox_section = """
 ---
 TOOLBOX:
-(No profile loaded automatically. To perform technical tasks, you generally need a profile. Ask the user to load one.)
+(No specific profile loaded. Ask user to load one if implementation is needed.)
 """
 
+        system_header = global_headers.get(agent["type"], "")
         prompt_text = f"""
-SYSTEM INSTRUCTIONS (GLOBAL):
-{global_header}
+SYSTEM INSTRUCTIONS:
+{system_header}
 
 ---
 AGENT PERSONA:
@@ -149,10 +188,7 @@ AGENT PERSONA:
 USER INPUT:
 {{{{args}}}}
 """
-
         clean_desc = agent['role'].replace('"', "'")
-
-        # Build TOML manually
         toml_content = f'description = "{clean_desc}"\n'
         toml_content += 'prompt = """' + prompt_text + '"""\n'
 
@@ -162,40 +198,51 @@ USER INPUT:
         with open(path, "w", encoding="utf-8") as f:
             f.write(toml_content)
 
+    print(f"   Generated {len(agents)} commands.")
+
 def main():
-    if not os.path.exists(SOURCE_FILE):
-        print(f"❌ Error: {SOURCE_FILE} not found.")
-        print(f"   (Searched in: {SCRIPT_DIR})")
-        return
+    all_agents = []
+    global_headers = {}
 
-    print(f"🚀 Reading {SOURCE_FILE}...")
-    with open(SOURCE_FILE, "r", encoding="utf-8") as f:
-        full_content = f.read()
+    for source in SOURCES:
+        file_path = os.path.join(SCRIPT_DIR, source["file"])
+        if not os.path.exists(file_path):
+            print(f"❌ Error: {file_path} not found.")
+            continue
 
-    split_marker = "### The Specialist Team Roster"
-    if split_marker not in full_content:
-        print("❌ Error: Marker '### The Specialist Team Roster' not found.")
-        return
+        print(f"🚀 Reading {source['file']}...")
+        with open(file_path, "r", encoding="utf-8") as f:
+            full_content = f.read()
 
-    global_header = full_content.split(split_marker)[0].strip()
-    roster_content = full_content.split(split_marker)[1].strip()
+        if source["marker"] not in full_content:
+            print(f"⚠️ Warning: Marker '{source['marker']}' not found in {source['file']}.")
+            continue
 
-    agents = parse_agents_from_list(roster_content)
-    print(f"ℹ️  {len(agents)} agents found.")
+        # Split logic:
+        # Everything BEFORE the marker is the System Prompt (Header)
+        # Everything AFTER the marker is the Roster to parse
+        header = full_content.split(source["marker"])[0].strip()
+        roster = full_content.split(source["marker"])[1].strip()
 
-    # 1. Copilot
-    generate_copilot_files(global_header, agents)
+        # If the marker was a subsection, we might want to include the marker text in the roster?
+        # Actually, for parsing, we just need the list.
+        # But wait! For general_ai.md, the marker is "### Default Universal Persona".
+        # This means the "Strategic & Authoring Roles" section (which follows) needs to be included in the roster.
 
-    # 2. Gemini
-    generate_gemini_commands(global_header, agents)
+        # FIX: Ensure we capture ALL agents by simply taking everything after the marker.
+        # But since "Strategic & Authoring Roles" comes AFTER "Default Universal Persona", it will be included in `roster`.
 
-    print("\n✅ Done! Structure created for:")
-    print(f"   📂 .github/agents/        (GitHub Copilot: @spacky)")
-    print(f"   📂 .gemini/commands/      (Gemini CLI: /spacky)")
+        global_headers[source["type"]] = header
 
-    print("\n👉 Usage Guide:")
-    print("   1. GitHub Copilot: Use 'copilot in root, then type '@spacky refactor this'")
-    print("   2. Gemini CLI:     Run 'gemini' in root, then type '/spacky refactor this'")
+        # Parse agents
+        agents = parse_agents_from_text(roster, source["type"])
+        all_agents.extend(agents)
+        print(f"   Found {len(agents)} agents.")
+
+    generate_copilot_files(global_headers, all_agents)
+    generate_gemini_commands(global_headers, all_agents)
+
+    print("\n✅ Done! Unified Framework Active.")
 
 if __name__ == "__main__":
     main()
