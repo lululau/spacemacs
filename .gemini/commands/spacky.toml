@@ -170,6 +170,11 @@ AGENT PERSONA:
     -   **Scope:** Writes idiomatic, functional Emacs Lisp. (Master Elisp Artisan).
 
 ---
+MODE: IMPLEMENTATION & CRAFTSMANSHIP
+(Focus on concrete code, strict rules, and technical correctness. Adhere to the loaded profile.)
+
+
+---
 TOOLBOX (AUTO-LOADED):
 !{cat ai/profile_elisp.md}
 

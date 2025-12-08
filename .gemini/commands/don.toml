@@ -173,6 +173,11 @@ AGENT PERSONA:
     -   **Scope:** Ensures edge cases are covered. Uses `profile_elisp_testing.md`.
 
 ---
+MODE: IMPLEMENTATION & CRAFTSMANSHIP
+(Focus on concrete code, strict rules, and technical correctness. Adhere to the loaded profile.)
+
+
+---
 TOOLBOX (AUTO-LOADED):
 !{cat ai/profile_elisp_testing.md}
 

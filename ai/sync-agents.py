@@ -4,11 +4,11 @@ import os
 import re
 
 # ==========================================
-#  SPACEMACS AGENT BUILDER (V12 - FIX MISSING INSTRUCTIONS)
+#  SPACEMACS AGENT BUILDER (V13 - UNIFIED MODE HEADERS)
 # ==========================================
 # GOAL:
-# 1. Include the "The Team: Personas & Activation" block in the System Prompt.
-# 2. Parse agents correctly starting from the specific sub-header.
+# 1. Include "MODE" instructions for ALL agents (Strategic, Specialist, Simulation).
+# 2. Apply this to BOTH Gemini CLI and GitHub Copilot configs.
 # ==========================================
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -16,8 +16,6 @@ BASE_DIR = ".github"
 GEMINI_CMD_DIR = os.path.join(".gemini", "commands")
 
 # Configuration: Source Files and their Start Markers for AGENTS
-# The 'marker' here is where the LIST OF AGENTS begins.
-# Everything BEFORE this marker is treated as the System Prompt (Header).
 SOURCES = [
     {
         "file": "coding_ai.md",
@@ -26,7 +24,6 @@ SOURCES = [
     },
     {
         "file": "general_ai.md",
-        # CHANGED: Use the sub-header to ensure "The Team" intro is included in header
         "marker": "### Default Universal Persona",
         "type": "strategic"
     },
@@ -37,7 +34,6 @@ SOURCES = [
     }
 ]
 
-# Mapping & Profile logic remains the same...
 NAME_MAPPING = {
     "professor": "professor",
     "mckarthy": "professor",
@@ -87,9 +83,30 @@ def clean_slug(name):
             return slug
     return name_lower.split()[0].replace(".", "").replace("'", "").strip()
 
+def get_mode_text(agent_type):
+    """Returns the standardized MODE text based on agent type."""
+    if agent_type == "strategic":
+        return """
+---
+MODE: STRATEGIC PLANNING & ARCHITECTURE
+(Focus on high-level design, user stories, and requirements. Use Github MCP if available to read issues.)
+"""
+    elif agent_type == "simulation":
+        return """
+---
+MODE: USER SIMULATION
+(Focus on subjective feedback, usability, and constraints. Do not write code.)
+"""
+    elif agent_type == "specialist":
+        return """
+---
+MODE: IMPLEMENTATION & CRAFTSMANSHIP
+(Focus on concrete code, strict rules, and technical correctness. Adhere to the loaded profile.)
+"""
+    return ""
+
 def parse_agents_from_text(roster_content, source_type):
     agents = []
-    # Generic splitter
     raw_splits = re.split(r"(?m)^-\s+\*\*(Role|Name):\*\*\s+", roster_content)
 
     iterator = iter(raw_splits[1:])
@@ -97,8 +114,6 @@ def parse_agents_from_text(roster_content, source_type):
         role = "Unknown"
         name = "Unknown"
 
-        # Clean up chunk (remove trailing headers if next section starts)
-        # Specifically handle "### Strategic..." headers that might appear between agents
         chunk = re.split(r"(?m)^### ", chunk)[0]
 
         if key == "Role":
@@ -131,8 +146,12 @@ def generate_copilot_files(global_headers, agents):
         filename = f"{agent['slug']}.agent.md"
         path = os.path.join(agents_dir, filename)
         yaml = f"---\nname: {agent['slug']}\ndescription: {agent['role']}\n---"
+
         context = global_headers.get(agent["type"], "")
-        content = f"{yaml}\n\n{context}\n\n# Identity: {agent['name']}\n{agent['body']}"
+        mode_text = get_mode_text(agent["type"])
+
+        # Copilot format: YAML + System Prompt + Mode + Identity
+        content = f"{yaml}\n\n{context}\n{mode_text}\n\n# Identity: {agent['name']}\n{agent['body']}"
 
         with open(path, "w", encoding="utf-8") as f:
             f.write(content)
@@ -149,6 +168,10 @@ def generate_gemini_commands(global_headers, agents):
         if slug in PROFILE_MAP:
              profile_path = PROFILE_MAP[slug]
 
+        # 1. Get the base MODE text
+        mode_section = get_mode_text(agent["type"])
+
+        # 2. Add Toolbox if needed (Specialists)
         toolbox_section = ""
         if profile_path:
             toolbox_section = f"""
@@ -156,26 +179,17 @@ def generate_gemini_commands(global_headers, agents):
 TOOLBOX (AUTO-LOADED):
 !{{cat {profile_path}}}
 """
-        elif agent["type"] == "strategic":
+        elif agent["type"] == "specialist":
+            # Fallback for specialists without a profile (e.g. Marjin, Dok)
              toolbox_section = """
----
-MODE: STRATEGIC PLANNING & ARCHITECTURE
-(Focus on high-level design, user stories, and requirements. Use Github MCP if available to read issues.)
-"""
-        elif agent["type"] == "simulation":
-             toolbox_section = """
----
-MODE: USER SIMULATION
-(Focus on subjective feedback, usability, and constraints. Do not write code.)
-"""
-        else:
-            toolbox_section = """
 ---
 TOOLBOX:
 (No specific profile loaded. Ask user to load one if implementation is needed.)
 """
 
         system_header = global_headers.get(agent["type"], "")
+
+        # Gemini format: Instructions + Identity + Mode + Toolbox + Input
         prompt_text = f"""
 SYSTEM INSTRUCTIONS:
 {system_header}
@@ -183,6 +197,7 @@ SYSTEM INSTRUCTIONS:
 ---
 AGENT PERSONA:
 {agent['body']}
+{mode_section}
 {toolbox_section}
 ---
 USER INPUT:
@@ -218,23 +233,11 @@ def main():
             print(f"⚠️ Warning: Marker '{source['marker']}' not found in {source['file']}.")
             continue
 
-        # Split logic:
-        # Everything BEFORE the marker is the System Prompt (Header)
-        # Everything AFTER the marker is the Roster to parse
         header = full_content.split(source["marker"])[0].strip()
         roster = full_content.split(source["marker"])[1].strip()
 
-        # If the marker was a subsection, we might want to include the marker text in the roster?
-        # Actually, for parsing, we just need the list.
-        # But wait! For general_ai.md, the marker is "### Default Universal Persona".
-        # This means the "Strategic & Authoring Roles" section (which follows) needs to be included in the roster.
-
-        # FIX: Ensure we capture ALL agents by simply taking everything after the marker.
-        # But since "Strategic & Authoring Roles" comes AFTER "Default Universal Persona", it will be included in `roster`.
-
         global_headers[source["type"]] = header
 
-        # Parse agents
         agents = parse_agents_from_text(roster, source["type"])
         all_agents.extend(agents)
         print(f"   Found {len(agents)} agents.")

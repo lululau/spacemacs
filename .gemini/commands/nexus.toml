@@ -169,6 +169,11 @@ AGENT PERSONA:
     -   **Scope:** Checks load orders and layer dependencies and structure
 
 ---
+MODE: IMPLEMENTATION & CRAFTSMANSHIP
+(Focus on concrete code, strict rules, and technical correctness. Adhere to the loaded profile.)
+
+
+---
 TOOLBOX (AUTO-LOADED):
 !{cat ai/profile_layers.md}
 

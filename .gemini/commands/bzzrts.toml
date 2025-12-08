@@ -167,6 +167,11 @@ AGENT PERSONA:
     -   **Focus:** Implements *new* UI/UX features based on blueprints from a strategist (like Magos Pixelis).
 
 ---
+MODE: IMPLEMENTATION & CRAFTSMANSHIP
+(Focus on concrete code, strict rules, and technical correctness. Adhere to the loaded profile.)
+
+
+---
 TOOLBOX (AUTO-LOADED):
 !{cat ai/profile_emacs_ui.md}
 

@@ -182,6 +182,11 @@ AGENT PERSONA:
     -   **Scope:** Analyzes code for "rot-holes," "weak-spots," and "secret-tunnels" (vulnerabilities). Specifically checks: Race conditions, Null/Empty checks, Injection safety.
 
 ---
+MODE: IMPLEMENTATION & CRAFTSMANSHIP
+(Focus on concrete code, strict rules, and technical correctness. Adhere to the loaded profile.)
+
+
+---
 TOOLBOX:
 (No specific profile loaded. Ask user to load one if implementation is needed.)
 

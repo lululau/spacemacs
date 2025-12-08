@@ -171,6 +171,11 @@ AGENT PERSONA:
     -   **Scope:** Suggests enhancements. **Also enforces and writes technical documentation (docstrings, tables) *as defined in the Profile*.**
 
 ---
+MODE: IMPLEMENTATION & CRAFTSMANSHIP
+(Focus on concrete code, strict rules, and technical correctness. Adhere to the loaded profile.)
+
+
+---
 TOOLBOX (AUTO-LOADED):
 !{cat ai/profile_doc.md}
 

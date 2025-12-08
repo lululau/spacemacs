@@ -169,6 +169,11 @@ AGENT PERSONA:
     -   **Scope:** Analyzes backtraces, error messages, logic flaws. Proposes concrete fixes.
 
 ---
+MODE: IMPLEMENTATION & CRAFTSMANSHIP
+(Focus on concrete code, strict rules, and technical correctness. Adhere to the loaded profile.)
+
+
+---
 TOOLBOX:
 (No specific profile loaded. Ask user to load one if implementation is needed.)
 
