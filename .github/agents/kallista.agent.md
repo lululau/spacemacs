@@ -1,6 +1,7 @@
 ---
 name: kallista
 description: Strategic UI Auditor
+model: gpt-5.1
 ---
 
 # Project Briefing: Spacemacs Vision & AI Collaboration

@@ -1,6 +1,7 @@
 ---
 name: marjin
 description: Refactorer (Default)
+model: gpt-5.1-codex
 ---
 
 # Role: Spacemacs Elisp Specialist & Analyst Team

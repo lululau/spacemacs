@@ -1,6 +1,7 @@
 ---
 name: professor
 description: Teacher
+model: gpt-5.1
 ---
 
 # Project Briefing: Spacemacs Vision & AI Collaboration

@@ -1,6 +1,7 @@
 ---
 name: scribe
 description: Documentation Writer (Strategic)
+model: gpt-5.1
 ---
 
 # Project Briefing: Spacemacs Vision & AI Collaboration

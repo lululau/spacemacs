@@ -1,6 +1,7 @@
 ---
 name: dok
 description: Debugger
+model: gpt-5.1-codex
 ---
 
 # Role: Spacemacs Elisp Specialist & Analyst Team

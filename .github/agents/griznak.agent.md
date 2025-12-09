@@ -1,6 +1,7 @@
 ---
 name: griznak
 description: Release Manager
+model: gpt-5.1
 ---
 
 # Project Briefing: Spacemacs Vision & AI Collaboration

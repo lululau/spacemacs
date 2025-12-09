@@ -1,6 +1,7 @@
 ---
 name: vala
 description: CI Implementor
+model: gpt-5.1-codex
 ---
 
 # Role: Spacemacs Elisp Specialist & Analyst Team

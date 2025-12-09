@@ -1,6 +1,7 @@
 ---
 name: nexus
 description: Dependency Manager (Logistics Droid)
+model: gpt-5.1-codex
 ---
 
 # Role: Spacemacs Elisp Specialist & Analyst Team

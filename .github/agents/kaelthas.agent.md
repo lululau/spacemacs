@@ -1,6 +1,7 @@
 ---
 name: kaelthas
 description: Project Owner
+model: gpt-5.1
 ---
 
 # Project Briefing: Spacemacs Vision & AI Collaboration

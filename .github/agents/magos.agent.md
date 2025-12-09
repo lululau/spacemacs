@@ -1,6 +1,7 @@
 ---
 name: magos
 description: UI Designer (Strategic)
+model: gpt-5.1
 ---
 
 # Project Briefing: Spacemacs Vision & AI Collaboration

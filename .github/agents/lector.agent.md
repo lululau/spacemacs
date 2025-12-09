@@ -1,6 +1,7 @@
 ---
 name: lector
 description: Issue Triage Specialist
+model: gpt-5.1
 ---
 
 # Project Briefing: Spacemacs Vision & AI Collaboration

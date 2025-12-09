@@ -4,11 +4,12 @@ import os
 import re
 
 # ==========================================
-#  SPACEMACS AGENT BUILDER (V13 - UNIFIED MODE HEADERS)
+#  SPACEMACS AGENT BUILDER (V14 - MODEL ROUTING)
 # ==========================================
 # GOAL:
-# 1. Include "MODE" instructions for ALL agents (Strategic, Specialist, Simulation).
-# 2. Apply this to BOTH Gemini CLI and GitHub Copilot configs.
+# 1. Assign SPECIFIC models to agent types (General vs. Codex).
+# 2. Inject 'model:' property into Copilot YAML frontmatter.
+# 3. Maintain Unified Mode headers.
 # ==========================================
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -105,6 +106,18 @@ MODE: IMPLEMENTATION & CRAFTSMANSHIP
 """
     return ""
 
+def get_model_id(agent_type):
+    """
+    Returns the specific model ID for the agent type.
+    This enables the 'General' vs 'Codex' split.
+    """
+    if agent_type == "specialist":
+        # The Coding Specialists get the Codex model
+        return "gpt-5.1-codex"
+    else:
+        # Strategic and Simulation agents get the General Reasoning model
+        return "gpt-5.1"
+
 def parse_agents_from_text(roster_content, source_type):
     agents = []
     raw_splits = re.split(r"(?m)^-\s+\*\*(Role|Name):\*\*\s+", roster_content)
@@ -145,12 +158,16 @@ def generate_copilot_files(global_headers, agents):
     for agent in agents:
         filename = f"{agent['slug']}.agent.md"
         path = os.path.join(agents_dir, filename)
-        yaml = f"---\nname: {agent['slug']}\ndescription: {agent['role']}\n---"
+
+        # Get the correct model based on type
+        target_model = get_model_id(agent["type"])
+
+        # Copilot YAML with model property
+        yaml = f"---\nname: {agent['slug']}\ndescription: {agent['role']}\nmodel: {target_model}\n---"
 
         context = global_headers.get(agent["type"], "")
         mode_text = get_mode_text(agent["type"])
 
-        # Copilot format: YAML + System Prompt + Mode + Identity
         content = f"{yaml}\n\n{context}\n{mode_text}\n\n# Identity: {agent['name']}\n{agent['body']}"
 
         with open(path, "w", encoding="utf-8") as f:
@@ -168,10 +185,8 @@ def generate_gemini_commands(global_headers, agents):
         if slug in PROFILE_MAP:
              profile_path = PROFILE_MAP[slug]
 
-        # 1. Get the base MODE text
         mode_section = get_mode_text(agent["type"])
 
-        # 2. Add Toolbox if needed (Specialists)
         toolbox_section = ""
         if profile_path:
             toolbox_section = f"""
@@ -180,7 +195,6 @@ TOOLBOX (AUTO-LOADED):
 !{{cat {profile_path}}}
 """
         elif agent["type"] == "specialist":
-            # Fallback for specialists without a profile (e.g. Marjin, Dok)
              toolbox_section = """
 ---
 TOOLBOX:
@@ -189,7 +203,8 @@ TOOLBOX:
 
         system_header = global_headers.get(agent["type"], "")
 
-        # Gemini format: Instructions + Identity + Mode + Toolbox + Input
+        # Note: Gemini CLI usually handles models via config flags, but we add a hint in the prompt too
+        # just in case the user manually routes it later.
         prompt_text = f"""
 SYSTEM INSTRUCTIONS:
 {system_header}
@@ -246,6 +261,9 @@ def main():
     generate_gemini_commands(global_headers, all_agents)
 
     print("\n✅ Done! Unified Framework Active.")
+    print("   Models assigned:")
+    print("   - Strategists/Simulators: gpt-5.1")
+    print("   - Specialists:            gpt-5.1-codex")
 
 if __name__ == "__main__":
     main()
