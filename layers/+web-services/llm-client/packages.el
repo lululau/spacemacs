@@ -86,7 +86,7 @@
     (let ((purpose-mode-was-enabled (bound-and-true-p purpose-mode)))
       (when purpose-mode-was-enabled
         (purpose-mode -1))
-      (prog1
+      (unwind-protect
           (apply orig-func args)
         (when purpose-mode-was-enabled
           (purpose-mode 1)))))
