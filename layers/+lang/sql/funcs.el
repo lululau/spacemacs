@@ -21,14 +21,6 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-(defun spacemacs/sql-populate-products-list (&rest args)
-  "Update Spacemacs list of sql products"
-  (setq
-   spacemacs-sql-highlightable sql-product-alist
-   spacemacs-sql-startable (cl-remove-if-not
-                            (lambda (product) (sql-get-product-feature (car product) :sqli-program))
-                            sql-product-alist)))
-
 (defun spacemacs//sql-setup-company ()
   "Conditionally setup company based on backend."
   (pcase sql-backend
@@ -45,3 +37,97 @@
   "Conditionally setup sql backend."
   (when (eq sql-backend 'lsp)
     (lsp-deferred)))
+
+(defun spacemacs//sql-product-completion-table ()
+  "Return an alist of (PRODUCT-PRETTY-NAME . PRODUCT-SYMBOL)."
+  (mapcar
+   (lambda (product)
+     (cons (plist-get (cdr product) :name)
+           (car product)))
+   sql-product-alist))
+
+(defun spacemacs//sql-read-product (pred)
+  "Read an SQL product, with completion limited by predicate PRED."
+  (let* ((alist (spacemacs//sql-product-completion-table))
+         (input (completing-read
+                 "SQL Product: "
+                 alist pred 'require-match
+                 nil 'sql-product-history)))
+    (cdr (assoc input alist))))
+
+(defun spacemacs/sql-highlight (product)
+  "Set SQL dialect-specific highlighting."
+  (interactive (list (spacemacs//sql-read-product nil)))
+  (sql-set-product product))
+
+(defun spacemacs/sql-start (product)
+  "Set SQL dialect-specific highlighting and start inferior SQLi process."
+  (interactive
+   (list (spacemacs//sql-read-product
+          (lambda (product) (sql-get-product-feature (cdr product) :sqli-program)))))
+  (sql-set-product product)
+  (sql-product-interactive))
+
+(defun spacemacs/sql-send-string-and-focus ()
+  "Send a string to SQLi and switch to SQLi in `insert state'."
+  (interactive)
+  (let ((sql-pop-to-buffer-after-send-region t))
+    (call-interactively 'sql-send-string)
+    (evil-insert-state)))
+
+(defun spacemacs/sql-send-buffer-and-focus ()
+  "Send the buffer to SQLi and switch to SQLi in `insert state'."
+  (interactive)
+  (let ((sql-pop-to-buffer-after-send-region t))
+    (sql-send-buffer)
+    (evil-insert-state)))
+
+(defun spacemacs/sql-send-paragraph-and-focus ()
+  "Send the paragraph to SQLi and switch to SQLi in `insert state'."
+  (interactive)
+  (let ((sql-pop-to-buffer-after-send-region t))
+    (sql-send-paragraph)
+    (evil-insert-state)))
+
+(defun spacemacs/sql-send-region-and-focus (start end)
+  "Send region to SQLi and switch to SQLi in `insert state'."
+  (interactive "r")
+  (let ((sql-pop-to-buffer-after-send-region t))
+    (sql-send-region start end)
+    (evil-insert-state)))
+
+(defun spacemacs/sql-send-line-and-next-and-focus ()
+  "Send the current line to SQLi and switch to SQLi in `insert state'."
+  (interactive)
+  (let ((sql-pop-to-buffer-after-send-region t))
+    (sql-send-line-and-next)))
+
+(defun spacemacs/sql-send-string ()
+  "Send a string to SQLi and stays in the same region."
+  (interactive)
+  (let ((sql-pop-to-buffer-after-send-region nil))
+    (call-interactively 'sql-send-string)))
+
+(defun spacemacs/sql-send-buffer ()
+  "Send the buffer to SQLi and stays in the same region."
+  (interactive)
+  (let ((sql-pop-to-buffer-after-send-region nil))
+    (sql-send-buffer)))
+
+(defun spacemacs/sql-send-paragraph ()
+  "Send the paragraph to SQLi and stays in the same region."
+  (interactive)
+  (let ((sql-pop-to-buffer-after-send-region nil))
+    (sql-send-paragraph)))
+
+(defun spacemacs/sql-send-region (start end)
+  "Send region to SQLi and stays in the same region."
+  (interactive "r")
+  (let ((sql-pop-to-buffer-after-send-region nil))
+    (sql-send-region start end)))
+
+(defun spacemacs/sql-send-line-and-next ()
+  "Send the current line to SQLi and stays in the same region."
+  (interactive)
+  (let ((sql-pop-to-buffer-after-send-region nil))
+    (sql-send-line-and-next)))
