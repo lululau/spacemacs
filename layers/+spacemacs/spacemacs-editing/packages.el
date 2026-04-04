@@ -117,7 +117,7 @@
         (dired-quick-sort-setup))
       (advice-remove 'dired-noselect 'dired-noselect@quick-sort-setup))
     :config
-    (evil-define-key 'normal dired-mode-map "S" 'hydra-dired-quick-sort/body)))
+    (evil-define-key 'normal dired-mode-map "s" 'dired-quick-sort-transient)))
 
 (defun spacemacs-editing/init-drag-stuff ()
   (use-package drag-stuff
