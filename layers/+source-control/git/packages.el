@@ -199,13 +199,6 @@
     :config
     ;; seems to be necessary at the time of release
     (require 'git-rebase)
-    ;; bind function keys
-    ;; (define-key magit-mode-map (kbd "<tab>") 'magit-section-toggle)
-    (evilified-state-evilify-map magit-repolist-mode-map
-      :mode magit-repolist-mode
-      :bindings
-      (kbd "gr") 'magit-list-repositories
-      (kbd "RET") 'magit-repolist-status)
     ;; confirm/abort
     (when dotspacemacs-major-mode-leader-key
       (add-hook 'with-editor-mode-hook 'evil-normalize-keymaps)
