@@ -438,7 +438,6 @@
 
 (defun spacemacs-navigation/init-transient-cycles ()
   (use-package transient-cycles
-    :demand t
     :config
     (when (or (eq t dotspacemacs-enable-cycling)
               (member 'alternate-buffer dotspacemacs-enable-cycling))

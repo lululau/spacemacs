@@ -32,7 +32,6 @@
   "Initialize the `ellama` package and set up keybindings."
   (use-package ellama
     :defer t
-    :ensure t
     :init
     (spacemacs/declare-prefix "$" "AI")
     (spacemacs/declare-prefix "$e" "Ellama")
@@ -42,7 +41,6 @@
   "Initialize the `gptel` package and set up keybindings."
   (use-package gptel
     :defer t
-    :ensure t
     :init
     ;; evilify gptel-context-buffer-mode-map
     (evilified-state-evilify-map gptel-context-buffer-mode-map

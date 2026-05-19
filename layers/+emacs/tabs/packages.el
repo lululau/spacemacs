@@ -35,7 +35,6 @@
 
   (use-package centaur-tabs
     :defer t
-    :demand
     :custom
     (centaur-tabs-set-icons tabs-icons)
     (centaur-tabs-gray-out-icons 'buffer)

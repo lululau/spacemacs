@@ -325,7 +325,6 @@
 
 (defun compleseus/init-embark-consult ()
   (use-package embark-consult
-    :ensure t
     :after (embark consult)
     :demand t ; only necessary if you have the hook below
     ;; if you want to have consult previews as you move around an
@@ -443,7 +442,6 @@
 
   (use-package vertico-directory
     :after vertico
-    :ensure nil
     ;; More convenient directory navigation commands
     :init (bind-key "C-h" 'vertico-directory-up vertico-map
                     (spacemacs//support-hjkl-navigation-p))
@@ -452,14 +450,12 @@
 
   (use-package vertico-quick
     :after vertico
-    :ensure nil
     :init
     (define-key vertico-map "\M-q" #'vertico-quick-insert)
     (define-key vertico-map "\C-q" #'vertico-quick-exit))
 
   (use-package vertico-repeat
     :after vertico
-    :ensure nil
     :init
     (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
     (spacemacs/set-leader-keys

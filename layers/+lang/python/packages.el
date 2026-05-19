@@ -509,7 +509,6 @@
 
 (defun python/init-lsp-pyright ()
   (use-package lsp-pyright
-    :ensure nil
     :defer t))
 
 (defun python/post-init-window-purpose ()
