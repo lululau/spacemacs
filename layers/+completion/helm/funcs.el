@@ -167,7 +167,7 @@ If DEFAULT-INPUTP is non nil then the current region or symbol at point
   ;; see https://github.com/syl20bnr/spacemacs/pull/8065
   (let* ((root-helm-ag-base-command "rg --smart-case --no-heading --color=never --line-number")
          (helm-ag-base-command (if spacemacs-helm-rg-max-column-number
-                                   (concat root-helm-ag-base-command " --max-columns=" (number-to-string spacemacs-helm-rg-max-column-number))
+                                   (concat root-helm-ag-base-command " --max-columns=" (number-to-string spacemacs-helm-rg-max-column-number) (if (bound-and-true-p spacemacs-helm-rg-addtional-args) (concat " " spacemacs-helm-rg-addtional-args) ""))
                                  root-helm-ag-base-command)))
     (helm-do-ag dir)))
 
