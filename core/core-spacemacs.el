@@ -101,8 +101,7 @@ Returns the directory path from load-hints where FILE is found."
   "Enable the `load-hints' support for Spacemacs.
 This helps Emacs locate files more efficiently by maintaining a mapping
 of directories to file basenames."
-  (setq package-enable-load-hints dotspacemacs-enable-load-hints
-        load-hints
+  (setq load-hints
         (mapcar
          (lambda (path)
            (when-let* (((file-directory-p path))
