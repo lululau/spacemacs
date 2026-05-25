@@ -25,6 +25,7 @@
 (defconst llm-client-packages
   '((ellama :toggle llm-client-enable-ellama)
     (gptel :toggle llm-client-enable-gptel)
+    (gptel-agent :toggle llm-client-enable-gptel-agent)
     org
     window-purpose))
 
@@ -54,21 +55,37 @@
       "p"       #'gptel-context-previous
       "d"       #'gptel-context-flag-deletion)
     ;; set up keybindings
-    (spacemacs/declare-prefix "$g" "Gptel")
+    (spacemacs/declare-prefix "$g" "gptel")
     (spacemacs/set-leader-keys
-      "$gg" 'gptel                          ; Start a new GPTel session
-      "$gs" 'spacemacs//gptel-send-wrapper  ; Send a message to GPTel
-      "$gq" 'spacemacs//gptel-abort-wrapper ; Abort any active GPTel process
-      "$gm" 'gptel-menu                     ; Open the GPTel menu
+      "$gg" 'gptel                          ; Start a new gptel session
+      "$gs" 'spacemacs//gptel-send-wrapper  ; Send a message to gptel
+      "$gq" 'spacemacs//gptel-abort-wrapper ; Abort any active gptel process
+      "$gm" 'gptel-menu                     ; Open the gptel menu
       "$gc" 'gptel-add                      ; Add context
       "$gf" 'gptel-add-file                 ; Add a file
       "$go" 'gptel-org-set-topic            ; Set topic in Org-mode
       "$gp" 'gptel-org-set-properties       ; Set properties in Org-mode
       "$gr" 'gptel-rewrite)))               ; Rewrite or refactor test region
 
+(defun llm-client/init-gptel-agent ()
+  "Initialize the `gptel-agent` package and set up keybindings."
+  (use-package gptel-agent
+    :defer t
+    :init
+    ;; evilify gptel-context-buffer-mode-map
+    (evilified-state-evilify-map gptel-context-buffer-mode-map
+      :eval-after-load gptel-context
+      :mode gptel-context-buffer-mode)
+    ;; set up keybindings
+    (spacemacs/set-leader-keys
+      "$ga" 'gptel-agent                          ; Start a new gptel-agent session
+      "$gu" 'gptel-agent-update)                  ; Updates the gptel-agent database
+    ;; Config for =gptel-agent=
+    :config (gptel-agent-update)))
+
 (defun llm-client/post-init-org ()
-  "Set up Org-mode keybindings for GPTel."
-  (spacemacs/declare-prefix-for-mode 'org-mode "m$g" "Gptel")
+  "Set up Org-mode keybindings for gptel."
+  (spacemacs/declare-prefix-for-mode 'org-mode "m$g" "gptel")
   (spacemacs/set-leader-keys-for-major-mode 'org-mode
     "$go" 'gptel-org-set-topic
     "$gp" 'gptel-org-set-properties))
