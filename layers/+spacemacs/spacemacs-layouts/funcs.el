@@ -102,7 +102,7 @@ current perspective."
 
 (defmacro spacemacs||with-persp-buffer-list (&rest body)
   "This one is a brute force version of `with-persp-buffer-list'.
-It maitains the order of the original `buffer-list'"
+It maintains the order of the original `buffer-list'"
   `(cl-letf* ((org-buffer-list
                (symbol-function 'buffer-list))
               ((symbol-function 'buffer-list)
