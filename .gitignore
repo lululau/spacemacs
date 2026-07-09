@@ -129,3 +129,4 @@ vimish-fold/
 /.chatgpt-shell.el
 /tramp-rpc/
 /agent/
+/projectile-frecency.eld
