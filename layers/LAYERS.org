@@ -230,6 +230,7 @@
   - [[#geolocation][Geolocation]]
   - [[#imenu-list][Imenu-list]]
   - [[#import-js][Import-js]]
+  - [[#just][Just]]
   - [[#kubernetes][Kubernetes]]
   - [[#lsp][LSP]]
   - [[#meson][Meson]]
@@ -3018,6 +3019,15 @@ Features:
 - Import Javascript/Typescript modules to buffer
 - Import missing modules and remove unused one
 - Go to module location
+
+** Just
+[[file:+tools/just/README.org][+tools/just/README.org]]
+
+This layer adds [[https://just.systems/][just]] support.
+
+Features:
+- Adds [[https://github.com/psibi/justl.el][justl]] and sets up ~SPC p j/J~.
+- Adds [[https://github.com/leon-barrett/just-ts-mode.el][just-ts-mode]] for syntax highlighting
 
 ** Kubernetes
 [[file:+tools/kubernetes/README.org][+tools/kubernetes/README.org]]
