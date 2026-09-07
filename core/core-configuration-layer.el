@@ -1715,11 +1715,10 @@ RNAME is the name symbol of another existing layer."
            ((and (listp location) (eq 'recipe (car location)))
             (configuration-layer//install-from-recipe pkg)
             (oset pkg lazy-install nil))
-           (t (configuration-layer//warning "Cannot install package %S."
-                                            pkg-name)))
-        ('error
+           (t (configuration-layer//warning "Cannot install package %s" pkg-name)))
+        (error
          (configuration-layer//error
-          (concat "\nAn error occurred while installing %s " "(error: %s)\n")
+          (concat "An error occurred while installing %s:\n" "(error: %s)\n")
           pkg-name
           err)
          (spacemacs//redisplay))))))

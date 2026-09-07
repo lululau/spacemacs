@@ -366,8 +366,9 @@
     ;; prompt is a `completing-read-multiple'.
     (defun crm-indicator (args)
       (cons (concat "[CRM] " (car args)) (cdr args)))
-    (unless (boundp 'crm-prompt)
-      (advice-add #'completing-read-multiple :filter-args #'crm-indicator))
+    (with-eval-after-load 'crm
+      (unless (boundp 'crm-prompt)
+        (advice-add #'completing-read-multiple :filter-args #'crm-indicator)))
     ;; Grow and shrink minibuffer
     ;;(setq resize-mini-windows t)
     ;; Do not allow the cursor in the minibuffer prompt
