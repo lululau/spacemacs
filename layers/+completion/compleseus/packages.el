@@ -351,10 +351,20 @@
     ;; should be all in with orderless otherwise the results are inconsistent.
     ;; the available styles are registered in `completion-styles-alist`.
     (setq completion-styles '(orderless basic)
-          completion-category-defaults nil
           ;; we need to have 'basic here first in order to support tramp connections...
           ;; see `completion-styles`.
           completion-category-overrides '((file (styles basic partial-completion))))
+    ;; Only override built-in categories, from the default value of
+    ;; `completion-category-defaults'.  Do not second-guess site- or
+    ;; package-specific categories.
+    (dolist (category '(buffer
+                        unicode-name
+                        project-file
+                        xref-location
+                        info-menu
+                        symbol-help))
+      (add-to-list 'completion-category-overrides
+                   (list category '(styles))))
     :config
     (add-to-list 'orderless-style-dispatchers #'orderless-kwd-dispatch)))
 
@@ -429,7 +439,6 @@
         (define-key vertico-reverse-map (kbd "C-M-k")
                     #'spacemacs/next-candidate-preview))
       (define-key vertico-map (kbd "C-l") #'vertico-insert)
-      (define-key vertico-map (kbd "M-RET") #'vertico-exit-input)
       (define-key vertico-map (kbd "C-SPC") #'spacemacs/embark-preview)
       (define-key vertico-map (kbd "C-r") #'consult-history)
       (define-key vertico-map (kbd "M-P") #'spacemacs/consult-toggle-preview)))
@@ -437,8 +446,10 @@
   (use-package vertico-directory
     :after vertico
     ;; More convenient directory navigation commands
-    :init (bind-key "C-h" 'vertico-directory-up vertico-map
-                    (spacemacs//support-hjkl-navigation-p))
+    :init
+    (define-key vertico-map (kbd "M-DEL") #'vertico-directory-delete-word)
+    (bind-key "C-h" 'vertico-directory-up vertico-map
+              (spacemacs//support-hjkl-navigation-p))
     ;; tidy shadowed file names
     :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
